@@ -122,7 +122,7 @@ class pPilotDetail extends pageAssembly
 	 */
 	function statSetup()
 	{
-		if(!isset($this->kill_summary))
+		if(!isset($this->summary))
 		{
 			$this->summary = new KillSummaryTable();
 			$this->summary->addInvolvedPilot($this->plt_id);
