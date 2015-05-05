@@ -74,6 +74,17 @@ class Page
 		$this->setContent($smarty->fetch(get_tpl('error')));
 		$this->generate();
 	}
+	
+	/**
+	 * Add a meta tag to the header html with attributes name and content
+	 *
+	 * @param string $name Name attribute value
+	 * @param string $content Name attribute value
+	 */
+	public function addMetaTag($name, $content)
+	{
+		$this->addHeader("<meta name='".$name."' content='".$content."' />");
+	}
 
 	/**
 	 * Add a line to the header html.
