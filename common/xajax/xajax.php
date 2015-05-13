@@ -3,21 +3,19 @@
  * @package EDK
  */
 
-require_once('common/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
 event::register('page_assembleheader', 'edk_xajax::insertHTML');
 
 // if mods depend on xajax they can register to xajax_initialised
 // it gets called after all mods have been initialized
-//event::register('smarty_displayindex', 'edk_xajax::lateProcess');
-//event::register('page_assembleheader', 'edk_xajax::lateProcess');
 event::register('mods_initialised', 'edk_xajax::lateProcess');
-//event::register('page_initialisation', 'edk_xajax::lateProcess');
 
 $uri = html_entity_decode(edkURI::build(edkURI::parseURI()));
 if(strpos($uri, "?") === false) $uri .= "?xajax=1";
 else $uri .= "&xajax=1";
 $xajax->configure('requestURI', $uri);
+
+$xajax->configure('javascript URI', config::get('cfg_kbhost')."/vendor/xajax/xajax/");
 
 /**
  * @package EDK
@@ -39,7 +37,7 @@ class edk_xajax
 		}
 
 		global $xajax;
-		$obj->addHeader($xajax->getJavascript(config::get('cfg_kbhost')."/common/xajax/"));
+		$obj->addHeader($xajax->getJavascript(config::get('cfg_kbhost')."/vendor/xajax/xajax/"));
 	}
 
 	public static function lateProcess()

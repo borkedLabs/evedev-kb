@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dab86d372e233d7078e46a55b596c8e9",
+    "hash": "84ab00e370074e3859830fd9c6916335",
     "packages": [
         {
             "name": "3rdpartyeve/phealng",
@@ -92,12 +92,67 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "xajax/xajax",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Xajax/Xajax.git",
+                "reference": "49ea682f4dffbda7a2984e7d07450207d233ad7c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Xajax/Xajax/zipball/49ea682f4dffbda7a2984e7d07450207d233ad7c",
+                "reference": "49ea682f4dffbda7a2984e7d07450207d233ad7c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "xajax_core/"
+                },
+                "files": [
+                    "xajax_core/xajax.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jared White"
+                },
+                {
+                    "name": "J. Max Wilson"
+                },
+                {
+                    "name": "Joseph Woolley"
+                },
+                {
+                    "name": "Steffen Konerow"
+                }
+            ],
+            "description": "Xajax is an open source PHP class library for easily creating powerful PHP-driven, web-based Ajax Applications. Using Xajax, you can asynchronously call PHP functions and update the content of your your webpage without reloading the page.",
+            "homepage": "http://xajaxproject.org",
+            "keywords": [
+                "asynchronous",
+                "php",
+                "xajax"
+            ],
+            "time": "2014-10-22 16:40:16"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "xajax/xajax": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
