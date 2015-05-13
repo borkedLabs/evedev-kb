@@ -14,7 +14,6 @@ require_once('common/includes/class.edkloader.php');
 spl_autoload_register('edkloader::load');
 
 // Set up the external class files with the autoloader.
-edkloader::register('Smarty', 'common/smarty/Smarty.class.php');
 
 // Ugly hacks to make things work until other changes are made with the file structure
 edkloader::register('API', 'common/includes/api/class.api.php');

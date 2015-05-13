@@ -1,6 +1,7 @@
 {
     "require": {
         "3rdpartyeve/phealng": "~2.0",
-		"xajax/xajax": "dev-master"
+		"xajax/xajax": "dev-master",
+		"smarty/smarty": "3.1.19"
     }
 }
