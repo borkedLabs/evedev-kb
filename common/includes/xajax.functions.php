@@ -187,7 +187,7 @@ function getComments($kll_id, $message = '')
 
 /**
  * Post a new comment.
- * 
+ *
  * @global Smarty $smarty
  * @param integer $kll_id
  * @param string $author
