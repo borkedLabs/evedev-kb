@@ -71,7 +71,7 @@ class cache
 			return false;
 		}
 		// Don't cache the image files.
-		if ($page == 'thumb' || $page == 'sig') {
+		if ($page == 'thumb') {
 			return false;
 		}
 		self::checkLoad();
