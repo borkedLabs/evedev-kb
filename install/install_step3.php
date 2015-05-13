@@ -57,12 +57,17 @@ if (file_exists('../kbconfig.php') && (empty($_POST['submit']) || $_POST['submit
 	}
 }
 if (empty($_SESSION['sql']['host']))
+{
 	$smarty->assign('db_host', $host);
-else $smarty->assign('db_host', $_SESSION['sql']['host']);
-$smarty->assign('db_user', $_SESSION['sql']['user']);
-$smarty->assign('db_pass', $_SESSION['sql']['pass']);
-$smarty->assign('db_db', $_SESSION['sql']['db']);
-$smarty->assign('db_engine', $_SESSION['sql']['engine']);
+}
+else 
+{
+	$smarty->assign('db_host', $_SESSION['sql']['host']);
+	$smarty->assign('db_user', $_SESSION['sql']['user']);
+	$smarty->assign('db_pass', $_SESSION['sql']['pass']);
+	$smarty->assign('db_db', $_SESSION['sql']['db']);
+	$smarty->assign('db_engine', $_SESSION['sql']['engine']);
+}
 
 if ($_SESSION['sql']['db'])
 {
