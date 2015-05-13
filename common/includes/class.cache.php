@@ -22,7 +22,7 @@ class cache
 	protected static $reinforced_prob = 20;
 
 	/**
-	 * Check the server load using /proc/loadavg.
+	 * Check the server load using sys_getloadavg
 	 *
 	 * Changes reinforced statust depending on load where supported.
 	 *
@@ -31,19 +31,11 @@ class cache
 	 */
 	public static function checkLoad()
 	{
-		if (PHP_OS != 'Linux') {
+		if (!function_exists('sys_getloadavg')) {
 			return false;
 		}
-
-		static $load = null;
-		if (null != $load) {
-			return!!config::get('is_reinforced');
-		}
-		$load = @file_get_contents('/proc/loadavg');
-		if (false === $load) {
-			return;
-		}
-		$array = explode(' ', $load);
+		
+		$array = sys_getloadavg();
 		if ((float) $array[0] > self::$reinforced_enable_threshold) {
 			// If load is high put killboard into RF
 			config::set('is_reinforced', true);
