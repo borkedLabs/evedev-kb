@@ -36,12 +36,12 @@ class API_KillLog extends API
 		$posted = array();
 		$skipped = array();
 
-                // get maximum number of API calls per key
-                $numberOfCallsMax = config::get('apikillmails_numberofcalls');
-                if(!$numberOfCallsMax)
-                {
-                    $numberOfCallsMax = NUMBER_OF_CALLS_DEFAULT;
-                }
+		// get maximum number of API calls per key
+		$numberOfCallsMax = config::get('apikillmails_numberofcalls');
+		if(!$numberOfCallsMax)
+		{
+			$numberOfCallsMax = NUMBER_OF_CALLS_DEFAULT;
+		}
 
 		foreach ($characters as $char) {
 			$output .= "Processing ".$char['characterName']."<br><br>";

@@ -241,14 +241,13 @@ class API_Helpers
             // connectivity check for XML API
             $apiIdToName = new API_IDtoName();
             // don't use caching for this
-            PhealConfig::getInstance()->cache = new PhealNullCache();
+            \Pheal\Core\Config::getInstance()->cache = new \Pheal\Cache\NullStorage();
             $apiIdToName->setIDs($API_TESTING_CHARACTER_ID);
             $apiIdToName->fetchXML();
             if(count($apiIdToName->getIDData()) > 0)
             {
                 return true;
             }
-            
             else
             {
                 throw new EDKApiConnectionException($apiIdToName->getMessage(), $apiIdToName->getError());

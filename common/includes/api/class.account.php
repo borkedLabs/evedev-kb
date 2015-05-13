@@ -28,7 +28,7 @@ class API_Account extends API
 	}
 
 	public function isOldKey($userID, $APIKey) {
-		PhealConfig::getInstance()->api_customkeys = false;
+		\Pheal\Core\Config::getInstance()->api_customkeys = false;
 		$data = $this->CallAPI( "account", "Characters", null, $userID, $APIKey );
 		if( $data == false ) {
 			return false;
