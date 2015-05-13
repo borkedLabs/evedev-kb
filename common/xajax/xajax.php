@@ -14,7 +14,7 @@ $uri = html_entity_decode(edkURI::build(edkURI::parseURI()));
 if(strpos($uri, "?") === false) $uri .= "?xajax=1";
 else $uri .= "&xajax=1";
 $xajax->configure('requestURI', $uri);
-
+$xajax->configure('deferScriptGeneration', false);
 $xajax->configure('javascript URI', config::get('cfg_kbhost')."/vendor/xajax/xajax/");
 
 /**
@@ -37,7 +37,7 @@ class edk_xajax
 		}
 
 		global $xajax;
-		$obj->addHeader($xajax->getJavascript(config::get('cfg_kbhost')."/vendor/xajax/xajax/"));
+		$obj->addHeader($xajax->getJavascript());
 	}
 
 	public static function lateProcess()
