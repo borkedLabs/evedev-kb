@@ -9,6 +9,9 @@
 
 // check your php folder is correct as defined by the first line of this file
 @error_reporting(E_ALL ^ E_NOTICE);
+
+require '../vendor/autoload.php';
+
 //
 // Simple Cronjob script - set it to run this, no more than once an hour as you can only pull info once an hour anyway
 // by Captain Thunk! (ISK donations are all gratefully received)

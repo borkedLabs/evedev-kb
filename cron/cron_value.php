@@ -7,6 +7,7 @@
  * @package EDK
  */
 
+require '../vendor/autoload.php';
 /********************************************
 *  Based on the
 *  Cron script for value fetcher by Beansman

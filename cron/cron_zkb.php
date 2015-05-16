@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+require '../vendor/autoload.php';
+
 if (!substr_compare(PHP_OS, 'win', 0, 3, true)) {
 	@ini_set('include_path', ini_get('include_path').';.\\common\\includes');
 } else {

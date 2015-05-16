@@ -6,6 +6,7 @@
  * $HeadURL$
  * @package EDK
  */
+require '../vendor/autoload.php';
 
 /** @var integer Maximum size for the store in megabytes. */
 $maxStoreSize = 512;
