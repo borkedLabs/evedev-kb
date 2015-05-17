@@ -2,10 +2,10 @@
 /**
  * @package EDK
  */
+require __DIR__.'/../vendor/autoload.php';
 
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('display_errors', 1);
-include_once('../common/smarty/Smarty.class.php');
 
 //May be a bit overkill to use smarty here, but this way the html is in the template
 $smarty = new Smarty();
