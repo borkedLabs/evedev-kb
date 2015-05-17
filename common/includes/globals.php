@@ -7,40 +7,39 @@
  * @package EDK
  */
 
-include_once('common/includes/constants.php');
+include_once(__DIR__.'/constants.php');
 
 // Make sure the core functions are loaded.
-require_once('common/includes/class.edkloader.php');
+require_once(__DIR__.'/class.edkloader.php');
 spl_autoload_register('edkloader::load');
 
 // Set up the external class files with the autoloader.
 
 // Ugly hacks to make things work until other changes are made with the file structure
-edkloader::register('API', 'common/includes/api/class.api.php');
-edkloader::register('TopList', 'common/includes/class.toplist.php');
-edkloader::register('TopKillsList', 'common/includes/class.toplist.php');
-edkloader::register('TopCorpKillsList', 'common/includes/class.toplist.php');
-edkloader::register('TopScoreList', 'common/includes/class.toplist.php');
-edkloader::register('TopLossesList', 'common/includes/class.toplist.php');
-edkloader::register('TopCorpLossesList', 'common/includes/class.toplist.php');
-edkloader::register('TopFinalBlowList', 'common/includes/class.toplist.php');
-edkloader::register('TopDamageDealerList', 'common/includes/class.toplist.php');
-edkloader::register('TopSoloKillerList', 'common/includes/class.toplist.php');
-edkloader::register('TopPodKillerList', 'common/includes/class.toplist.php');
-edkloader::register('TopGrieferList', 'common/includes/class.toplist.php');
-edkloader::register('TopCapitalShipKillerList',
-		'common/includes/class.toplist.php');
-edkloader::register('TopContractKillsList', 'common/includes/class.toplist.php');
-edkloader::register('TopContractScoreList', 'common/includes/class.toplist.php');
-edkloader::register('TopPilotTable', 'common/includes/class.toplist.php');
-edkloader::register('TopCorpTable', 'common/includes/class.toplist.php');
-edkloader::register('TopShipList', 'common/includes/class.toplist.php');
-edkloader::register('TopShipListTable', 'common/includes/class.toplist.php');
-edkloader::register('TopWeaponList', 'common/includes/class.toplist.php');
-edkloader::register('TopWeaponListTable', 'common/includes/class.toplist.php');
-edkloader::register('thumbInt', 'common/includes/class.thumb.php');
+edkloader::register('API', '/api/class.api.php');
+edkloader::register('TopList', 'class.toplist.php');
+edkloader::register('TopKillsList', 'class.toplist.php');
+edkloader::register('TopCorpKillsList', 'class.toplist.php');
+edkloader::register('TopScoreList', 'class.toplist.php');
+edkloader::register('TopLossesList', 'class.toplist.php');
+edkloader::register('TopCorpLossesList', 'class.toplist.php');
+edkloader::register('TopFinalBlowList', 'class.toplist.php');
+edkloader::register('TopDamageDealerList', 'class.toplist.php');
+edkloader::register('TopSoloKillerList', 'class.toplist.php');
+edkloader::register('TopPodKillerList', 'class.toplist.php');
+edkloader::register('TopGrieferList', 'class.toplist.php');
+edkloader::register('TopCapitalShipKillerList', 'class.toplist.php');
+edkloader::register('TopContractKillsList', 'class.toplist.php');
+edkloader::register('TopContractScoreList', 'class.toplist.php');
+edkloader::register('TopPilotTable', 'class.toplist.php');
+edkloader::register('TopCorpTable', 'class.toplist.php');
+edkloader::register('TopShipList', 'class.toplist.php');
+edkloader::register('TopShipListTable', 'class.toplist.php');
+edkloader::register('TopWeaponList', 'class.toplist.php');
+edkloader::register('TopWeaponListTable', 'class.toplist.php');
+edkloader::register('thumbInt', 'class.thumb.php');
 
-require_once('common/includes/db.php');
+require_once(__DIR__.'/db.php');
 
 function slashfix($fix)
 {

@@ -38,25 +38,31 @@ class edkloader
 		$name = strtolower($name);
 		$splitpos = strpos($name, "_");
 
-		if ($splitpos > 0) {
+		if ($splitpos > 0)
+		{
 			$subdirname = substr($name, 0, $splitpos);
 			
-			if ($subdirname == 'smarty') {
+			if ($subdirname == 'smarty')
+			{
 				return false;
 			}
 			$subfilename = substr($name, $splitpos + 1);
 		}
 		$name = str_replace("_", "", $name);
-
-		if (isset(self::$classes[$name])) {
-			require_once(self::$classes[$name]);
-		} else if ($splitpos
-				&& is_file(self::$dir."common/includes/".$subdirname
-						."/class.".$subfilename.".php")) {
-			require_once(self::$dir."common/includes/".$subdirname."/class."
-					.$subfilename.".php");
-		} else {
-			@include_once(self::$dir."common/includes/class.".$name.".php");
+		
+		$subFilePath = __DIR__.'/'.$subdirname."/class.".$subfilename.".php";
+		
+		if (isset(self::$classes[$name]))
+		{
+			require_once(__DIR__.'/'.self::$classes[$name]);
+		}
+		else if ($splitpos && is_file($subFilePath))
+		{
+			require_once $subFilePath;
+		} 
+		else 
+		{
+			require_once(__DIR__.'/class.'.$name.".php");
 		}
 	}
 
