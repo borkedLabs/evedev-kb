@@ -1,68 +1,41 @@
-#!/usr/bin/php
 <?php
-/**
- * $Date$
- * $Revision$
- * $HeadURL$
- * @package EDK
- */
-require '../vendor/autoload.php';
 
-if (!substr_compare(PHP_OS, 'win', 0, 3, true)) {
-	@ini_set('include_path', ini_get('include_path').';.\\common\\includes');
-} else {
-	@ini_set('include_path', ini_get('include_path').':./common/includes');
-}
+class FeedCommand extends CronCommand
+{
+	public function execute()
+	{
+		$config = new Config(KB_SITE);
 
-$cronStartTime = microtime(true);
-@error_reporting(E_ERROR);
-
-// Has to be run from the KB main directory for nested includes to work
-if(file_exists(getcwd().'/cron_feed.php')) {
-	// current working directory minus last 5 letters of string ("/cron")
-	$KB_HOME = preg_replace('/[\/\\\\]cron$/', '', getcwd());
-} else if(file_exists(__FILE__)) {
-	$KB_HOME = preg_replace('/[\/\\\\]cron[\/\\\\]cron_feed\.php$/', '', __FILE__);
-} else {
-	echo "Set \$KB_HOME to the killboard root in cron/cron_feed\.php.";
-	die;
-}
-
-// If the above doesn't work - place your working directory path to killboard root below - comment out the above two lines and uncomment the two below
-
-// Edit the path below with your webspace directory to the killboard root folder - also check your php folder is correct as defined by the first line of this file
-//$KB_HOME = "/home/yoursite/public_html/kb";
-
-chdir($KB_HOME);
-
-require_once('kbconfig.php');
-require_once('globals.php');
-$config = new Config(KB_SITE);
-
-$feeds = config::get("fetch_idfeeds");
-$html = '';
-
-// load mods
-loadMods();
-
-foreach($feeds as $key => &$val) {
-	$tmphtml = '';
-	if (isIDFeed($val['url'])) {
-		if ($tmphtml = getIDFeed($key, $val)) {
-			$html .= "Fetching IDFeed: ".$key."<br />\n".$tmphtml;
+		$feeds = config::get("fetch_idfeeds");
+		if( !is_array($feeds) )
+		{
+			println("No feeds configured");
+			exit(1);
 		}
-	} else {
-		if ($tmphtml = getOldFeed($key, $val)) {
-			$html .= "Fetching RSS Feed: ".$key."<br />\n".$tmphtml;
+		
+		$html = '';
+
+		foreach($feeds as $key => &$val)
+		{
+			$tmphtml = '';
+			if (isIDFeed($val['url'])) {
+				if ($tmphtml = getIDFeed($key, $val)) {
+					$html .= "Fetching IDFeed: ".$key."<br />\n".$tmphtml;
+				}
+			} else {
+				if ($tmphtml = getOldFeed($key, $val)) {
+					$html .= "Fetching RSS Feed: ".$key."<br />\n".$tmphtml;
+				}
+			}
+			if ($tmphtml ) {
+				config::set("fetch_idfeeds", $feeds);
+			}
 		}
-	}
-	if ($tmphtml ) {
-		config::set("fetch_idfeeds", $feeds);
+		echo $html."<br />\n";
+
+		echo "Time taken = ".(microtime(true) - $cronStartTime)." seconds.\n";
 	}
 }
-echo $html."<br />\n";
-
-echo "Time taken = ".(microtime(true) - $cronStartTime)." seconds.\n";
 
 /**
  * Fetch the board owners.

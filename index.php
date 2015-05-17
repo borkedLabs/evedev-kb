@@ -1,6 +1,6 @@
 <?php
 
-require 'vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 /**
  * Request forwarder, look at common/index.php for the action and license
  * @package EDK
