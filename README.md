@@ -5,11 +5,20 @@ EDK is a killboard application to showcase alliance, corporation and individual 
 ## borkedLabs fork
 This is an fork of EDK. For various reasons this fork aims to clean house of garbage in EDK. Changes from the master will be merged every once in awhile.
 
-### Install
+## Install
+### Requirements
+- PHP >= 5.3
+ - MySQL extension (temporary until the installer is fixed)
+ - MySQLi extension
+ - GD2
+ - curl (optional)
+- composer
+- MySQL
+
+### Setup
 This fork of EDK requires usage of composer to deploy.
 
 https://getcomposer.org
-
 
 After uploading the folder to your web server.
 
@@ -18,9 +27,10 @@ Run
 php composer.phar install --no-dev
 ```
 in the folder.
-After composer is done fetching dependencies visit the /install folder to complete setup.
 
+After composer is done fetching dependencies visit the /install folder via browser to complete setup.
 
+##Usage
 
 ### Cron Jobs
 The cron jobs have been restructured to operate through a central cron.php caller instead of the original individual file mess.
