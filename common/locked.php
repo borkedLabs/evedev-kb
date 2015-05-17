@@ -32,7 +32,6 @@ class pLocked extends pageAssembly
 		global $smarty;
 		return $smarty->fetch(get_tpl("locked"));
 	}
-
 }
 
 $locked = new pLocked();

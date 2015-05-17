@@ -38,11 +38,11 @@ if (count($kill->destroyeditems_) > 0)
 		$i_location = InventoryFlag::collapse($destroyed->getLocationID());
 		$i_id = $item->getID();
 		$i_usedgroup = $item->get_used_launcher_group($i_name);
-		
+
 		// Nanite Repair Paste for ancillary armor repairers is a special snowflake
 		// there are no type attributes indicating a used group
 		// if item is nanite repair paste
-		if($i_id == 28668) 
+		if($i_id == 28668)
 		{
 			// ancillary armor repairers
 			$i_usedgroup = 1199;
@@ -78,7 +78,6 @@ if (count($kill->destroyeditems_) > 0)
 				}
 			}
 		}
-	//fitting thing end
 	}
 }
 
@@ -95,12 +94,12 @@ if (count($kill->droppeditems_) > 0)
 		// Nanite Repair Paste for ancillary armor repairers is a special snowflake
 		// there are no type attributes indicating a used group
 		// if item is nanite repair paste
-		if($i_id == 28668) 
+		if($i_id == 28668)
 		{
 			// ancillary armor repairers
 			$i_usedgroup = 1199;
 		}
-		
+
 		//Fitting -KE, add dropped items to the list
 		if($i_location != InventoryFlag::$CARGO)
 		{
@@ -131,9 +130,6 @@ if (count($kill->droppeditems_) > 0)
 				}
 			}
 		}
-	//fitting thing end
-
-
 	}
 }
 

@@ -33,7 +33,7 @@ class pKillRelated extends pageAssembly
 	public $page;
 	/** @var array */
 	protected $menuOptions = array();
-	
+
 	function __construct()
 	{
 		parent::__construct();
@@ -95,8 +95,6 @@ class pKillRelated extends pageAssembly
 			Header("Location: ".KB_HOST."/?a=kill_detail&kll_id=".$this->kll_id);
 			die();
 		}
-//		$this->getInvolved();
-//		$this->buildStats();
 	}
 
 	public function getInvolved()
