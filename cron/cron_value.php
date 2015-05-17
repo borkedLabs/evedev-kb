@@ -6,7 +6,9 @@ class ValueCommand extends CronCommand
 	{
 		$url = config::get('itemPriceCrestUrl');
 		if ($url == null || $url == "")
+		{
 			$url = ValueFetcherCrest::$CREST_URL;
+		}
 
 		$fetch = new ValueFetcherCrest($url);
 
@@ -14,6 +16,6 @@ class ValueCommand extends CronCommand
 		$count = $fetch->fetchValues();
 
 		// Echo result
-		echo $count." Items updated\n";
+		println($count." Items updated");
 	}
 }

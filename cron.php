@@ -41,6 +41,8 @@ if( in_array($task, $tasks) )
 	$name = ucfirst($task).'Command';
 	$command = new $name;
 	$command->execute();
+	
+	println("Time taken = ".(microtime(true) - $cronStartTime)." seconds.");
 }
 
 function println($msg)

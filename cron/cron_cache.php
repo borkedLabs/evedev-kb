@@ -6,22 +6,13 @@ class CacheCommand extends CronCommand
 	{
 		$config = new Config(KB_SITE);
 
-		$outhead = "Running Cron_Cache on " . gmdate("M d Y H:i") . "\n\n";
-		$html = '';
+		println("Running Cron_Cache on " . gmdate("M d Y H:i"));
+		println("");
 
 		// Alliance
 		$myAlliAPI = new API_Alliance();
+		
+		println("Caching Alliance XML");
 		$Allitemp .= $myAlliAPI->fetchalliances();
-		$html .= "Caching Alliance XML \n";
-
-		if ($html)
-		{
-			$html = str_replace("<div class=block-header2>","",$html);
-			$html = str_replace("</div>","\n",$html);
-			$html = str_replace("<br>","\n",$html);
-		 
-			//print $outhead . strip_tags($out, '<a>');
-			print $outhead . strip_tags($html);
-		}
 	}
 }

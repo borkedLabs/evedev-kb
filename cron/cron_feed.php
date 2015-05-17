@@ -26,8 +26,6 @@ class FeedCommand extends CronCommand
 				$this->getOldFeed($key, $val);
 			}
 		}
-		
-		println("Time taken = ".(microtime(true) - $cronStartTime)." seconds.");
 	}
 	
 	protected function getIDFeed(&$key, &$val)

@@ -7,25 +7,20 @@ class ZkbCommand extends CronCommand
 		$config = new Config(KB_SITE);
 
 		$fetchConfigs = ZKBFetch::getAll();
-		$html = '';
 
 		foreach($fetchConfigs AS &$fetchConfig)
 		{
-			$html .= $this->getZKBApi($fetchConfig);
+			$this->getZKBApi($fetchConfig);
 		}
-
-		echo $html."<br />\n";
-
-		println("Time taken = ".(microtime(true) - $cronStartTime)." seconds.");
 	}
 
 	private function getZKBApi(&$fetchConfig)
 	{
-		$html = '';
 		// Just in case, check for empty urls.
 		if(is_null($fetchConfig->getUrl())) 
 		{
-			return 'No URL given<br />';
+			println("No URL given");
+			exit(1);
 		}
 		
 		if(!$fetchConfig->getLastKillTimestamp())
@@ -38,25 +33,23 @@ class ZkbCommand extends CronCommand
 			$fetchConfig->setKillTimestampOffset(config::get('killTimestampOffset'));
 			$fetchConfig->setIgnoreNpcOnlyKills((boolean)(config::get('post_no_npc_only_zkb')));
 			$fetchConfig->processApi();
-			$html .= "ZKBApi: ".$fetchConfig->getUrl()."<br />\n";
-			$html .= count($fetchConfig->getPosted())." kills were posted and ".
-						count($fetchConfig->getSkipped())." were skipped. ";
+			println("ZKBApi: ".$fetchConfig->getUrl());
+			println(count($fetchConfig->getPosted())." kills were posted and ".
+						count($fetchConfig->getSkipped())." were skipped. ");
 						
-			$html .= "Timestamp of last kill: ".strftime('%Y-%m-%d %H:%M:%S', $fetchConfig->getLastKillTimestamp());
-			$html .= "<br />\n";
+			println("Timestamp of last kill: ".strftime('%Y-%m-%d %H:%M:%S', $fetchConfig->getLastKillTimestamp()));
 			
 			if ($fetchConfig->getParseMessages()) 
 			{
-				$html .= implode("<br />", $fetchConfig->getParseMessages())."<br/>";
+				println(implode(PHP_EOL, $fetchConfig->getParseMessages()));
 			}
 		}
 		catch (Exception $ex) 
 		{
-			$html .= "Error reading feed: ".$fetchConfig->getUrl()."<br/>";
+			println("Error reading feed: ".$fetchConfig->getUrl());
+			println($ex->getMessage());
 			$lastKillTimestampFormatted = strftime('%Y-%m-%d %H:%M:%S', $fetchConfig->getLastKillTimestamp());
-			$html .= $ex->getMessage();
-			$html .= ", Start time = ".$lastKillTimestampFormatted;
-			$html .= "<br/><br/>";
+			println("ZKB API Kill Start time = ".$lastKillTimestampFormatted);
 		}
 		
 		return $html;
