@@ -302,6 +302,12 @@ class Alliance extends Entity
 		if (isset($this->imgurl[$size])) {
 			return $this->imgurl[$size];
 		}
+		
+		if( config::get('cfg_ccpimages') )
+		{
+			return imageURL::getURL('Alliance', $this->getExternalID(), $size);;
+		}
+		
 		if (file_exists("img/alliances/".$this->getUnique().".png")) {
 			if ($size == 128) {
 				$this->imgurl[$size] = IMG_HOST."/img/alliances/"

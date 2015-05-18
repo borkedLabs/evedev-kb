@@ -17,7 +17,7 @@ class CacheHandler
 	/** @var string Internal root path. */
 	protected static $internalroot = KB_CACHEDIR;
 	/** @var string External root path. */
-	protected static $externalroot = KB_CACHEDIR;
+	protected static $externalroot = KB_CACHEURL;
 	/** @var array Cache of generated paths to avoid recalculation. */
 	protected static $paths = array();
 	/** @var string Default location in cache to store files. */

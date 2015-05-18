@@ -11,6 +11,7 @@ if (!defined('LATEST_DB_UPDATE')) {
 }
 
 define('KB_CACHEDIR', __DIR__.'/../../cache');
+define('KB_CACHEURL', '/cache');
 define('KB_PAGECACHEDIR', KB_CACHEDIR.'/page');
 define('KB_MAILCACHEDIR', KB_CACHEDIR.'/mails');
 define('KB_QUERYCACHEDIR', KB_CACHEDIR.'/SQL');
