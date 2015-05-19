@@ -55,7 +55,7 @@ km_cache_dir	cache/mails
 summarytable	1
 cfg_qcache	0
 cache_update	home
-cache_time	1440
+cache_time	20
 upd_dbVersion	1.2.1
 cfg_log	1
 cfg_sqlhalt	1
