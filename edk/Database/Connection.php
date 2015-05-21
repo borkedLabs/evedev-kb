@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+namespace EDK\Database;
 
 /**
  * mysqli connection class.
@@ -13,7 +14,7 @@
  * Establishes the connection to the database.
  * @package EDK
  */
-class DBConnection
+class Connection
 {
 	private static $conn_id = null;
 

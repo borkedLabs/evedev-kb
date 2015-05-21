@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+ use EDK\Database\Connection;
 /**
  * mysqli uncached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
@@ -20,7 +21,7 @@ class DBNormalQuery extends DBBaseQuery
 	 */
 	function __construct()
 	{
-		self::$dbconn = new DBConnection();
+		self::$dbconn = new Connection();
 	}
 
 	/**

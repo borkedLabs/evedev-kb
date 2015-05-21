@@ -9,6 +9,8 @@
 // TODO Check if caching is enabled and flag tables as dirty even if we don't
 // cache prepared queries.
 
+ use EDK\Database\Connection;
+ 
 /**
  * mysqli uncached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
@@ -28,7 +30,7 @@ class DBPreparedQuery
 	 */
 	function __construct()
 	{
-		self::$dbconn = new DBConnection();
+		self::$dbconn = new Connection();
 	}
     /**
      * Return the count of queries performed.
