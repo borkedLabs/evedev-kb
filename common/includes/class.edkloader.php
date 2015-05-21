@@ -55,15 +55,23 @@ class edkloader
 		if (isset(self::$classes[$name]))
 		{
 			require_once(__DIR__.'/'.self::$classes[$name]);
+			return true;
 		}
 		else if ($splitpos && is_file($subFilePath))
 		{
 			require_once $subFilePath;
+			return true;
 		} 
 		else 
 		{
-			require_once(__DIR__.'/class.'.$name.".php");
+			if( file_exists(__DIR__.'/class.'.$name.".php") )
+			{
+				require_once(__DIR__.'/class.'.$name.".php");
+				return true;
+			}
 		}
+		
+		return false;
 	}
 
 	/**
