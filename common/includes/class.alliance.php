@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * Creates a new Alliance or fetches an existing one from the database.
  * @package EDK
@@ -303,7 +304,7 @@ class Alliance extends Entity
 			return $this->imgurl[$size];
 		}
 		
-		if( config::get('cfg_ccpimages') )
+		if( Config::get('cfg_ccpimages') )
 		{
 			return imageURL::getURL('Alliance', $this->getExternalID(), $size);;
 		}

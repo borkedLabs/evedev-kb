@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /*
  * Control handling of admin menu options.
  */
@@ -95,19 +96,19 @@ class options
 		foreach ($current as &$elements) {
 			foreach ($elements as &$element) {
 				// Record the previous value
-				$element['previous'] = config::get($element['name']);
+				$element['previous'] = Config::get($element['name']);
 				// for checkboxes we need to set the value to zero if the option is not there
 				if ($element['type'] == 'checkbox')
 				{
 					if (isset( $_POST['option_'.$element['name']] ) && $_POST['option_'.$element['name']] == 'on')
 					{
-						config::set($element['name'], '1');
+						Config::set($element['name'], '1');
 					} else {
-						config::set($element['name'], '0');
+						Config::set($element['name'], '0');
 					}
 				} else if ($element['type']) {
 					// edits and options will be set directly
-					config::set($element['name'], $_POST['option_'.$element['name']]);
+					Config::set($element['name'], $_POST['option_'.$element['name']]);
 				}
 				// for callbacks we check their callback function on postdata to deal with it
 				if ($element['onchange']) {
@@ -312,16 +313,16 @@ class options
 	public static function getPrevious($key)
 	{
 		if (!isset(self::$data[urldecode($_POST['field'])][urldecode($_POST['sub'])]))
-				return config::get($key);
+				return Config::get($key);
 		$current = self::$data[urldecode($_POST['field'])][urldecode($_POST['sub'])];
 		foreach ($current as $element) {
 			foreach ($element as $subelement) {
 				if (isset($subelement['name']) && $subelement['name'] == $key) {
 					if (isset($subelement['previous'])) return $subelement['previous'];
-					else return config::get($subelement['name']);
+					else return Config::get($subelement['name']);
 				}
 			}
 		}
-		return config::get($key);
+		return Config::get($key);
 	}
 }

@@ -7,6 +7,8 @@
  */
 
 
+use EDK\Core\Config;
+
 options::cat('Appearance', 'Global Options', 'Global Look');
 options::fadd('Banner', 'style_banner', 'select', array('admin_appearance', 'createSelectBanner'), array('admin_appearance', 'changeBanner'));
 options::fadd('Theme', 'theme_name', 'select', array('admin_appearance', 'createSelectTheme'), array('admin_appearance', 'changeTheme'));
@@ -82,7 +84,7 @@ class admin_appearance
 			"tyrannis_default",
 			"tyrannis_revelations");
 		$option = array();
-		$selected = config::get('fp_theme');
+		$selected = Config::get('fp_theme');
 		foreach($sfp_themes as $theme)
 		{
 			if($theme == $selected)
@@ -105,7 +107,7 @@ class admin_appearance
 			"Border",
 			"Faded");
 		$option = array();
-		$selected = config::get('fp_style');
+		$selected = Config::get('fp_style');
 		foreach($sfp_styles as $style)
 		{
 			if($style == $selected)
@@ -130,7 +132,7 @@ class admin_appearance
 			"tag",
 			"none");
 		$option = array();
-		$selected = config::get('fp_highstyle');
+		$selected = Config::get('fp_highstyle');
 		foreach($sfp_highstyles as $style)
 		{
 			if($style == $selected)
@@ -152,7 +154,7 @@ class admin_appearance
 			"transparent",
 			"none");
 		$option = array();
-		$selected = config::get('fp_ammostyle');
+		$selected = Config::get('fp_ammostyle');
 		foreach($sfp_ammostyles as $style)
 		{
 			if($style == $selected)
@@ -175,7 +177,7 @@ class admin_appearance
 	{
 		$options = array();
 
-		if(config::get('style_banner') == "0") $state = 1;
+		if(Config::get('style_banner') == "0") $state = 1;
 		else $state = 0;
 		$options[] = array('value' => "0", 'descr' => "No banner", 'state' => $state);
 
@@ -189,7 +191,7 @@ class admin_appearance
 					$file = substr($file, 0);
 					if(!is_dir($dir.$file))
 					{
-						if(config::get('style_banner') == $file) $state = 1;
+						if(Config::get('style_banner') == $file) $state = 1;
 						else $state = 0;
 
 						$options[] = array('value' => $file, 'descr' => $file, 'state' => $state);
@@ -207,7 +209,7 @@ class admin_appearance
 	function createSelectStyle()
 	{
 		$options = array();
-		$dir = "themes/".config::get('theme_name')."/";
+		$dir = "themes/".Config::get('theme_name')."/";
 
 		if(is_dir($dir))
 		{
@@ -219,7 +221,7 @@ class admin_appearance
 					{
 						if(substr($file, -4) != ".css") continue;
 
-						if(config::get('style_name').'.css' == $file) $state = 1;
+						if(Config::get('style_name').'.css' == $file) $state = 1;
 						else $state = 0;
 
 						$options[] = array('value' => substr($file, 0, -4), 'descr' => substr($file, 0, -4), 'state' => $state);
@@ -248,7 +250,7 @@ class admin_appearance
 					if(is_dir($dir.$file))
 					{
 						if($file == "." || $file == ".." || $file == ".svn") continue;
-						if(config::get('theme_name') == $file) $state = 1;
+						if(Config::get('theme_name') == $file) $state = 1;
 						else $state = 0;
 
 						$options[] = array('value' => $file, 'descr' => $file, 'state' => $state);
@@ -271,10 +273,10 @@ class admin_appearance
 		if(!is_dir("themes/$themename")) $themename = 'default';
 
 		$_POST['option_theme_name'] = $themename;
-		config::set('theme_name', $themename);
+		Config::set('theme_name', $themename);
 
 		global $smarty;
-		$smarty->assign('theme_url', config::get('cfg_kbhost').'/themes/'.$themename);
+		$smarty->assign('theme_url', Config::get('cfg_kbhost').'/themes/'.$themename);
 		$smarty->template_dir = './themes/'.$themename.'/templates';
 		if(!file_exists(KB_CACHEDIR.'/templates_c/'.$themename.'/'))
 				mkdir(KB_CACHEDIR.'/templates_c/'.$themename.'/', 0755, true);
@@ -295,7 +297,7 @@ class admin_appearance
 
 			$arr = reset(self::createSelectStyle());
 
-			config::set('style_name', $arr['value']);
+			Config::set('style_name', $arr['value']);
 			$_POST['option_style_name'] = $arr['value'];
 
 			$smarty->assign('style', $arr['value']);
@@ -322,8 +324,8 @@ class admin_appearance
 		$dimensions = getimagesize('banner/'.$_POST['option_style_banner']);
 		if(!$dimensions) $dimensions = array(0, 0);
 
-		config::set('style_banner_x', $dimensions[0]);
-		config::set('style_banner_y', $dimensions[1]);
+		Config::set('style_banner_x', $dimensions[0]);
+		Config::set('style_banner_y', $dimensions[1]);
 
 		$smarty->assign('banner_x', $dimensions[0]);
 		$smarty->assign('banner_y', $dimensions[1]);
@@ -337,7 +339,7 @@ class admin_appearance
 					|| substr($file, -4) != '.php') {
 				continue;
 			}
-			if (config::get('cfg_language') == substr($file, 0, -4)) {
+			if (Config::get('cfg_language') == substr($file, 0, -4)) {
 				$state = 1;
 			} else {
 				$state = 0;

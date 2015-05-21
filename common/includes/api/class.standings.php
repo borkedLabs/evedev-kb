@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * API Standings - /corp & char/Standings.xml.aspx
  * @package EDK
@@ -366,7 +368,7 @@ class API_Standings
     {
 		$configvalue = $this->API_characterID_ . '_Standings';
 
-		$UseCaching = config::get('API_UseCache');
+		$UseCaching = Config::get('API_UseCache');
 
         $url = API_SERVER."/" . $typestring . "/Standings.xml.aspx" . $keystring;
         $path = "/" . $typestring . "/Standings.xml.aspx";

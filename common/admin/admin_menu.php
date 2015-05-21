@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 // include all admin modules
 // this doesnt need to check for itself because its already loaded
 $dir = 'common/admin/';
@@ -26,7 +28,7 @@ if (is_dir($dir))
 }
 
 // load all auto-options from mods
-$mods_active = explode(',', config::get('mods_active'));
+$mods_active = explode(',', Config::get('mods_active'));
 $modOverrides = false;
 foreach ($mods_active as $mod)
 {

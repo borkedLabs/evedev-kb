@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * EDK IDFeed Syndication reader class.
  * This class is used to fetch and read the feed from another EDK board. It
@@ -164,27 +166,27 @@ class IDFeed
 
 		//Set to board owner.
 		if ($type == '') {
-			if (config::get('cfg_allianceid')) {
+			if (Config::get('cfg_allianceid')) {
 				$alls = array();
-				foreach (config::get('cfg_allianceid') as $val) {
+				foreach (Config::get('cfg_allianceid') as $val) {
 					$all = new Alliance($val);
 					if (!$all->getExternalID()) return false;
 					$alls[] = $all->getExternalID();
 				}
 				$this->options['alliance'] = implode(',', $alls);
 			}
-			if (config::get('cfg_corpid')) {
+			if (Config::get('cfg_corpid')) {
 				$crps = array();
-				foreach (config::get('cfg_corpid') as $val) {
+				foreach (Config::get('cfg_corpid') as $val) {
 					$crp = new Corporation($val);
 					if (!$crp->getExternalID()) return false;
 					$crps[] = $crp->getExternalID();
 				}
 				$this->options['corp'] = implode(',', $crps);
 			}
-			if (config::get('cfg_pilotid')) {
+			if (Config::get('cfg_pilotid')) {
 				$pilots = array();
-				foreach (config::get('cfg_pilotid') as $val) {
+				foreach (Config::get('cfg_pilotid') as $val) {
 					$pilot = new Pilot($val);
 					if (!$pilot->getExternalID()) return false;
 					$pilots[] = $pilot->getExternalID();
@@ -422,12 +424,12 @@ class IDFeed
                 if(is_null($sxe['edkapi']))
                 {
                     $this->isApiFetch = TRUE;
-                    $this->skipNpcOnly = config::get('post_no_npc_only');
+                    $this->skipNpcOnly = Config::get('post_no_npc_only');
                 }
                 
                 else
                 {
-                    $this->skipNpcOnly = config::get('post_no_npc_only_feed');
+                    $this->skipNpcOnly = Config::get('post_no_npc_only_feed');
                 }
                 
                 // if we'r fetching from another IDFeed (not from API) and the version is either empty or below 1.2
@@ -444,7 +446,7 @@ class IDFeed
 		}
 		// We need raw mails for the mailhash so temporarily disable
 		// classification
-		config::put('kill_classified', 0);
+		Config::put('kill_classified', 0);
 		if (!is_null($sxe->result->rowset->row)) {
 			foreach ($sxe->result->rowset->row as $row) {
 				$this->processKill($row);
@@ -462,7 +464,7 @@ class IDFeed
 		$internalID = (int)$row['killInternalID'];
 		$externalID = (int)$row['killID'];
 		$id = 0;
-		if (config::get('filter_apply') && config::get('filter_date')
+		if (Config::get('filter_apply') && Config::get('filter_date')
 				> strtotime(strval($row['killTime']))) {
 			$skip = true;
 		}
@@ -973,7 +975,7 @@ class IDFeed
 		$count = 0;
 		$timing = '';
 		while ($kill = $killList->getKill()) {
-			if (config::get('km_cache_enabled') && CacheHandler::exists($kill->getID().".xml",
+			if (Config::get('km_cache_enabled') && CacheHandler::exists($kill->getID().".xml",
 							'mails')) {
 				$cachedRow = new SimpleXMLElement(CacheHandler::get($kill->getID().".xml",
 										'mails'));
@@ -1150,7 +1152,7 @@ class IDFeed
 					$itemRow->addAttribute('qtyDestroyed', 0);
 				}
 			}
-			if (config::get('km_cache_enabled')) {
+			if (Config::get('km_cache_enabled')) {
 				CacheHandler::put($kill->getID().".xml", $row->asXML(), 'mails');
 			}
 			$timing .= $kill->getID().": ".(microtime(true) - $starttime)."<br />";

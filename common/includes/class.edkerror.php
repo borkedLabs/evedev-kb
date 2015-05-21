@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * @package EDK
  */
@@ -58,7 +60,7 @@ class EDKError
 		
 		if (ini_get('log_errors') && (error_reporting() & $errno))
 			error_log(sprintf("PHP %s:  %s in %s on line %d", $errno, $errstr, $errfile, $errline));
-		if(class_exists('config') && config::get('cfg_log'))
+		if(class_exists('config') && Config::get('cfg_log'))
 		{
 			error_log(sprintf("PHP %s %s:  %s in %s on line %d\n", gmdate("Y-m-d H:i:s"), $errno, $errstr, $errfile, $errline), 3, $logfile);
 			if(filesize($logfile) > 1024*1024*10)

@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * Construct an output page.
  * @package EDK
@@ -33,8 +34,8 @@ class Page
 		global $timeStarted;
 		$this->timestart = &$timeStarted;
 		event::call('page_initialisation', $this);
-		if (!config::get('public_stats')) {
-			config::set('public_stats', 'do nothing');
+		if (!Config::get('public_stats')) {
+			Config::set('public_stats', 'do nothing');
 		}
 
 		$this->title = htmlspecialchars($title);
@@ -137,7 +138,7 @@ class Page
 	{
 		global $smarty;
 
-		$smarty->assign('kb_title', config::get('cfg_kbtitle').' '.$this->title);
+		$smarty->assign('kb_title', Config::get('cfg_kbtitle').' '.$this->title);
 
 		if ($this->onload) {
 			$smarty->assign('on_load', ' onload="'
@@ -151,13 +152,13 @@ class Page
 		event::call('page_assemblebody', $this);
 		$smarty->assign('page_bodylines', join("\n", $this->bodylines));
 
-		if (config::get('cfg_mainsite')) {
-			$smarty->assign('banner_link', config::get('cfg_mainsite'));
+		if (Config::get('cfg_mainsite')) {
+			$smarty->assign('banner_link', Config::get('cfg_mainsite'));
 		}
 
-		$smarty->assign('banner', config::get('style_banner'));
-		$smarty->assign('banner_x', config::get('style_banner_x'));
-		$smarty->assign('banner_y', config::get('style_banner_y'));
+		$smarty->assign('banner', Config::get('style_banner'));
+		$smarty->assign('banner_x', Config::get('style_banner_x'));
+		$smarty->assign('banner_y', Config::get('style_banner_y'));
 
 		$nav = new Navigation();
 		$menu = $nav->generateMenu();
@@ -169,7 +170,7 @@ class Page
 		$smarty->assign('menu', $menu->get());
 
 		//check if banner is a swf
-		$bannerExn = substr(config::get('style_banner'), -3);
+		$bannerExn = substr(Config::get('style_banner'), -3);
 		if (strtoupper($bannerExn) == 'SWF') {
 			$smarty->assign('bannerswf', 'true');
 		} else {
@@ -186,12 +187,12 @@ class Page
 		$smarty->assign('profile_time', $processingtime);
 		$smarty->assign('sql_time', number_format($qry->getTotalTime(), 4));
 		if ($this->isAdmin()
-				|| config::get('cfg_profile')
+				|| Config::get('cfg_profile')
 				|| intval(KB_PROFILE)) {
 			$smarty->assign('profile', 1);
 		}
 		$smarty->assign('content_html', $this->contenthtml);
-		if (config::get('user_showmenu')) {
+		if (Config::get('user_showmenu')) {
 			$this->contexthtml = array_merge(array(user::menu()), $this->contexthtml);
 		}
 		$smarty->assign('context_html', implode($this->contexthtml));
@@ -200,7 +201,7 @@ class Page
 
 		$html = $smarty->fetch(get_tpl('index'));
 		if (!$this->cachable) {
-			config::put('cache_enabled', false);
+			Config::put('cache_enabled', false);
 		}
 		event::call('final_content', $html);
 		// Reduce page size by about 10%

@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 include_once(__DIR__.'/constants.php');
 
 // Make sure the core functions are loaded.
@@ -121,7 +123,7 @@ function kbdate($format, $timestamp = null)
  */
 function getYear()
 {
-	if (config::get('show_monthly')) {
+	if (Config::get('show_monthly')) {
 		return gmdate('Y');
 	}
 
@@ -343,7 +345,7 @@ function isNewerVersion($newVersion, $baseVersion)
 
 function loadMods()
 {
-    $mods_active = explode(',', config::get('mods_active'));
+    $mods_active = explode(',', Config::get('mods_active'));
     $modOverrides = false;
     $modconflicts = array();
 

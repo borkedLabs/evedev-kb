@@ -25,6 +25,8 @@
  *
  */
 
+use EDK\Core\Config;
+ 
 // Start timing the killboard page.
 $timeStarted = microtime(true);
 

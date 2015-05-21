@@ -5,11 +5,12 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Core\Config;
 
 //TODO: Make a useful registration mod
 $page = new Page('User - Registration');
 
-if (config::get('user_regdisabled'))
+if (Config::get('user_regdisabled'))
 {
     $page->error('Registration has been disabled.');
     return;
@@ -18,9 +19,9 @@ if (config::get('user_regdisabled'))
 if (isset($_POST['submit']))
 {
     $error = false;
-    if (config::get('user_regpass'))
+    if (Config::get('user_regpass'))
     {
-        if ($_POST['regpass'] != config::get('user_regpass'))
+        if ($_POST['regpass'] != Config::get('user_regpass'))
         {
             $smarty->assign('error', 'Registration password does not match.');
             $error = true;

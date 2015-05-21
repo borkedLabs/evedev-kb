@@ -7,6 +7,7 @@
  */
 
 
+use EDK\Core\Config;
 /**
  * @package EDK
  */
@@ -617,10 +618,10 @@ class KillSummaryTable
 		$smarty->assign('filter', $this->filter);
 		$smarty->assign('losses', 1);
 
-		if (config::get('summarytable_summary'))
+		if (Config::get('summarytable_summary'))
 		{
 			$smarty->assign('summarysummary', 1);
-			if (config::get('summarytable_efficiency'))
+			if (Config::get('summarytable_efficiency'))
 				$smarty->assign('efficiency', round($this->tkisk / (($this->tkisk + $this->tlisk) == 0 ? 1 : ($this->tkisk + $this->tlisk)) * 100, 2));
 			else $smarty->assign('efficiency', 0);
 			$smarty->assign('kiskB', round($this->tkisk/1000000000, 2));

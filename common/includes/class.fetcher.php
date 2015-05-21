@@ -9,6 +9,8 @@
  * EDK Feed Syndication v1.9
  * based on liq's feed syndication mod v1.5
  */
+use EDK\Core\Config;
+
 $feedversion = "v1.9";
 
 /**
@@ -51,7 +53,7 @@ class Fetcher
 		$this->accepttrust = $accepttrust;
 		$this->killsAdded = 0;
 		$this->killsSkipped = 0;
-		$fetchurl = $url.$str."&board=".urlencode(config::get('cfg_kbtitle'));
+		$fetchurl = $url.$str."&board=".urlencode(Config::get('cfg_kbtitle'));
 		if(strpos($fetchurl, 'apikills=1')) $this->apikills = true;
 		else $this->apikills = false;
 		if(strpos($fetchurl, '?') === false)
@@ -199,7 +201,7 @@ class Fetcher
 		@unlink($this->feedfilename.'.stat');
 		@unlink($this->feedfilename.'.tstat');
 
-		if(config::get('fetch_verbose'))
+		if(Config::get('fetch_verbose'))
 		{
 			if($this->killsAdded == 1) $suffixA = '';
 			else $suffixA = 's';
@@ -264,8 +266,8 @@ class Fetcher
 				else
 				{
 					//Check age of mail
-					if(config::get('filter_apply')
-							&& $killstamp < config::get('filter_date'))
+					if(Config::get('filter_apply')
+							&& $killstamp < Config::get('filter_date'))
 					{
 						$killid = -4;
 					}
@@ -318,17 +320,17 @@ class Fetcher
 					}
 					if($killid <= 0)
 					{
-						if($killid == 0 && config::get('fetch_verbose'))
+						if($killid == 0 && Config::get('fetch_verbose'))
 								$this->html .= "Killmail ".intval($this->title)." is malformed. ".$this->uurl." Kill ID = ".$this->title." <br />\n";
-						if($killid == -1 && config::get('fetch_verbose'))
+						if($killid == -1 && Config::get('fetch_verbose'))
 								$this->html .= "Killmail ".intval($this->title)." already posted <a href=\"?a=kill_detail&amp;kll_id=".$parser->getDupeID()."\">here</a>.<br />\n";
-						if($killid == -2 && config::get('fetch_verbose'))
-								$this->html .= "Killmail ".intval($this->title)." is not related to ".config::get('cfg_kbtitle').".<br />\n";
-						if($killid == -3 && config::get('fetch_verbose'))
+						if($killid == -2 && Config::get('fetch_verbose'))
+								$this->html .= "Killmail ".intval($this->title)." is not related to ".Config::get('cfg_kbtitle').".<br />\n";
+						if($killid == -3 && Config::get('fetch_verbose'))
 								$this->html .= "Killmail ".intval($this->title)." already posted <a href=\"?a=kill_detail&amp;kll_external_id=".$this->apiID."\">here</a>.<br />\n";
-						if($killid == -4 && config::get('fetch_verbose'))
+						if($killid == -4 && Config::get('fetch_verbose'))
 								$this->html .= "Killmail ".intval($this->title)." too old to post with current settings.<br />\n";
-						if($killid == -5 && config::get('fetch_verbose'))
+						if($killid == -5 && Config::get('fetch_verbose'))
 								$this->html .= "Killmail ".intval($this->title)." has already been deleted.<br />\n";
 						$this->killsSkipped++;
 					}

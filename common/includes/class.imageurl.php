@@ -7,6 +7,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * Generate the correct URL for an image.
  * @package EDK
@@ -54,7 +55,7 @@ class imageURL
 		// Images are handled by the killboard if they are maps or we specify
 		// (globally or just this instance)
 		if ($type == 'map' || $type == 'region' || $type == 'cons'
-				|| !config::get('cfg_ccpimages') || $internal) {
+				|| !Config::get('cfg_ccpimages') || $internal) {
 			$ccp = false;
 			$url = KB_HOST."/thumb.php";
 		} else {
@@ -62,7 +63,7 @@ class imageURL
 			$url = IMG_SERVER;
 		}
 
-		if ($ccp || config::get('cfg_pathinfo')) {
+		if ($ccp || Config::get('cfg_pathinfo')) {
 			switch ($type) {
 				case 'Character':
 				case 'Pilot':

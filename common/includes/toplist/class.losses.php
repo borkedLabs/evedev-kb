@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 // Create a box to display the top pilots at something. Subclasses of TopList
 // define the something.
 

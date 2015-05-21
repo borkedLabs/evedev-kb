@@ -1,4 +1,6 @@
 <?php
+use EDK\Core\Config;
+
 /*
  * @package EDK
  */
@@ -129,8 +131,8 @@ class pInvtype extends pageAssembly
 				$list = new KillList();
 				$list->setOrdered(true);
 				$list->addInvolvedShipType($this->typeID);
-				$list->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), config::get('killcount'));
+				$list->setPageSplit(Config::get('killcount'));
+				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
 				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$html = $smarty->fetch(get_tpl('invtype_ship_killlist'));
@@ -144,8 +146,8 @@ class pInvtype extends pageAssembly
 				$list = new KillList();
 				$list->setOrdered(true);
 				$list->addVictimShipType($this->typeID);
-				$list->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), config::get('killcount'));
+				$list->setPageSplit(Config::get('killcount'));
+				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
 
 				$table = new KillListTable($list);
 				$table->setDayBreak(false);

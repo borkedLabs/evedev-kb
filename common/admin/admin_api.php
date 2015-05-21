@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 require_once("common/admin/admin_menu.php");
 
 $page = new Page("Settings - Kill Log API");
@@ -62,21 +64,21 @@ if ($_POST['add'] ) {
 
 if ($_POST['submit'] || $_POST['import']) {
 	if ($_POST['API_MultipleMode']) {
-		config::set('API_MultipleMode', '1');
+		Config::set('API_MultipleMode', '1');
 	} else {
-		config::set('API_MultipleMode', '0');
+		Config::set('API_MultipleMode', '0');
 	}
 
 	if ($_POST['post_no_npc_only']) {
-		config::set('post_no_npc_only', '1');
+		Config::set('post_no_npc_only', '1');
 	} else {
-		config::set('post_no_npc_only', '0');
+		Config::set('post_no_npc_only', '0');
 	}
 
 	if ($_POST['API_NoOfAPICalls']) {
 		$tmp = intval($_POST['API_NoOfAPICalls']);
 		if($tmp <= 0 || $tmp > 100) $tmp = 1;
-                config::set('apikillmails_numberofcalls', $tmp);
+                Config::set('apikillmails_numberofcalls', $tmp);
         }
 
 	$html .= "Settings Saved.<br />";
@@ -93,7 +95,7 @@ if ($_POST['import'] || isset($_GET['Process'])) {
 		$processindex = 1;
 	}
 
-	if (config::get("API_MultipleMode")) { // save output to file and load when complete
+	if (Config::get("API_MultipleMode")) { // save output to file and load when complete
 		$i = $processindex;
 		$qry = new DBQuery();
 		$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '".KB_SITE."' ORDER BY key_name");
@@ -255,7 +257,7 @@ if ($_POST['apilog']) {
 
 	$order = array();
 	for ($i = 1; $i <= $keycount; $i++) {
-		$corpName = config::get("API_Name_$i");
+		$corpName = Config::get("API_Name_$i");
 		$order[$i] = $corpName;
 	}
 	uasort($order, "cmp");
@@ -409,17 +411,17 @@ if ($_POST['apilog']) {
 
 	$html .= "<table><tr><td style='height:30px; width:150px'>Ignore NPC only deaths?</td>";
 	$html .= "<td><input type='checkbox' name='post_no_npc_only' id='post_no_npc_only'";
-	if (config::get('post_no_npc_only')) $html .= " checked=\"checked\"";
+	if (Config::get('post_no_npc_only')) $html .= " checked=\"checked\"";
 	$html .= " /></td></tr>";
 
 	$html .= "<tr><td style='height:30px; width:150px'>Import multiple keys one at a time? </td>";
 	$html .= "<td><input type='checkbox' name='API_MultipleMode' id='API_MultipleMode'";
-	if (config::get('API_MultipleMode')) $html .= " checked=\"checked\"";
+	if (Config::get('API_MultipleMode')) $html .= " checked=\"checked\"";
 	$html .= " /></td></tr>";
 
 	$html .= "<tr><td style='height:30px; width:150px'>Max. number of API calls per key [1..100] </td>";
 	$html .= "<td><input type='text' name='API_NoOfAPICalls' id='API_NoOfAPICalls' size='5'";
-	if ($NoAPICalls = config::get('apikillmails_numberofcalls')) {
+	if ($NoAPICalls = Config::get('apikillmails_numberofcalls')) {
 		 $html .= " value=\"". $NoAPICalls ."\"";
 	}
 	else {

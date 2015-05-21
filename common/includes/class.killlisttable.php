@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * @package EDK
  */
@@ -51,10 +53,10 @@ class KillListTable
 		$prevdate = "";
 		$this->kill_list_->rewind();
 		$smarty->assign('daybreak', $this->daybreak_);
-		$smarty->assign('comments_count', config::get('comments_count'));
+		$smarty->assign('comments_count', Config::get('comments_count'));
 
 		// evil hardcode-hack, don't do this at home kids ! ;)
-		if (config::get('style_name') == 'revelations')
+		if (Config::get('style_name') == 'revelations')
 		{
 			$smarty->assign('comment_white', '_white');
 		}
@@ -108,13 +110,13 @@ class KillListTable
 			$kll['fb'] = $kill->getFBPilotName();
 			$kll['fbcorp'] = $kill->getFBCorpName();
 			if ($kill->isClassified() && !Session::isAdmin()) {
-				if (config::get('killlist_regionnames')) {
+				if (Config::get('killlist_regionnames')) {
 					$kll['region'] = Language::get("classified");
 				}
 				$kll['systemsecurity'] = "-";
 				$kll['system'] = Language::get("classified");
 			} else {
-				if (config::get('killlist_regionnames')) {
+				if (Config::get('killlist_regionnames')) {
 					$kll['region'] = $kill->getSystem()->getRegionName();
 				}
 				$kll['systemsecurity'] = $kill->getSolarSystemSecurity();
@@ -127,11 +129,11 @@ class KillListTable
 			$kll['fbid'] = $kill->getFBPilotID();
 			$kll['fbcorpid'] = $kill->getFBCorpID();
 			$kll['inv'] = 0;
-			if (config::get('killlist_involved')) {
+			if (Config::get('killlist_involved')) {
 				$kll['inv'] = $kill->getInvolvedPartyCount();
 			}
 			$kll['timestamp'] = $kill->getTimeStamp();
-			if (config::get('killlist_alogo'))
+			if (Config::get('killlist_alogo'))
 			{
 				// Need to return yet another value from killlists.
 				$all = new Alliance($kill->getVictimAllianceID());
@@ -155,7 +157,7 @@ class KillListTable
 
 			$kll['fbplext'] = $kill->getFBPilotExternalID();
 			$kll['plext'] = $kill->getFBPilotExternalID();
-			if (config::get('comments_count'))
+			if (Config::get('comments_count'))
 			{
 				$kll['commentcount'] = $kill->countComment();
 			}
@@ -164,17 +166,17 @@ class KillListTable
 			$kll['kill'] = false;
 			if ($this->combined_)
 			{
-				if(config::get('cfg_allianceid')
+				if(Config::get('cfg_allianceid')
 						&& in_array($kill->getVictimAllianceID(),
-								config::get('cfg_allianceid'))) {
+								Config::get('cfg_allianceid'))) {
 					$kll['loss'] = true;
-				} else if (config::get('cfg_corpid')
+				} else if (Config::get('cfg_corpid')
 						&& in_array($kill->getVictimCorpID(),
-								config::get('cfg_corpid'))) {
+								Config::get('cfg_corpid'))) {
 					$kll['loss'] = true;
-				} else if (config::get('cfg_pilotid')
+				} else if (Config::get('cfg_pilotid')
 						&& in_array($kill->getVictimID(),
-								config::get('cfg_pilotid'))) {
+								Config::get('cfg_pilotid'))) {
 					$kll['loss'] = true;
 				}
 				$kll['kill'] = !$kll['loss'];
@@ -210,7 +212,7 @@ class KillListTable
 		}
 
 		$smarty->assignByRef('killlist', $kl);
-		$smarty->assign('killlist_iskloss', config::get('killlist_iskloss'));
+		$smarty->assign('killlist_iskloss', Config::get('killlist_iskloss'));
 		return $smarty->fetch(get_tpl('killlisttable'));
 	}
 }

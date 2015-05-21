@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /*
  * @package EDK
  */
@@ -40,10 +42,10 @@ class pSelf extends pageAssembly
     {
         global $smarty;
 		$alls = $corps = $pilots = false;
-		if(config::get('cfg_allianceid'))
+		if(Config::get('cfg_allianceid'))
 		{
 			$alls = array();
-			foreach(config::get('cfg_allianceid') as $entity)
+			foreach(Config::get('cfg_allianceid') as $entity)
 			{
 				$alliance = new Alliance($entity);
 				if ($alliance->getExternalID()) {
@@ -60,10 +62,10 @@ class pSelf extends pageAssembly
 					'url' => $url);
 			}
 		}
-		if(config::get('cfg_corpid'))
+		if(Config::get('cfg_corpid'))
 		{
 			$corps = array();
-			foreach(config::get('cfg_corpid') as $entity)
+			foreach(Config::get('cfg_corpid') as $entity)
 			{
 				$corp = new Corporation($entity);
 				if ($corp->getExternalID()) {
@@ -80,10 +82,10 @@ class pSelf extends pageAssembly
 					'url' => $url);
 			}
 		}
-		if(config::get('cfg_pilotid'))
+		if(Config::get('cfg_pilotid'))
 		{
 			$pilots = array();
-			foreach(config::get('cfg_pilotid') as $entity)
+			foreach(Config::get('cfg_pilotid') as $entity)
 			{
 				$pilot = new Pilot($entity);
 				if ($pilot->getExternalID()) {
@@ -109,9 +111,9 @@ class pSelf extends pageAssembly
     }
 }
 
-if(count(config::get('cfg_allianceid'))
-	+ count(config::get('cfg_corpid'))
-	+ count(config::get('cfg_pilotid')) > 1)
+if(count(Config::get('cfg_allianceid'))
+	+ count(Config::get('cfg_corpid'))
+	+ count(Config::get('cfg_pilotid')) > 1)
 {
 
 	$selfDetail = new pSelf();
@@ -121,9 +123,9 @@ if(count(config::get('cfg_allianceid'))
 
 	$selfDetail->page->generate();
 }
-else if(config::get('cfg_allianceid'))
+else if(Config::get('cfg_allianceid'))
 {
-	$alls = config::get('cfg_allianceid');
+	$alls = Config::get('cfg_allianceid');
 	/* @var $alliance Alliance */
 	$alliance = Cacheable::factory('Alliance', $alls[0]);
 	if ($alliance->getExternalID()) {
@@ -134,9 +136,9 @@ else if(config::get('cfg_allianceid'))
 	header("Location: ".htmlspecialchars_decode($url));
 	die;
 }
-elseif(config::get('cfg_corpid'))
+elseif(Config::get('cfg_corpid'))
 {
-	$corps = config::get('cfg_corpid');
+	$corps = Config::get('cfg_corpid');
 	/* @var $corp Corporation */
 	$corp = Cacheable::factory('Corporation', $corps[0]);
 	if ($corp->getExternalID()) {
@@ -147,9 +149,9 @@ elseif(config::get('cfg_corpid'))
 	header("Location: ".htmlspecialchars_decode($url));
 	die;
 }
-elseif(config::get('cfg_pilotid'))
+elseif(Config::get('cfg_pilotid'))
 {
-	$pilots = config::get('cfg_pilotid');
+	$pilots = Config::get('cfg_pilotid');
 	/* @var $pilot Pilot */
 	$pilot = Cacheable::factory('Pilot', $pilots[0]);
 	if ($pilot->getExternalID()) {

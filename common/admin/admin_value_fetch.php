@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 
 $page = new Page('Fetcher - Item Values from CREST');
 $page->setAdmin();
@@ -32,7 +33,7 @@ if($_POST['submit'])
         $url = ValueFetcherCrest::$CREST_URL;
     }
 
-    config::set('fetchurl', $url);
+    Config::set('fetchurl', $url);
 
     $ValueFetcherCrest = new ValueFetcherCrest($url);
 
@@ -53,8 +54,8 @@ if($_POST['submit'])
 else
 {
     // Get from config
-    $url = config::get('itemPriceCrestUrl');
-    $timestamp = config::get('lastfetch');
+    $url = Config::get('itemPriceCrestUrl');
+    $timestamp = Config::get('lastfetch');
     $time = date('r', $timestamp);
     if ($url == null)
     {

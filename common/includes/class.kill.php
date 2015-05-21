@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
  
 /**
@@ -524,7 +525,7 @@ class Kill extends Cacheable
 	{
 		if(!is_null($this->mail)) return $this->mail;
 
-		if (config::get('km_cache_enabled')
+		if (Config::get('km_cache_enabled')
 				&& file_exists(KB_PAGECACHEDIR."/".$this->getID().".txt")) {
 			$this->mail = file_get_contents(
 					KB_PAGECACHEDIR."/".$this->getID().".txt");
@@ -742,7 +743,7 @@ class Kill extends Cacheable
 			}
 		}
 
-		if ($this->id && config::get('km_cache_enabled')) {
+		if ($this->id && Config::get('km_cache_enabled')) {
 			file_put_contents(KB_MAILCACHEDIR."/".$this->getID().".txt", $mail);
 		}
 
@@ -959,7 +960,7 @@ class Kill extends Cacheable
 	 */
 	function isClassified()
 	{
-		if (config::get('kill_classified')) {
+		if (Config::get('kill_classified')) {
 			if (user::role('classified_see')) {
 				return false;
 			} else if($this->getClassifiedTime() > 0) {
@@ -975,10 +976,10 @@ class Kill extends Cacheable
 	 */
 	function getClassifiedTime()
 	{
-		if (config::get('kill_classified') &&
+		if (Config::get('kill_classified') &&
 				strtotime($this->getTimeStamp()." UTC") >
-				time() - config::get('kill_classified') * 3600) {
-			return (config::get('kill_classified') * 3600
+				time() - Config::get('kill_classified') * 3600) {
+			return (Config::get('kill_classified') * 3600
 				- time() + strtotime($this->getTimeStamp()." UTC"));
 		}
 		return 0;
@@ -1046,40 +1047,40 @@ class Kill extends Cacheable
 			return $this->relatedkillcount;
 		}
 
-		if(config::get('cfg_pilotid') && config::get('cfg_allianceid')
-			|| config::get('cfg_pilotid') && config::get('cfg_corpid')
-			|| config::get('cfg_corpid') && config::get('cfg_allianceid')) {
+		if(Config::get('cfg_pilotid') && Config::get('cfg_allianceid')
+			|| Config::get('cfg_pilotid') && Config::get('cfg_corpid')
+			|| Config::get('cfg_corpid') && Config::get('cfg_allianceid')) {
 			$sql ="SELECT COUNT(DISTINCT ind_kll_id) AS kills FROM kb3_inv_detail INNER JOIN
 				kb3_kills ON (kll_id = ind_kll_id) WHERE
 				ind_timestamp <= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) + 60 * 60))."'
 				AND ind_timestamp >= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) - 60 * 60))."'
 				AND kll_system_id = ".$this->getSystem()->getID();
 			$sqlinv = array();
-			if(config::get('cfg_allianceid'))
-				$sqlinv[] = "ind_all_id in (".implode(",", config::get('cfg_allianceid')).")";
-			if(config::get('cfg_corpid'))
-				$sqlinv[] = "ind_crp_id in (".implode(",", config::get('cfg_corpid')).")";
-			if(config::get('cfg_pilotid'))
-				$sqlinv[] = "ind_plt_id in (".implode(",", config::get('cfg_pilotid')).")";
+			if(Config::get('cfg_allianceid'))
+				$sqlinv[] = "ind_all_id in (".implode(",", Config::get('cfg_allianceid')).")";
+			if(Config::get('cfg_corpid'))
+				$sqlinv[] = "ind_crp_id in (".implode(",", Config::get('cfg_corpid')).")";
+			if(Config::get('cfg_pilotid'))
+				$sqlinv[] = "ind_plt_id in (".implode(",", Config::get('cfg_pilotid')).")";
 			$sql .= " AND (".implode(" OR ", $sqlinv).")";
-		} else if(config::get('cfg_allianceid')) {
+		} else if(Config::get('cfg_allianceid')) {
 			$sql ="SELECT COUNT(DISTINCT ina_kll_id) AS kills FROM kb3_inv_all INNER JOIN
 				kb3_kills ON (kll_id = ina_kll_id) WHERE
-				ina_all_id in (".implode(",", config::get('cfg_allianceid')).") AND
+				ina_all_id in (".implode(",", Config::get('cfg_allianceid')).") AND
 				ina_timestamp <= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) + 60 * 60))."'
 				AND ina_timestamp >= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) - 60 * 60))."'
 				AND kll_system_id = ".$this->getSystem()->getID();
-		} else if(config::get('cfg_corpid')) {
+		} else if(Config::get('cfg_corpid')) {
 			$sql ="SELECT COUNT(DISTINCT inc_kll_id) AS kills FROM kb3_inv_crp INNER JOIN
 				kb3_kills ON (kll_id = inc_kll_id) WHERE
-				inc_crp_id in (".implode(",", config::get('cfg_corpid')).") AND
+				inc_crp_id in (".implode(",", Config::get('cfg_corpid')).") AND
 				inc_timestamp <= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) + 60 * 60))."'
 				AND inc_timestamp >= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) - 60 * 60))."'
 				AND kll_system_id = ".$this->getSystem()->getID();
-		} else if(config::get('cfg_pilotid')) {
+		} else if(Config::get('cfg_pilotid')) {
 			$sql ="SELECT COUNT(DISTINCT ind_kll_id) AS kills FROM kb3_inv_detail INNER JOIN
 				kb3_kills ON (kll_id = ind_kll_id) WHERE
-				ind_plt_id in (".implode(",", config::get('cfg_pilotid')).") AND
+				ind_plt_id in (".implode(",", Config::get('cfg_pilotid')).") AND
 				ind_timestamp <= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) + 60 * 60))."'
 				AND ind_timestamp >= '".(date('Y-m-d H:i:s',strtotime($this->getTimeStamp()) - 60 * 60))."'
 				AND kll_system_id = ".$this->getSystem()->getID();
@@ -1123,22 +1124,22 @@ class Kill extends Cacheable
 		$sqlInv = array();
 		$sqlVic = array();
 		$inv = false;
-		if(config::get('cfg_allianceid')) {
+		if(Config::get('cfg_allianceid')) {
 			$sqlInv[] = "EXISTS (SELECT * FROM kb3_inv_detail WHERE ind_kll_id = kll.kll_id".
-				" AND ind_all_id NOT IN (".implode(",", config::get('cfg_allianceid')).") LIMIT 1)";
-			$sqlVic[] = "kll.kll_all_id IN (".implode(",", config::get('cfg_allianceid')).")";
+				" AND ind_all_id NOT IN (".implode(",", Config::get('cfg_allianceid')).") LIMIT 1)";
+			$sqlVic[] = "kll.kll_all_id IN (".implode(",", Config::get('cfg_allianceid')).")";
 			$inv = true;
 		}
-		if(config::get('cfg_corpid')) {
+		if(Config::get('cfg_corpid')) {
 			$sqlInv[] = "EXISTS (SELECT * FROM kb3_inv_detail WHERE ind_kll_id = kll.kll_id".
-				" AND ind_crp_id NOT IN (".implode(",", config::get('cfg_corpid')).") LIMIT 1)";
-			$sqlVic[] .= "kll.kll_crp_id IN (".implode(",", config::get('cfg_corpid')).")";
+				" AND ind_crp_id NOT IN (".implode(",", Config::get('cfg_corpid')).") LIMIT 1)";
+			$sqlVic[] .= "kll.kll_crp_id IN (".implode(",", Config::get('cfg_corpid')).")";
 			$inv = true;
 		}
-		if(config::get('cfg_pilotid')) {
+		if(Config::get('cfg_pilotid')) {
 			$sqlInv[] = "EXISTS (SELECT * FROM kb3_inv_detail WHERE ind_kll_id = kll.kll_id".
-				" AND ind_plt_id NOT IN (".implode(",", config::get('cfg_pilotid')).") LIMIT 1)";
-			$sqlVic[] .= "kll.kll_victim_id IN (".implode(",", config::get('cfg_pilotid')).")";
+				" AND ind_plt_id NOT IN (".implode(",", Config::get('cfg_pilotid')).") LIMIT 1)";
+			$sqlVic[] .= "kll.kll_victim_id IN (".implode(",", Config::get('cfg_pilotid')).")";
 			$inv = true;
 		}
 		if($inv) {
@@ -1339,7 +1340,7 @@ class Kill extends Cacheable
 			$item = $itd->getItem();
 			if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();
 		}
-		if(config::get('kd_droptototal')) {
+		if(Config::get('kd_droptototal')) {
 			foreach($this->droppeditems_ as $itd) {
 				$item = $itd->getItem();
 				if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();

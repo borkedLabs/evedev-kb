@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 class EDKApiConnectionException extends Exception {}
 
 // **********************************************************************************************************************************************
@@ -199,11 +201,11 @@ class API_Helpers
 	// **********************************************************************************************************************************************
 	public static function ConvertTimestamp($timeStampGMT)
 	{
-		if (!config::get('API_ConvertTimestamp'))
+		if (!Config::get('API_ConvertTimestamp'))
 		{
 			// set gmt offset
 			$gmoffset = (strtotime(date("M d Y H:i:s")) - strtotime(gmdate("M d Y H:i:s")));
-			//if (!config::get('API_ForceDST'))
+			//if (!Config::get('API_ForceDST'))
 				//$gmoffset = $gmoffset + 3600;
 
 			$cachetime = date("Y-m-d H:i:s",  strtotime($timeStampGMT) + $gmoffset);
@@ -291,7 +293,7 @@ class API_Helpers
         public static function autoSetApiConnectionMethod()
         {
             // has the connection method already been set?
-            if(config::get('apiConnectionMethod'))
+            if(Config::get('apiConnectionMethod'))
             {
                 return;
             }
@@ -299,21 +301,21 @@ class API_Helpers
             // don't test cURL connection if cURL is not available
             if(!API_Helpers::isCurlSupported())
             {
-                config::set('apiConnectionMethod', 'file');
+                Config::set('apiConnectionMethod', 'file');
                 return;
             }
             
             try
             {
                 // initialize with cURL setting
-                config::set('apiConnectionMethod', 'curl');
+                Config::set('apiConnectionMethod', 'curl');
                 @API_Helpers::testXmlApiConnection();
                 @API_Helpers::testCrestApiConnection();
             } 
             catch (Exception $ex) 
             {
                 // cURL didn't work, fall back to file
-                config::set('apiConnectionMethod', 'file');
+                Config::set('apiConnectionMethod', 'file');
             }
         }
         

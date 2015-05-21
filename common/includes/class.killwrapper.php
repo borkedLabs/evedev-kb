@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * @package EDK
  *
@@ -501,7 +503,7 @@ class KillWrapper extends Kill
 	 */
 	function isClassified()
 	{
-		if (config::get('kill_classified')) {
+		if (Config::get('kill_classified')) {
 			if (user::role('classified_see'))
 				return false;
 
@@ -518,10 +520,10 @@ class KillWrapper extends Kill
 	 */
 	function getClassifiedTime()
 	{
-		if (config::get('kill_classified') &&
+		if (Config::get('kill_classified') &&
 				strtotime($this->getTimeStamp() . " UTC") >
-				time() - config::get('kill_classified') * 3600) {
-			return (config::get('kill_classified') * 3600
+				time() - Config::get('kill_classified') * 3600) {
+			return (Config::get('kill_classified') * 3600
 					- time() + strtotime($this->getTimeStamp() . " UTC"));
 		}
 		return 0;
@@ -630,7 +632,7 @@ class KillWrapper extends Kill
 				$value += $itd->getValue() * $itd->getQuantity();
 			}
 		}
-		if (config::get('kd_droptototal')) {
+		if (Config::get('kd_droptototal')) {
 			foreach ($this->droppeditems_ as $itd) {
 				$item = $itd->getItem();
 				if (strpos($item->getName(), "Blueprint") === FALSE) {

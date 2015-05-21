@@ -1,5 +1,7 @@
 <?php
 
+use EDK\Core\Config;
+
 class API {
 	private $error = null;
 
@@ -10,7 +12,7 @@ class API {
 		
 		// init API connection method
 		API_Helpers::autoSetApiConnectionMethod();
-		if(config::get('apiConnectionMethod') == 'curl')
+		if(Config::get('apiConnectionMethod') == 'curl')
 		{
 			\Pheal\Core\Config::getInstance()->http_method = 'curl';
 		}

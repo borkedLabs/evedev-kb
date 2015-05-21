@@ -6,7 +6,10 @@
  * @package EDK
  */
 
-if (config::get('comments')) {
+ 
+use EDK\Core\Config;
+
+if (Config::get('comments')) {
 	require_once('common/includes/xajax.functions.php');
 }
 
@@ -153,15 +156,15 @@ class pKillDetail extends pageAssembly
 		$this->commenthtml = '';
 		// Check for posted comments.
 		// If a comment is being posted then we won't exit this block.
-		if (isset($_POST['comment']) && config::get('comments')) {
+		if (isset($_POST['comment']) && Config::get('comments')) {
 			$comments = new Comments($this->kll_id);
 			$pw = false;
-			if (!config::get('comments_pw') || $this->page->isAdmin()) {
+			if (!Config::get('comments_pw') || $this->page->isAdmin()) {
 				$pw = true;
 			}
 			if ($pw || crypt($_POST['password'],
-					config::get("comment_password"))
-							== config::get("comment_password")) {
+					Config::get("comment_password"))
+							== Config::get("comment_password")) {
 				if ($_POST['comment'] == '') {
 					$this->commenthtml = 'Error: The silent type, hey? Good for'
 							.' you, bad for a comment.';
@@ -173,7 +176,7 @@ class pKillDetail extends pageAssembly
 					}
 					$comments->addComment($name, $comment);
 					//Remove cached file.
-					if (config::get('cache_enabled')) {
+					if (Config::get('cache_enabled')) {
 						cache::deleteCache();
 					}
 					//Redirect to avoid refresh reposting comments.
@@ -193,11 +196,11 @@ class pKillDetail extends pageAssembly
 		}
 
 		global $smarty;
-		if (!file_exists('img/panel/'.config::get('fp_theme').'.png')) {
-				config::set('fp_theme', 'tyrannis');
+		if (!file_exists('img/panel/'.Config::get('fp_theme').'.png')) {
+				Config::set('fp_theme', 'tyrannis');
 		}
-		$smarty->assign('panel_colour', config::get('fp_theme'));
-		$smarty->assign('showiskd', config::get('kd_showiskd'));
+		$smarty->assign('panel_colour', Config::get('fp_theme'));
+		$smarty->assign('showiskd', Config::get('kd_showiskd'));
 		$smarty->assign('formURL', edkURI::build(edkURI::parseURI()));
 
 		$this->involvedSetup();
@@ -216,7 +219,7 @@ class pKillDetail extends pageAssembly
 				$item = $destroyed->getItem();
 				$i_qty = $destroyed->getQuantity();
 
-				if (config::get('item_values')) {
+				if (Config::get('item_values')) {
 					$value = $destroyed->getValue();
 					$this->totalValue += $value * $i_qty;
 					$formatted = $destroyed->getFormattedValue();
@@ -325,12 +328,12 @@ class pKillDetail extends pageAssembly
 				$item = $dropped->getItem();
 				$i_qty = $dropped->getQuantity();
 
-				if (config::get('item_values')) {
+				if (Config::get('item_values')) {
 					$value = $dropped->getValue();
 					$this->dropvalue+=$value * $i_qty;
 					$formatted = $dropped->getFormattedValue();
 
-					if (config::get('kd_droptototal') && strpos(
+					if (Config::get('kd_droptototal') && strpos(
 							$item->getName(), 'Blueprint') !== false) {
 						$this->bp_value += $value * $i_qty;
 					}
@@ -433,7 +436,7 @@ class pKillDetail extends pageAssembly
 		$this->involved = array();
 
 		$this->ownKill = false;
-		$invlimit = config::get('kd_involvedlimit');
+		$invlimit = Config::get('kd_involvedlimit');
 		if (!is_numeric($invlimit)) $this->nolimit = 1;
 		foreach ($this->kill->getInvolved() as $inv) {
 			$corp = Corporation::getByID($inv->getCorpID());
@@ -460,11 +463,11 @@ class pKillDetail extends pageAssembly
 			} else {
 				$this->invShips[$ship_name] += 1;
 			}
-			if (in_array($alliance->getID(), config::get('cfg_allianceid'))) {
+			if (in_array($alliance->getID(), Config::get('cfg_allianceid'))) {
 				$this->ownKill = true;
-			} else if (in_array($corp->getID(), config::get('cfg_corpid'))) {
+			} else if (in_array($corp->getID(), Config::get('cfg_corpid'))) {
 				$this->ownKill = true;
-			} else if (in_array($inv->getPilotID(), config::get('cfg_pilotid'))) {
+			} else if (in_array($inv->getPilotID(), Config::get('cfg_pilotid'))) {
 				$this->ownKill = true;
 			}
 
@@ -480,7 +483,7 @@ class pKillDetail extends pageAssembly
 				}
 
 				// include the final blow pilot
-				if (!config::get('kd_showbox')
+				if (!Config::get('kd_showbox')
 						|| $inv->getPilotID() != $this->kill->getFBPilotID()) {
 					continue;
 				}
@@ -648,7 +651,7 @@ class pKillDetail extends pageAssembly
 		$smarty->assign('alliesCount', count($this->invAllies));
 		$smarty->assign('kill', $this->ownKill);
 		$smarty->assign('involvedPartyCount', $this->kill->getInvolvedPartyCount());
-		$smarty->assign('showext', config::get('kd_showext'));
+		$smarty->assign('showext', Config::get('kd_showext'));
 
 		return $smarty->fetch(get_tpl('kill_detail_inv_sum'));
 	}
@@ -757,7 +760,7 @@ class pKillDetail extends pageAssembly
 	 */
 	function comments()
 	{
-		if (config::get('comments')) {
+		if (Config::get('comments')) {
 			$this->page->addOnLoad("xajax_getComments({$this->kll_id});");
 			$comments = new Comments(0);
 
@@ -778,7 +781,7 @@ class pKillDetail extends pageAssembly
 	{
 		global $smarty;
 
-		if (config::get('item_values')) {
+		if (Config::get('item_values')) {
 			$smarty->assign('item_values', 'true');
 		}
                 
@@ -912,7 +915,7 @@ class pKillDetail extends pageAssembly
 		// Get Ship Value
 		$this->ShipValue = $this->kill->getVictimShip()->getPrice();
 
-		if (config::get('kd_droptototal')) {
+		if (Config::get('kd_droptototal')) {
 			$this->totalValue += $this->dropvalue;
 		}
 
@@ -1296,7 +1299,7 @@ class pKillDetail extends pageAssembly
 		$smarty->assignByRef('fitting_ammo_high', $hiammo);
 		$smarty->assignByRef('fitting_ammo_mid', $midammo);
                 $smarty->assignByRef('fitting_ammo_low', $lowammo);
-		$smarty->assign('showammo', config::get('fp_showammo'));
+		$smarty->assign('showammo', Config::get('fp_showammo'));
 
 		$smarty->assign('victimShipBigImage',
 				$this->kill->getVictimShip()->getImage(256));
@@ -1371,7 +1374,7 @@ class pKillDetail extends pageAssembly
 	function damageBox()
 	{
 		global $smarty;
-		if (!config::get('kd_showbox')) {
+		if (!Config::get('kd_showbox')) {
 			return '';
 		}
 		$maxdamage = -1;
@@ -1438,7 +1441,7 @@ class pKillDetail extends pageAssembly
                     $this->addMenuItem("link", "CREST Link", $crestUrl);
                 }
                 
-		if (config::get('kd_EFT')) {
+		if (Config::get('kd_EFT')) {
 			$this->addMenuItem("link", "EFT Fitting", edkURI::page(
 					'eft_fitting', $this->kill->getID(), 'kll_id'), 0, 0,
 					"sndReq('".edkURI::page(
@@ -1457,9 +1460,9 @@ class pKillDetail extends pageAssembly
 
 		if ($this->kill->relatedKillCount() > 1
 				|| $this->kill->relatedLossCount() > 1
-				|| ((config::get('cfg_allianceid')
-						|| config::get('cfg_corpid')
-						|| config::get('cfg_pilotid'))
+				|| ((Config::get('cfg_allianceid')
+						|| Config::get('cfg_corpid')
+						|| Config::get('cfg_pilotid'))
 				&& $this->kill->relatedKillCount()
 						+ $this->kill->relatedLossCount() > 1)) {
 			$this->addMenuItem("link", "Related kills ("
@@ -1519,7 +1522,7 @@ class pKillDetail extends pageAssembly
 	 */
 	function points()
 	{
-		if (!config::get('kill_points')) return '';
+		if (!Config::get('kill_points')) return '';
 
 		$scorebox = new Box("Points");
 		$scorebox->addOption("points", $this->kill->getKillPoints());
@@ -1582,7 +1585,7 @@ class pKillDetail extends pageAssembly
 	 */
 	private function updatePrices()
 	{
-		if (config::get('item_values')) {
+		if (Config::get('item_values')) {
 			if (isset($_POST['submit']) && $_POST['submit'] == 'UpdateValue') {
 				// Send new value for item to the database
 				$qry = DBFactory::getDBQuery();

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * Generate and parse killboard URIs
  * @package EDK

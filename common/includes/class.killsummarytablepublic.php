@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * @package EDK
  */
@@ -162,7 +164,7 @@ class KillSummaryTablePublic extends KillSummaryTable
 		$smarty->assign('verbose', $this->verbose);
 		$smarty->assign('filter', $this->filter);
 
-		if (config::get('summarytable_summary')) {
+		if (Config::get('summarytable_summary')) {
 			$smarty->assign('summarysummary', 1);
 			$smarty->assign('efficiency', 0);
 			$smarty->assign('kiskB', round($this->tkisk / 1000000000, 2));

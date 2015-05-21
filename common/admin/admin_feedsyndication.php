@@ -12,6 +12,8 @@
  *
  */
 
+use EDK\Core\Config;
+
 // set this to 1 if you are running a master killboard and want
 // to even fetch mails not related to your corp / alliance
 define('MASTER', 0);
@@ -27,8 +29,8 @@ $html .= "<script language=\"JavaScript\">function checkAll(checkname, exby) {fo
 $html .= "<div class='block-header2'>The new feed syndication is more reliable and faster. Support for the old feeds will be removed in EDK 4.1<br /><a href='".edkURI::page("admin_idfeedsyndication")."'>Feed Syndication</a></div>";
 $html .= "<table class='kb-subtable'>";
 
-if (config::get('fetch_feed_count'))
-    $feedcount = config::get('fetch_feed_count');
+if (Config::get('fetch_feed_count'))
+    $feedcount = Config::get('fetch_feed_count');
 else
     $feedcount = 3;
 // saving urls and options
@@ -37,19 +39,19 @@ if ($_POST['submit'] || $_POST['fetch'])
     if (ctype_digit($_POST['fetch_feed_count']) && $_POST['fetch_feed_count'] > 0)
     {
         $feedcount = $_POST['fetch_feed_count'];
-        for ($i = config::get('fetch_feed_count'); $i > $feedcount; $i--)
+        for ($i = Config::get('fetch_feed_count'); $i > $feedcount; $i--)
         {
-            config::del('fetch_url_' . $i);
+            Config::del('fetch_url_' . $i);
         }
-        config::set('fetch_feed_count', $feedcount);
+        Config::set('fetch_feed_count', $feedcount);
     }
-        config::del('fetch_verbose');
-        config::del('fetch_compress');
+        Config::del('fetch_verbose');
+        Config::del('fetch_compress');
 
     if ($_POST['fetch_comment'])
-        config::set('fetch_comment', $_POST['fetch_comment']);
+        Config::set('fetch_comment', $_POST['fetch_comment']);
     else
-        config::set('fetch_comment', '');
+        Config::set('fetch_comment', '');
 	
     for ($i = 1; $i <= $feedcount; $i++)
     {
@@ -62,16 +64,16 @@ if ($_POST['submit'] || $_POST['fetch'])
             if ($_POST['apikills'] && in_array ($i, $_POST['apikills']))
                 $apikills = "on";
             else $apikills = "";
-            $fstr = config::get('fetch_url_' . $i);
+            $fstr = Config::get('fetch_url_' . $i);
             $ftmp = explode(':::', $fstr);
             // reset the feed lastkill details if the URL or api status has changed
             if($_POST[$url] != $ftmp[0] )
-                config::set($url, $_POST[$url] . ':::' . 0 . ':::' . 0 . ':::' . $apikills . ':::' . $trusted);
+                Config::set($url, $_POST[$url] . ':::' . 0 . ':::' . 0 . ':::' . $apikills . ':::' . $trusted);
             elseif($trusted != $ftmp[4] || $apikills != $ftmp[3] )
-                config::set($url, $_POST[$url] . ':::' . $ftmp[1] . ':::' . 0 . ':::' . $apikills . ':::' . $trusted);
+                Config::set($url, $_POST[$url] . ':::' . $ftmp[1] . ':::' . 0 . ':::' . $apikills . ':::' . $trusted);
         }
         else
-            config::set($url, '');
+            Config::set($url, '');
         $feed[$i] = '';
     }
 }
@@ -81,7 +83,7 @@ $trusted = array();
 $apikills = array();
 for ($i = 1; $i <= $feedcount; $i++)
 {
-    $str = config::get('fetch_url_' . $i);
+    $str = Config::get('fetch_url_' . $i);
     $tmp = explode(':::', $str);
     $feed[$i] = $tmp[0];
     $feedlast[$i] = $tmp[1];
@@ -99,18 +101,18 @@ if ($_POST['fetch'])
 	$myid = array();
 	if(!MASTER)
 	{
-		foreach (config::get('cfg_pilotid') as $entity)
+		foreach (Config::get('cfg_pilotid') as $entity)
 		{
 			$pilot = new Pilot($entity);
 			$myid[] = '&pilot=' . urlencode($pilot->getName());
 		}
 
-		foreach (config::get('cfg_corpid') as $entity)
+		foreach (Config::get('cfg_corpid') as $entity)
 		{
 			$corp = new Corporation($entity);
 			$myid[] = '&corp=' . urlencode($corp->getName());
 		}
-		foreach (config::get('cfg_allianceid') as $entity)
+		foreach (Config::get('cfg_allianceid') as $entity)
 		{
 			$alli = new Alliance($entity);
 			$myid[] = '&alli=' . urlencode($alli->getName());
@@ -158,7 +160,7 @@ if ($_POST['fetch'])
 					if($lastkill > $feedlast[$i]) $feedlast[$i] = $lastkill;
 					// Store oldest 'most recent kill id' fetched from all entities.
 					// (since kills may be posted during multiple fetches)
-					if($feedlast[$i]) config::set("fetch_url_" . $i, $feed[$i] . ':::' . $feedlast[$i] . ':::' . 0 . ':::' . $apikills[$i] . ':::' . $trusted[$i]);
+					if($feedlast[$i]) Config::set("fetch_url_" . $i, $feed[$i] . ':::' . $feedlast[$i] . ':::' . 0 . ':::' . $apikills[$i] . ':::' . $trusted[$i]);
                 }
             }
             else
@@ -176,7 +178,7 @@ if ($_POST['fetch'])
 				// If kills are fetched then change the last kill id for the feed
 				if($feedlast[$i])
 				{
-						config::set($cfg, $feed[$i] . ':::' . $feedlast[$i] . ':::' . 0 . ':::' . $apikills[$i] . ':::' . $trusted[$i]);
+						Config::set($cfg, $feed[$i] . ':::' . $feedlast[$i] . ':::' . 0 . ':::' . $apikills[$i] . ':::' . $trusted[$i]);
 				}
 			}
         }
@@ -259,8 +261,8 @@ $html .= "<tr><td height='30px' width='150px'><b>Number of feeds:</b></td>";
 $html .= "<td><input type='text' name='fetch_feed_count' size='2' maxlength='2' class='password' value='" . $feedcount . "'></td></tr>";
 $html .= "<tr><td height='50px' width='150px'><b>Comment for automatically parsed killmails?</b></td>";
 $html .= "<td><input type='text' size='50' class='password' name='fetch_comment' id='fetch_comment' value=\"";
-if (config::get('fetch_comment'))
-    $html .= config::get('fetch_comment');
+if (Config::get('fetch_comment'))
+    $html .= Config::get('fetch_comment');
 $html .= "\"><br><i> (leave blank for none)</i><br></td></tr>";
 $html .= "</table><br><br>";
 $html .= "<input type='submit' id='submit' name='submit' value=\"Save\">";

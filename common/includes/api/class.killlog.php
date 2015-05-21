@@ -5,6 +5,8 @@
  * does not suffer from the terrible account-wide caching, always returns valid results
  */
 
+use EDK\Core\Config;
+
 define('NUMBER_OF_CALLS_DEFAULT', 1);
 
 class API_KillLog extends API
@@ -37,7 +39,7 @@ class API_KillLog extends API
 		$skipped = array();
 
 		// get maximum number of API calls per key
-		$numberOfCallsMax = config::get('apikillmails_numberofcalls');
+		$numberOfCallsMax = Config::get('apikillmails_numberofcalls');
 		if(!$numberOfCallsMax)
 		{
 			$numberOfCallsMax = NUMBER_OF_CALLS_DEFAULT;

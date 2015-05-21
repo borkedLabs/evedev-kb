@@ -5,7 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
- 
+namespace EDK\Core;
 /*
  * @package EDK
  */

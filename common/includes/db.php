@@ -6,7 +6,8 @@
  * @package EDK
  */
 
- use EDK\Database\Connection;
+use EDK\Core\Config;
+use EDK\Database\Connection;
  
 // cached query class will be loaded additionally once we received the config
 // see common/index.php for details

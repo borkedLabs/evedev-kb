@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * API Character Sheet - char/CharacterSheet
  * Incomplete - Does not read Certificates or Roles
@@ -288,7 +290,7 @@ class API_CharacterSheet
 		$configvalue = $this->CharName_ . '_CharacterSheet';
 
 		$CachedTime = ApiCache::get($configvalue);
-		$UseCaching = config::get('API_UseCache');
+		$UseCaching = Config::get('API_UseCache');
 
         $url = API_SERVER."/char/CharacterSheet.xml.aspx" . $keystring;
 

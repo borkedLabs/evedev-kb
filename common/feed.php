@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /*
  * Create a syndication feed of kills stored on this board.
  *
@@ -32,10 +34,10 @@ $maxreturned = 200;
 $html = '<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   	<channel>
-	<title>'.config::get('cfg_kbtitle').'</title>
+	<title>'.Config::get('cfg_kbtitle').'</title>
 	<link>'.KB_HOST.'</link>
 	<description>Kill Feed '.$feedversion.'</description>
-	<copyright>'.config::get('cfg_kbtitle')."</copyright>\n";
+	<copyright>'.Config::get('cfg_kbtitle')."</copyright>\n";
 if($_GET['combined']) $html .= "<combined>true</combined>\n";
 if($_GET['APIkills']) $html .= "<apikills>true</apikills>\n";
 $klist = new KillList();
@@ -111,24 +113,24 @@ if ($_GET['alli'] || $_GET['alliance_name'])
 	$alli = Alliance::add(urldecode($a));
 }
 
-if ($_GET['master'] == 1 && config::get('feed_allowmaster') == 1)
+if ($_GET['master'] == 1 && Config::get('feed_allowmaster') == 1)
 {
 	$master = true;
 }
 
 if (!$master && $_GET['losses'])
 {
-	if (config::get('cfg_pilotid')  && !$pilot && !corp && !$alli) // local
+	if (Config::get('cfg_pilotid')  && !$pilot && !corp && !$alli) // local
 	{
-		$klist->addVictimPilot(config::get('cfg_pilotid'));
+		$klist->addVictimPilot(Config::get('cfg_pilotid'));
 	}
-	if (config::get('cfg_corpid')  && !$pilot && !$corp && !$alli) // local
+	if (Config::get('cfg_corpid')  && !$pilot && !$corp && !$alli) // local
 	{
-		$klist->addVictimCorp(config::get('cfg_corpid'));
+		$klist->addVictimCorp(Config::get('cfg_corpid'));
 	}
-	if (config::get('cfg_allianceid')  && !$pilot && !$corp && !$alli) // local
+	if (Config::get('cfg_allianceid')  && !$pilot && !$corp && !$alli) // local
 	{
-		$klist->addVictimAlliance(config::get('cfg_allianceid'));
+		$klist->addVictimAlliance(Config::get('cfg_allianceid'));
 	}
 	if ($pilot && $_GET['friend']) // remote friend
 	{
@@ -163,17 +165,17 @@ else if(!$master && $_GET['combined'])
 }
 else if (!$master)
 {
-	if (config::get('cfg_pilotid')  && !$pilot && !corp && !$alli) // local
+	if (Config::get('cfg_pilotid')  && !$pilot && !corp && !$alli) // local
 	{
-		$klist->addInvolvedPilot(config::get('cfg_pilotid'));
+		$klist->addInvolvedPilot(Config::get('cfg_pilotid'));
 	}
-	if (config::get('cfg_corpid')  && !$pilot && !$corp && !$alli) // local
+	if (Config::get('cfg_corpid')  && !$pilot && !$corp && !$alli) // local
 	{
-		$klist->addInvolvedCorp(config::get('cfg_corpid'));
+		$klist->addInvolvedCorp(Config::get('cfg_corpid'));
 	}
-	if (config::get('cfg_allianceid')  && !$pilot && !$corp && !$alli) // local
+	if (Config::get('cfg_allianceid')  && !$pilot && !$corp && !$alli) // local
 	{
-		$klist->addInvolvedAlliance(config::get('cfg_allianceid'));
+		$klist->addInvolvedAlliance(Config::get('cfg_allianceid'));
 	}
 	if ($pilot && $_GET['friend']) // remote friend
 	{
@@ -223,18 +225,18 @@ $qry = DBFactory::getDBQuery();
 if($klist->getCount() != $maxreturned)
 {
 	$qry = DBFactory::getDBQuery();
-	if(config::get('kill_classified'))
+	if(Config::get('kill_classified'))
 	{
-		$qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills WHERE kll_timestamp < "'.(date('Y-m-d H:i:s',time()-config::get('kill_classified')*60*60)).'"');
+		$qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills WHERE kll_timestamp < "'.(date('Y-m-d H:i:s',time()-Config::get('kill_classified')*60*60)).'"');
 	}
 	else $qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills');
 	$row=$qry->getRow();
 	$finalkill = intval($row['finalkill']);
 }
-elseif(config::get('kill_classified'))
+elseif(Config::get('kill_classified'))
 {
 	// Check if there are classified kills with lower kill ids still to come.
-	$qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills WHERE kll_timestamp < "'.(date('Y-m-d H:i:s',time()-config::get('kill_classified')*60*60)).'"');
+	$qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills WHERE kll_timestamp < "'.(date('Y-m-d H:i:s',time()-Config::get('kill_classified')*60*60)).'"');
 	$row=$qry->getRow();
 	if($finalkill > intval($row['finalkill'])) $finalkill = intval($row['finalkill']);
 }

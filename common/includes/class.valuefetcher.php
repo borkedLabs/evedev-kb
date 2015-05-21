@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * @package EDK
  */
@@ -156,7 +157,7 @@ class valueFetcher
 		$querytext .= " ON DUPLICATE KEY UPDATE price = VALUES(price);";
 		$qry->execute($querytext);
 		//return "Count: ".$i." <br><br>Cached on: ".date('H:i:s - j/m/Y',(int)($sxe->timestamp));
-		config::set('lastfetch', time());
+		Config::set('lastfetch', time());
 		return $i;
 	}
 }

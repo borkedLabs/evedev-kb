@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * @package EDK
  */
@@ -20,30 +22,30 @@ class involved
 	{
 		if($type == 'kill')
 		{
-			if(config::get('cfg_pilotid'))
-					$killlist->addInvolvedPilot(config::get('cfg_pilotid'));
-			if(config::get('cfg_corpid'))
-					$killlist->addInvolvedCorp(config::get('cfg_corpid'));
-			if(config::get('cfg_allianceid'))
-					$killlist->addInvolvedAlliance(config::get('cfg_allianceid'));
+			if(Config::get('cfg_pilotid'))
+					$killlist->addInvolvedPilot(Config::get('cfg_pilotid'));
+			if(Config::get('cfg_corpid'))
+					$killlist->addInvolvedCorp(Config::get('cfg_corpid'));
+			if(Config::get('cfg_allianceid'))
+					$killlist->addInvolvedAlliance(Config::get('cfg_allianceid'));
 		}
 		elseif($type == 'loss')
 		{
-			if(config::get('cfg_pilotid'))
-					$killlist->addVictimPilot(config::get('cfg_pilotid'));
-			if(config::get('cfg_corpid'))
-					$killlist->addVictimCorp(config::get('cfg_corpid'));
-			if(config::get('cfg_allianceid'))
-					$killlist->addVictimAlliance(config::get('cfg_allianceid'));
+			if(Config::get('cfg_pilotid'))
+					$killlist->addVictimPilot(Config::get('cfg_pilotid'));
+			if(Config::get('cfg_corpid'))
+					$killlist->addVictimCorp(Config::get('cfg_corpid'));
+			if(Config::get('cfg_allianceid'))
+					$killlist->addVictimAlliance(Config::get('cfg_allianceid'));
 		}
 		elseif($type == 'combined')
 		{
-			if(config::get('cfg_pilotid'))
-					$killlist->addCombinedPilot(config::get('cfg_pilotid'));
-			if(config::get('cfg_corpid'))
-					$killlist->addCombinedCorp(config::get('cfg_corpid'));
-			if(config::get('cfg_allianceid'))
-					$killlist->addCombinedAlliance(config::get('cfg_allianceid'));
+			if(Config::get('cfg_pilotid'))
+					$killlist->addCombinedPilot(Config::get('cfg_pilotid'));
+			if(Config::get('cfg_corpid'))
+					$killlist->addCombinedCorp(Config::get('cfg_corpid'));
+			if(Config::get('cfg_allianceid'))
+					$killlist->addCombinedAlliance(Config::get('cfg_allianceid'));
 		}
 	}
 

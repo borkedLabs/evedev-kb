@@ -5,6 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Core\Config;
+
 /*
  * @package EDK
  */
@@ -84,10 +86,10 @@ class pSystemDetail extends pageAssembly
 	{
 		$this->kill_summary = new KillSummaryTable();
 		$this->kill_summary->setSystem($this->sys_id);
-		if (config::get('kill_classified')) {
+		if (Config::get('kill_classified')) {
 			$this->kill_summary->setEndDate(
 					gmdate('Y-m-d H:i', strtotime('now - '
-					.(config::get('kill_classified')).' hours')));
+					.(Config::get('kill_classified')).' hours')));
 		}
 		involved::load($this->kill_summary, 'kill');
 		$this->kill_summary->generate();
@@ -126,28 +128,28 @@ class pSystemDetail extends pageAssembly
 			involved::load($klist, 'kill');
 		}
 		$klist->addSystem($this->system);
-		if (config::get('kill_classified')) {
+		if (Config::get('kill_classified')) {
 			$klist->setEndDate(gmdate('Y-m-d H:i', strtotime('now - '
-					.(config::get('kill_classified')).' hours')));
+					.(Config::get('kill_classified')).' hours')));
 		}
 		if ($scl_id) {
 			$klist->addVictimShipClass(intval($scl_id));
 		} else {
-			$klist->setPodsNoobShips(config::get('podnoobs'));
+			$klist->setPodsNoobShips(Config::get('podnoobs'));
 		}
 
 		if ($this->view == 'recent' || !$this->view) {
 			$klist->setLimit(20);
-			$smarty->assign('klheader', config::get('killcount').' most recent kills');
+			$smarty->assign('klheader', Config::get('killcount').' most recent kills');
 		} else if ($this->view == 'losses') {
 			$smarty->assign('klheader', 'All losses');
 		} else {
 			$smarty->assign('klheader', 'All kills');
 		}
 
-		$klist->setPageSplit(config::get('killcount'));
+		$klist->setPageSplit(Config::get('killcount'));
 
-		$pagesplitter = new PageSplitter($klist->getCount(), config::get('killcount'));
+		$pagesplitter = new PageSplitter($klist->getCount(), Config::get('killcount'));
 
 		$table = new KillListTable($klist);
 		$smarty->assign('klsplit', $pagesplitter->generate());

@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page();
@@ -52,7 +53,7 @@ if ($_REQUEST['searchphrase'] != "" && strlen($_REQUEST['searchphrase']) >= 3) {
 }
 if ($val = $_REQUEST['standing']) {
 	$qry = DBFactory::getDBQuery();
-	foreach (config::get('cfg_corpid') as $id) {
+	foreach (Config::get('cfg_corpid') as $id) {
 		$fromtyp = 'c';
 		$fields = array();
 		$fields[] = $id;
@@ -64,7 +65,7 @@ if ($val = $_REQUEST['standing']) {
 
 		$qry->execute('INSERT INTO kb3_standings VALUES (\'' . join("','", $fields) . '\')');
 	}
-	foreach (config::get('cfg_allianceid') as $id) {
+	foreach (Config::get('cfg_allianceid') as $id) {
 		$fromtyp = 'a';
 		$fields = array();
 		$fields[] = $id;
@@ -84,30 +85,30 @@ if (edkURI::getArg('del', 1)) {
 	$toid = intval(substr($standingId, 1));
 
 	$qry = DBFactory::getDBQuery();
-	if (config::get('cfg_corpid')) {
+	if (Config::get('cfg_corpid')) {
 		$qry->execute('DELETE FROM kb3_standings WHERE sta_from IN ('
-				. join(',', config::get('cfg_corpid'))
+				. join(',', Config::get('cfg_corpid'))
 				. ') AND sta_from_type=\'c\' AND sta_to=' . $toid
 				. ' AND sta_to_type=\'' . $totyp . '\'');
 	}
-	if (config::get('cfg_allianceid')) {
+	if (Config::get('cfg_allianceid')) {
 		$qry->execute('DELETE FROM kb3_standings WHERE sta_from IN ('
-				. join(',', config::get('cfg_allianceid'))
+				. join(',', Config::get('cfg_allianceid'))
 				. ') AND sta_from_type=\'a\' AND sta_to=' . $toid
 				. ' AND sta_to_type=\'' . $totyp . '\'');
 	}
 }
 
 $permt = array();
-if (config::get("cfg_corpid") || config::get("cfg_allianceid")) {
+if (Config::get("cfg_corpid") || Config::get("cfg_allianceid")) {
 	$qry = DBFactory::getDBQuery();
 	$ent = array();
-	if (config::get("cfg_corpid")) {
-		$ent[] = 'sta_from IN (' . join(',', config::get("cfg_corpid"))
+	if (Config::get("cfg_corpid")) {
+		$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_corpid"))
 				. ') AND sta_from_type=\'c\'';
 	}
-	if (config::get("cfg_allianceid")) {
-		$ent[] = 'sta_from IN (' . join(',', config::get("cfg_allianceid"))
+	if (Config::get("cfg_allianceid")) {
+		$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_allianceid"))
 				. ') AND sta_from_type=\'a\'';
 	}
 	$qry->execute('SELECT * FROM kb3_standings WHERE ('

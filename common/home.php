@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Core\Config;
 /*
  * @package EDK
  */
@@ -79,7 +80,7 @@ class pHome extends pageAssembly
 		if((int)$year && !$period) {
 			$year = (int)$year;
 			$this->dateSet = true;
-			if (config::get('show_monthly')) {
+			if (Config::get('show_monthly')) {
 				$month = (int) edkURI::getArg('m', $datestart + 1);
 			} else {
 				$week = (int) edkURI::getArg('w', $datestart + 1);
@@ -127,10 +128,10 @@ class pHome extends pageAssembly
 
 		$this->scl_id = (int) edkURI::getArg('scl_id');
 
-		$this->showcombined = config::get('show_comb_home')
-				&& (count(config::get('cfg_allianceid'))
-						|| count(config::get('cfg_corpid'))
-						|| count(config::get('cfg_pilotid')));
+		$this->showcombined = Config::get('show_comb_home')
+				&& (count(Config::get('cfg_allianceid'))
+						|| count(Config::get('cfg_corpid'))
+						|| count(Config::get('cfg_pilotid')));
 
 		if ($this->view == 'kills') {
 			$this->page->setTitle('Kills - '.$this->getCurrentPeriod());
@@ -150,8 +151,8 @@ class pHome extends pageAssembly
 	function summaryTable()
 	{
 		// Display the summary table.
-		if (config::get('summarytable')) {
-			if (config::get('public_summarytable')) {
+		if (Config::get('summarytable')) {
+			if (Config::get('public_summarytable')) {
 				//$kslist = new KillList();
 				$summarytable = new KillSummaryTablePublic();
 				$this->loadTime($summarytable);
@@ -202,11 +203,11 @@ class pHome extends pageAssembly
 		$klist = new KillList();
 		$klist->setOrdered(true);
 		// We'll be needing comment counts so set the killlist to retrieve them
-		if (config::get('comments_count')) {
+		if (Config::get('comments_count')) {
 			$klist->setCountComments(true);
 		}
 		// We'll be needing involved counts so set the killlist to retrieve them
-		if (config::get('killlist_involved')) {
+		if (Config::get('killlist_involved')) {
 			$klist->setCountInvolved(true);
 		}
 
@@ -223,24 +224,24 @@ class pHome extends pageAssembly
 		if ($this->scl_id) {
 			$klist->addVictimShipClass($this->scl_id);
 		} else {
-			$klist->setPodsNoobShips(config::get('podnoobs'));
+			$klist->setPodsNoobShips(Config::get('podnoobs'));
 		}
 
 		// If no week is set then show the most recent kills. Otherwise
 		// show all kills for the week using the page splitter.
-		if (config::get("cfg_fillhome") && !$this->dateSet) {
-			$klist->setLimit(config::get('killcount'));
+		if (Config::get("cfg_fillhome") && !$this->dateSet) {
+			$klist->setLimit(Config::get('killcount'));
 			$table = new KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
-			$table->setLimit(config::get('killcount'));
+			$table->setLimit(Config::get('killcount'));
 			$html = $table->generate();
 		} else {
 			$this->loadTime($klist);
 			//$klist->setWeek($this->week);
 			//$klist->setYear($this->year);
-			$klist->setPageSplit(config::get('killcount'));
+			$klist->setPageSplit(Config::get('killcount'));
 			$pagesplitter = new PageSplitter($klist->getCount(),
-					config::get('killcount'));
+					Config::get('killcount'));
 			$table = new KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
 			$pagesplit = $pagesplitter->generate();
@@ -293,7 +294,7 @@ class pHome extends pageAssembly
 		}
 		$this->addMenuItem("link", "Kills", edkURI::build($killLink));
 		$this->addMenuItem("link", "Losses", edkURI::build($lossLink));
-		if (config::get('show_comb_home')) {
+		if (Config::get('show_comb_home')) {
 			$this->addMenuItem("link", $weektext."All Kills",
 					edkURI::build($combinedLink));
 		}
@@ -328,7 +329,7 @@ class pHome extends pageAssembly
 	function clock()
 	{
 		// Show the Eve time.
-		if (config::get('show_clock')) {
+		if (Config::get('show_clock')) {
 			$this->page->addOnLoad("setInterval('updateClock()', 60000 )");
 			$clock = new Clock();
 			return $clock->generate();
@@ -529,7 +530,7 @@ class pHome extends pageAssembly
 				($this->week == kbdate('W') && $this->year == kbdate('o'));
 
 		$this->pargs = $this->nargs = $this->cargs = array();
-		if (config::get('show_monthly')) {
+		if (Config::get('show_monthly')) {
 			$this->pargs[] = array('period', 'week', true);
 			$this->nargs[] = array('period', 'week', true);
 			$this->cargs[] = array('period', 'week', true);
@@ -582,7 +583,7 @@ class pHome extends pageAssembly
 		$this->currentTime =
 				($this->month == kbdate('m') && $this->year == kbdate('Y'));
 
-		if (!config::get('show_monthly')) {
+		if (!Config::get('show_monthly')) {
 			$this->pargs[] = array('period', 'month', true);
 			$this->nargs[] = array('period', 'month', true);
 			$this->cargs[] = array('period', 'month', true);
@@ -698,7 +699,7 @@ class pHome extends pageAssembly
 			$this->setMonth($month, $year);
 			$this->week = 0;
 		} else {
-			if (config::get('show_monthly')) {
+			if (Config::get('show_monthly')) {
 				$this->setMonth(kbdate('m'), kbdate('Y'));
 			} else {
 				$this->setWeek(kbdate('W'), kbdate('o'));

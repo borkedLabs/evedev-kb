@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 @set_time_limit(0);
 require_once('common/admin/admin_menu.php');
 
@@ -87,21 +89,21 @@ if ($_POST)
 	{
 		$comma = false;
 		$str = '';
-		if(config::get('cfg_allianceid'))
+		if(Config::get('cfg_allianceid'))
 		{
-			$str = 'a'.implode(',a', config::get('cfg_allianceid'));
+			$str = 'a'.implode(',a', Config::get('cfg_allianceid'));
 			$comma = true;
 		}
-		if (config::get('cfg_corpid'))
+		if (Config::get('cfg_corpid'))
 		{
 			if($comma) $str .= ',';
 			else $comma = true;
-			$str .= 'c'.implode(',c', config::get('cfg_corpid'));
+			$str .= 'c'.implode(',c', Config::get('cfg_corpid'));
 		}
-		if (config::get('cfg_pilotid'))
+		if (Config::get('cfg_pilotid'))
 		{
 			if($comma) $str .= ',';
-			$str .= 'p'.implode(',p', config::get('cfg_pilotid'));
+			$str .= 'p'.implode(',p', Config::get('cfg_pilotid'));
 		}
 		$_SESSION['admin_kill_export']['to_export'] = $str;
 

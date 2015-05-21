@@ -8,6 +8,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 
 require_once('common/xajax/xajax.php');
@@ -148,7 +149,7 @@ function doAjaxSearch($searchphrase='', $type='pilot', $limit = 10)
  */
 function getComments($kll_id, $message = '')
 {
-	if (config::get('comments'))
+	if (Config::get('comments'))
 	{
 		$kll_id = intval($kll_id);
 		$comments = new Comments($kll_id);
@@ -157,7 +158,7 @@ function getComments($kll_id, $message = '')
 		if(!$smarty)
 		{
 			$smarty = new Smarty();
-			$themename = config::get('theme_name');
+			$themename = Config::get('theme_name');
 			if(is_dir('./themes/'.$themename.'/templates'))
 				$smarty->template_dir = './themes/'.$themename.'/templates';
 			else $smarty->template_dir = './themes/default/templates';
@@ -169,7 +170,7 @@ function getComments($kll_id, $message = '')
 			$smarty->cache_dir = KB_CACHEDIR.'/data';
 			$smarty->assign('theme_url', THEME_URL);
 			$smarty->assign('style', $stylename);
-			$smarty->assign('img_url', config::get('cfg_img'));
+			$smarty->assign('img_url', Config::get('cfg_img'));
 			$smarty->assign('img_host', IMG_HOST);
 			$smarty->assign('kb_host', KB_HOST);
 			$smarty->assignByRef('config', $config);
@@ -199,7 +200,7 @@ function getComments($kll_id, $message = '')
  */
 function postComments($kll_id, $author, $comment, $password = '')
 {
-	if (config::get('comments'))
+	if (Config::get('comments'))
 	{
 		$kll_id = intval($kll_id);
 		$comments = new Comments($kll_id);
@@ -209,11 +210,11 @@ function postComments($kll_id, $author, $comment, $password = '')
 
 		$comments = new Comments($kll_id);
 		$pw = false;
-		if (!config::get('comments_pw') || $page->isAdmin())
+		if (!Config::get('comments_pw') || $page->isAdmin())
 		{
 			$pw = true;
 		}
-		if ($pw || crypt($password, config::get("comment_password")) == config::get("comment_password"))
+		if ($pw || crypt($password, Config::get("comment_password")) == Config::get("comment_password"))
 		{
 			if ($comment == '')
 			{

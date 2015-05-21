@@ -2,6 +2,7 @@
 /**
  * @package EDK
  */
+use EDK\Core\Config;
 
 $xajax = new xajax();
 event::register('page_assembleheader', 'edk_xajax::insertHTML');
@@ -15,7 +16,7 @@ if(strpos($uri, "?") === false) $uri .= "?xajax=1";
 else $uri .= "&xajax=1";
 $xajax->configure('requestURI', $uri);
 $xajax->configure('deferScriptGeneration', false);
-$xajax->configure('javascript URI', config::get('cfg_kbhost')."/vendor/xajax/xajax/");
+$xajax->configure('javascript URI', Config::get('cfg_kbhost')."/vendor/xajax/xajax/");
 
 /**
  * @package EDK

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * Create a box to display information in.
  *
@@ -67,7 +69,7 @@ class Box
         $smarty->assign('count', count($this->box_array));
         if ($this->icon_)
         {
-            $smarty->assign('icon', config::get('cfg_img')."/".$this->icon_);
+            $smarty->assign('icon', Config::get('cfg_img')."/".$this->icon_);
         }
         $smarty->assign('title', $this->title_ );
         $smarty->assign('items', $this->box_array);

@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 require_once('common/admin/option_acache.php');
 
 require_once('update/CCPDB/xml.parser.php');

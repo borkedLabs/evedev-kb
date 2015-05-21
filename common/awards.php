@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /*
  * @package EDK
  */
@@ -109,7 +111,7 @@ class pAwards extends pageAssembly
 		$tkbox = new AwardBox($tklist, Language::get('topkillers'), Language::get('kills'), "kills", "eagle");
 		$awardboxes[] = $tkbox->generate();
 		// top scorers
-		if (config::get('kill_points'))
+		if (Config::get('kill_points'))
 		{
 			$tklist = new TopList_Score();
 			$tklist->setMonth($this->month);

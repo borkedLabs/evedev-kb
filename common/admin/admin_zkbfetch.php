@@ -6,6 +6,8 @@
  *
  */
 
+use EDK\Core\Config;
+
 require_once('common/admin/admin_menu.php');
 
 $page = new Page("Administration - zKillboard Fetch v" . ZKB_FETCH_VERSION);
@@ -93,18 +95,18 @@ if ($_POST['submit'] || $_POST['fetch'])
 
     if($_POST['post_no_npc_only_zkb'])
     {
-        config::set('post_no_npc_only_zkb', 1);
+        Config::set('post_no_npc_only_zkb', 1);
     }
 
     else
     {
-        config::set('post_no_npc_only_zkb', 0);
+        Config::set('post_no_npc_only_zkb', 0);
     }
     
     // set the negative timestamp offset
     if(isset($_POST['killTimestampOffset']) && is_numeric($_POST['killTimestampOffset']))
     {
-        config::set('killTimestampOffset', (int) $_POST['killTimestampOffset']);
+        Config::set('killTimestampOffset', (int) $_POST['killTimestampOffset']);
     }
     
 }
@@ -142,8 +144,8 @@ foreach($fetchConfigs as &$fetchConfig)
 
 $smarty->assignByRef('rows', $rows);
 $smarty->assign('results', $html);
-$smarty->assign('post_no_npc_only_zkb', config::get('post_no_npc_only_zkb'));
-$killTimestampOffset = config::get('killTimestampOffset');
+$smarty->assign('post_no_npc_only_zkb', Config::get('post_no_npc_only_zkb'));
+$killTimestampOffset = Config::get('killTimestampOffset');
 if(is_null($killTimestampOffset) || !is_numeric($killTimestampOffset))
 {
     $killTimestampOffset = ZKBFetch::$KILL_TIMESTAMP_OFFSET_DEFAULT;
@@ -171,8 +173,8 @@ function getZKBApi(&$fetchConfig)
         
         try
         {
-            $fetchConfig->setKillTimestampOffset(config::get('killTimestampOffset'));
-            $fetchConfig->setIgnoreNpcOnlyKills((boolean)(config::get('post_no_npc_only_zkb')));
+            $fetchConfig->setKillTimestampOffset(Config::get('killTimestampOffset'));
+            $fetchConfig->setIgnoreNpcOnlyKills((boolean)(Config::get('post_no_npc_only_zkb')));
             $fetchConfig->processApi();
             $html .= "ZKBApi: ".$fetchConfig->getUrl()."<br />\n";
             $html .= count($fetchConfig->getPosted())." kills were posted and ".

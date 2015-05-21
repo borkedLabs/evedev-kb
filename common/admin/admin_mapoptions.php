@@ -6,19 +6,21 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 $page = new Page();
 $page->setAdmin();
 $page->setTitle('Administration - Mapoptions');
 
 if ($_POST['submit'])
 {
-	config::checkCheckbox('map_map_showlines');
-	config::checkCheckbox('map_reg_showlines');
-	config::checkCheckbox('map_con_showlines');
-	config::checkCheckbox('map_con_shownames');
-	config::checkCheckbox('map_map_security');
-	config::checkCheckbox('map_reg_security');
-	config::checkCheckbox('map_con_security');
+	Config::checkCheckbox('map_map_showlines');
+	Config::checkCheckbox('map_reg_showlines');
+	Config::checkCheckbox('map_con_showlines');
+	Config::checkCheckbox('map_con_shownames');
+	Config::checkCheckbox('map_map_security');
+	Config::checkCheckbox('map_reg_security');
+	Config::checkCheckbox('map_con_security');
 
 	foreach ($_POST as $key => $value)
 	{
@@ -47,11 +49,11 @@ if ($_POST['submit'])
 					$val[$i] = min(max($tmp[$i], 0), 255);
 				}
 				$string = implode(',', $val);
-				config::set($key, $string);
+				Config::set($key, $string);
 			}
 			else
 			{
-				config::del($key);
+				Config::del($key);
 			}
 		}
 	}

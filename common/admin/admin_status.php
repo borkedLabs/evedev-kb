@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page('Administration - Troubleshooting');

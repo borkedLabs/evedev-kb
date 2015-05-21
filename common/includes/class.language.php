@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -19,10 +20,10 @@ class Language {
 
 	private static function init()
 	{
-		if(!config::get("cfg_language")) {
-			config::set("cfg_language", "en");
+		if(!Config::get("cfg_language")) {
+			Config::set("cfg_language", "en");
 		}
-		@include_once("common/language/".config::get("cfg_language").".php");
+		@include_once("common/language/".Config::get("cfg_language").".php");
 		include_once("common/language/en.php");
 		self::$lang = $language;
 	}
@@ -43,9 +44,9 @@ class Language {
 		if(!$phrase) {
 			return "";
 		} else if(isset($language) && isset(self::$lang[$language][$phrase])) {
-			return self::$lang[config::get("cfg_language")][$phrase];
-		} else if(isset(self::$lang[config::get("cfg_language")][$phrase])) {
-			return self::$lang[config::get("cfg_language")][$phrase];
+			return self::$lang[Config::get("cfg_language")][$phrase];
+		} else if(isset(self::$lang[Config::get("cfg_language")][$phrase])) {
+			return self::$lang[Config::get("cfg_language")][$phrase];
 		} else if(isset(self::$lang["en"][$phrase])) {
 			return self::$lang["en"][$phrase];
 		} else {
@@ -106,7 +107,7 @@ class Language {
 			self::init();
 		}
 		if($language === null) {
-			$language = config::get("cfg_language");
+			$language = Config::get("cfg_language");
 		} else {
 			$language = preg_replace('/[^a-z-]/', '', strtolower($language));
 		}

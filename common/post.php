@@ -1,5 +1,7 @@
 <?php
 
+use EDK\Core\Config;
+
 $page = new Page('Post kill');
 
 if (isset($_POST['undelete']) && isset($_POST['kll_id']) && $page->isAdmin()) {
@@ -30,9 +32,9 @@ if (isset($html)) {
 }
 
 $smarty->assign('isadmin', $page->isAdmin());
-$smarty->assign('post_forbid', config::get('post_forbid'));
-$smarty->assign('post_crest_forbid', config::get('post_crest_forbid'));
-$smarty->assign('crest_pw_needed', config::get('crest_pw_needed'));
+$smarty->assign('post_forbid', Config::get('post_forbid'));
+$smarty->assign('post_crest_forbid', Config::get('post_crest_forbid'));
+$smarty->assign('crest_pw_needed', Config::get('crest_pw_needed'));
 
 $page->setContent($smarty->fetch(get_tpl('post')));
 $page->generate();
@@ -40,15 +42,15 @@ $page->generate();
 function post()
 {
 	global $page;
-	if (config::get("post_password") == ''
-			|| crypt($_POST['password'], config::get("post_password"))
-			== config::get("post_password")
+	if (Config::get("post_password") == ''
+			|| crypt($_POST['password'], Config::get("post_password"))
+			== Config::get("post_password")
 			|| $page->isAdmin()) {
 		$parser = new Parser($_POST['killmail']);
 
 		// Filtering
-		if (config::get('filter_apply')) {
-			$filterdate = config::get('filter_date');
+		if (Config::get('filter_apply')) {
+			$filterdate = Config::get('filter_date');
 			$year = substr($_POST['killmail'], 0, 4);
 			$month = substr($_POST['killmail'], 5, 2);
 			$day = substr($_POST['killmail'], 8, 2);
@@ -82,7 +84,7 @@ function post()
 			} elseif ($killid == -2) {
 				$html = "You are not authorized to post this killmail.";
 			} elseif ($killid == -3) {
-				$filterdate = kbdate("j F Y", config::get("filter_date"));
+				$filterdate = kbdate("j F Y", Config::get("filter_date"));
 				$html = "You are not allowed to post killmails older than"
 						." $filterdate.";
 			} elseif ($killid == -4) {
@@ -114,9 +116,9 @@ function post()
 function post_crest()
 {
     global $page;
-    if (config::get("crest_pw_needed") == false
-	|| config::get("post_crest_password") == ''
-        || crypt($_POST['password_crest'], config::get("post_crest_password")) == config::get("post_crest_password")
+    if (Config::get("crest_pw_needed") == false
+	|| Config::get("post_crest_password") == ''
+        || crypt($_POST['password_crest'], Config::get("post_crest_password")) == Config::get("post_crest_password")
         || $page->isAdmin()) {
 
         $CrestParser = new CrestParser($_POST['crest_url']);

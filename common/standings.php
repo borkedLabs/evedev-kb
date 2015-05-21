@@ -6,17 +6,19 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 $page = new Page();
 $page->setTitle('Standings');
 
 $qry = DBFactory::getDBQuery();
 $ent = array();
-if (config::get("cfg_corpid")) {
-	$ent[] = 'sta_from IN (' . join(',', config::get("cfg_corpid"))
+if (Config::get("cfg_corpid")) {
+	$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_corpid"))
 			. ') AND sta_from_type=\'c\'';
 }
-if (config::get("cfg_allianceid")) {
-	$ent[] = 'sta_from IN (' . join(',', config::get("cfg_allianceid"))
+if (Config::get("cfg_allianceid")) {
+	$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_allianceid"))
 			. ') AND sta_from_type=\'a\'';
 }
 $qry->execute('SELECT * FROM kb3_standings WHERE ('

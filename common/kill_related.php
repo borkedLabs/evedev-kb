@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /*
  * Build the related kills page.
  * @package EDK
@@ -121,8 +123,8 @@ class pKillRelated extends pageAssembly
 		// Check which side board owner is on and make that the kill side. The other
 		// side is the loss side. If board owner is on neither then victim is the loss
 		// side.
-		if (in_array($this->kill->getVictimAllianceID(), config::get('cfg_allianceid'))
-				|| in_array($this->kill->getVictimCorpID(), config::get('cfg_corpid'))) {
+		if (in_array($this->kill->getVictimAllianceID(), Config::get('cfg_allianceid'))
+				|| in_array($this->kill->getVictimCorpID(), Config::get('cfg_corpid'))) {
 			$tmp = $this->victimAll;
 			$this->victimAll = $this->invAll;
 			$this->invAll = $tmp;

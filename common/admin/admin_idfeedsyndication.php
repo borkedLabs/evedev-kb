@@ -11,17 +11,18 @@
  *
  */
 
+use EDK\Core\Config;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page("Administration - IDFeed Syndication " . ID_FEED_VERSION);
 $page->setCachable(false);
 $page->setAdmin();
 
-$feeds = config::get("fetch_idfeeds");
+$feeds = Config::get("fetch_idfeeds");
 // Add an empty feed to the list, or create with one empty feed.
 if(is_null($feeds)) {
 	$feeds[] = array('url'=>"", 'apikills'=>0, 'lastkill'=>0);
-	config::set("fetch_idfeeds", $feeds);
+	Config::set("fetch_idfeeds", $feeds);
 } else {
 	$feeds[] = array('url'=>"", 'apikills'=>0, 'lastkill'=>0);
 }
@@ -62,16 +63,16 @@ if ($_POST['submit'] || $_POST['fetch'])
 		}
 	}
 	$feeds = &$newlist;
-	config::set("fetch_idfeeds", $feeds);
+	Config::set("fetch_idfeeds", $feeds);
         
         if($_POST['post_no_npc_only_feed'])
         {
-            config::set('post_no_npc_only_feed', 1);
+            Config::set('post_no_npc_only_feed', 1);
         }
         
         else
         {
-            config::set('post_no_npc_only_feed', 0);
+            Config::set('post_no_npc_only_feed', 0);
         }
 	$feeds[] = array('url'=>"", 'apikills'=>0, 'lastkill'=>0);
 }
@@ -89,7 +90,7 @@ if ($_POST['fetch'])
 		} else {
 			$html .= getOldFeed($key, $val);
 		}
-		config::set("fetch_idfeeds", $feeds);
+		Config::set("fetch_idfeeds", $feeds);
 	}
 }
 // generating the html
@@ -105,7 +106,7 @@ foreach($feeds as $key => &$val) {
 	$rows[] = array('name'=>$key, 'uri'=>$val['url'], 'lastkill'=>$val['lastkill'], 'fetch'=>!$fetch);
 }
 $smarty->assignByRef('rows', $rows);
-$smarty->assign('post_no_npc_only_feed', config::get('post_no_npc_only_feed'));
+$smarty->assign('post_no_npc_only_feed', Config::get('post_no_npc_only_feed'));
 $smarty->assign('results', $html);
 $page->addContext($menubox->generate());
 $page->setContent($smarty->fetch(get_tpl('admin_idfeed')));
@@ -119,16 +120,16 @@ function getOwners()
 {
 	$myids = array();
 	if(!defined('MASTER') || !MASTER) {
-		foreach(config::get('cfg_pilotid') as $entity) {
+		foreach(Config::get('cfg_pilotid') as $entity) {
 			$pilot = new Pilot($entity);
 			$myids[] = '&pilot=' . urlencode($pilot->getName());
 		}
 
-		foreach(config::get('cfg_corpid') as $entity) {
+		foreach(Config::get('cfg_corpid') as $entity) {
 			$corp = new Corporation($entity);
 			$myids[] = '&corp=' . urlencode($corp->getName());
 		}
-		foreach(config::get('cfg_allianceid') as $entity) {
+		foreach(Config::get('cfg_allianceid') as $entity) {
 			$alli = new Alliance($entity);
 			$myids[] = '&alli=' . urlencode($alli->getName());
 		}

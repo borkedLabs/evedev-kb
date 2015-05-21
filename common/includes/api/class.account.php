@@ -6,7 +6,9 @@
  * @package EDK
  */
 
- require_once("class.api.php");
+use EDK\Core\Config;
+
+require_once("class.api.php");
 /**
  * Retrieve Character list from CCP API
  * @package EDK

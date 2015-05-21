@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 class ValueFetcherCrestException extends Exception {}
 /**
  * Fetches average item prices from CREST
@@ -100,7 +102,7 @@ class ValueFetcherCrest
         $querytext .= " ON DUPLICATE KEY UPDATE price = VALUES(price);";
 
         $qry->execute($querytext);
-        config::set('lastfetch', time());
+        Config::set('lastfetch', time());
         return $numberOfItemsUpdated;
     }
 }

@@ -7,6 +7,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * simple class for getting CREST references via URL
  */
@@ -46,7 +47,7 @@ class SimpleCrest
 
         API_Helpers::autoSetApiConnectionMethod();
         // determine whether cURL is available
-        if(config::get('apiConnectionMethod') == 'curl' && self::$HTTP_METHOD == 'curl')
+        if(Config::get('apiConnectionMethod') == 'curl' && self::$HTTP_METHOD == 'curl')
         {
             $data = self::getCrestByCurl($url);
         }

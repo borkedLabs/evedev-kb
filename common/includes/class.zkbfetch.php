@@ -1,5 +1,6 @@
 <?php
 
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -513,11 +514,11 @@ class ZKBFetch
         $this->hash = $hash;
 
         // Filtering
-        if(config::get('filter_apply'))
+        if(Config::get('filter_apply'))
         {
-            $filterdate = config::get('filter_date');
+            $filterdate = Config::get('filter_date');
             if ($timestamp < $filterdate) {
-                $filterdate = kbdate("j F Y", config::get("filter_date"));
+                $filterdate = kbdate("j F Y", Config::get("filter_date"));
                 $this->skipped[] = $killData->killID;
                 throw new ZKBFetchException("Kill ".$killData->killID." is older than the oldes allowed date (" .$filterdate. ")", -3);
             }

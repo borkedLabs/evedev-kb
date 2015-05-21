@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -392,15 +393,15 @@ class Parser
 			$kill->set('dmgtaken', $dmgtaken);
 		}
 
-		if (config::get('cfg_allianceid') && in_array($alliance->getID(), config::get('cfg_allianceid')))
+		if (Config::get('cfg_allianceid') && in_array($alliance->getID(), Config::get('cfg_allianceid')))
 		{
 			$authorized = true;
 		}
-		elseif (config::get('cfg_corpid') && in_array($corp->getID(), config::get('cfg_corpid')))
+		elseif (Config::get('cfg_corpid') && in_array($corp->getID(), Config::get('cfg_corpid')))
 		{
 			$authorized = true;
 		}
-		elseif (config::get('cfg_pilotid') && in_array($victim->getID(), config::get('cfg_pilotid')))
+		elseif (Config::get('cfg_pilotid') && in_array($victim->getID(), Config::get('cfg_pilotid')))
 		{
 			$authorized = true;
 		}
@@ -621,22 +622,22 @@ class Parser
 					$iweapon = new Item();
 				}
 
-				if (config::get('cfg_allianceid') && in_array($ialliance->getID(), config::get('cfg_allianceid')))
+				if (Config::get('cfg_allianceid') && in_array($ialliance->getID(), Config::get('cfg_allianceid')))
 				{
 					$authorized = true;
 				}
-				elseif (config::get('cfg_corpid') && in_array($icorp->getID(), config::get('cfg_corpid')))
+				elseif (Config::get('cfg_corpid') && in_array($icorp->getID(), Config::get('cfg_corpid')))
 				{
 					$authorized = true;
 				}
-				elseif (config::get('cfg_pilotid') && in_array($ipilot->getID(), config::get('cfg_pilotid')))
+				elseif (Config::get('cfg_pilotid') && in_array($ipilot->getID(), Config::get('cfg_pilotid')))
 				{
 					$authorized = true;
 				}
 
 				if (!$authorized)
 				{
-					if ($string = config::get('post_permission'))
+					if ($string = Config::get('post_permission'))
 					{
 						if ($string == 'all')
 						{

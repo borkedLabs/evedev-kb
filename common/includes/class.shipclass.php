@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * Contains the attributes of a Ship Class.
  * @package EDK

@@ -6,6 +6,7 @@
  * @package EDK
  */
  
+use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
  
 class CrestParserException extends Exception{}
@@ -161,11 +162,11 @@ class CrestParser
                 $timestamp = $this->killmailRepresentation->killTime;
                 
                 // Filtering
-                if(config::get('filter_apply'))
+                if(Config::get('filter_apply'))
                 {
-                    $filterdate = config::get('filter_date');
+                    $filterdate = Config::get('filter_date');
                     if ($timestamp < $filterdate) {
-                        $filterdate = kbdate("j F Y", config::get("filter_date"));
+                        $filterdate = kbdate("j F Y", Config::get("filter_date"));
                         throw new CrestParserException("You are not allowed to post killmails older than" .$filterdate, -3);
                     }
                 }

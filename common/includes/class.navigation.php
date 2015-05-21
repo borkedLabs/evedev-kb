@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 /**
  * @package EDK
  */
@@ -34,17 +35,17 @@ class Navigation
 			$query .= " AND url NOT LIKE '%?a=campaigns'";
 			$query .= " AND url NOT LIKE '%/campaigns/'";
 		}
-		if (config::get('public_losses'))
+		if (Config::get('public_losses'))
 		{
 			$query .= " AND url NOT LIKE '%?a=losses'";
 			$query .= " AND url NOT LIKE '%/losses/'";
 		}
-		if (!config::get('show_standings'))
+		if (!Config::get('show_standings'))
 		{
 			$query .= " AND url NOT LIKE '%a=standings'";
 			$query .= " AND url NOT LIKE '%/standings/'";
 		}
-		if (config::get('public_stats')=='remove')
+		if (Config::get('public_stats')=='remove')
 		{
 			$query .= " AND url NOT LIKE '%?a=self_detail'";
 			$query .= " AND url NOT LIKE '%/self_detail/'";

@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page();
@@ -71,14 +72,14 @@ if (isset($_GET['authall']))
 {
 	if ($_GET['authall'])
 	{
-		config::set('post_permission', 'all');
+		Config::set('post_permission', 'all');
 	}
 	else
 	{
-		config::set('post_permission', '');
+		Config::set('post_permission', '');
 	}
 }
-if (!$string = config::get('post_permission'))
+if (!$string = Config::get('post_permission'))
 {
 	$string = '';
 }
@@ -110,7 +111,7 @@ if ($string != 'all')
 				$conf[] = $typ.$id;
 			}
 		}
-		config::set('post_permission', implode(',', $conf));
+		Config::set('post_permission', implode(',', $conf));
 	}
 
 	if ($_GET['del'])
@@ -126,7 +127,7 @@ if ($string != 'all')
 				$conf[] = $typ.$id;
 			}
 		}
-		config::set('post_permission', implode(',', $conf));
+		Config::set('post_permission', implode(',', $conf));
 	}
 
 	asort($permissions['a']);

@@ -5,6 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
+ 
+use EDK\Core\Config;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page('Administration - Mods');
@@ -19,9 +21,9 @@ if (isset($_POST['set_mods']) && $_POST['set_mods']) {
 		}
 	}
 	$activemods = substr($activemods, 0, strlen($activemods) - 1);
-	config::set("mods_active", $activemods);
+	Config::set("mods_active", $activemods);
 }
-$activemods = explode(",", config::get("mods_active"));
+$activemods = explode(",", Config::get("mods_active"));
 
 $rows = array();
 if ($handle = opendir('mods')) {

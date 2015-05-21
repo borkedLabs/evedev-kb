@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /**
  * Page caching class
  *
@@ -38,13 +40,13 @@ class cache
 		$array = sys_getloadavg();
 		if ((float) $array[0] > self::$reinforced_enable_threshold) {
 			// If load is high put killboard into RF
-			config::set('is_reinforced', true);
+			Config::set('is_reinforced', true);
 			return true;
-		} else if (config::get('is_reinforced')
+		} else if (Config::get('is_reinforced')
 				&& (float) $array[0] < self::$reinforced_disable_threshold
 				&& rand(1, self::$reinforced_prob) == 1) {
 			// If load is consistently low cancel reinforced
-			config::set('is_reinforced', false);
+			Config::set('is_reinforced', false);
 			return false;
 		}
 		return!!config::get('is_reinforced');
@@ -67,12 +69,12 @@ class cache
 			return false;
 		}
 		self::checkLoad();
-		if (config::get('is_reinforced') && count($_POST) == 0) {
+		if (Config::get('is_reinforced') && count($_POST) == 0) {
 			return true;
 		}
 
-		$cacheignore = explode(',', config::get('cache_ignore'));
-		if (config::get('cache_enabled')
+		$cacheignore = explode(',', Config::get('cache_ignore'));
+		if (Config::get('cache_enabled')
 				&& count($_POST) == 0
 				&& !($page != '' && in_array($page, $cacheignore))) {
 			return true;
@@ -93,7 +95,7 @@ class cache
 			header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 			header('Cache-Control: no-cache');
 		}
-		$usegz = config::get('cfg_compress')
+		$usegz = Config::get('cfg_compress')
 				&& !ini_get('zlib.output_compression');
 		$cachefile = cache::genCacheName();
 		if (defined('DB_USE_MEMCACHE') && DB_USE_MEMCACHE == true) {
@@ -107,12 +109,12 @@ class cache
 			$cachetime = self::expiry($page);
 			$timestamp = time() - $cachehandler->age($cachefile);
 
-			if (config::get('cache_update') == '*'
+			if (Config::get('cache_update') == '*'
 					&& file_exists(KB_CACHEDIR.'/killadded.mk')
 					&& $timestamp < @filemtime(KB_CACHEDIR.'/killadded.mk')) {
 				$timestamp = 0;
 			} else {
-				$cacheupdate = explode(',', config::get('cache_update'));
+				$cacheupdate = explode(',', Config::get('cache_update'));
 				if (($page != '' && in_array($page, $cacheupdate))
 						&& file_exists(KB_CACHEDIR.'/killadded.mk')
 						&& $timestamp < @filemtime(KB_CACHEDIR.'/killadded.mk')) {
@@ -180,7 +182,7 @@ class cache
 			$page = null;
 		}
 		if (cache::shouldCache()) {
-			$usegz = config::get('cfg_compress')
+			$usegz = Config::get('cfg_compress')
 					&& !ini_get('zlib.output_compression');
 			$cachefile = cache::genCacheName();
 
@@ -251,7 +253,7 @@ class cache
 	 */
 	public static function touchCache()
 	{
-		if (!config::get('cache_enabled')) {
+		if (!Config::get('cache_enabled')) {
 			return;
 		}
 		if (!file_exists(KB_PAGECACHEDIR.'/'.KB_SITE)) {
@@ -265,7 +267,7 @@ class cache
 	 */
 	public static function notifyKillAdded()
 	{
-		if (!config::get('cache_enabled')) {
+		if (!Config::get('cache_enabled')) {
 			return;
 		}
 		if (!file_exists(KB_PAGECACHEDIR)) {
@@ -283,8 +285,8 @@ class cache
 	protected static function expiry($page)
 	{
 		$cachetimes = array();
-		if (config::get('cache_times')) {
-			$times = explode(',', config::get('cache_times'));
+		if (Config::get('cache_times')) {
+			$times = explode(',', Config::get('cache_times'));
 			foreach ($times as $string) {
 				$array = explode(':', $string);
 				$cachetimes[$array[0]] = $array[1];
@@ -294,12 +296,12 @@ class cache
 		if (isset($cachetimes[$page])) {
 			$cachetime = $cachetimes[$page];
 		} else {
-			$cachetime = config::get('cache_time');
+			$cachetime = Config::get('cache_time');
 		}
 
 		$cachetime = $cachetime * 60;
 
-		if (config::get('is_reinforced')) {
+		if (Config::get('is_reinforced')) {
 			// cache is extended in reinforced mode
 			$cachetime = $cachetime * 20;
 			if ($cachetime < 60) {

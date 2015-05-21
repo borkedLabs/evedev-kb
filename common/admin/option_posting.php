@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 options::cat('Advanced', 'Posting Options', 'Posting Options');
 
 options::fadd('Enable Comments', 'comments', 'checkbox');
@@ -24,8 +26,8 @@ class admin_posting
 {
     function dateSelector()
     {
-        $apply = config::get('filter_apply');
-        $date = config::get('filter_date');
+        $apply = Config::get('filter_apply');
+        $date = Config::get('filter_date');
 
     	if ($date > 0)
         {
@@ -81,13 +83,13 @@ class admin_posting
     {
         if ($_POST['option_filter_apply'] == 'on')
         {
-            config::set('filter_apply', '1');
-            config::set('filter_date', gmmktime(0, 0, 0, $_POST['option_filter_month'], ($_POST['option_filter_day'] > 31 ? 31 : $_POST['option_filter_day']), $_POST['option_filter_year']));
+            Config::set('filter_apply', '1');
+            Config::set('filter_date', gmmktime(0, 0, 0, $_POST['option_filter_month'], ($_POST['option_filter_day'] > 31 ? 31 : $_POST['option_filter_day']), $_POST['option_filter_year']));
         }
         else
         {
-        	config::set('filter_apply', '0');
-        	config::set('filter_date', 0);
+        	Config::set('filter_apply', '0');
+        	Config::set('filter_date', 0);
         }
 
     }
@@ -103,28 +105,28 @@ class admin_posting
 	}
 	function setPostPassword()
 	{
-		if(admin_posting::passwordChanged($_POST['option_post_password'],config::get('post_password')))
-			config::set('post_password', admin_posting::makePassword($_POST['option_post_password']));
+		if(admin_posting::passwordChanged($_POST['option_post_password'],Config::get('post_password')))
+			Config::set('post_password', admin_posting::makePassword($_POST['option_post_password']));
 	}
 	function setCrestPostPassword()
 	{
-		if(admin_posting::passwordChanged($_POST['option_post_crest_password'],config::get('post_crest_password')))
-			config::set('post_crest_password', admin_posting::makePassword($_POST['option_post_crest_password']));
+		if(admin_posting::passwordChanged($_POST['option_post_crest_password'],Config::get('post_crest_password')))
+			Config::set('post_crest_password', admin_posting::makePassword($_POST['option_post_crest_password']));
 	}
 	function setCommentPassword()
 	{
-		if(admin_posting::passwordChanged($_POST['option_comment_password'],config::get('comment_password')))
-			config::set('comment_password', admin_posting::makePassword($_POST['option_comment_password']));
+		if(admin_posting::passwordChanged($_POST['option_comment_password'],Config::get('comment_password')))
+			Config::set('comment_password', admin_posting::makePassword($_POST['option_comment_password']));
 	}
 	function createCommentQ()
 	{
-		if(config::get('comment_password')) $pwd = 'SET';
+		if(Config::get('comment_password')) $pwd = 'SET';
 		else $pwd = '';
 		return '<input type="text" id="option_comment_password" name="option_comment_password" value="'.$pwd.'" size="20" maxlength="20" />';
 	}
 	function createPostQ()
 	{
-		if(config::get('post_password')) $pwd = 'SET';
+		if(Config::get('post_password')) $pwd = 'SET';
 		else $pwd = '';
 		return '<input type="text" id="option_post_password" name="option_post_password" value="'.$pwd.'" size="20" maxlength="20" />';
 	}

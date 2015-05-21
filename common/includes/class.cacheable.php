@@ -7,6 +7,7 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
 
 /**
  * Cache objects between page loads.
@@ -32,7 +33,7 @@ abstract class Cacheable {
 
 		if (isset(self::$cache[$classname.$id])) {
 			return self::$cache[$classname.$id];
-		} else if (class_exists('Config', false) && !config::get('cfg_objcache')) {
+		} else if (class_exists('Config', false) && !Config::get('cfg_objcache')) {
 			return new $classname($id);
 		} else if (self::$cachehandler->exists($classname.$id)) {
 			return self::$cachehandler->get($classname.$id);
@@ -65,7 +66,7 @@ abstract class Cacheable {
 			return true;
 		}
 
-		if (!config::get('cfg_objcache')) {
+		if (!Config::get('cfg_objcache')) {
 			return false;
 		}
 
@@ -87,7 +88,7 @@ abstract class Cacheable {
 			return self::$cache[get_class($this).$this->getID()];
 		}
 
-		if (!config::get('cfg_objcache')) {
+		if (!Config::get('cfg_objcache')) {
 			return false;
 		}
 
@@ -108,7 +109,7 @@ abstract class Cacheable {
 		// The unserialize/serialize is used to make a deep copy
 		self::$cache[get_class($this).$this->getID()] = unserialize(serialize($this));
 
-		if (!config::get('cfg_objcache')) {
+		if (!Config::get('cfg_objcache')) {
 			return false;
 		}
 
@@ -129,7 +130,7 @@ abstract class Cacheable {
 	 {
 		unset(self::$cache[get_class($obj).$obj->getID()]);
 
-		if (!config::get('cfg_objcache')) {
+		if (!Config::get('cfg_objcache')) {
 			return true;
 		}
 		return self::$cachehandler->remove(

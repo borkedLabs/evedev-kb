@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Config;
+
 /*
  * @package EDK
  */
@@ -316,9 +318,9 @@ class pCorpDetail extends pageAssembly
 				$list->setLimit(10);
 				$list->addInvolvedCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);
-				else $list->setPodsNoobShips(config::get('podnoobs'));
-				if (config::get('comments_count')) $list->setCountComments(true);
-				if (config::get('killlist_involved')) $list->setCountInvolved(true);
+				else $list->setPodsNoobShips(Config::get('podnoobs'));
+				if (Config::get('comments_count')) $list->setCountComments(true);
+				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
 
 				$ktab = new KillListTable($list);
 				$ktab->setLimit(10);
@@ -330,9 +332,9 @@ class pCorpDetail extends pageAssembly
 				$list->setLimit(10);
 				$list->addVictimCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);
-				else $list->setPodsNoobShips(config::get('podnoobs'));
-				if (config::get('comments_count')) $list->setCountComments(true);
-				if (config::get('killlist_involved')) $list->setCountInvolved(true);
+				else $list->setPodsNoobShips(Config::get('podnoobs'));
+				if (Config::get('comments_count')) $list->setCountComments(true);
+				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
 
 				$ltab = new KillListTable($list);
 				$ltab->setLimit(10);
@@ -346,9 +348,9 @@ class pCorpDetail extends pageAssembly
 				$list->setOrdered(true);
 				$list->addInvolvedCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);
-				else $list->setPodsNoobShips(config::get('podnoobs'));
-				$list->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), config::get('killcount'));
+				else $list->setPodsNoobShips(Config::get('podnoobs'));
+				$list->setPageSplit(Config::get('killcount'));
+				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
 				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('splitter',$pagesplitter->generate());
@@ -361,9 +363,9 @@ class pCorpDetail extends pageAssembly
 				$list->setOrdered(true);
 				$list->addVictimCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);
-				else $list->setPodsNoobShips(config::get('podnoobs'));
-				$list->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), config::get('killcount'));
+				else $list->setPodsNoobShips(Config::get('podnoobs'));
+				$list->setPageSplit(Config::get('killcount'));
+				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
 
 				$table = new KillListTable($list);
 				$table->setDayBreak(false);
@@ -386,7 +388,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Kills();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, "Kills");
@@ -394,7 +396,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Kills();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Kills");
 				$smarty->assign('total_stats', $table->generate());
 
@@ -415,7 +417,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Score();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, "Points");
@@ -423,7 +425,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Score();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Points");
 				$smarty->assign('total_stats', $table->generate());
 
@@ -444,7 +446,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_SoloKiller();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, "Solokills");
@@ -452,7 +454,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_SoloKiller();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Solokills");
 				$smarty->assign('total_stats', $table->generate());
 
@@ -474,7 +476,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_DamageDealer();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, "Kills");
@@ -482,7 +484,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_DamageDealer();
 				$list->addInvolvedCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Kills");
 				$smarty->assign('total_stats', $table->generate());
 
@@ -543,7 +545,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Losses();
 				$list->addVictimCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, "Losses");
@@ -551,7 +553,7 @@ class pCorpDetail extends pageAssembly
 
 				$list = new TopList_Losses();
 				$list->addVictimCorp($this->crp_id);
-				$list->setPodsNoobShips(config::get('podnoobs'));
+				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Losses");
 				$smarty->assign('total_stats', $table->generate());
 
@@ -694,7 +696,7 @@ class pCorpDetail extends pageAssembly
 		$this->addMenuItem("caption","Pilot statistics");
 		$this->addMenuItem("link","Top killers", edkURI::build($args, array('view', 'pilot_kills', true)));
 
-		if (config::get('kill_points'))
+		if (Config::get('kill_points'))
 			$this->addMenuItem("link","Top scorers", edkURI::build($args, array('view', 'pilot_scores', true)));
 		$this->addMenuItem("link","Top solokillers", edkURI::build($args, array('view', 'pilot_solo', true)));
 		$this->addMenuItem("link","Top damagedealers", edkURI::build($args, array('view', 'pilot_damage', true)));
