@@ -11,10 +11,6 @@
  */
 class Profiler
 {
-    function Profiler()
-    {
-    }
-
     function start()
     {
         $this->starttime_ = microtime(true);

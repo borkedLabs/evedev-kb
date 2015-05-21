@@ -14,53 +14,52 @@ class CrestParser
 {
 	private $error_ = array();
 	/** @var string the URL to the crest representation */
-        private $crestUrl;
-        /** @var string the crest hash value */
-        private $crestHash;
+	private $crestUrl;
+	/** @var string the crest hash value */
+	private $crestHash;
 	private $externalID = 0;
 	private $dupeid_ = 0;
 	private $hash = null;
 	private $trust = 0;
-        /** @var Object (json decoded) */
-        private $killmailRepresentation;
-        /** @var boolean isNPCOnly flag indicating the killmail has only NPCs as involved parties */
-        private $isNPCOnly = false;
+	/** @var Object (json decoded) */
+	private $killmailRepresentation;
+	/** @var boolean isNPCOnly flag indicating the killmail has only NPCs as involved parties */
+	private $isNPCOnly = false;
 
-        /**
-         * 
-         * @param string $crestUrl the URL to the crest representation of the kill
-         */
-	function CrestParser($crestUrl)
+	/**
+	 * 
+	 * @param string $crestUrl the URL to the crest representation of the kill
+	 */
+	function __construct($crestUrl)
 	{                
-            $this->crestUrl = $crestUrl;
-            // validate the syntax
-            try
-            {
-                $this->validateCrestUrl();
-            }
-            
-            catch(CrestParserException $e)
-            {
-                $this->error($e->getMessage());
-            }
+		$this->crestUrl = $crestUrl;
+		// validate the syntax
+		try
+		{
+			$this->validateCrestUrl();
+		}
+		catch(CrestParserException $e)
+		{
+			$this->error($e->getMessage());
+		}
 	}
         
         
-        function validateCrestUrl()
-        {
-            // should look like this:
-            // http://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
-            $urlPieces = explode("/", $this->crestUrl);
-            if(count($urlPieces) < 6 || 
-                    $urlPieces[2] != "public-crest.eveonline.com" || 
-                    $urlPieces[3] != "killmails" ||
-                    !is_numeric($urlPieces[4]) ||
-                    strlen($urlPieces[5]) != 40)
-            {
-                
-                throw new CrestParserException("Invalid CREST URL.");
-            }        
-        }
+	function validateCrestUrl()
+	{
+		// should look like this:
+		// http://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
+		$urlPieces = explode("/", $this->crestUrl);
+		if(count($urlPieces) < 6 || 
+				$urlPieces[2] != "public-crest.eveonline.com" || 
+				$urlPieces[3] != "killmails" ||
+				!is_numeric($urlPieces[4]) ||
+				strlen($urlPieces[5]) != 40)
+		{
+			
+			throw new CrestParserException("Invalid CREST URL.");
+		}        
+	}
         
         
 	function parse($checkauth = true)

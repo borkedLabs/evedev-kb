@@ -30,8 +30,8 @@ class Kill extends Cacheable
 	 * @var integer
 	 */
 	private $externalid = null;
-        /** @var string the crest hash for this kill */
-        private $crestHash = null;
+	/** @var string the crest hash for this kill */
+	private $crestHash = null;
 	public $involvedparties_ = array();
 	public $destroyeditems_ = array();
 	public $droppeditems_ = array();
@@ -62,7 +62,7 @@ class Kill extends Cacheable
 	 * @param integer $id The ID for this kill
 	 * @param boolean $external If true then $id is treated as an external ID.
 	 */
-	function Kill($id = 0, $external = false)
+	function __construct($id = 0, $external = false)
 	{
 		$id = intval($id);
 		if($id && $external) {

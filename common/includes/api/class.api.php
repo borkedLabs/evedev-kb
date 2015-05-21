@@ -5,7 +5,7 @@ class API {
 
 	protected $pheal = null;
 	
-	function API() {
+	function __construct() {
 		// Loads pheal, so we can do some stuff with it, 
 		
 		// init API connection method

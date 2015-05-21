@@ -15,7 +15,7 @@ class AwardBox
 	/**
 	 * Create an AwardBox from the given TopList and descriptions.
 	 */
-	function AwardBox($list, $title, $comment, $entity, $award)
+	function __construct($list, $title, $comment, $entity, $award)
 	{
 		$this->toplist_ = $list;
 		$this->title_ = $title;

@@ -23,10 +23,10 @@ class DBPreparedQuery
 	static protected $queryCachedCount = 0;
 	protected $stmt = null;
 	
-/**
- * Prepare a connection for a new mysqli query.
- */
-	function DBPreparedQuery()
+	/**
+	 * Prepare a connection for a new mysqli query.
+	 */
+	function __construct()
 	{
 		self::$dbconn = new DBConnection();
 	}

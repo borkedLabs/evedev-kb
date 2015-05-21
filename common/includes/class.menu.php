@@ -15,12 +15,7 @@
 class Menu
 {
 	private $menu = array();
-	/**
-	 * Construct a blank side menu.
-	 */
-	function Menu()
-	{
-	}
+	
 	/**
 	 * Return the array of menu options.
 	 *

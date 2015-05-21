@@ -36,14 +36,6 @@ class Fetcher
 	private $trust = "";
 
 	/**
-	 * Construct the Fetcher class and initialise variables.
-	 */
-	function Fetcher()
-	{
-		
-	}
-
-	/**
 	 * Fetch a new feed.
 	 * Use the input parameters to fetch a feed, parse it and add new kills
 	 * to the db.

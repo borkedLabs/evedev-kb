@@ -16,7 +16,7 @@ class KillList
 	private $killisk_ = 0;
 	private $exclude_scl_ = array();
 	private $vic_scl_id_ = array();
-        private $vic_sc_id_ = array();
+	private $vic_sc_id_ = array();
 	private $regions_ = array();
 	private $systems_ = array();
 	private $groupby_ = array();
@@ -60,7 +60,7 @@ class KillList
 	private $limit_ = 0;
 	private $expr = array();
 
-	function KillList()
+	function __construct()
 	{
 		$this->qry_ = DBFactory::getDBQuery();
 		$this->expr = array("kll.kll_id",
