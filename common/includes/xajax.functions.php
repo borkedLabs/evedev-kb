@@ -8,6 +8,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 require_once('common/xajax/xajax.php');
 
 $xajax->register(XAJAX_FUNCTION, "doAjaxSearch");
@@ -26,7 +28,7 @@ edk_xajax::xajax();
  */
 function doAjaxSearch($searchphrase='', $type='pilot', $limit = 10)
 {
-	$qry = new DBPreparedQuery();
+	$qry = new PreparedQuery();
 
 	switch($type)
 	{

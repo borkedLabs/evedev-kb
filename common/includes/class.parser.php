@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 /**
  * @package EDK
  */
@@ -144,7 +146,7 @@ class Parser
 		$hash = self::hashMail($this->killmail_);
 		if(!isset($checkHash))
 		{
-			$checkHash = new DBPreparedQuery();
+			$checkHash = new PreparedQuery();
 			$checkHash->prepare('SELECT kll_id, kll_trust FROM kb3_mails WHERE kll_timestamp = ? AND kll_hash = ?');
 			$arr = array(&$kill_id, &$trust);
 			$checkHash->bind_results($arr);

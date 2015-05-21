@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 /**
  * Creates a new Pilot or fetches an existing one from the database.
  * @package EDK
@@ -92,7 +94,7 @@ class Pilot extends Entity
 				return $this->externalid;
 			}
 
-			$pqry = new DBPreparedQuery();
+			$pqry = new PreparedQuery();
 			$sql = "SELECT typeID FROM kb3_invtypes, kb3_pilots WHERE typeName = plt_name AND plt_id = ?";
 			$id = "";
 			$pqry->prepare($sql);

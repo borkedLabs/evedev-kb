@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 /**
  * Wrapper class to pick the correct language from config settings and return
  * a translation. English is the default language.
@@ -110,7 +112,7 @@ class Language {
 		}
 
 		if (!isset(self::$pqry)) {
-			$pqry = new DBPreparedQuery();
+			$pqry = new PreparedQuery();
 			$sql = "SELECT keyID FROM trntranslations"
 					." WHERE text LIKE ? AND tcID=? LIMIT 1";
 			$keyID = 0;

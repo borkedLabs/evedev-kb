@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 /**
  * Store and retrieve comments for each killmail.
  *
@@ -78,7 +80,7 @@ class Comments
 		$comment = $this->bbencode(trim($text));
 		$name = trim($name);
 
-		$qryP = new DBPreparedQuery();
+		$qryP = new PreparedQuery();
 
 		$sql = "INSERT INTO kb3_comments (`kll_id`,`site`, `comment`,`name`,`posttime`, `ip`)
                        VALUES (?, ?, ?, ?, ?, ?)";

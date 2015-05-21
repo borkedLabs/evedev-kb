@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 require_once('common/admin/admin_menu.php');
 require_once('common/includes/eve_central_sync.php');
 /**
@@ -28,7 +30,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] AND isset($_POST['update_value'])) {
 	$item = $_POST['itm_id'];
 	$value = $_POST['value'];
         
-        $query = new DBPreparedQuery();
+        $query = new PreparedQuery();
         $query->prepare('REPLACE INTO kb3_item_price (`typeID`, `price`) VALUES (?, ?)');
         $dataTypes = 'ii';
 

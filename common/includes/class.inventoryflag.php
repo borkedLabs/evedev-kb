@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 
+use EDK\Database\PreparedQuery;
 
 /**
  * represents an InventoryFlag used to describe the position of items in a kill
@@ -145,7 +146,7 @@ class InventoryFlag extends Cacheable
            return;
         }
         
-        $flagDetails = new DBPreparedQuery();
+        $flagDetails = new PreparedQuery();
         $flagDetails->prepare('SELECT itl_flagID, itl_flagName, itl_flagText, itl_icon FROM kb3_item_locations WHERE itl_flagID = ?');
         
         $resultArray = array(

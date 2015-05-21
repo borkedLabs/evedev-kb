@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+ 
 /**
  * thrown whenever anything goes wrong while handling a kill
  */
@@ -1807,7 +1809,7 @@ class Kill extends Cacheable
 	function getCrestHash()
 	{
 		if(is_null($this->crestHash) && $this->id) {
-		    $qry = new DBPreparedQuery();
+		    $qry = new PreparedQuery();
                     $qry->prepare('SELECT kll_crest_hash FROM kb3_mails WHERE kll_id = ?');
 
                     $resultArray = array(
@@ -1886,7 +1888,7 @@ class Kill extends Cacheable
 	{
 		$this->execQuery();
                 
-		$qry = new DBPreparedQuery();
+		$qry = new PreparedQuery();
                 $qry->prepare('UPDATE kb3_mails SET kll_crest_hash = ? WHERE kll_id = ?');
                 $params = array(
                     'si',

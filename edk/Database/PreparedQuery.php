@@ -9,13 +9,13 @@
 // TODO Check if caching is enabled and flag tables as dirty even if we don't
 // cache prepared queries.
 
- use EDK\Database\Connection;
+ namespace EDK\Database;
  
 /**
  * mysqli uncached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
  */
-class DBPreparedQuery
+class PreparedQuery
 {
 	static protected $totalexectime = 0;
 	protected $exectime = 0;

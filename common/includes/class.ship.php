@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Database\PreparedQuery;
+
 /**
  * Contains the attributes of a Ship and standard methods to manipulate Ships.
  * @package EDK
@@ -258,7 +260,7 @@ class Ship extends Cacheable
 			
 		}
 		if ($pqry === null) {
-			$pqry = new DBPreparedQuery();
+			$pqry = new PreparedQuery();
 			$pqry->prepare("SELECT typeID, typeName, shp_class"
 					." FROM kb3_ships RIGHT JOIN kb3_invtypes ON shp_id=typeID"
 					." WHERE typeName = ?");

@@ -1,5 +1,7 @@
 <?php
 
+use EDK\Database\PreparedQuery;
+
 /**
  * @package EDK
  */
@@ -65,7 +67,7 @@ class ZKBFetch
             return;
         }
         
-        $fetchParams = new DBPreparedQuery();
+        $fetchParams = new PreparedQuery();
         $fetchParams->prepare('SELECT fetchID, url, lastKillTimestamp FROM kb3_zkbfetch WHERE fetchID = ?');
         $lastKillTimestamp = NULL;
         $arr = array(&$this->id, &$this->url, &$lastKillTimestamp);
@@ -119,7 +121,7 @@ class ZKBFetch
             $this->lastKillTimestamp = time();
         }
         
-        $fetchParams = new DBPreparedQuery();
+        $fetchParams = new PreparedQuery();
         $fetchParams->prepare('INSERT INTO kb3_zkbfetch (`url`, `lastKillTimestamp`) VALUES (?, ?)');
         $types = 'ss';
         $timeString = strftime('%Y-%m-%d %H:%M:%S', $this->lastKillTimestamp);
@@ -140,7 +142,7 @@ class ZKBFetch
      */
     public static function delete($id)
     {
-        $fetchParams = new DBPreparedQuery();
+        $fetchParams = new PreparedQuery();
         $fetchParams->prepare('DELETE FROM kb3_zkbfetch WHERE fetchID = ?');
         $types = 'i';
         $arr = array(&$types, &$id);
@@ -176,7 +178,7 @@ class ZKBFetch
             return;
         }
         
-        $updateParams = new DBPreparedQuery();
+        $updateParams = new PreparedQuery();
         $updateParams->prepare('UPDATE kb3_zkbfetch SET url = ? WHERE fetchID = ?');
         $types = 'si';
         $arr = array(&$types, &$this->url, &$this->id);
@@ -228,7 +230,7 @@ class ZKBFetch
             return;
         }
         $timeString = strftime('%Y-%m-%d %H:%M:%S', $this->lastKillTimestamp);
-        $updateParams = new DBPreparedQuery();
+        $updateParams = new PreparedQuery();
         $updateParams->prepare('UPDATE kb3_zkbfetch SET lastKillTimestamp = ? WHERE fetchID = ?');
         $types = 'si';
         $arr = array(&$types, &$timeString, &$this->id);
@@ -458,7 +460,7 @@ class ZKBFetch
 
         if(!isset($checkHash))
         {
-                $checkHash = new DBPreparedQuery();
+                $checkHash = new PreparedQuery();
                 $checkHash->prepare('SELECT kll_id, kll_trust FROM kb3_mails WHERE kll_timestamp = ? AND kll_hash = ?');
                 $arr = array(&$killId, &$trust);
                 $checkHash->bind_results($arr);
