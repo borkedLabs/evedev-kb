@@ -5,12 +5,13 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Database;
 
 /**
  * Base DB query class.
  * @package EDK
  */
-abstract class DBBaseQuery
+abstract class BaseQuery
 {
 	/** @var integer */
 	static protected $totalexectime = 0;

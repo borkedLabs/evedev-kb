@@ -6,11 +6,13 @@
  * @package EDK
  */
 
+ namespace EDK\Database;
+ 
 /**
  * mysqli file-cached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
  */
-class DBCachedQuery extends DBBaseQuery
+class CachedQuery extends BaseQuery
 {
 	/**
 	 * @var float
@@ -63,7 +65,7 @@ class DBCachedQuery extends DBBaseQuery
 	{
 		$this->nocache = $nocache;
 
-		self::$cachehandler = new CacheHandlerHashed();
+		self::$cachehandler = new \CacheHandlerHashed();
 
 		if(is_null(self::$maxmem))
 		{

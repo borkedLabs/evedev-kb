@@ -6,12 +6,13 @@
  * @package EDK
  */
 
- use EDK\Database\Connection;
+ namespace EDK\Database;
+ 
 /**
  * mysqli uncached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
  */
-class DBNormalQuery extends DBBaseQuery
+class NormalQuery extends BaseQuery
 {
 	/** @var MySQLi_Result|boolean */
 	private $resid;

@@ -6,11 +6,13 @@
  * @package EDK
  */
 
+ namespace EDK\Database;
+ 
 /**
  * mysqli memcached query class. Manages SQL queries to a MySQL DB using mysqli.
  * @package EDK
  */
-class DBMemcachedQuery extends DBCachedQuery
+class DBMemcachedQuery extends CachedQuery
 {
 	/**
 	 * Set up a mysqli cached query object with default values.
@@ -21,7 +23,7 @@ class DBMemcachedQuery extends DBCachedQuery
 	{
 		$this->nocache = $nocache;
 
-		self::$cachehandler = new CacheHandlerHashedMem();
+		self::$cachehandler = new \CacheHandlerHashedMem();
 
 		if(is_null(self::$maxmem))
 		{
