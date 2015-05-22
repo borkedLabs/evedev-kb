@@ -1,6 +1,10 @@
 <?php
 
-class ClearupCommand extends CronCommand
+namespace EDK\Command;
+
+use EDK\Core\Config;
+
+class ClearUp extends Command
 {
 	public function execute()
 	{
@@ -16,18 +20,18 @@ class ClearupCommand extends CronCommand
 		$maxOtherAge = 7;
 
 		// disable query caching while the script is running.
-		$qcache = config::get('cfg_qcache');
+		$qcache = Config::get('cfg_qcache');
 		if($qcache)
 		{
 			println("File query cache disabled");
-			config::set('cfg_qcache', 0);
+			Config::set('cfg_qcache', 0);
 		}
 
-		$pcache = config::get('cache_enabled');
+		$pcache = Config::get('cache_enabled');
 		if($pcache)
 		{
 			println("Page cache disabled");
-			config::set('cache_enabled', 0);
+			Config::set('cache_enabled', 0);
 		}
 
 		println("Removed ".CacheHandler::removeByAge('SQL/', $maxSQLAge * 24)." files from SQL");
@@ -42,13 +46,13 @@ class ClearupCommand extends CronCommand
 		if($qcache)
 		{
 			println("File query cache re-enabled");
-			config::set('cfg_qcache', 1);
+			Config::set('cfg_qcache', 1);
 		}
 
 		if($pcache)
 		{
 			println("Page cache re-enabled");
-			config::set('cache_enabled', 1);
+			Config::set('cache_enabled', 1);
 		}
 	}
 }

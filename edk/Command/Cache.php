@@ -1,6 +1,10 @@
 <?php
 
-class CacheCommand extends CronCommand
+namespace EDK\Command;
+
+use EDK\Core\Config;
+
+class Cache extends Command
 {
 	public function execute()
 	{

@@ -1,12 +1,16 @@
 <?php
 
-class FeedCommand extends CronCommand
+namespace EDK\Command;
+
+use EDK\Core\Config;
+
+class Feed extends Command
 {
 	public function execute()
 	{
 		$config = new Config(KB_SITE);
 
-		$feeds = config::get("fetch_idfeeds");
+		$feeds = Config::get("fetch_idfeeds");
 		if( !is_array($feeds) )
 		{
 			println("No feeds configured");
@@ -36,7 +40,7 @@ class FeedCommand extends CronCommand
 			return '';
 		}
 		
-		$feedfetch = new IDFeed();
+		$feedfetch = new \IDFeed();
 		$feedfetch->setID();
 		
 		if($val['apikills'])
@@ -112,21 +116,21 @@ class FeedCommand extends CronCommand
 		$myids = array();
 		if(!defined('MASTER') || !MASTER)
 		{
-			foreach(config::get('cfg_pilotid') as $entity)
+			foreach(Config::get('cfg_pilotid') as $entity)
 			{
-				$pilot = new Pilot($entity);
+				$pilot = new \Pilot($entity);
 				$myids[] = '&pilot=' . urlencode($pilot->getName());
 			}
 
-			foreach(config::get('cfg_corpid') as $entity)
+			foreach(Config::get('cfg_corpid') as $entity)
 			{
-				$corp = new Corporation($entity);
+				$corp = new \Corporation($entity);
 				$myids[] = '&corp=' . urlencode($corp->getName());
 			}
 			
-			foreach(config::get('cfg_allianceid') as $entity)
+			foreach(Config::get('cfg_allianceid') as $entity)
 			{
-				$alli = new Alliance($entity);
+				$alli = new \Alliance($entity);
 				$myids[] = '&alli=' . urlencode($alli->getName());
 			}
 		}
@@ -153,7 +157,7 @@ class FeedCommand extends CronCommand
 				$url .= "?a=feed";
 			}
 		}
-		$feedfetch = new Fetcher();
+		$feedfetch = new \Fetcher();
 
 		$myids = $this->getOwners();
 		$lastkill = 0;
@@ -254,7 +258,7 @@ class FeedCommand extends CronCommand
 			$urltest = $url."/?a=idfeed&kll_id=-1";
 		}
 		
-		$http = new http_request($urltest);
+		$http = new \http_request($urltest);
 		$http->set_useragent("EDK IDFeedfetcher Check");
 		$http->set_timeout(10);
 		$res = $http->get_content();

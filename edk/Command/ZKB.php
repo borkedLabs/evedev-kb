@@ -1,12 +1,16 @@
 <?php
 
-class ZkbCommand extends CronCommand
+namespace EDK\Command;
+
+use EDK\Core\Config;
+
+class ZKB extends Command
 {
 	public function execute()
 	{
 		$config = new Config(KB_SITE);
 
-		$fetchConfigs = ZKBFetch::getAll();
+		$fetchConfigs = \ZKBFetch::getAll();
 
 		foreach($fetchConfigs AS &$fetchConfig)
 		{
@@ -44,7 +48,7 @@ class ZkbCommand extends CronCommand
 				println(implode(PHP_EOL, $fetchConfig->getParseMessages()));
 			}
 		}
-		catch (Exception $ex) 
+		catch (\Exception $ex) 
 		{
 			println("Error reading feed: ".$fetchConfig->getUrl());
 			println($ex->getMessage());

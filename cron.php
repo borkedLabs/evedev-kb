@@ -33,19 +33,17 @@ if( $consoleArgs == null || count($consoleArgs) < 2 )
 
 $task = $argv[1];
 
-$tasks = array('api', 
-				'cache', 
-				'clearup',
-				'feed',
-				'value',
-				'zkb',
+$tasks = array('Api', 
+				'Cache', 
+				'ClearUp',
+				'Feed',
+				'Value',
+				'ZKB',
 				);
 				
-if( in_array($task, $tasks) )
+if( in_array(strtolower($task), array_map('strtolower',$tasks) ) )
 {
-	require_once __DIR__.'/cron/cron_'.$task.'.php';
-	
-	$name = ucfirst($task).'Command';
+	$name = 'EDK\Command\\' . $task;
 	$command = new $name;
 	$command->execute();
 	

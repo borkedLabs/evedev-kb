@@ -1,6 +1,8 @@
 <?php
 
-abstract class CronCommand
+namespace EDK\Command;
+
+abstract class Command
 {
     abstract public function execute();
 }

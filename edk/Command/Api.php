@@ -1,6 +1,9 @@
 <?php
+namespace EDK\Command;
 
-class ApiCommand extends CronCommand
+use EDK\Core\Config;
+
+class Api extends Command
 {
 	public function execute()
 	{
@@ -22,7 +25,7 @@ class ApiCommand extends CronCommand
 		$myEveAPI = new \EDK\EVEAPI\KillLog();
 		$myEveAPI->iscronjob_ = true;
 
-		$qry = new DBQuery();
+		$qry = new \DBQuery();
 		$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '" . KB_SITE . "' ORDER BY key_name");
 		
 		while ($row = $qry->getRow())
