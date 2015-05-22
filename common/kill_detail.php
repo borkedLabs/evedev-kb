@@ -8,6 +8,9 @@
 
  
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 if (Config::get('comments')) {
 	require_once('common/includes/xajax.functions.php');
@@ -611,8 +614,8 @@ class pKillDetail extends pageAssembly
 				foreach ($nameIDPair as $idpair) {
 					//store the IDs
 					foreach ($this->kill->getInvolved() as $inv) {
-						$pilot = Cacheable::factory('Pilot', $inv->getPilotID());
-						$corp = Cacheable::factory('Corporation', $inv->getCorpID());
+						$pilot = Cacheable::factory('\EDK\Entity\Pilot', $inv->getPilotID());
+						$corp = Cacheable::factory('\EDK\Entity\Corporation', $inv->getCorpID());
 
 						if ($idpair['name'] == $corp->getName()) {
 							$corp->setExternalID($idpair['characterID']);

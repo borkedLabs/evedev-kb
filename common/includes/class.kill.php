@@ -8,6 +8,9 @@
 
 use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
  
 /**
  * thrown whenever anything goes wrong while handling a kill
@@ -165,7 +168,7 @@ class Kill extends Cacheable
 			$this->execQuery();
 		}
 
-		$this->victim = Cacheable::factory('Pilot', $this->victimid);
+		$this->victim = Cacheable::factory('\EDK\Entity\Pilot', $this->victimid);
 		return $this->victim;
 	}
 	/**
@@ -182,7 +185,7 @@ class Kill extends Cacheable
 			$this->execQuery();
 		}
 
-		$this->victimcorp = Cacheable::factory('Corporation', $this->victimcorpid);
+		$this->victimcorp = Cacheable::factory('\EDK\Entity\Corporation', $this->victimcorpid);
 		return $this->victimcorp;
 	}
 	/**
@@ -199,7 +202,7 @@ class Kill extends Cacheable
 			$this->execQuery();
 		}
 
-		$this->victimalliance = Cacheable::factory('Alliance', $this->victimallianceid);
+		$this->victimalliance = Cacheable::factory('\EDK\Entity\Alliance', $this->victimallianceid);
 		return $this->victimalliance;
 	}
 	/**
@@ -338,7 +341,7 @@ class Kill extends Cacheable
 	 */
 	function getFBPilotName()
 	{
-		$fbpilot = Cacheable::factory('Pilot', $this->getFBPilotID());
+		$fbpilot = Cacheable::factory('\EDK\Entity\Pilot', $this->getFBPilotID());
 		return $fbpilot->getName();
 	}
 
@@ -360,7 +363,7 @@ class Kill extends Cacheable
 	 */
 	function getFBCorpName()
 	{
-		$fbcorp = Cacheable::factory('Corporation', $this->getFBCorpID());
+		$fbcorp = Cacheable::factory('\EDK\Entity\Corporation', $this->getFBCorpID());
 		return $fbcorp->getName();
 	}
 
@@ -382,7 +385,7 @@ class Kill extends Cacheable
 	 */
 	function getFBAllianceName()
 	{
-		$alliance = Cacheable::factory('Alliance', $this->getFBAllianceID());
+		$alliance = Cacheable::factory('\EDK\Entity\Alliance', $this->getFBAllianceID());
 		return $alliance->getName();
 	}
 

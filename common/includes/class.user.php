@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Entity\Pilot;
+
 /**
  * @package EDK
  */

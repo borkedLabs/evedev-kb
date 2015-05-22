@@ -10,6 +10,9 @@
  * based on liq's feed syndication mod v1.5
  */
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 $feedversion = "v1.9";
 

@@ -23,7 +23,7 @@ class TopTable_Corp
 		while ($row = $this->toplist->getRow())
 		{
 			/* @var $corp Corporation */
-			$corp = Cacheable::factory('Corporation', $row['crp_id']);
+			$corp = Cacheable::factory('\EDK\Entity\Corporation', $row['crp_id']);
 			if($corp->getExternalID()) {
 				$uri = KB_HOST."/?a=corp_detail&amp;crp_ext_id=".$corp->getExternalID();
 			} else {

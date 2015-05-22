@@ -7,6 +7,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /*
  * @package EDK
@@ -99,7 +102,7 @@ class pPilotDetail extends pageAssembly
 			}
 
 		} else {
-			$this->pilot = Cacheable::factory('Pilot', $this->plt_id);
+			$this->pilot = Cacheable::factory('\EDK\Entity\Pilot', $this->plt_id);
 			$this->plt_external_id = $this->pilot->getExternalID();
 
 		}

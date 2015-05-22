@@ -7,6 +7,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /*
  * Create a syndication feed of kills stored on this board.

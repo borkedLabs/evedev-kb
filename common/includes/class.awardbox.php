@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
 
 /**
  * Create a box to display TopList awards.

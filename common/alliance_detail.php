@@ -8,6 +8,8 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /**
  * Display alliance details.
@@ -106,7 +108,7 @@ class pAllianceDetail extends pageAssembly
 				exit;
 			}
 		} else {
-			$this->alliance = Cacheable::factory('Alliance', $this->all_id);
+			$this->alliance = Cacheable::factory('\EDK\Entity\Alliance', $this->all_id);
 			$this->all_external_id = $this->alliance->getExternalID();
 		}
 

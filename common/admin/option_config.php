@@ -8,6 +8,7 @@
  */
  
 use EDK\Core\Config;
+use EDK\Entity\Corporation;
 
 options::cat('Advanced', 'Configuration', 'Available updates');
 options::fadd('Code updates', 'none', 'custom', array('update', 'codeCheck'));

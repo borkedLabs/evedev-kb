@@ -8,6 +8,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /**
  * Cache objects between page loads.
@@ -30,7 +33,6 @@ abstract class Cacheable {
 		if(!self::$cachehandler) {
 			self::init();
 		}
-
 		if (isset(self::$cache[$classname.$id])) {
 			return self::$cache[$classname.$id];
 		} else if (class_exists('Config', false) && !Config::get('cfg_objcache')) {

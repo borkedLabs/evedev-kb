@@ -5,6 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
+ 
+namespace EDK\Entity;
 
 use EDK\Core\Config;
 /**
@@ -125,7 +127,7 @@ class Alliance extends Entity
 				$this->executed = $cache->executed;
 				$this->name = $cache->name;
 			} else {
-				$qry = DBFactory::getDBQuery();
+				$qry = \DBFactory::getDBQuery();
 				$sql = "select all_id, all_name, all_external_id from kb3_alliances where ";
 				if ($this->externalid) {
 					$sql .= "all_external_id = ".$this->externalid;
@@ -165,7 +167,7 @@ class Alliance extends Entity
 	 */
 	static function add($name, $externalid = 0)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$name = stripslashes($name);
 		$qry->execute("select all_id, all_name, all_external_id"
 				." from kb3_alliances where all_name = '".$qry->escape($name)."'");
@@ -189,7 +191,7 @@ class Alliance extends Entity
 					$qry->execute("UPDATE kb3_alliances SET all_name = '".$qry->escape($name)
 							."' WHERE all_external_id = ".$externalid);
 
-					$all = Cacheable::factory('Alliance', (int) $qry->getInsertID());
+					$all = \Cacheable::factory('\EDK\Entity\Alliance', (int) $qry->getInsertID());
 				} else {
 					$qry->execute("insert into kb3_alliances ".
 							"(all_id, all_name, all_external_id) values ".
@@ -306,17 +308,17 @@ class Alliance extends Entity
 		
 		if( Config::get('cfg_ccpimages') )
 		{
-			return imageURL::getURL('Alliance', $this->getExternalID(), $size);;
+			return \imageURL::getURL('Alliance', $this->getExternalID(), $size);;
 		}
 		
 		if (file_exists("img/alliances/".$this->getUnique().".png")) {
 			if ($size == 128) {
 				$this->imgurl[$size] = IMG_HOST."/img/alliances/"
 						.$this->getUnique().".png";
-			} else if (CacheHandler::exists(
+			} else if (\CacheHandler::exists(
 					$this->getUnique()."_$size.png",'img')) {
 				$this->imgurl[$size] = KB_HOST."/"
-						.CacheHandler::getExternal($this->getUnique()
+						.\CacheHandler::getExternal($this->getUnique()
 						."_$size.png", 'img');
 			} else {
 				$this->imgurl[$size] = KB_HOST.'/?a=thumb&amp;type=alliance&amp;id='
@@ -324,11 +326,11 @@ class Alliance extends Entity
 			}
 			$this->putCache();
 		} else if ($this->getExternalID()) {
-			$this->imgurl[$size] = imageURL::getURL('Alliance', $this->getExternalID(),
+			$this->imgurl[$size] = \imageURL::getURL('Alliance', $this->getExternalID(),
 					$size);
 			$this->putCache();
 		} else {
-			$this->imgurl[$size] = imageURL::getURL('Alliance', 1, $size);
+			$this->imgurl[$size] = \imageURL::getURL('Alliance', 1, $size);
 		}
 		return $this->imgurl[$size];
 	}
@@ -341,10 +343,10 @@ class Alliance extends Entity
 	function getDetailsURL()
 	{
 		if ($this->getExternalID()) {
-			return edkURI::page('alliance_detail', $this->externalid,
+			return \edkURI::page('alliance_detail', $this->externalid,
 					'all_ext_id');
 		} else {
-			return edkURI::page('alliance_detail', $this->id, 'all_id');
+			return \edkURI::page('alliance_detail', $this->id, 'all_id');
 		}
 	}
 
@@ -381,6 +383,6 @@ class Alliance extends Entity
 	 */
 	static function getByID($id)
 	{
-		return Cacheable::factory(get_class(), $id);
+		return \Cacheable::factory(get_class(), $id);
 	}
 }

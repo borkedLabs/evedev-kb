@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+namespace EDK\Entity;
 
 /**
  * Creates a new Corporation or fetches an existing one from the database.
@@ -66,9 +67,9 @@ class Corporation extends Entity
 
 		// NPC alliances can be recorded as corps on killmails.
 		if($this->externalid > 500000 && $this->externalid < 500021)
-			return imageURL::getURL('Alliance', $this->externalid, $size);
+			return \imageURL::getURL('Alliance', $this->externalid, $size);
 
-		return imageURL::getURL('Corporation', $this->externalid, $size);
+		return \imageURL::getURL('Corporation', $this->externalid, $size);
 	}
 
 	/**
@@ -79,9 +80,9 @@ class Corporation extends Entity
 	function getDetailsURL()
 	{
 		if ($this->getExternalID()) {
-			return edkURI::page('corp_detail', $this->externalid, 'crp_ext_id');
+			return \edkURI::page('corp_detail', $this->externalid, 'crp_ext_id');
 		} else {
-			return edkURI::page('corp_detail', $this->id, 'crp_id');
+			return \edkURI::page('corp_detail', $this->id, 'crp_id');
 		}
 	}
 
@@ -134,12 +135,12 @@ class Corporation extends Entity
 	*/
 	static function lookup($name)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute("select crp_id from kb3_corps where crp_name = '"
 				.slashfix($name)."'");
 		if($qry->recordCount()) {
 			$row = $qry->getRow();
-			return Cacheable::factory('Corporation', (int)$row['crp_id']);
+			return \Cacheable::factory('\EDK\Entity\Corporation', (int)$row['crp_id']);
 		} else {
 			return false;
 		}
@@ -163,7 +164,7 @@ class Corporation extends Entity
 			$this->name = $cache->name;
 			$this->alliance = $cache->alliance;
 		} else {
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$sql = "select * from kb3_corps where ";
 			if($this->externalid) $sql .= "crp_external_id = ".$this->externalid;
 			else $sql .= "crp_id = ".$this->id;
@@ -212,7 +213,7 @@ class Corporation extends Entity
 		}
 		$name = stripslashes($name);
 		$externalid = (int) $externalid;
-		$qry = DBFactory::getDBQuery(true);
+		$qry = \DBFactory::getDBQuery(true);
 		$qry->execute("select * from kb3_corps
 		               where crp_name = '".$qry->escape($name)."'");
 		// If the corp name is not present in the db add it.
@@ -237,7 +238,7 @@ class Corporation extends Entity
 									."' WHERE crp_external_id = ".$externalid);
 
 					$crp = Corporation::getByID((int)$row['crp_id']);
-					Cacheable::delCache($crp);
+					\Cacheable::delCache($crp);
 					$crp->name = $name;
 					$crp->externalid = $row['crp_external_id'];
 					if (!is_null($row['crp_updated'])) {
@@ -316,7 +317,7 @@ class Corporation extends Entity
 		if(isset($this->updated))
 			if(is_null($this->updated) || strtotime($timestamp." UTC") > $this->updated) return true;
 			else return false;
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute("select crp_id from kb3_corps
 		               where crp_id = ".$this->id."
 		               and ( crp_updated < date_format( '".$timestamp."', '%Y-%m-%d %H:%i' )
@@ -339,7 +340,7 @@ class Corporation extends Entity
 		if($externalid && $this->id)
 		{
 			$this->execQuery();
-			$qry = DBFactory::getDBQuery(true);
+			$qry = \DBFactory::getDBQuery(true);
 			$qry->execute("SELECT crp_id FROM kb3_corps WHERE crp_external_id = ".$externalid." AND crp_id <> ".$this->id);
 			if($qry->recordCount())
 			{
@@ -378,7 +379,7 @@ class Corporation extends Entity
 	 */
 	function getMemberList()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute("SELECT plt_id FROM kb3_pilots
                        WHERE plt_crp_id = " . $this->id);
 
@@ -445,6 +446,6 @@ class Corporation extends Entity
 	 */
 	static function getByID($id)
 	{
-		return Cacheable::factory(get_class(), $id);
+		return \Cacheable::factory(get_class(), $id);
 	}
 }

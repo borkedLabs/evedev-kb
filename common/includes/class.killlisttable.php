@@ -7,6 +7,8 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Alliance;
+use EDK\Entity\Corporation;
 
 /**
  * @package EDK

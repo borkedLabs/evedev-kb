@@ -26,6 +26,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
  
 // Start timing the killboard page.
 $timeStarted = microtime(true);

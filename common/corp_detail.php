@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Corporation;
 
 /*
  * @package EDK
@@ -116,7 +117,7 @@ class pCorpDetail extends pageAssembly
 				exit;
 			}
 		} else {
-			$this->corp = Cacheable::factory('Corporation', $this->crp_id);
+			$this->corp = Cacheable::factory('\EDK\Entity\Corporation', $this->crp_id);
 			$this->crp_external_id = $this->corp->getExternalID();
 		}
 

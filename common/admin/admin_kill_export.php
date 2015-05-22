@@ -7,6 +7,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 @set_time_limit(0);
 require_once('common/admin/admin_menu.php');

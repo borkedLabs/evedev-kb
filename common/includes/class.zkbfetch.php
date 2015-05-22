@@ -2,6 +2,9 @@
 
 use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /**
  * @package EDK

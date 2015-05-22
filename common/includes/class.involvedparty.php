@@ -94,7 +94,7 @@ class InvolvedParty
 	 */
 	function getPilot()
 	{
-		return Cacheable::factory('Pilot', $this->pilotid);
+		return Cacheable::factory('\EDK\Entity\Pilot', $this->pilotid);
 	}
 
 	/**
@@ -103,7 +103,7 @@ class InvolvedParty
 	 */
 	function getCorp()
 	{
-		return Cacheable::factory('Corporation', $this->corpid);
+		return Cacheable::factory('\EDK\Entity\Corporation', $this->corpid);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class InvolvedParty
 	 */
 	function getAlliance()
 	{
-		return Cacheable::factory('Alliance', $this->allianceid);
+		return Cacheable::factory('\EDK\Entity\Alliance', $this->allianceid);
 	}
 
 	/**

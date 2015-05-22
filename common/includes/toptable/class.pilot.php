@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Entity\Pilot;
+
 class TopTable_Pilot
 {
 	function __construct($toplist, $entity)

@@ -8,6 +8,10 @@
 
 require_once('common/admin/admin_menu.php');
 
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
+
 $page = new Page();
 $page->setAdmin();
 

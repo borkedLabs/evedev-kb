@@ -7,6 +7,9 @@
  */
 
 use EDK\Core\Config;
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Entity\Alliance;
 
 /*
  * @package EDK
@@ -127,7 +130,7 @@ else if(Config::get('cfg_allianceid'))
 {
 	$alls = Config::get('cfg_allianceid');
 	/* @var $alliance Alliance */
-	$alliance = Cacheable::factory('Alliance', $alls[0]);
+	$alliance = Cacheable::factory('\EDK\Entity\Alliance', $alls[0]);
 	if ($alliance->getExternalID()) {
 		$url = edkURI::page('alliance_detail', $alliance->getExternalID(), 'all_ext_id');
 	} else {
@@ -140,7 +143,7 @@ elseif(Config::get('cfg_corpid'))
 {
 	$corps = Config::get('cfg_corpid');
 	/* @var $corp Corporation */
-	$corp = Cacheable::factory('Corporation', $corps[0]);
+	$corp = Cacheable::factory('\EDK\Entity\Corporation', $corps[0]);
 	if ($corp->getExternalID()) {
 		$url = edkURI::page('corp_detail', $corp->getExternalID(), 'crp_ext_id');
 	} else {
@@ -153,7 +156,7 @@ elseif(Config::get('cfg_pilotid'))
 {
 	$pilots = Config::get('cfg_pilotid');
 	/* @var $pilot Pilot */
-	$pilot = Cacheable::factory('Pilot', $pilots[0]);
+	$pilot = Cacheable::factory('\EDK\Entity\Pilot', $pilots[0]);
 	if ($pilot->getExternalID()) {
 		$url = edkURI::page('pilot_detail', $pilot->getExternalID(),
 				'plt_ext_id');
