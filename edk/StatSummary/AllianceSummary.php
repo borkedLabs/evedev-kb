@@ -5,12 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\StatSummary;
 
+use \DBFactory;
 /**
  * Store summary statistics for Alliances.
  * @package EDK
  */
-class allianceSummary extends statSummary
+class AllianceSummary extends StatSummary
 {
 	/** @var integer */
 	private $all_id = null;

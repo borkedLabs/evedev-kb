@@ -5,12 +5,15 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\StatSummary;
+
+use \DBFactory;
 
 /**
  * Store summary statistics for Corporations.
  * @package EDK
  */
-class corpSummary extends statSummary
+class CorpSummary extends StatSummary
 {
 	/** @var integer */
 	private $crp_id = null;

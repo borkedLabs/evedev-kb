@@ -6,12 +6,13 @@
  * @package EDK
  */
 
+namespace EDK\StatSummary;
 
 /**
  * Base class for storing summary statistics.
  * @package EDK
  */
-abstract class statSummary
+abstract class StatSummary
 {
 	/** @var boolean */
 	protected $executed = false;

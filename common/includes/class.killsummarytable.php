@@ -8,6 +8,9 @@
 
 
 use EDK\Core\Config;
+use EDK\StatSummary\AllianceSummary;
+use EDK\StatSummary\CorpSummary;
+use EDK\StatSummary\PilotSummary;
 /**
  * @package EDK
  */
@@ -247,7 +250,7 @@ class KillSummaryTable
 		{
 			if( count($this->inv_all) == 1 && !$this->inv_crp && !$this->inv_plt)
 			{
-				$allsum = new allianceSummary($this->inv_all[0]);
+				$allsum = new AllianceSummary($this->inv_all[0]);
 				$summary = $allsum->getSummary();
 				foreach($summary as $key => $row)
 				{
@@ -265,7 +268,7 @@ class KillSummaryTable
 			}
 			elseif( count($this->inv_crp) == 1 && !$this->inv_all && !$this->inv_plt)
 			{
-				$crpsum = new corpSummary($this->inv_crp[0]);
+				$crpsum = new CorpSummary($this->inv_crp[0]);
 				$summary = $crpsum->getSummary();
 				foreach($summary as $key => $row)
 				{
@@ -283,7 +286,7 @@ class KillSummaryTable
 			}
 			elseif( count($this->inv_plt) == 1 && !$this->inv_all && !$this->inv_crp)
 			{
-				$pltsum = new pilotSummary($this->inv_plt[0]);
+				$pltsum = new PilotSummary($this->inv_plt[0]);
 				$summary = $pltsum->getSummary();
 				foreach($summary as $key => $row)
 				{
