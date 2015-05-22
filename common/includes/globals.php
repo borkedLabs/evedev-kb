@@ -9,19 +9,6 @@
 
 use EDK\Core\Config;
 
-include_once(__DIR__.'/constants.php');
-
-// Make sure the core functions are loaded.
-require_once(__DIR__.'/class.edkloader.php');
-spl_autoload_register('edkloader::load');
-
-// Set up the external class files with the autoloader.
-
-// Ugly hacks to make things work until other changes are made with the file structure
-edkloader::register('thumbInt', 'class.thumb.php');
-
-require_once(__DIR__.'/db.php');
-
 function slashfix($fix)
 {
 	return addslashes(stripslashes($fix));

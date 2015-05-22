@@ -6,6 +6,12 @@
  *
  * @package EDK
  */
+ 
+require __DIR__.'/vendor/autoload.php';
+require __DIR__ .'/bootstrap/edk.php';
+
+use EDK\Core\Config;
+
 @error_reporting(E_ERROR);
 
 // We don't alter images often. Let's save time and leave it up to the
@@ -137,8 +143,6 @@ function goMap($type, $id, $size=200)
 {
 	global $mc, $config;
 	//TODO integrate the existing common/includes/class.mapview.php
-	include_once('kbconfig.php');
-	require_once('common/includes/globals.php');
 	$config = new Config();
 
 	$view = new MapView($type, $size);
@@ -265,10 +269,6 @@ function show404()
 
 function fetchImage($id, $type = 'Character', $size = 128, $ext = "jpg")
 {
-	include_once('kbconfig.php');
-	require_once('common/includes/globals.php');
-	require_once("common/includes/class.cachehandler.php");
-
 	$url = IMG_SERVER."/".$type."/".$id."_".$size.".".$ext;
 	if(function_exists('curl_init'))
 	{
@@ -317,7 +317,7 @@ function fetchImage($id, $type = 'Character', $size = 128, $ext = "jpg")
 		if($http_code != 200)
 		{
 			if($type == 'Character')
-                            $file = file_get_contents("img/1_$size.jpg");
+				$file = file_get_contents("img/1_$size.jpg");
 			else if($type == 'Alliance')
 				$file = file_get_contents("img/alliances/default.png");
 			else if($type == 'Corporation')

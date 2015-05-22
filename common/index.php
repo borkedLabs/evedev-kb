@@ -33,8 +33,6 @@ use EDK\Entity\Alliance;
 // Start timing the killboard page.
 $timeStarted = microtime(true);
 
-@include_once('kbconfig.php');
-
 // determine the request scheme
 $requestScheme = "http";
 if (isset($_SERVER['HTTPS'])) 
@@ -80,7 +78,6 @@ else if(file_exists("install") && !file_exists("install/install.lock"))
 	$html .= "</body></html>";
 	die($html);
 }
-require_once('common/includes/globals.php');
 
 // Set the default encoding to UTF-8
 header('Content-Type: text/html; charset=UTF-8');

@@ -3,23 +3,11 @@
 set_time_limit(0);
 
 require __DIR__.'/vendor/autoload.php';
-
-// Enable custom error handling.
-require_once(__DIR__ . "/bootstrap/SplClassLoader.php");
-$loader = new SplClassLoader('EDK', '');
-$loader->setIncludePath(__DIR__);
-$loader->register();
+require __DIR__ .'/bootstrap/edk.php';
 
 $cronStartTime = microtime(true);
 
 @error_reporting(E_ALL ^ E_NOTICE);
-
-require_once __DIR__.'/common/includes/class.edkerror.php';
-set_error_handler(array('EDKError', 'handler'), E_ERROR );
-
-require_once __DIR__.'/kbconfig.php';
-require_once __DIR__.'/common/includes/globals.php';
-require_once __DIR__.'/common/includes/db.php';
 
 // load mods
 loadMods();

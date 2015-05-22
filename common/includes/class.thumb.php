@@ -6,6 +6,9 @@
  * @package EDK
  */
 
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+
 /**
  * @package EDK
  */
