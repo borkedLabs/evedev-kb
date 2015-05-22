@@ -53,7 +53,7 @@ class ValueFetcherCrest
         $qry = DBFactory::getDBQuery();
 
         // fetch and decode JSON
-        $data = SimpleCrest::getReferenceByUrl($this->url);
+        $data = \EDK\CREST\CREST::getReferenceByUrl($this->url);
 
         if(!isset($data->items) || count($data->items) < 1)
         {

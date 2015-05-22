@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\CREST;
  
 use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
@@ -12,12 +13,12 @@ use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
  
-class CrestParserException extends Exception{}
+class ParserException extends Exception{}
 
 /**
  * @package EDK
  */
-class CrestParser
+class Parser
 {
 	private $error_ = array();
 	/** @var string the URL to the crest representation */
@@ -64,7 +65,7 @@ class CrestParser
 				strlen($urlPieces[5]) != 40)
 		{
 			
-			throw new CrestParserException("Invalid CREST URL.");
+			throw new ParserException("Invalid CREST URL.");
 		}        
 	}
         
@@ -80,12 +81,12 @@ class CrestParser
                 // get instance
                 try
                 {
-                    $this->killmailRepresentation = SimpleCrest::getReferenceByUrl($this->crestUrl);
+                    $this->killmailRepresentation = CREST::getReferenceByUrl($this->crestUrl);
                 }
                 
                 catch(Exception $e)
                 {
-                    throw new CrestParserException($e->getMessage(), $e->getCode());
+                    throw new ParserException($e->getMessage(), $e->getCode());
                 }
 
 		$qry = DBFactory::getDBQuery();
@@ -140,10 +141,10 @@ class CrestParser
 				
 			if($trust < 0)
                         {
-                            throw new CrestParserException("That mail has been deleted. Kill id was "
+                            throw new ParserException("That mail has been deleted. Kill id was "
 						.$this->getDupeID(), -4);
                         }
-			throw new CrestParserException("That killmail has already been posted <a href=\""
+			throw new ParserException("That killmail has already been posted <a href=\""
 						."?a=kill_detail&kll_id=".$this->getDupeID()
 						."\">here</a>.", -1);
 		}			
@@ -154,7 +155,7 @@ class CrestParser
 			if($qry->recordCount())
 			{
 				$row = $qry->getRow();
-				throw new CrestParserException("That killmail has already been posted <a href=\""
+				throw new ParserException("That killmail has already been posted <a href=\""
 						."?a=kill_detail&kll_id=".$row['kll_id']
 						."\">here</a>.", -1);
 			}
@@ -170,7 +171,7 @@ class CrestParser
                     $filterdate = Config::get('filter_date');
                     if ($timestamp < $filterdate) {
                         $filterdate = kbdate("j F Y", Config::get("filter_date"));
-                        throw new CrestParserException("You are not allowed to post killmails older than" .$filterdate, -3);
+                        throw new ParserException("You are not allowed to post killmails older than" .$filterdate, -3);
                     }
                 }
                
@@ -187,7 +188,7 @@ class CrestParser
                 $solarSystemID = (int)$this->killmailRepresentation->solarSystem->id;
                 $solarSystem = SolarSystem::getByID($solarSystemID);
                 if (!$solarSystem->getName()) {
-                    throw new CrestParserException("Unknown solar system ID: ".$solarSystemID);
+                    throw new ParserException("Unknown solar system ID: ".$solarSystemID);
                 }
                 $Kill->setSolarSystem($solarSystem);
                 

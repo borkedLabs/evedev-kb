@@ -164,7 +164,7 @@ if(file_exists($cachingFolderApi))
         // test XML API connection
         try 
         {
-            API_Helpers::testXmlApiConnection();
+            \EDK\EVEAPI\Helpers::testXmlApiConnection();
             $html =  '  Successfully connected to XML API';
             $trouble['API Caching'][] = array('passed'=>true, 'text'=> $html);
         } 
@@ -177,7 +177,7 @@ if(file_exists($cachingFolderApi))
         // connectivity check for CREST
         try
         {
-            API_Helpers::testCrestApiConnection();
+            \EDK\EVEAPI\Helpers::testCrestApiConnection();
             $html =  '  Successfully connected to CREST API';
             $trouble['API Caching'][] = array('passed'=>true, 'text'=> $html);
         }

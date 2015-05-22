@@ -6,12 +6,13 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\CREST;
 
 use EDK\Core\Config;
 /**
  * simple class for getting CREST references via URL
  */
-class SimpleCrest
+class CREST
 {
     
     /** timeout for fetching data from CREST

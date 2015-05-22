@@ -122,7 +122,7 @@ function post_crest()
         || crypt($_POST['password_crest'], Config::get("post_crest_password")) == Config::get("post_crest_password")
         || $page->isAdmin()) {
 
-        $CrestParser = new CrestParser($_POST['crest_url']);
+        $CrestParser = new \EDK\CREST\Parser($_POST['crest_url']);
 
         if($CrestParser->getError()) {
             $errors = $CrestParser->getError();
@@ -139,7 +139,7 @@ function post_crest()
             $killid = $CrestParser->parse(true);
             logger::logKill($killid);
         }
-        catch(CrestParserException $e) {
+        catch(\EDK\CREST\ParserException $e) {
             if($e->getCode() == -4 )
 			{
 				$html = "That mail has been deleted. Kill id was ".$CrestParser->getDupeID();

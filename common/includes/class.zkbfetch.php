@@ -293,7 +293,7 @@ class ZKBFetch
         // get instance
         try
         {
-            $this->rawData = SimpleCrest::getReferenceByUrl($this->fetchUrl);
+            $this->rawData = \EDK\CREST\CREST::getReferenceByUrl($this->fetchUrl);
         }
 
         catch(Exception $e)
