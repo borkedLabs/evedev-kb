@@ -6,6 +6,7 @@
  * @package EDK
  */
 use EDK\Core\Config;
+use EDK\Page\Page;
 
 //TODO: Make a useful registration mod
 $page = new Page('User - Registration');

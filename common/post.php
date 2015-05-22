@@ -1,6 +1,7 @@
 <?php
 
 use EDK\Core\Config;
+use EDK\Page\Page;
 
 $page = new Page('Post kill');
 
