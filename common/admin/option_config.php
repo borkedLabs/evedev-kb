@@ -87,7 +87,7 @@ class admin_config
         public static function createApiConnectionMethod()
 	{
 		$options = array();
-                API_Helpers::autoSetApiConnectionMethod();
+                \EDK\EVEAPI\Helpers::autoSetApiConnectionMethod();
 
 		if (Config::get('apiConnectionMethod') == 'curl') {
 			$state = 1;
@@ -497,10 +497,10 @@ class admin_config
 	public static function nameToId($type, $set, $value)
 	{
 		if ($type == 'nametoid') {
-			$api = new API_NametoID();
+			$api = new \EDK\EVEAPI\NametoID();
 			$api->setNames($value);
 		} else if ($type == 'idtoname') {
-			$api = new API_IDtoName();
+			$api = new \EDK\EVEAPI\IDtoName();
 			$api->setIDs($value);
 		}
 		$api->fetchXML();
@@ -581,11 +581,12 @@ class update
 			return "The required PHP DOMDocument libraries are not installed.";
 		}
 		update::checkStatus();
+		/*
 		if (isNewerVersion(update::$codeVersion, KB_VERSION)) {
 			return "<div>Code updates are available, <a href='"
 					.edkURI::page('admin_upgrade')."'>here</a></div><br/>";
 		}
-		return "<div>No updates available</div>";
+		return "<div>No updates available</div>";*/
 	}
 
 	/**
@@ -611,8 +612,7 @@ class update
 	 */
 	public static function checkStatus()
 	{
-		require_once('update/CCPDB/xml.parser.php');
-		$xml = new UpdateXMLParser();
+		$xml = new \EDK\CCPDB\UpdateXMLParser();
 		if ($xml->getXML() < 3) {
 			$xml->retrieveData();
 			update::$codeVersion = $xml->getLatestCodeVersion();

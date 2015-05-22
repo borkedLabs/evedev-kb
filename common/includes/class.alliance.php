@@ -56,7 +56,7 @@ class Alliance extends Entity
 			return $this->externalid;
 		}
 		// If we still don't have an external ID then try to fetch it from CCP.
-		$myID = new API_NametoID();
+		$myID = new \EDK\EVEAPI\NametoID();
 		$myID->setNames($this->getName());
 		$myID->fetchXML();
 		$myNames = $myID->getNameData();
@@ -173,7 +173,7 @@ class Alliance extends Entity
 		if (!$qry->recordCount()) {
 			$externalid = (int) $externalid;
 			if (!$externalid && strcasecmp($name, 'None') != 0) {
-				$myID = new API_NametoID();
+				$myID = new \EDK\EVEAPI\NametoID();
 				$myID->setNames($name);
 				$myID->fetchXML();
 				$myNames = $myID->getNameData();
@@ -357,7 +357,7 @@ class Alliance extends Entity
 			return false;
 		}
 
-		$myID = new API_IDtoName();
+		$myID = new \EDK\EVEAPI\IDtoName();
 		$myID->setIDs($this->externalid);
 		$myID->fetchXML();
 		$myNames = $myID->getIDData();

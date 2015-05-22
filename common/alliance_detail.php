@@ -187,7 +187,7 @@ class pAllianceDetail extends pageAssembly
 		global $smarty;
 		$tempMyCorp = new Corporation();
 
-		$myAlliAPI = new API_Alliance();
+		$myAlliAPI = new \EDK\EVEAPI\Alliance();
 		$myAlliAPI->fetchalliances();
 
 		// Use alliance ID if we have it
@@ -208,7 +208,7 @@ class pAllianceDetail extends pageAssembly
 		}
 
 		if ($myAlliance) {
-			$myCorpAPI = new API_CorporationSheet();
+			$myCorpAPI = new \EDK\EVEAPI\CorporationSheet();
 
 			foreach ((array) $myAlliance["memberCorps"] as $tempcorp) {
 				$myCorpAPI->setCorpID($tempcorp["corporationID"]);

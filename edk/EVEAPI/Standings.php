@@ -6,13 +6,15 @@
  * @package EDK
  */
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
 
 /**
  * API Standings - /corp & char/Standings.xml.aspx
  * @package EDK
  */
-class API_Standings
+class Standings
 {
 	function getCachedUntil()
 	{
@@ -88,7 +90,7 @@ class API_Standings
 			// is a player feed - take details from logged in user
 			if (user::get('usr_pilot_id'))
     		{
-				$myEveCharAPI = new API_CharacterSheet();
+				$myEveCharAPI = new \EDK\EVEAPI\CharacterSheet();
 				$this->html .= $myEveCharAPI->fetchXML();
 
 				$skills = $myEveCharAPI->getSkills();

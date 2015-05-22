@@ -5,11 +5,13 @@
  * does not suffer from the terrible account-wide caching, always returns valid results
  */
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
 
 define('NUMBER_OF_CALLS_DEFAULT', 1);
 
-class API_KillLog extends API
+class KillLog extends API
 {
 	function Import($name, $id, $key, $flags)
 	{
@@ -33,7 +35,7 @@ class API_KillLog extends API
 		// Load new XML
 		$output = "<i>Downloading latest XML file for $name</i><br><br>";
 
-		$accts = new API_Account();
+		$accts = new \EDK\EVEAPI\Account();
 		$characters = $accts->fetch($id, $key);
 		$posted = array();
 		$skipped = array();
@@ -100,7 +102,7 @@ class API_KillLog extends API
 						}
 					} else if (!$posted && !$skipped) {
 						// Something went wrong and no kills were found.
-						$qry = DBFactory::getDBQuery();
+						$qry = \DBFactory::getDBQuery();
 						$logtype = "Cron Job";
 
 						$qry->execute("insert into kb3_apilog	values( '".KB_SITE."', '"
@@ -119,7 +121,7 @@ class API_KillLog extends API
 						break;
 					} else {
 						// We found kills!
-						$qry = DBFactory::getDBQuery();
+						$qry = \DBFactory::getDBQuery();
 						$logtype = "Cron Job";
 
 						$qry->execute("insert into kb3_apilog values( '".KB_SITE."', '"
@@ -138,7 +140,7 @@ class API_KillLog extends API
 					}
 				}
                                 
-				$feedfetch = new IDFeed();
+				$feedfetch = new \IDFeed();
 				$feedfetch->setXML($this->pheal->xml);
 				$feedfetch->setLogName("API");
 				$feedfetch->read();
@@ -149,7 +151,7 @@ class API_KillLog extends API
                                 if ($this->getError() == null)
                                 {
                                     // We found kills!
-                                    $qry = DBFactory::getDBQuery();
+                                    $qry = \DBFactory::getDBQuery();
 
                                     $qry->execute("insert into kb3_apilog values( '".KB_SITE."', '"
                                                                     .addslashes($name)."',"
@@ -174,7 +176,7 @@ class API_KillLog extends API
 					$output .= "<div class='block-header2'>Posted</div>\n";
 					foreach ($posted as $killid) {
 						$output .= "<div><a href='"
-										.edkURI::page('kill_detail', $killid[2], 'kll_id')
+										.\edkURI::page('kill_detail', $killid[2], 'kll_id')
 										."'>Kill ".$killid[0]."</a></div>";
 					}
 				}

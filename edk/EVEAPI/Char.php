@@ -6,12 +6,13 @@
  * @package EDK
  */
 
- require_once("class.api.php");
+namespace EDK\EVEAPI;
+
 /**
  * Retrieve Character list from CCP API
  * @package EDK
  */
-class API_Char extends API
+class Char extends API
 {
 	private $error = false;
 	private $chars = array();
@@ -42,7 +43,7 @@ class API_Char extends API
 			// check if chars eveid exists in kb
 			$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "' . $char['Name'] . '"';
 
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$qry->execute($sql);
 			if ($qry->recordCount() != 0)
 			{
@@ -64,14 +65,14 @@ class API_Char extends API
 				// pilot is not in DB
 
 				// Set Corp
-				$pilotscorp = Corporation::lookup($char['corpName']);
+				$pilotscorp = \Corporation::lookup($char['corpName']);
 				// Check Corp was set, if not, add the Corp
 				if ( !$pilotscorp->getID() )
 				{
-					$ialliance = Alliance::add('None');
-					$pilotscorp = Corporation::add($char['corpName'], $ialliance, gmdate("Y-m-d H:i:s"));
+					$ialliance = \Alliance::add('None');
+					$pilotscorp = \Corporation::add($char['corpName'], $ialliance, gmdate("Y-m-d H:i:s"));
 				}
-				Pilot::add($char['Name'], $pilotscorp, gmdate("Y-m-d H:i:s"), intval($char['charID']));
+				\Pilot::add($char['Name'], $pilotscorp, gmdate("Y-m-d H:i:s"), intval($char['charID']));
 			}
 		}
 

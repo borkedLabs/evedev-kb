@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
 
 /**
@@ -105,14 +107,14 @@ class API_CharacterSheet
 		// is a player feed - take details from logged in user
 		if (user::get('usr_pilot_id'))
     	{
-			$plt = new pilot(user::get('usr_pilot_id'));
+			$plt = new \pilot(user::get('usr_pilot_id'));
 			$usersname = $plt->getName();
 
 			$this->CharName_ = $usersname;  // $this->CharName_ is used later for config key value for caching
 
 			$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "' . $usersname . '"';
 
-    		$qry = DBFactory::getDBQuery();;
+    		$qry = \DBFactory::getDBQuery();;
 			$qry->execute($sql);
    		 	$row = $qry->getRow();
 
@@ -168,10 +170,10 @@ class API_CharacterSheet
                     {
 						case "TYPEID":
 							$tempdata['typeID'] = $v;
-							$tempdata['SkillName'] = API_Helpers::gettypeIDname($v);
-							$tempdata['GroupID'] = API_Helpers::getgroupID($v);
-							$tempdata['GroupName'] = API_Helpers::getgroupIDname($tempdata['GroupID']);
-							$tempdata['Rank'] = API_Helpers::gettypeIDrank($v);
+							$tempdata['SkillName'] = Helpers::gettypeIDname($v);
+							$tempdata['GroupID'] = Helpers::getgroupID($v);
+							$tempdata['GroupName'] = Helpers::getgroupIDname($tempdata['GroupID']);
+							$tempdata['Rank'] = Helpers::gettypeIDrank($v);
                             break;
 						case "SKILLPOINTS":
 							$tempdata['SkillPoints'] = $v;
@@ -310,7 +312,7 @@ class API_CharacterSheet
 		// if API_UseCache = 1 (off) then don't use cache
 		if ((strtotime(gmdate("M d Y H:i:s")) - strtotime($CachedTime) > 0) || ($UseCaching == 1)  || !$cacheexists )
     	{
-			$http = new http_request($url);
+			$http = new \http_request($url);
 			$http->set_useragent("PHPApi");
 			foreach($keystring as $key => $val) $http->set_postform($key, $val);
 			$contents = $http->get_content();

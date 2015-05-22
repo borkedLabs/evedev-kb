@@ -147,7 +147,7 @@ class pPilotDetail extends pageAssembly
 		$this->summary->generate();
 		if($this->pilot->getExternalID())
 		{
-			$apiInfo = new API_CharacterInfo();
+			$apiInfo = new \EDK\EVEAPI\CharacterInfo();
 			$apiInfo->setID($this->pilot->getExternalID());
 			$result .= $apiInfo->fetchXML();
 			// Update the name if it has changed.

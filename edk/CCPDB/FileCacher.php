@@ -2,6 +2,8 @@
 /**
  * @package EDK
  */
+namespace EDK\CCPDB;
+
 class FileCacher
 {
     /** Caches a file to a selected folder/filename pair ($cacheFileName) from

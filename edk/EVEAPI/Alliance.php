@@ -6,12 +6,14 @@
  * @package EDK
  */
 
- require_once("class.api.php");
+namespace EDK\EVEAPI;
+ 
+use EDK\Core\Config;
 /**
  * Retrieve Alliance list from CCP to find alliance details.
  * @package EDK
  */
-class API_Alliance extends API
+class Alliance extends API
 {
 	protected $sxe = null;
 	protected $CachedUntil_ = null;

@@ -106,7 +106,7 @@ class Corporation extends Entity
 		{
 			if($this->externalid && is_numeric($this->externalid) && $this->externalid > 1000000) return $this->externalid;
 
-			$myID = new API_NametoID();
+			$myID = new \EDK\EVEAPI\NametoID();
 			$myID->setNames($this->getName());
 			$myID->fetchXML();
 			$myNames = $myID->getNameData();
@@ -219,7 +219,7 @@ class Corporation extends Entity
 		if (!$qry->recordCount()) {
 			// If no external id is given then look it up.
 			if (!$externalid && $loadExternals) {
-				$myID = new API_NametoID();
+				$myID = new \EDK\EVEAPI\NametoID();
 				$myID->setNames($name);
 				$myID->fetchXML();
 				$myNames = $myID->getNameData();
@@ -406,7 +406,7 @@ class Corporation extends Entity
 		if(!$this->externalid) $this->execQuery();
 		if(!$this->externalid) return false;
 
-		$myAPI = new API_CorporationSheet();
+		$myAPI = new \EDK\EVEAPI\CorporationSheet();
 		$myAPI->setCorpID($this->externalid);
 		$result = $myAPI->fetchXML();
 

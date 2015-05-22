@@ -18,7 +18,6 @@ spl_autoload_register('edkloader::load');
 // Set up the external class files with the autoloader.
 
 // Ugly hacks to make things work until other changes are made with the file structure
-edkloader::register('API', '/api/class.api.php');
 edkloader::register('TopList', 'class.toplist.php');
 edkloader::register('TopKillsList', 'class.toplist.php');
 edkloader::register('TopCorpKillsList', 'class.toplist.php');

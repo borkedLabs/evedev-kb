@@ -192,7 +192,7 @@ class pCorpDetail extends pageAssembly
 		// The summary table is also used by the stats. Whichever is called
 		// first generates the table.
 
-		$myAPI = new API_CorporationSheet();
+		$myAPI = new \EDK\EVEAPI\CorporationSheet();
 		$myAPI->setCorpID($this->corp->getExternalID());
 		$result .= $myAPI->fetchXML();
 		// Update the name if it has changed.

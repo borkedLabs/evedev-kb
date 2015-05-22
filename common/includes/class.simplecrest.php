@@ -45,7 +45,7 @@ class SimpleCrest
             return null;
         }
 
-        API_Helpers::autoSetApiConnectionMethod();
+        \EDK\EVEAPI\Helpers::autoSetApiConnectionMethod();
         // determine whether cURL is available
         if(Config::get('apiConnectionMethod') == 'curl' && self::$HTTP_METHOD == 'curl')
         {

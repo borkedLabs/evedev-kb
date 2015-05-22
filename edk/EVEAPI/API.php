@@ -1,5 +1,7 @@
 <?php
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
 
 class API {
@@ -11,7 +13,7 @@ class API {
 		// Loads pheal, so we can do some stuff with it, 
 		
 		// init API connection method
-		API_Helpers::autoSetApiConnectionMethod();
+		Helpers::autoSetApiConnectionMethod();
 		if(Config::get('apiConnectionMethod') == 'curl')
 		{
 			\Pheal\Core\Config::getInstance()->http_method = 'curl';

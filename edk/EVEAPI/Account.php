@@ -6,14 +6,14 @@
  * @package EDK
  */
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
-
-require_once("class.api.php");
 /**
  * Retrieve Character list from CCP API
  * @package EDK
  */
-class API_Account extends API
+class Account extends API
 {
 	protected static $data = array();
 

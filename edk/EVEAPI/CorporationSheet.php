@@ -6,13 +6,15 @@
  * @package EDK
  */
 
- require_once("class.api.php");
+namespace EDK\EVEAPI;
+ 
+use EDK\Core\Config;
 /**
  * API Corporation Sheet - /corp/CorporationSheet
  *
  * @package EDK
  */
-class API_CorporationSheet extends API
+class CorporationSheet extends API
 {
 	private $_result;
 
@@ -162,14 +164,14 @@ class API_CorporationSheet extends API
 			$myKeyString["corporationID"] = $this->API_corpID_;
 			$this->CharName_ = $this->API_corpID_;			
 		} elseif (user::get('usr_pilot_id')) {
-			$plt = new pilot(user::get('usr_pilot_id'));
+			$plt = new \pilot(user::get('usr_pilot_id'));
 			$usersname = $plt->getName();
 
 			$this->CharName_ = $usersname;
 
 			$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "' . $usersname . '"';
 
-    		$qry = DBFactory::getDBQuery();;
+    		$qry = \DBFactory::getDBQuery();;
 			$qry->execute($sql);
    		 	$row = $qry->getRow();
 

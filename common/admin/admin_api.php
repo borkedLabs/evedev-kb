@@ -86,7 +86,7 @@ if ($_POST['submit'] || $_POST['import']) {
 
 if ($_POST['import'] || isset($_GET['Process'])) {
 	// Importing of mails
-	$myEveAPI = new API_KillLog();
+	$myEveAPI = new \EDK\EVEAPI\KillLog();
 	$myEveAPI->iscronjob_ = false;
 
 	if ($_GET['Process']) {
@@ -281,7 +281,7 @@ if ($_POST['apilog']) {
 		$flags = $row['key_flags'];
 
 		if ($flags == 0) {
-			$act = new API_Account();
+			$act = new \EDK\EVEAPI\Account();
 			if ($act->CheckAccess($row['key_id'], $row['key_key'], 256)) {
 				// valid new style key with valid access
 				switch ($act->GetType($row['key_id'], $row['key_key'])) {
@@ -334,7 +334,7 @@ if ($_POST['apilog']) {
 			$html .= "<td>";
 			$chars = array();
 			if (!($flags & KB_APIKEY_BADAUTH || $flags & KB_APIKEY_EXPIRED)) {
-				$act = new API_Account();
+				$act = new \EDK\EVEAPI\Account();
                                 $characters = $act->fetch($row['key_id'], $row['key_key']);
                                 if($characters)
                                 {

@@ -3,8 +3,10 @@
  * @package EDK
  */
 
+ 
+namespace EDK\CCPDB;
 
-include_once('file.cacher.php');
+use EDK\Core\Config;
 
 /**
  * @package EDK
@@ -68,7 +70,7 @@ class UpdateXMLParser
 	{
 		//the validation - should it sit on the google SVN or locally, I wonder...
 		$xsdURL = KB_UPDATE_URL . "/update.xsd";
-		$this->dom = new DOMDocument('1.0', 'utf-8');
+		$this->dom = new \DOMDocument('1.0', 'utf-8');
 		$this->dom->load($this->domFileLocation);
 		//check if cURL exists, else use fsocket open
 		if (function_exists('curl_init'))

@@ -10,7 +10,7 @@ class CacheCommand extends CronCommand
 		println("");
 
 		// Alliance
-		$myAlliAPI = new API_Alliance();
+		$myAlliAPI = new \EDK\EVEAPI\Alliance();
 		
 		println("Caching Alliance XML");
 		$Allitemp .= $myAlliAPI->fetchalliances();

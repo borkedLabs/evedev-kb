@@ -166,7 +166,7 @@ if(file_exists($cachingFolderApi))
             $html =  '  Successfully connected to XML API';
             $trouble['API Caching'][] = array('passed'=>true, 'text'=> $html);
         } 
-        catch (EDKApiConnectionException $e) 
+        catch (EDK\EVEAPI\EDKApiConnectionException $e) 
         {
             $html =  '  Connection to XML API NOT successul, Error: '.$e->getMessage().' (Code: '.$e->getCode().')';
             $trouble['API Caching'][] = array('passed'=>false, 'text'=> $html);
@@ -179,7 +179,7 @@ if(file_exists($cachingFolderApi))
             $html =  '  Successfully connected to CREST API';
             $trouble['API Caching'][] = array('passed'=>true, 'text'=> $html);
         }
-        catch(EDKApiConnectionException $e)
+        catch(\EDK\EVEAPI\EDKApiConnectionException $e)
         {
             $html =  '  Connection to CREST API NOT successul, Error: '.$e->getMessage().' (Code: '.$e->getCode().')';
             $trouble['API Caching'][] = array('passed'=>false, 'text'=> $html);

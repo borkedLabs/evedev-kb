@@ -600,7 +600,7 @@ class pKillDetail extends pageAssembly
 
 		//prod CCP for the entire list of names
 		if (count($fetchExternalIDs) > 0) {
-			$names = new API_NametoID();
+			$names = new \EDK\EVEAPI\NametoID();
 			$names->setNames(implode(',', $fetchExternalIDs));
 			$names->fetchXML();
 			$nameIDPair = $names->getNameData();

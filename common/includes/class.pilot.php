@@ -111,7 +111,7 @@ class Pilot extends Entity
 			if ($this->getName() != $this->name) {
 				return 0;
 			}
-			$myID = new API_NametoID();
+			$myID = new \EDK\EVEAPI\NametoID();
 			$myID->setNames($this->getName());
 			$myID->fetchXML();
 			$myNames = $myID->getNameData();
@@ -317,7 +317,7 @@ class Pilot extends Entity
 			$externalID = (int)$externalID;
 			// If no external id is given then look it up.
 			if (!$externalID && $loadExternals) {
-				$myID = new API_NametoID();
+				$myID = new \EDK\EVEAPI\NametoID();
 				$myID->setNames($name);
 				$myID->fetchXML();
 				$myNames = $myID->getNameData();
@@ -503,7 +503,7 @@ class Pilot extends Entity
 		if (!$this->externalid) {
 			return false;
 		}
-			$apiInfo = new API_CharacterInfo();
+			$apiInfo = new \EDK\EVEAPI\CharacterInfo();
 			$apiInfo->setID($this->externalid);
 			$result = $apiInfo->fetchXML();
 

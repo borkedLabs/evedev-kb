@@ -670,7 +670,7 @@ class ZKBFetch
        {
            if($victimDetails["moonID"] > 0)
            {
-               $moonName = API_Helpers::getMoonName($victimDetails["moonID"]);
+               $moonName = \EDK\EVEAPI\Helpers::getMoonName($victimDetails["moonID"]);
                $victimName = $Corp->getName()." - ".$moonName;
            }
 
@@ -1030,7 +1030,7 @@ class ZKBFetch
         // was it a pos structure?
         else if($victim["moonID"] != 0)
         {
-            $moonName = API_Helpers::getMoonName($victim["moonID"]);
+            $moonName = \EDK\EVEAPI\Helpers::getMoonName($victim["moonID"]);
             // cut off the first two characters (again, to keep compatibility with legacy parser killmails)
             $hashIn .= substr($moonName, 2, strlen($moonName)-1);
         }

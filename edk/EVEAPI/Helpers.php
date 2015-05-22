@@ -6,16 +6,18 @@
  * @package EDK
  */
 
+namespace EDK\EVEAPI;
+ 
 use EDK\Core\Config;
 
-class EDKApiConnectionException extends Exception {}
+class EDKApiConnectionException extends \Exception {}
 
 // **********************************************************************************************************************************************
 // **********************************************************************************************************************************************
 // ****************                         					  GENERIC public static functionS                					             ****************
 // **********************************************************************************************************************************************
 // **********************************************************************************************************************************************
-class API_Helpers
+class Helpers
 {
 	// **********************************************************************************************************************************************
 	// ****************                         					Convert ID -> Name               					             ****************
@@ -25,7 +27,7 @@ class API_Helpers
 		$id = intval($id);
 		$sql = 'select inv.typeName from kb3_invtypes inv where inv.typeID = ' . $id;
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($sql);
 		if($qry->recordCount())
 		{
@@ -35,7 +37,7 @@ class API_Helpers
 		}
 		else
 		{
-			$info = new API_IDtoName();
+			$info = new IDtoName();
 			$info->setIDs($id);
 			$result = $info->fetchXML();
 			if($result == "")
@@ -59,7 +61,7 @@ class API_Helpers
 	{
 		$sql = 'select inv.groupID from kb3_invtypes inv where inv.typeID = ' . $id;
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -73,7 +75,7 @@ class API_Helpers
 	{
 		$sql = 'select itt.itt_name from kb3_item_types itt where itt.itt_id = ' . $id;
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -87,7 +89,7 @@ class API_Helpers
 	{
 		$sql = 'select att.value from kb3_dgmtypeattributes att where att.typeID = ' . $id . ' and att.attributeID = 275';
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -101,7 +103,7 @@ class API_Helpers
 	{
 		if ($id != 0)
 		{
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$sql = 'select itemName FROM kb3_moons WHERE itemID = '.$id;
 
 			$qry->execute($sql);
@@ -121,7 +123,7 @@ class API_Helpers
 	{
 		if (!is_null($moonName))
 		{
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$sql = "select itemID FROM kb3_moons WHERE itemName = '".$qry->escape($moonName)."'";
 
 			$qry->execute($sql);
@@ -140,7 +142,7 @@ class API_Helpers
 	{ // round about now would probably be a good time for apologising about my sense of humour :oD
 		$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "Captain Thunk"';
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -161,7 +163,7 @@ class API_Helpers
 	{
 		if ( (strlen($corpName) != 0) && ($corpID != 0) )
 		{
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$qry->execute( "SELECT * FROM `kb3_corps` WHERE `crp_name` = '" . slashfix($corpName) . "'");
 
 			if ($qry->recordCount() != 0)
@@ -182,7 +184,7 @@ class API_Helpers
 	{
 		if ( ($allianceName != "NONE") && ($allianceID != 0) )
 		{
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$qry->execute( "SELECT * FROM `kb3_alliances` WHERE `all_name` = '" . slashfix($allianceName) . "'");
 
 			if ($qry->recordCount() != 0)
@@ -299,7 +301,7 @@ class API_Helpers
             }
             
             // don't test cURL connection if cURL is not available
-            if(!API_Helpers::isCurlSupported())
+            if(!Helpers::isCurlSupported())
             {
                 Config::set('apiConnectionMethod', 'file');
                 return;
@@ -309,8 +311,8 @@ class API_Helpers
             {
                 // initialize with cURL setting
                 Config::set('apiConnectionMethod', 'curl');
-                @API_Helpers::testXmlApiConnection();
-                @API_Helpers::testCrestApiConnection();
+                @Helpers::testXmlApiConnection();
+                @Helpers::testCrestApiConnection();
             } 
             catch (Exception $ex) 
             {

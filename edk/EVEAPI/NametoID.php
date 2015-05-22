@@ -6,11 +6,13 @@
  * @package EDK
  */
 
-require_once("class.api.php");
+namespace EDK\EVEAPI;
+ 
+use EDK\Core\Config;
 // **********************************************************************************************************************************************
 // ****************                                   API Name -> ID Conversion /eve/CharacterID.xml.aspx 	                     ****************
 // **********************************************************************************************************************************************
-class API_NametoID extends API
+class NametoID extends API
 {
 	function setNames($names)
 	{

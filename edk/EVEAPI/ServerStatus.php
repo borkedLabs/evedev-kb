@@ -6,10 +6,13 @@
  * @package EDK
  */
 
+namespace EDK\EVEAPI;
+ 
+use EDK\Core\Config;
 /**
  * API Server Status /server/ServerStatus.xml.aspx
  */
-class API_ServerStatus extends API
+class ServerStatus extends API
 {
 	/** @var boolean Whether the server is open. */
 	static protected $serverOpen = false;

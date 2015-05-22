@@ -428,7 +428,7 @@ class Fetcher
 		if(!count($checklist)) return;
 		$position = 0;
 		$myNames = array();
-		$myID = new API_NametoID();
+		$myID = new \EDK\EVEAPI\NametoID();
 		while($position < count($checklist))
 		{
 			$namestring = str_replace(" ", "%20", implode(',', array_slice($checklist, $position, 100, true)));
@@ -476,7 +476,7 @@ class Fetcher
 			$namestring = str_replace(" ", "%20", implode(',', array_slice($checklist, $position, 100, true)));
 			$namestring = str_replace("\'", "'", $namestring);
 			$position +=100;
-			$myID = new API_NametoID();
+			$myID = new \EDK\EVEAPI\NametoID();
 			$myID->setNames($namestring);
 			$myID->fetchXML();
 			$tempNames = $myID->getNameData();

@@ -664,9 +664,9 @@ class IDFeed
 
 		if (!strval($victim['characterName'])) {
 			if ((int)$row['moonID']) {
-				$name = API_Helpers::getMoonName((int)$row['moonID']);
+				$name = \EDK\EVEAPI\Helpers::getMoonName((int)$row['moonID']);
 				if (!$name) {
-					$idtoname = new API_IDtoName();
+					$idtoname = new \EDK\EVEAPI\IDtoName();
 					$idtoname->setIDs((int)$row['moonID']);
 
 					if ($idtoname->fetchXML()) {
@@ -1005,7 +1005,7 @@ class IDFeed
                             {
                                 $moonName = $victimName;
                             }
-                            $moonId = API_Helpers::getMoonID($moonName);
+                            $moonId = \EDK\EVEAPI\Helpers::getMoonID($moonName);
                             if($moonId)
                             {
                                 $row->addAttribute('moonID', $moonId);

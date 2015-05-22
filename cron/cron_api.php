@@ -19,7 +19,7 @@ class ApiCommand extends CronCommand
 
 		println("Running API Import on " . gmdate("M d Y H:i") . "\n\n");
 
-		$myEveAPI = new API_KillLog();
+		$myEveAPI = new \EDK\EVEAPI\KillLog();
 		$myEveAPI->iscronjob_ = true;
 
 		$qry = new DBQuery();

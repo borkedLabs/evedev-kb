@@ -6,7 +6,9 @@
  * @package EDK
  */
 
-require_once("class.api.php");
+namespace EDK\EVEAPI;
+ 
+use EDK\Core\Config;
 /**
  * Retrieve Character Info from CCP API
  * @package EDK
