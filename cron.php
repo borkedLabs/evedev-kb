@@ -3,6 +3,13 @@
 set_time_limit(0);
 
 require __DIR__.'/vendor/autoload.php';
+
+// Enable custom error handling.
+require_once(__DIR__ . "/bootstrap/SplClassLoader.php");
+$loader = new SplClassLoader('EDK', '');
+$loader->setIncludePath(__DIR__);
+$loader->register();
+
 $cronStartTime = microtime(true);
 
 @error_reporting(E_ALL ^ E_NOTICE);
