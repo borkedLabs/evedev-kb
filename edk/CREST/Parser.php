@@ -13,7 +13,7 @@ use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
  
-class ParserException extends Exception{}
+class ParserException extends \Exception{}
 
 /**
  * @package EDK
@@ -84,12 +84,12 @@ class Parser
                     $this->killmailRepresentation = CREST::getReferenceByUrl($this->crestUrl);
                 }
                 
-                catch(Exception $e)
+                catch(\Exception $e)
                 {
                     throw new ParserException($e->getMessage(), $e->getCode());
                 }
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 
 		// Check hashes with a prepared query.
 		// Make it static so we can reuse the same query for feed fetches.
@@ -176,7 +176,7 @@ class Parser
                 }
                
                 // create the kill
-                $Kill = new Kill();
+                $Kill = new \Kill();
                 // set external ID
                 $Kill->setExternalID($this->externalID);
                 // set timestamp
@@ -186,7 +186,7 @@ class Parser
                 
                 // handle solarSystem
                 $solarSystemID = (int)$this->killmailRepresentation->solarSystem->id;
-                $solarSystem = SolarSystem::getByID($solarSystemID);
+                $solarSystem = \SolarSystem::getByID($solarSystemID);
                 if (!$solarSystem->getName()) {
                     throw new ParserException("Unknown solar system ID: ".$solarSystemID);
                 }
@@ -461,7 +461,7 @@ class Parser
             $Pilot = $pilot = Pilot::add($victimName, $Corp, $timestamp, $victimDetails["characterID"]);
             
             // handle victim's ship
-            $Ship = Ship::getByID($victimDetails["shipTypeID"]);
+            $Ship = \Ship::getByID($victimDetails["shipTypeID"]);
             
             
             // set values in $Kill
@@ -496,30 +496,29 @@ class Parser
                 $isNPC = FALSE;
                 
                 // get involved party's ship
-                $Ship = new Ship();
+                $Ship = null;
                 if(!$involvedParty['shipTypeID'])
                 {
-                    $Ship = Ship::lookup("Unknown");
+                    $Ship = \Ship::lookup("Unknown");
                 }
-                
                 else
                 {
-                    $Ship = Ship::getByID($involvedParty['shipTypeID']);
+                    $Ship = \Ship::getByID($involvedParty['shipTypeID']);
                 }
                 
-		$Weapon = Cacheable::factory('Item', $involvedParty['weaponTypeID']);
+				$Weapon = \Cacheable::factory('Item', $involvedParty['weaponTypeID']);
             
                 	
                 // get alliance
                 $Alliance = Alliance::add("None");
                 if ($involvedParty['allianceID'] > 0) 
                 {
-                        $Alliance = Alliance::add($involvedParty['allianceName'], $involvedParty['allianceID']);
+					$Alliance = Alliance::add($involvedParty['allianceName'], $involvedParty['allianceID']);
                 }
                 // only use faction as alliance if no corporation is given (faction NPC)
                 else if ($involvedParty['factionID'] > 0 && strlen($involvedParty['corporationName']) > 0) 
                 {		
-                        $Alliance = Alliance::add($involvedParty['factionName'], $involvedParty['factionID']);
+					$Alliance = Alliance::add($involvedParty['factionName'], $involvedParty['factionID']);
                 }           
                 
                 // get corp
@@ -604,7 +603,7 @@ class Parser
                 $Pilot = Pilot::add($involvedPartyName, $Corp, $timestamp, $involvedCharacterID, $loadPilotExternals);
 
                 // create involvedParty
-                $IParty = new InvolvedParty($Pilot->getID(), $Corp->getID(),
+                $IParty = new \InvolvedParty($Pilot->getID(), $Corp->getID(),
 				$Alliance->getID(),  $involvedParty['securityStatus'],
 						$Ship->getID(), $Weapon->getID(),
 						$involvedParty['damageDone']);
@@ -657,7 +656,7 @@ class Parser
             $typeID = (int)$item['typeID'];
             // we will add this item with the given flag, even if it's not in our database
             // that way, when the database is updated, the item will display correctly
-            $Item = new Item($typeID);
+            $Item = new \Item($typeID);
             
             // if item has a parent, use the parent's flag
             if(!is_null($parentItemLocation))
@@ -675,11 +674,11 @@ class Parser
            
             if($item['qtyDropped']) {
                $Kill->addDroppedItem(
-                   new DestroyedItem($Item, $item['qtyDropped'], $singleton, '', $location));
+                   new \DestroyedItem($Item, $item['qtyDropped'], $singleton, '', $location));
             }
             if($item['qtyDestroyed']) {
                     $Kill->addDestroyedItem(
-                        new DestroyedItem($Item, $item['qtyDestroyed'], $singleton, '',  $location));
+                        new \DestroyedItem($Item, $item['qtyDestroyed'], $singleton, '',  $location));
             }
             
             // process container-items
