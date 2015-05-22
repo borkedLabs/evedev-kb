@@ -5,11 +5,12 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
 
 /*
  * @package EDK
  */
-class pLogin extends pageAssembly
+class Login extends \pageAssembly
 {
 
 	/** @var Page The Page object used to display this page. */
@@ -22,10 +23,19 @@ class pLogin extends pageAssembly
 		$this->queue("start");
 		$this->queue("content");
 	}
+	
+	public function generate()
+	{
+		\event::call(login_assembling);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->page->generate();
+	}
 
 	function start()
 	{
-		$this->page = new Page(language::get('page_login'));
+		$this->page = new Page(\Language::get('page_login'));
 	}
 
 	function content()
@@ -51,25 +61,25 @@ class pLogin extends pageAssembly
 					file_put_contents("kbconfig.php", trim($kbconfig));
 					chmod("kbconfig.php", 0440);
 
-					session::create(true);
+					\session::create(true);
 
 					session_write_close();
-					header('Location: '.html_entity_decode(edkURI::page('admin')));
+					header('Location: '.html_entity_decode(\edkURI::page('admin')));
 					die;
 				}
 			} else if ($_POST['usrlogin'] == ''
 					&& crypt($_POST['usrpass'], ADMIN_PASSWORD) == ADMIN_PASSWORD) {
-				session::create(true);
+				\session::create(true);
 
 				session_write_close();
-				$page = preg_replace('/[^a-zA-Z0-9-_]/', '', edkURI::getArg("page", 1));
+				$page = preg_replace('/[^a-zA-Z0-9-_]/', '', \edkURI::getArg("page", 1));
 				$page = $page ? $page : "admin";
-				header('Location: '.html_entity_decode(edkURI::page($page)));
+				header('Location: '.html_entity_decode(\edkURI::page($page)));
 				die;
 			} else {
-				$result = user::login($_POST['usrlogin'], $_POST['usrpass']);
+				$result = \user::login($_POST['usrlogin'], $_POST['usrpass']);
 				if ($result) {
-					header('Location: '.html_entity_decode(edkURI::page('home')));
+					header('Location: '.html_entity_decode(\edkURI::page('home')));
 					die;
 				} else {
 					$smarty->assign('error',
@@ -81,13 +91,4 @@ class pLogin extends pageAssembly
 
 		return $smarty->fetch(get_tpl('user_login'));
 	}
-
 }
-
-
-$login = new pLogin();
-event::call("login_assembling", $about);
-$html = $login->assemble();
-$login->page->setContent($html);
-
-$login->page->generate();

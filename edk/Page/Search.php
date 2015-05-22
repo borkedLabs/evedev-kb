@@ -6,13 +6,15 @@
  * @package EDK
  */
 
+namespace EDK\Page;
+
 // An ajax search function for this page is in common/includes/xajax.functions.php
-require_once('common/includes/xajax.functions.php');
+require_once(__DIR__.'/../../common/includes/xajax.functions.php');
 
 /*
  * @package EDK
  */
-class pSearch extends pageAssembly
+class Search extends \pageAssembly
 {
 	/** @var Page */
 	public $page;
@@ -45,6 +47,15 @@ class pSearch extends pageAssembly
         $this->searchtype = is_null($_POST['searchtype']) ? $_GET['searchtype'] : $_POST['searchtype'];
     }
 
+	public function generate()
+	{
+		\event::call("search_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->page->generate();
+	}
+	
     function checkSearch()
     {
         global $smarty;
@@ -90,7 +101,7 @@ class pSearch extends pageAssembly
                     $sql = "select typeID, typeName from kb3_invtypes where typeName like ('%".$this->searchphrase."%')";
                     break;
             }
-			$qry = DBFactory::getDBQuery();;
+			$qry = \DBFactory::getDBQuery();;
             if (!$qry->execute($sql))
             {
                 die ($qry->getErrorMsg());
@@ -158,10 +169,3 @@ class pSearch extends pageAssembly
         return $smarty->fetch(get_tpl('search_new'));
     }
 }
-
-$searchDetail = new pSearch();
-event::call("search_assembling", $searchDetail);
-$html = $searchDetail->assemble();
-$searchDetail->page->setContent($html);
-
-$searchDetail->page->generate();

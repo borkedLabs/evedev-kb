@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Page\Page;
+
 @set_time_limit(0);
 
 $page = new Page();

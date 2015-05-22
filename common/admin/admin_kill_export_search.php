@@ -12,6 +12,7 @@
 * Currently only supports users,
 * but will be made to support corps and alliances
 */
+use EDK\Page\Page;
 
 require_once('admin_menu.php');
 

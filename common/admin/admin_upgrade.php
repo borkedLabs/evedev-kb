@@ -7,6 +7,8 @@
  */
 
 use EDK\Core\Config;
+use EDK\Page\Page;
+
 require_once('common/admin/option_acache.php');
 
 require_once('update/CCPDB/xml.parser.php');

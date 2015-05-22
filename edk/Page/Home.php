@@ -5,11 +5,13 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
+ 
 use EDK\Core\Config;
 /*
  * @package EDK
  */
-class pHome extends pageAssembly
+class Home extends \pageAssembly
 {
 	/** @var array */
 	private $pargs = array();
@@ -54,14 +56,28 @@ class pHome extends pageAssembly
 		$this->queue('killList');
 	}
 
+	public function generate()
+	{
+		\event::call("home_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context(); //This resets the queue and queues context items.
+		\event::call("home_context_assembling", $this);
+		$contextHTML = $this->assemble();
+		$this->page->addContext($contextHTML);
+
+		$this->page->generate();
+	}
+	
 	function start()
 	{
 		$this->page = new Page();
 		$this->page->addHeader(
-				"<link rel='canonical' href='".edkURI::page()."' />");
+				"<link rel='canonical' href='".\edkURI::page()."' />");
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '',
-				edkURI::getArg('view', 1));
-		$period = edkURI::getArg('period');
+				\edkURI::getArg('view', 1));
+		$period = \edkURI::getArg('period');
 
 		$day = $week = $month = $year = 0;
 		// First argument is either the view or the year
@@ -75,15 +91,15 @@ class pHome extends pageAssembly
 			$datestart = 2;
 		}
 
-		$year = edkURI::getArg('y', $datestart);
+		$year = \edkURI::getArg('y', $datestart);
 
 		if((int)$year && !$period) {
 			$year = (int)$year;
 			$this->dateSet = true;
 			if (Config::get('show_monthly')) {
-				$month = (int) edkURI::getArg('m', $datestart + 1);
+				$month = (int) \edkURI::getArg('m', $datestart + 1);
 			} else {
-				$week = (int) edkURI::getArg('w', $datestart + 1);
+				$week = (int) \edkURI::getArg('w', $datestart + 1);
 			}
 		} else if ($year || $period) {
 			if (!$period) {
@@ -92,25 +108,25 @@ class pHome extends pageAssembly
 			$datestart++;
 			switch($period) {
 				case "month":
-					$year = (int) edkURI::getArg('y', $datestart);
+					$year = (int) \edkURI::getArg('y', $datestart);
 					if((int)$year) {
-						$month = (int) edkURI::getArg('m', $datestart + 1);
+						$month = (int) \edkURI::getArg('m', $datestart + 1);
 						$this->dateSet = true;
 					}
 					break;
 				case "week":
-					$year = (int) edkURI::getArg('y', $datestart);
+					$year = (int) \edkURI::getArg('y', $datestart);
 					if((int)$year) {
-						$week = (int) edkURI::getArg('w', $datestart + 1);
+						$week = (int) \edkURI::getArg('w', $datestart + 1);
 						$this->dateSet = true;
 					}
 					break;
 				case "day":
-					$year = (int) edkURI::getArg('y', $datestart);
+					$year = (int) \edkURI::getArg('y', $datestart);
 					if((int)$year) {
-						$month = (int) edkURI::getArg('m', $datestart + 1);
+						$month = (int) \edkURI::getArg('m', $datestart + 1);
 						if((int)$month) {
-							$day = (int) edkURI::getArg('d', $datestart + 2);
+							$day = (int) \edkURI::getArg('d', $datestart + 2);
 							$this->dateSet = true;
 						}
 					}
@@ -120,13 +136,13 @@ class pHome extends pageAssembly
 
 		$this->setTime($week, $year, $month, $day);
 
-		if (edkURI::getArg('scl_id') === false
-				|| edkURI::getArg('y', 1) === false) {
+		if (\edkURI::getArg('scl_id') === false
+				|| \edkURI::getArg('y', 1) === false) {
 			$this->page->addHeader(
 					'<meta name="robots" content="index, follow" />');
 		}
 
-		$this->scl_id = (int) edkURI::getArg('scl_id');
+		$this->scl_id = (int) \edkURI::getArg('scl_id');
 
 		$this->showcombined = Config::get('show_comb_home')
 				&& (count(Config::get('cfg_allianceid'))
@@ -154,14 +170,14 @@ class pHome extends pageAssembly
 		if (Config::get('summarytable')) {
 			if (Config::get('public_summarytable')) {
 				//$kslist = new KillList();
-				$summarytable = new KillSummaryTablePublic();
+				$summarytable = new \KillSummaryTablePublic();
 				$this->loadTime($summarytable);
-				involved::load($summarytable, 'kill');
+				\involved::load($summarytable, 'kill');
 				//$summarytable = new KillSummaryTablePublic($kslist);
 			} else {
-				$summarytable = new KillSummaryTable();
+				$summarytable = new \KillSummaryTable();
 				$this->loadTime($summarytable);
-				involved::load($summarytable, 'kill');
+				\involved::load($summarytable, 'kill');
 			}
 			return $summarytable->generate();
 		}
@@ -174,7 +190,7 @@ class pHome extends pageAssembly
 	function campaigns()
 	{
 		// Display campaigns, if any.
-		if (Killboard::hasCampaigns(true) &&
+		if (\Killboard::hasCampaigns(true) &&
 				$this->isCurrentPeriod()) {
 			$html = "<div class='kb-campaigns-header'>Active campaigns</div>";
 			$list = new ContractList();
@@ -200,7 +216,7 @@ class pHome extends pageAssembly
 
 		global $smarty;
 
-		$klist = new KillList();
+		$klist = new \KillList();
 		$klist->setOrdered(true);
 		// We'll be needing comment counts so set the killlist to retrieve them
 		if (Config::get('comments_count')) {
@@ -214,11 +230,11 @@ class pHome extends pageAssembly
 		// Select between kills, losses or both.
 		if ($this->view == 'combined'
 				|| ($this->view == '' && $this->showcombined)) {
-			involved::load($klist, 'combined');
+			\involved::load($klist, 'combined');
 		} else if ($this->view == 'losses') {
-			involved::load($klist, 'loss');
+			\involved::load($klist, 'loss');
 		} else {
-			involved::load($klist, 'kill');
+			\involved::load($klist, 'kill');
 		}
 
 		if ($this->scl_id) {
@@ -231,7 +247,7 @@ class pHome extends pageAssembly
 		// show all kills for the week using the page splitter.
 		if (Config::get("cfg_fillhome") && !$this->dateSet) {
 			$klist->setLimit(Config::get('killcount'));
-			$table = new KillListTable($klist);
+			$table = new \KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
 			$table->setLimit(Config::get('killcount'));
 			$html = $table->generate();
@@ -240,9 +256,9 @@ class pHome extends pageAssembly
 			//$klist->setWeek($this->week);
 			//$klist->setYear($this->year);
 			$klist->setPageSplit(Config::get('killcount'));
-			$pagesplitter = new PageSplitter($klist->getCount(),
+			$pagesplitter = new \PageSplitter($klist->getCount(),
 					Config::get('killcount'));
-			$table = new KillListTable($klist);
+			$table = new \KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
 			$pagesplit = $pagesplitter->generate();
 			$html = $pagesplit.$table->generate().$pagesplit;
@@ -287,16 +303,16 @@ class pHome extends pageAssembly
 			$combinedLink[] = $sclarg;
 		}
 		$this->addMenuItem("link", "Previous ".$this->getPeriodName(),
-				edkURI::build($previous));
+				\edkURI::build($previous));
 		if (!$this->isCurrentPeriod()) {
 			$this->addMenuItem("link", "Next ".$this->getPeriodName(),
-					edkURI::build($next));
+					\edkURI::build($next));
 		}
-		$this->addMenuItem("link", "Kills", edkURI::build($killLink));
-		$this->addMenuItem("link", "Losses", edkURI::build($lossLink));
+		$this->addMenuItem("link", "Kills", \edkURI::build($killLink));
+		$this->addMenuItem("link", "Losses", \edkURI::build($lossLink));
 		if (Config::get('show_comb_home')) {
 			$this->addMenuItem("link", $weektext."All Kills",
-					edkURI::build($combinedLink));
+					\edkURI::build($combinedLink));
 		}
 		return "";
 	}
@@ -310,7 +326,7 @@ class pHome extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2])) {
@@ -331,7 +347,7 @@ class pHome extends pageAssembly
 		// Show the Eve time.
 		if (Config::get('show_clock')) {
 			$this->page->addOnLoad("setInterval('updateClock()', 60000 )");
-			$clock = new Clock();
+			$clock = new \Clock();
 			return $clock->generate();
 		}
 	}
@@ -346,28 +362,28 @@ class pHome extends pageAssembly
 		if ($this->view != 'losses') {
 			$tklist = new \EDK\Toplist\Kills();
 			$this->loadTime($tklist);
-			involved::load($tklist, 'kill');
+			\involved::load($tklist, 'kill');
 
 			$tklist->generate();
-			$tkbox = new AwardBox($tklist, "Top killers", "kills in "
+			$tkbox = new \AwardBox($tklist, "Top killers", "kills in "
 					.$this->getCurrentPeriod(), "kills", "eagle");
 			$html = $tkbox->generate();
 
 			$tklist = new \EDK\Toplist\Score();
 			$this->loadTime($tklist);
-			involved::load($tklist, 'kill');
+			\involved::load($tklist, 'kill');
 
 			$tklist->generate();
-			$tkbox = new AwardBox($tklist, "Top scorers", "points in "
+			$tkbox = new \AwardBox($tklist, "Top scorers", "points in "
 					.$this->getCurrentPeriod(), "points", "redcross");
 			$html .= $tkbox->generate();
 		} else {
 			$tllist = new \EDK\Toplist\Losses();
 			$this->loadTime($tllist);
-			involved::load($tllist, 'loss');
+			\involved::load($tllist, 'loss');
 
 			$tllist->generate();
-			$tlbox = new AwardBox($tllist, "Top losers", "losses in "
+			$tlbox = new \AwardBox($tllist, "Top losers", "losses in "
 					.$this->getCurrentPeriod(), "losses", "moon");
 			$html = $tlbox->generate();
 		}
@@ -731,16 +747,3 @@ class pHome extends pageAssembly
 		$this->viewList[$view] = $callback;
 	}
 }
-
-$pageAssembly = new pHome();
-event::call("home_assembling", $pageAssembly);
-$html = $pageAssembly->assemble();
-$pageAssembly->page->setContent($html);
-
-$pageAssembly->context(); //This resets the queue and queues context items.
-event::call("home_context_assembling", $pageAssembly);
-$contextHTML = $pageAssembly->assemble();
-$pageAssembly->page->addContext($contextHTML);
-
-
-$pageAssembly->page->generate();

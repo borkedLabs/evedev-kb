@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Page\Page;
 use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;

@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Page\Page;
 
 require_once('common/admin/admin_menu.php');
 

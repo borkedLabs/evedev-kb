@@ -7,6 +7,7 @@
  */
 
 use EDK\Database\PreparedQuery;
+use EDK\Page\Page;
 
 require_once('common/admin/admin_menu.php');
 require_once('common/includes/eve_central_sync.php');

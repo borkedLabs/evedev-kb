@@ -6,11 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Page;
 $page = new Page('Campaigns');
 /*
  * @package EDK
  */
-class pCampaignList extends pageAssembly
+class Campaigns extends \pageAssembly
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -31,12 +32,27 @@ class pCampaignList extends pageAssembly
 	{
 		parent::__construct();
 
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 1));
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 1));
 
 		$this->queue("start");
 		$this->queue("listCampaigns");
 
 	}
+	
+	public function generate()
+	{
+		\event::call("campaignList_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("campaignList_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+	
 	/**
 	 *  Reset the assembly object to prepare for creating the context.
 	 */
@@ -63,23 +79,23 @@ class pCampaignList extends pageAssembly
 		if(isset($this->viewList[$this->view])) {
 			return call_user_func_array($this->viewList[$this->view], array(&$this));
 		}
-		$pageNum = (int)edkURI::getArg('page');
+		$pageNum = (int)\edkURI::getArg('page');
 
 		switch ($this->view)
 		{
 			case '':
-				$activelist = new ContractList();
+				$activelist = new \ContractList();
 				$activelist->setActive('yes');
 				$this->page->setTitle('Active campaigns');
-				$table = new ContractListTable($activelist);
+				$table = new \ContractListTable($activelist);
 				$table->paginate(10, $pageNum);
 				return $table->generate();
 				break;
 			case 'past':
-				$pastlist = new ContractList();
+				$pastlist = new \ContractList();
 				$pastlist->setActive('no');
 				$this->page->setTitle('Past campaigns');
-				$table = new ContractListTable($pastlist);
+				$table = new \ContractListTable($pastlist);
 				$table->paginate(10, $pageNum);
 				return $table->generate();
 				break;
@@ -104,7 +120,7 @@ class pCampaignList extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -168,15 +184,3 @@ class pCampaignList extends pageAssembly
 		return $this->view;
 	}
 }
-
-$campaignList = new pCampaignList();
-event::call("campaignList_assembling", $campaignList);
-$html = $campaignList->assemble();
-$campaignList->page->setContent($html);
-
-$campaignList->context();
-event::call("campaignList_context_assembling", $campaignList);
-$context = $campaignList->assemble();
-$campaignList->page->addContext($context);
-
-$campaignList->page->generate();

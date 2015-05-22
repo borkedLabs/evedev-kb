@@ -5,13 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
 
 use EDK\Core\Config;
 
 /*
  * @package EDK
  */
-class pAwards extends pageAssembly
+class Awards extends \pageAssembly
 {
 	/** @var array The array of menu options */
 	protected $menuOptions;
@@ -42,6 +43,21 @@ class pAwards extends pageAssembly
 		$this->queue("start");
 		$this->queue("awards");
 	}
+
+	public function generate()
+	{
+		\event::call("award_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context(); //This resets the queue and queues context items.
+		\event::call("award_context_assembling", $this);
+		$contextHTML = $this->assemble();
+		$this->page->addContext($contextHTML);
+
+		$this->page->generate();
+	}
+	
 	/**
 	 * Start constructing the page.
 	 * Prepare all the shared variables.
@@ -49,13 +65,13 @@ class pAwards extends pageAssembly
 	 */
 	function start()
 	{
-		$this->page = new Page(Language::get('page_awards'));
+		$this->page = new Page(\Language::get('page_awards'));
 		$this->page->addHeader('<meta name="robots" content="index, follow" />');
 
-		$this->page->addHeader("<link rel='canonical' href='".edkURI::build(array('a', 'awards', true))."' />");
+		$this->page->addHeader("<link rel='canonical' href='".\edkURI::build(array('a', 'awards', true))."' />");
 
-		$this->year = (int)edkURI::getArg('y', 1);
-		$this->month = (int)edkURI::getArg('m', 2);
+		$this->year = (int)\edkURI::getArg('y', 1);
+		$this->month = (int)\edkURI::getArg('m', 2);
 		if(!$this->month){
 			$this->month = kbdate('m') - 1;
 		}
@@ -68,10 +84,10 @@ class pAwards extends pageAssembly
 			$this->year = $this->year - 1;
 		}
 
-		if (!edkURI::getArg('y', 1)) {
-			$this->view = edkURI::getArg('view', 1);
+		if (!\edkURI::getArg('y', 1)) {
+			$this->view = \edkURI::getArg('view', 1);
 		} else {
-			$this->view = edkURI::getArg('view', 3);
+			$this->view = \edkURI::getArg('view', 3);
 		}
 		$this->listList = $this->listSetup();
 	}
@@ -105,10 +121,10 @@ class pAwards extends pageAssembly
 		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('topkillers'), Language::get('kills'), "kills", "eagle");
+		$tkbox = new \AwardBox($tklist, \Language::get('topkillers'), \Language::get('kills'), "kills", "eagle");
 		$awardboxes[] = $tkbox->generate();
 		// top scorers
 		if (Config::get('kill_points'))
@@ -116,56 +132,56 @@ class pAwards extends pageAssembly
 			$tklist = new \EDK\Toplist\Score();
 			$tklist->setMonth($this->month);
 			$tklist->setYear($this->year);
-			involved::load($tklist,'kill');
+			\involved::load($tklist,'kill');
 
 			$tklist->generate();
-			$tkbox = new AwardBox($tklist, Language::get('topscorers'), Language::get('top_points'), "points", "redcross");
+			$tkbox = new \AwardBox($tklist, \Language::get('topscorers'), \Language::get('top_points'), "points", "redcross");
 			$awardboxes[] = $tkbox->generate();
 		}
 		// top solo killers
 		$tklist = new \EDK\Toplist\SoloKiller();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_solo'), Language::get('top_solo_desc'), "kills", "cross");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_solo'), \Language::get('top_solo_desc'), "kills", "cross");
 		$awardboxes[] = $tkbox->generate();
 		// top damage dealers
 		$tklist = new \EDK\Toplist\DamageDealer();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_damage'), Language::get('top_damage_desc'), "kills", "wing1");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_damage'), \Language::get('top_damage_desc'), "kills", "wing1");
 		$awardboxes[] = $tkbox->generate();
 
 		// top final blows
 		$tklist = new \EDK\Toplist\FinalBlow();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_final'), Language::get('top_final_desc'), "kills", "skull");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_final'), \Language::get('top_final_desc'), "kills", "skull");
 		$awardboxes[] = $tkbox->generate();
 		// top podkillers
 		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->addVictimShipClass(2); // pod
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_podkill'), Language::get('top_podkill_desc'), "kills", "globe");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_podkill'), \Language::get('top_podkill_desc'), "kills", "globe");
 		$awardboxes[] = $tkbox->generate();
 		// top griefers
 		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->addVictimShipClass(20); // freighter
 		$tklist->addVictimShipClass(22); // exhumer
@@ -178,13 +194,13 @@ class pAwards extends pageAssembly
 
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_griefer'), Language::get('top_griefer_desc'), "kills", "star");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_griefer'), \Language::get('top_griefer_desc'), "kills", "star");
 		$awardboxes[] = $tkbox->generate();
 		// top capital killers
 		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
-		involved::load($tklist,'kill');
+		\involved::load($tklist,'kill');
 
 		$tklist->addVictimShipClass(20); // freighter
 		$tklist->addVictimShipClass(19); // dread
@@ -194,7 +210,7 @@ class pAwards extends pageAssembly
 		$tklist->addVictimShipClass(29); // cap. industrial
 
 		$tklist->generate();
-		$tkbox = new AwardBox($tklist, Language::get('top_isk_kill'), Language::get('top_isk_kill_desc'), "kills", "wing2");
+		$tkbox = new \AwardBox($tklist, \Language::get('top_isk_kill'), \Language::get('top_isk_kill_desc'), "kills", "wing2");
 		$awardboxes[] = $tkbox->generate();
 
 		$monthname = kbdate("F", strtotime("2000-".$this->month."-2"));
@@ -204,7 +220,7 @@ class pAwards extends pageAssembly
 		$smarty->assign('year', $this->year);
 		$smarty->assign('boxcount', count($awardboxes));
 
-		$smarty->assign('page_title', Language::get('page_awards_for')." ".$monthname." ".$this->year);
+		$smarty->assign('page_title', \Language::get('page_awards_for')." ".$monthname." ".$this->year);
 		return $smarty->fetch(get_tpl('awards'));
 	}
 	/**
@@ -223,7 +239,7 @@ class pAwards extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new Box("Menu");
+		$menubox = new \Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -257,9 +273,9 @@ class pAwards extends pageAssembly
 		}
 
 		$this->addMenuItem("caption", "Navigation");
-		$this->addMenuItem("link", "Previous month ", edkURI::build(array('y', $pyear, true), array('m', $pmonth, true)));
+		$this->addMenuItem("link", "Previous month ", \edkURI::build(array('y', $pyear, true), array('m', $pmonth, true)));
 		if (! ($this->month == kbdate("m") - 1 && $this->year == kbdate("Y")))
-			$this->addMenuItem("link", "Next month", edkURI::build(array('y', $nyear, true), array('m', $nmonth, true)));
+			$this->addMenuItem("link", "Next month", \edkURI::build(array('y', $nyear, true), array('m', $nmonth, true)));
 	}
 	/**
 	 * Add an item to the menu in standard box format.
@@ -312,15 +328,3 @@ class pAwards extends pageAssembly
 		return $this->view;
 	}
 }
-
-$award = new pAwards();
-event::call("award_assembling", $award);
-$html = $award->assemble();
-$award->page->setContent($html);
-
-$award->context();
-event::call("award_context_assembling", $award);
-$context = $award->assemble();
-$award->page->addContext($context);
-
-$award->page->generate();

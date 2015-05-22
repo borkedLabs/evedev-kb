@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Page\Page;
+
 $page = new Page();
 $page->setAdmin();
 $page->setTitle('Administration - Role Management');

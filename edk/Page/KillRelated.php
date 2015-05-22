@@ -6,13 +6,15 @@
  * @package EDK
  */
 
+namespace EDK\Page;
+
 use EDK\Core\Config;
 
 /*
  * Build the related kills page.
  * @package EDK
  */
-class pKillRelated extends pageAssembly
+class KillRelated extends \pageAssembly
 {
 
 	/** @var array */
@@ -58,6 +60,20 @@ class pKillRelated extends pageAssembly
 		$this->queue("menu");
 	}
 
+	public function generate()
+	{
+		\event::call("killRelated_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("killRelated_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+	
 	/**
 
 	 * Start constructing the page.
@@ -70,22 +86,22 @@ class pKillRelated extends pageAssembly
 		$this->page = new Page('Related kills & losses');
 		$this->page->addHeader('<meta name="robots" content="index, nofollow" />');
 
-		$this->kll_id = (int) edkURI::getArg('kll_id', 1);
+		$this->kll_id = (int) \edkURI::getArg('kll_id', 1);
 		if (!$this->kll_id) {
-			$this->kll_external_id = (int) edkURI::getArg('kll_ext_id');
+			$this->kll_external_id = (int) \edkURI::getArg('kll_ext_id');
 			if (!$this->kll_external_id) {
 				// internal and external ids easily overlap so we can't guess which
-				$this->kll_id = (int) edkURI::getArg(null, 1);
+				$this->kll_id = (int) \edkURI::getArg(null, 1);
 				$this->kill = Kill::getByID($this->kll_id);
 			} else {
 				$this->kill = new Kill($this->kll_external_id, true);
 				$this->kll_id = $this->kill->getID();
 			}
 		} else {
-			$this->kill = Kill::getByID($this->kll_id);
+			$this->kill = \Kill::getByID($this->kll_id);
 		}
-		$this->adjacent = edkURI::getArg('adjacent');
-		$this->scl_id = (int) edkURI::getArg('scl_id');
+		$this->adjacent = \edkURI::getArg('adjacent');
+		$this->scl_id = (int) \edkURI::getArg('scl_id');
 
 		$this->menuOptions = array();
 
@@ -137,7 +153,7 @@ class pKillRelated extends pageAssembly
 	public function buildStats()
 	{
 		// this is a fast query to get the system and timestamp
-		$rqry = DBFactory::getDBQuery();
+		$rqry = \DBFactory::getDBQuery();
 		if ($this->adjacent) {
 			$rsql = 'SELECT kll_timestamp, sjp_to as sys_id from kb3_kills
 				join kb3_systems a ON (a.sys_id = kll_system_id)
@@ -160,7 +176,7 @@ class pKillRelated extends pageAssembly
 				') AND kll.kll_timestamp <= "'.(date('Y-m-d H:i:s', strtotime($basetime) + 4 * 60 * 60)).'"'.
 				' AND kll.kll_timestamp >= "'.(date('Y-m-d H:i:s', strtotime($basetime) - 4 * 60 * 60)).'"'.
 				' ORDER BY kll.kll_timestamp ASC';
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$qry->execute($query);
 		$ts = array();
 		while ($row = $qry->getRow()) {
@@ -200,7 +216,7 @@ class pKillRelated extends pageAssembly
 		$this->firstts = array_shift($times);
 		$this->lastts = array_pop($times);
 
-		$this->kslist = new KillList();
+		$this->kslist = new \KillList();
 		$this->kslist->setOrdered(true);
 		foreach ($this->systems as $system)
 			$this->kslist->addSystem($system);
@@ -212,7 +228,7 @@ class pKillRelated extends pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->kslist->addInvolvedAlliance($ia);
 
-		$this->lslist = new KillList();
+		$this->lslist = new \KillList();
 		$this->lslist->setOrdered(true);
 		foreach ($this->systems as $system)
 			$this->lslist->addSystem($system);
@@ -224,7 +240,7 @@ class pKillRelated extends pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->lslist->addVictimAlliance($ia);
 
-		$this->klist = new KillList();
+		$this->klist = new \KillList();
 		$this->klist->setOrdered(true);
 		$this->klist->setCountComments(true);
 		$this->klist->setCountInvolved(true);
@@ -238,7 +254,7 @@ class pKillRelated extends pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->klist->addInvolvedAlliance($ia);
 
-		$this->llist = new KillList();
+		$this->llist = new \KillList();
 		$this->llist->setOrdered(true);
 		$this->llist->setCountComments(true);
 		$this->llist->setCountInvolved(true);
@@ -338,7 +354,7 @@ class pKillRelated extends pageAssembly
 		$smarty->assignByRef('pilots_a', $this->pilots['a']);
 		$smarty->assignByRef('pilots_e', $this->pilots['e']);
 
-		$pod = Ship::getByID(670);
+		$pod = \Ship::getByID(670);
 		$smarty->assign('podpic', $pod->getImage(32));
 		$smarty->assign('friendlycnt', count($this->pilots['a']));
 		$smarty->assign('hostilecnt', count($this->pilots['e']));
@@ -350,7 +366,7 @@ class pKillRelated extends pageAssembly
 			} else {
 				$sysnames = array();
 				foreach ($this->systems as $sys_id) {
-					$system = SolarSystem::getByID($sys_id);
+					$system = \SolarSystem::getByID($sys_id);
 					$sysnames[] = $system->getName();
 				}
 				$smarty->assign('system', implode(', ', $sysnames));
@@ -369,7 +385,7 @@ class pKillRelated extends pageAssembly
 	{
 		global $smarty;
 
-		$this->kill_summary = new KillSummaryTable($this->klist, $this->llist);
+		$this->kill_summary = new \KillSummaryTable($this->klist, $this->llist);
 		$this->kill_summary->generate();
 		$stats['kills'] = $this->kill_summary->getTotalKills();
 		$stats['losses'] = $this->kill_summary->getTotalLosses();
@@ -400,7 +416,7 @@ class pKillRelated extends pageAssembly
 	{
 		$this->kslist->rewind();
 		$this->lslist->rewind();
-		$summarytable = new KillSummaryTable($this->kslist, $this->lslist);
+		$summarytable = new \KillSummaryTable($this->kslist, $this->lslist);
 		return $summarytable->generate();
 	}
 
@@ -412,11 +428,11 @@ class pKillRelated extends pageAssembly
 	{
 		$html = '<div class="kb-kills-header">Related kills</div>';
 
-		$ktable = new KillListTable($this->klist);
+		$ktable = new \KillListTable($this->klist);
 		$html .= $ktable->generate();
 		$html .= '<div class="kb-losses-header">Related losses</div>';
 
-		$ltable = new KillListTable($this->llist);
+		$ltable = new \KillListTable($this->llist);
 		$html .= $ltable->generate();
 
 		return $html;
@@ -506,7 +522,7 @@ class pKillRelated extends pageAssembly
 	private function handle_involved($kill, $side)
 	{
 		// we need to get all involved pilots, killlists dont supply them
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$sql = "select ind_plt_id, ind_crp_id, ind_all_id, ind_sec_status, ind_shp_id, ind_wep_id,
 				wtype.typeName, plt_name, crp_name, all_name, stype.typeName AS shp_name, scl_points, scl_id
 				from kb3_inv_detail
@@ -526,7 +542,7 @@ class pKillRelated extends pageAssembly
 			$pos = strpos($row['plt_name'], "#");
 			if ($pos !== false) {
 				$name = explode("#", $row['plt_name']);
-				$item = Item::getByID($name[2]);
+				$item = \Item::getByID($name[2]);
 				$row['plt_name'] = $item->getName();
 			}
 
@@ -549,17 +565,17 @@ class pKillRelated extends pageAssembly
 			}
 			$this->pilots[$side][$row['ind_plt_id']][] = array(
 				'name' => $row['plt_name'],
-				'plt_url' => edkURI::page('pilot_detail', $row['ind_plt_id']),
+				'plt_url' => \edkURI::page('pilot_detail', $row['ind_plt_id']),
 				'corp' => $row['crp_name'],
 				'cid' => $row['ind_crp_id'],
-				'crp_url' => edkURI::page('corp_detail', $row['ind_crp_id']),
+				'crp_url' => \edkURI::page('corp_detail', $row['ind_crp_id']),
 				'alliance' => $row['all_name'],
 				'aid' => $row['ind_all_id'],
-				'all_url' => edkURI::page('alliance_detail', $row['ind_all_id']),
+				'all_url' => \edkURI::page('alliance_detail', $row['ind_all_id']),
 				'ts' => strtotime($kill->getTimeStamp()),
 				'weapon' => $row['itm_name'],
 				'sid' => $row['ind_shp_id'],
-				'spic' => imageURL::getURL('Ship', $row['ind_shp_id'], 32),
+				'spic' => \imageURL::getURL('Ship', $row['ind_shp_id'], 32),
 				'ship' => ($row['ind_shp_id'] ? $row['shp_name'] : Language::get("Unknown")),
 				'scl' => $row['scl_points'],
 				'shpclass' => $row['scl_id']);
@@ -601,7 +617,7 @@ class pKillRelated extends pageAssembly
 						$this->pilots[$side][$kill->getVictimId()][$id]['kll_id']
 								= $kill->getID();
 						$this->pilots[$side][$kill->getVictimId()][$id]['kll_url']
-								= edkURI::page('kill_detail', $kill->getID(), 'kll_id');
+								= \edkURI::page('kill_detail', $kill->getID(), 'kll_id');
 					}
 					return;
 				}
@@ -610,16 +626,16 @@ class pKillRelated extends pageAssembly
 
 		$this->pilots[$side][$kill->getVictimId()][] = array(
 			'kll_id' => $kill->getID(),
-			'kll_url' => edkURI::page('kill_detail', $kill->getID(), "kll_id"),
+			'kll_url' => \edkURI::page('kill_detail', $kill->getID(), "kll_id"),
 			'name' => $kill->getVictimName(),
-			'plt_url' => edkURI::page('pilot_detail', $kill->getVictimId()),
+			'plt_url' => \edkURI::page('pilot_detail', $kill->getVictimId()),
 			'destroyed' => true,
 			'corp' => $kill->getVictimCorpName(),
 			'cid' => $kill->getVictimCorpID(),
-			'crp_url' => edkURI::page('corp_detail', $kill->getVictimCorpID()),
+			'crp_url' => \edkURI::page('corp_detail', $kill->getVictimCorpID()),
 			'alliance' => $kill->getVictimAllianceName(),
 			'aid' => $kill->getVictimCorpID(),
-			'all_url' => edkURI::page('alliance_detail', $kill->getVictimCorpID()),
+			'all_url' => \edkURI::page('alliance_detail', $kill->getVictimCorpID()),
 			'ship' => $kill->getVictimShipname(),
 			'sid' => $ship->getID(),
 			'spic' => $ship->getImage(32),
@@ -632,20 +648,20 @@ class pKillRelated extends pageAssembly
 		$this->addMenuItem("caption", "View");
 		if ($this->adjacent) {
 			$this->addMenuItem("link", "Remove adjacent",
-					edkURI::build(array('kll_id', $this->kll_id, true)));
+					\edkURI::build(array('kll_id', $this->kll_id, true)));
 		} else {
 			$this->addMenuItem("link", "Include adjacent",
-					edkURI::build(array('kll_id', $this->kll_id, true),
+					\edkURI::build(array('kll_id', $this->kll_id, true),
 							array('adjacent', true, true)));
 		}
 		$this->addMenuItem("link", "Back to Killmail",
-				edkURI::build(array('a', 'kill_detail', true),
+				\edkURI::build(array('a', 'kill_detail', true),
 						array('kll_id', $this->kll_id, true)));
 	}
 
 	public function menu()
 	{
-		$menubox = new Box("Menu");
+		$menubox = new \Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2]))
@@ -670,14 +686,3 @@ class pKillRelated extends pageAssembly
 	}
 
 }
-$killRelated = new pKillRelated();
-event::call("killRelated_assembling", $killRelated);
-$html = $killRelated->assemble();
-$killRelated->page->setContent($html);
-
-$killRelated->context();
-event::call("killRelated_context_assembling", $killRelated);
-$context = $killRelated->assemble();
-$killRelated->page->addContext($context);
-
-$killRelated->page->generate();

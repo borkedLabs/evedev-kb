@@ -228,11 +228,34 @@ if(count($modconflicts) > 1) {
 
 $none = '';
 event::call('mods_initialised', $none);
-if (!$settingsPage && !file_exists('common/'.$page.'.php') && !$modOverrides)
+
+$pageMap = array('kill_detail' => 'KillDetail',
+				'home' => 'Home',
+				'search' => 'Search',
+				'pilot_detail' => 'PilotDetail',
+				'corp_detail' => 'CorpDetail',
+				'alliance_detail' => 'AllianceDetail',
+				'awards' => 'Awards',
+				'self_detail' => 'SelfDetail',
+				'about' => 'About',
+				'system_detail' => 'SystemDetail',
+				'campaigns' => 'Campaigns',
+				'invtype' => 'InvType',
+				'kill_related' => 'KillRelated',
+				'cc_detail' => 'ContractDetail',
+				'groupdb' => 'InvGroup'
+				);
+
+$className = '';
+if( array_key_exists($page, $pageMap) )
+{
+	$className = '\\EDK\\Page\\' .$pageMap[$page];
+}
+if (!$settingsPage && ( !empty($className) && !class_exists($className)) && !$modOverrides)
 {
 	$page = 'home';
 }
-
+		
 cache::check($page);
 
 /**
@@ -311,6 +334,11 @@ if ($settingsPage)
 elseif ($modOverrides)
 {
 	include('mods/'.$modOverride.'/'.$page.'.php');
+}
+else if( $className != '' )
+{
+	$pageAssembly = new $className();
+	$pageAssembly->generate();
 }
 else
 {

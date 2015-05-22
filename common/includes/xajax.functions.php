@@ -11,12 +11,11 @@
 use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 
-require_once('common/xajax/xajax.php');
+require_once(__DIR__.'/../xajax/xajax.php');
 
 $xajax->register(XAJAX_FUNCTION, "doAjaxSearch");
 $xajax->register(XAJAX_FUNCTION, "getComments");
 $xajax->register(XAJAX_FUNCTION, "postComments");
-
 edk_xajax::xajax();
 
 /**

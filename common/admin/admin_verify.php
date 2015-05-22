@@ -5,6 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Page\Page;
+
 $page = new Page("File Verification");
 $page->setAdmin();
 

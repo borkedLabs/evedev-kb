@@ -11,6 +11,8 @@
  * Used together with export tool!
  */
 
+use EDK\Page\Page;
+
 $page = new Page('Administration - Killmail import');
 $page->setAdmin();
 

@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
 
  
 use EDK\Core\Config;
@@ -13,13 +14,13 @@ use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 
 if (Config::get('comments')) {
-	require_once('common/includes/xajax.functions.php');
+	require_once(__DIR__.'/../../common/includes/xajax.functions.php');
 }
 
 /**
  * @package EDK
  */
-class pKillDetail extends pageAssembly
+class KillDetail extends \pageAssembly
 {
     
 	/** @var integer The id of the kill this page is for. */
@@ -86,6 +87,20 @@ class pKillDetail extends pageAssembly
 		$this->queue("damageBox");
 		$this->queue("map");
 	}
+	
+	public function generate()
+	{
+		\event::call("killDetail_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("killDetail_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
 
 	/**
 	 * Start constructing the page.
@@ -94,16 +109,16 @@ class pKillDetail extends pageAssembly
 	 */
 	function start()
 	{
-		$this->kll_id = (int) edkURI::getArg('kll_id');
+		$this->kll_id = (int) \edkURI::getArg('kll_id');
 		$this->kll_external_id = 0;
 		if (!$this->kll_id) {
-			$this->kll_external_id = (int) edkURI::getArg('kll_ext_id');
+			$this->kll_external_id = (int) \edkURI::getArg('kll_ext_id');
 			if (!$this->kll_external_id) {
 				// internal and external ids easily overlap so we can't guess which
-				$this->kll_id = (int) edkURI::getArg('id', 1);
+				$this->kll_id = (int) \edkURI::getArg('id', 1);
 			}
 		}
-		$this->nolimit = edkURI::getArg('nolimit', 2);
+		$this->nolimit = \edkURI::getArg('nolimit', 2);
 
 		$this->menuOptions = array();
 
@@ -117,7 +132,7 @@ class pKillDetail extends pageAssembly
 		}
 
 		if ($this->kll_id) {
-			$this->kill = Cacheable::factory('Kill', $this->kll_id);
+			$this->kill = \Cacheable::factory('Kill', $this->kll_id);
 		} else {
 			$this->kill = new Kill($this->kll_external_id, true);
 			$this->kll_id = $this->kill->getID();
@@ -132,11 +147,11 @@ class pKillDetail extends pageAssembly
 
 		if ($this->kll_external_id) {
 			$this->page->addHeader("<link rel='canonical' href='"
-					.edkURI::build(array('kll_ext_id', $this->kll_external_id,
+					.\edkURI::build(array('kll_ext_id', $this->kll_external_id,
 						true))."' />");
 		} else {
 			$this->page->addHeader("<link rel='canonical' href='"
-					.edkURI::build(array('kll_id', $this->kll_id, true))
+					.\edkURI::build(array('kll_id', $this->kll_id, true))
 					."' />");
 		}
 
@@ -153,7 +168,7 @@ class pKillDetail extends pageAssembly
 		$this->page->addMetaTag('twitter:title',$pageTitle);
 		$this->page->addMetaTag('og:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
 		$this->page->addMetaTag('twitter:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
-		$this->page->addMetaTag('og:url',edkURI::build(array('kll_id', $this->kll_id, true)));
+		$this->page->addMetaTag('og:url',\edkURI::build(array('kll_id', $this->kll_id, true)));
 		$this->page->addMetaTag('twitter:card', 'summary');
 
 		$this->commenthtml = '';
@@ -204,7 +219,7 @@ class pKillDetail extends pageAssembly
 		}
 		$smarty->assign('panel_colour', Config::get('fp_theme'));
 		$smarty->assign('showiskd', Config::get('kd_showiskd'));
-		$smarty->assign('formURL', edkURI::build(edkURI::parseURI()));
+		$smarty->assign('formURL', \edkURI::build(\edkURI::parseURI()));
 
 		$this->involvedSetup();
 		$this->fittingSetup();
@@ -236,7 +251,7 @@ class pKillDetail extends pageAssembly
 				}
 
 				$i_name = $item->getName();
-				$i_location = InventoryFlag::collapse($destroyed->getLocationID());
+				$i_location = \InventoryFlag::collapse($destroyed->getLocationID());
 				$i_id = $item->getID();
 				$i_usedgroup = $item->get_used_launcher_group();
                                 
@@ -251,7 +266,7 @@ class pKillDetail extends pageAssembly
 				
 				// BPCs
                                 $bpc = false;
-				if($destroyed->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+				if($destroyed->getSingleton() == \InventoryFlag::$SINGLETON_COPY) {
 					$i_name = $i_name." (Copy)";
 					$value = $formatted = 0;
 					$bpc = true;
@@ -261,7 +276,7 @@ class pKillDetail extends pageAssembly
 					(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => edkURI::page('invtype', $i_id),
+					'url' => \edkURI::page('invtype', $i_id),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -277,9 +292,9 @@ class pKillDetail extends pageAssembly
                                 );
 
 				//Fitting, KE - add destroyed items to an array of all fitted items.
-				if ($i_location ==InventoryFlag::$LOW_SLOT_1 || $i_location ==  InventoryFlag::$MED_SLOT_1 || $i_location ==  InventoryFlag::$HIGH_SLOT_1 || $i_location ==InventoryFlag::$SUB_SYSTEM_SLOT_1 || $i_location ==InventoryFlag::$RIG_SLOT_1) {
+				if ($i_location ==\InventoryFlag::$LOW_SLOT_1 || $i_location ==  \InventoryFlag::$MED_SLOT_1 || $i_location ==  \InventoryFlag::$HIGH_SLOT_1 || $i_location ==\InventoryFlag::$SUB_SYSTEM_SLOT_1 || $i_location ==\InventoryFlag::$RIG_SLOT_1) {
 					if (($i_usedgroup != 0)) {
-						if ($i_location == InventoryFlag::$HIGH_SLOT_1) {
+						if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
 							$i_ammo = $item->get_ammo_size($i_name);
 							if ($i_usedgroup == 481) {
 								$i_ammo = 0;
@@ -302,7 +317,7 @@ class pKillDetail extends pageAssembly
 						// Avoids timeouts on badly faked mails.
 						// TODO: Refuse to show fitting and display an invalid message.
 						for ($count = 0; $count < min($i_qty, 8); $count++) {
-							if ($i_location == InventoryFlag::$HIGH_SLOT_1) {
+							if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
 								$i_charge = $item->get_used_charge_size();
 							} else {
 								$i_charge = 0;
@@ -343,7 +358,7 @@ class pKillDetail extends pageAssembly
 				}
 
 				$i_name = $item->getName();
-				$i_location = InventoryFlag::collapse($dropped->getLocationID());
+				$i_location = \InventoryFlag::collapse($dropped->getLocationID());
 				$i_id = $item->getID();
 				$i_usedgroup = $item->get_used_launcher_group();
                                 
@@ -358,7 +373,7 @@ class pKillDetail extends pageAssembly
 
 				// BPCs
                                 $bpc = false;
-				if($dropped->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+				if($dropped->getSingleton() == \InventoryFlag::$SINGLETON_COPY) {
 					$i_name = $i_name." (Copy)";
 					$value = $formatted = 0;
 					$bpc = true;
@@ -367,7 +382,7 @@ class pKillDetail extends pageAssembly
 				$this->drop_array[$i_location][] = array(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => edkURI::page('invtype', $i_id),
+					'url' => \edkURI::page('invtype', $i_id),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -383,9 +398,9 @@ class pKillDetail extends pageAssembly
                                 );
 
 				//Fitting -KE, add dropped items to the list
-				if (($i_location != InventoryFlag::$CARGO )&& ($i_location != InventoryFlag::$DRONE_BAY)) {
+				if (($i_location != \InventoryFlag::$CARGO )&& ($i_location != \InventoryFlag::$DRONE_BAY)) {
 					if (($i_usedgroup != 0)) {
-						if ($i_location >= InventoryFlag::$HIGH_SLOT_1 && $i_location <= InventoryFlag::$HIGH_SLOT_8) {
+						if ($i_location >= \InventoryFlag::$HIGH_SLOT_1 && $i_location <= \InventoryFlag::$HIGH_SLOT_8) {
 							$i_ammo = $item->get_ammo_size($i_name);
 
 							if ($i_usedgroup == 481) {
@@ -407,7 +422,7 @@ class pKillDetail extends pageAssembly
 						// Use a max of 8 as a sanity check.
 						// Avoids timeouts on badly faked mails.
 						for ($count = 0; $count < min($i_qty, 8); $count++) {
-							if ($i_location == InventoryFlag::$HIGH_SLOT_1) {
+							if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
 								$i_charge = $item->get_used_charge_size();
 							} else {
 								$i_charge = 0;
@@ -444,7 +459,7 @@ class pKillDetail extends pageAssembly
 		foreach ($this->kill->getInvolved() as $inv) {
 			$corp = Corporation::getByID($inv->getCorpID());
 			$alliance = Alliance::getByID($inv->getAllianceID());
-			$ship = Ship::getByID( $inv->getShipID());
+			$ship = \Ship::getByID( $inv->getShipID());
 
 			$alliance_name = $alliance->getName();
 			if (!isset($this->invAllies[$alliance_name])) {
@@ -492,13 +507,13 @@ class pKillDetail extends pageAssembly
 				}
 			}
 			$pilot = Pilot::getByID($inv->getPilotID());
-			$weapon = Item::getByID($inv->getWeaponID());
+			$weapon = \Item::getByID($inv->getWeaponID());
 
 			$this->involved[$i]['shipImage'] = $ship->getImage(64);
 			$this->involved[$i]['shipName'] = $ship->getName();
 			$this->involved[$i]['shipID'] = $ship->getID();
 			if($ship->getID()) {
-				$this->involved[$i]['shipURL'] = edkURI::page('invtype', $ship->getID());
+				$this->involved[$i]['shipURL'] = \edkURI::page('invtype', $ship->getID());
 				$this->involved[$i]['shipClass'] = $ship->getClass()->getName();
 			} else {
 				$this->involved[$i]['shipURL'] = false;
@@ -506,13 +521,13 @@ class pKillDetail extends pageAssembly
 			}
 
 			$this->involved[$i]['corpURL'] =
-					edkURI::build(array('a', 'corp_detail', true),
+					\edkURI::build(array('a', 'corp_detail', true),
 							array('crp_id', $corp->getID(), true));
 			$this->involved[$i]['corpName'] = $corp->getName();
 
 			if($alliance && strcasecmp($alliance->getName(), "None") != 0) {
 				$this->involved[$i]['alliURL'] =
-						edkURI::build(array('a', 'alliance_detail', true),
+						\edkURI::build(array('a', 'alliance_detail', true),
 								array('all_id', $alliance->getID(), true));
 			} else {
 				$this->involved[$i]['alliURL'] = false;
@@ -531,7 +546,7 @@ class pKillDetail extends pageAssembly
 
 			if (!$pilot->getID() || $tpilot == $weapon->getName()) {
 				$this->involved[$i]['pilotURL'] =
-						edkURI::page('invtype', $weapon->getID());
+						\edkURI::page('invtype', $weapon->getID());
 				$this->involved[$i]['pilotName'] = $weapon->getName();
 				$this->involved[$i]['secStatus'] = 0;
 				$this->involved[$i]['portrait'] = $corp->getPortraitURL(64);
@@ -544,8 +559,8 @@ class pKillDetail extends pageAssembly
 				$this->involved[$i]['typeID'] = 2; //type number for corporations.
 
 				$this->involved[$i]['pilotURL'] =
-						edkURI::page('invtype', $weapon->getID());
-				$this->involved[$i]['shipImage'] = imageURL::getURL('Ship',
+						\edkURI::page('invtype', $weapon->getID());
+				$this->involved[$i]['shipImage'] = \imageURL::getURL('Ship',
 						$weapon->getID(), 64);
 				$this->involved[$i]['shipURL'] = false;
 				$this->involved[$i]['shipName'] = $weapon->getName();
@@ -554,12 +569,12 @@ class pKillDetail extends pageAssembly
 				$this->involved[$i]['weaponName'] = "Unknown";
 			} else {
 				if ($pilot->getExternalID(true)) {
-					$this->involved[$i]['pilotURL'] = edkURI::build(
+					$this->involved[$i]['pilotURL'] = \edkURI::build(
 							array('a', 'pilot_detail', true),
 							array('plt_ext_id', $pilot->getExternalID(), true));
 				} else {
 					$this->involved[$i]['pilotURL'] =
-							edkURI::build(array('a', 'pilot_detail', true),
+							\edkURI::build(array('a', 'pilot_detail', true),
 									array('plt_id', $pilot->getID(), true));
 				}
 				$this->involved[$i]['typeID'] = 1377; //type number for characters.
@@ -580,7 +595,7 @@ class pKillDetail extends pageAssembly
 						&& $weapon->getName() != $ship->getName()) {
 					$this->involved[$i]['weaponName'] = $weapon->getName();
 					$this->involved[$i]['weaponID'] = $weapon->getID();
-					$this->involved[$i]['weaponURL'] = edkURI::page('invtype', $weapon->getID());
+					$this->involved[$i]['weaponURL'] = \edkURI::page('invtype', $weapon->getID());
 				} else {
 					$this->involved[$i]['weaponName'] = "Unknown";
 				}
@@ -614,8 +629,8 @@ class pKillDetail extends pageAssembly
 				foreach ($nameIDPair as $idpair) {
 					//store the IDs
 					foreach ($this->kill->getInvolved() as $inv) {
-						$pilot = Cacheable::factory('\EDK\Entity\Pilot', $inv->getPilotID());
-						$corp = Cacheable::factory('\EDK\Entity\Corporation', $inv->getCorpID());
+						$pilot = \Cacheable::factory('\EDK\Entity\Pilot', $inv->getPilotID());
+						$corp = \Cacheable::factory('\EDK\Entity\Corporation', $inv->getCorpID());
 
 						if ($idpair['name'] == $corp->getName()) {
 							$corp->setExternalID($idpair['characterID']);
@@ -727,26 +742,26 @@ class pKillDetail extends pageAssembly
 		global $smarty;
 		$smarty->assign('killID', $this->kill->getID());
 		$plt = new Pilot($this->kill->getVictimID());
-		$item = new dogma($this->kill->getVictimShip()->getID());
+		$item = new \dogma($this->kill->getVictimShip()->getID());
                 $shipClassID = $this->kill->getVictimShip()->getClass()->getID();
 		// itt_cat = 6 for ships, shipClassID = 45 are personal deployable structures. Assume != 6 is a structure.
 		if ($item->get('itt_cat') != 6 && $shipClassID != 45) {
 			$corp = new Corporation($this->kill->getVictimCorpID());
 			$smarty->assign('victimPortrait', $corp->getPortraitURL(64));
 			$smarty->assign('victimExtID', 0);
-			$smarty->assign('victimURL', edkURI::page('invtype',
+			$smarty->assign('victimURL', \edkURI::page('invtype',
 					$item->getID()));
 		} else {
 			$smarty->assign('victimPortrait', $plt->getPortraitURL(64));
 			$smarty->assign('victimExtID', $plt->getExternalID());
-			$smarty->assign('victimURL', edkURI::page('pilot_detail',
+			$smarty->assign('victimURL', \edkURI::page('pilot_detail',
 					$this->kill->getVictimID(), 'plt_id'));
 		}
 		$smarty->assign('victimName', $this->kill->getVictimName());
-		$smarty->assign('victimCorpURL', edkURI::page('corp_detail',
+		$smarty->assign('victimCorpURL', \edkURI::page('corp_detail',
 				$this->kill->getVictimCorpID(), 'crp_id'));
 		$smarty->assign('victimCorpName', $this->kill->getVictimCorpName());
-		$smarty->assign('victimAllianceURL', edkURI::page('alliance_detail',
+		$smarty->assign('victimAllianceURL', \edkURI::page('alliance_detail',
 				$this->kill->getVictimAllianceID(), 'all_id'));
 		$smarty->assign('victimAllianceName',
 				$this->kill->getVictimAllianceName());
@@ -765,7 +780,7 @@ class pKillDetail extends pageAssembly
 	{
 		if (Config::get('comments')) {
 			$this->page->addOnLoad("xajax_getComments({$this->kll_id});");
-			$comments = new Comments(0);
+			$comments = new \Comments(0);
 
 			global $smarty;
 			$smarty->assignByRef('page', $this->page);
@@ -792,7 +807,7 @@ class pKillDetail extends pageAssembly
 		// preparing slot layout
                 // we predefine some flags/slots which are supposed to be at the top/bottom
                 // High slots
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$HIGH_SLOT_1);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$HIGH_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "High Slot",
@@ -800,7 +815,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Med slots
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$MED_SLOT_1);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$MED_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Medium Slot",
@@ -808,7 +823,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Low slots
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$LOW_SLOT_1);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$LOW_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Low Slot",
@@ -816,7 +831,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Rig slots
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$RIG_SLOT_1);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$RIG_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Rig Slot",
@@ -824,7 +839,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Subsystem slots
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$SUB_SYSTEM_SLOT_1);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$SUB_SYSTEM_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Subsystem Slot",
@@ -832,7 +847,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Drone Bay
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$DRONE_BAY);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$DRONE_BAY);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => $InventoryFlag->getText(),
@@ -840,7 +855,7 @@ class pKillDetail extends pageAssembly
                 );
                 
                 // Cargo
-                $InventoryFlag = new InventoryFlag(InventoryFlag::$CARGO);
+                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$CARGO);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => $InventoryFlag->getText(),
@@ -863,9 +878,9 @@ class pKillDetail extends pageAssembly
                 $genericSlotsInKill = array();
                 foreach($this->dest_array AS $flagID => $item)
                 {
-                    if(!isset($slot_array[$flagID]) && $flagID != InventoryFlag::$OTHER)
+                    if(!isset($slot_array[$flagID]) && $flagID != \InventoryFlag::$OTHER)
                     {
-                        $InventoryFlag = new InventoryFlag($flagID);
+                        $InventoryFlag = new \InventoryFlag($flagID);
                         $genericSlotsInKill[$flagID] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -876,9 +891,9 @@ class pKillDetail extends pageAssembly
                 
                 foreach($this->drop_array AS $flagID => $item)
                 {
-                    if(!isset($slot_array[$flagID]) && $flagID != InventoryFlag::$OTHER)
+                    if(!isset($slot_array[$flagID]) && $flagID != \InventoryFlag::$OTHER)
                     {
-                        $InventoryFlag = new InventoryFlag($flagID);
+                        $InventoryFlag = new \InventoryFlag($flagID);
                         $genericSlotsInKill[$flagID] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -895,9 +910,9 @@ class pKillDetail extends pageAssembly
                 $slot_array += $slot_array + $genericSlotsInKill;
                 
                 // now add pre-defined suffix flags
-                if((array_key_exists(InventoryFlag::$OTHER, $this->dest_array) || array_key_exists(InventoryFlag::$OTHER, $this->drop_array)))
+                if((array_key_exists(\InventoryFlag::$OTHER, $this->dest_array) || array_key_exists(\InventoryFlag::$OTHER, $this->drop_array)))
                 {
-                    $InventoryFlag = new InventoryFlag(InventoryFlag::$OTHER);
+                    $InventoryFlag = new \InventoryFlag(\InventoryFlag::$OTHER);
                         $slot_array[$InventoryFlag->getID()] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -954,11 +969,11 @@ class pKillDetail extends pageAssembly
 		$smarty->assign('victimShipIsFaction', $ship->isFaction());
 		$smarty->assign('victimShipName', $ship->getName());
 		$smarty->assign('victimShipID', $ship->getID());
-		$smarty->assign('victimShipURL', edkURI::page('invtype', $ship->getID()));
+		$smarty->assign('victimShipURL', \edkURI::page('invtype', $ship->getID()));
 		$smarty->assign('victimShipClassName', $shipclass->getName());
 		if ($this->page->isAdmin()) $smarty->assign('ship', $ship);
 
-		$ssc = new dogma($ship->getID());
+		$ssc = new \dogma($ship->getID());
 
 		$smarty->assignByRef('ssc', $ssc);
 
@@ -982,7 +997,7 @@ class pKillDetail extends pageAssembly
 			$smarty->assign('systemID', $this->kill->getSystem()->getID());
 			$smarty->assign('system', $this->kill->getSystem()->getName());
 			$smarty->assign('systemURL',
-					edkURI::build(
+					\edkURI::build(
 					array('a', 'system_detail', true),
 					array('sys_id', $this->kill->getSystem()->getID(), true)));
 			$smarty->assign('systemSecurity',
@@ -1007,7 +1022,7 @@ class pKillDetail extends pageAssembly
 		global $smarty;
                 
                 // high slots
-                for($i = InventoryFlag::$HIGH_SLOT_1; $i <= InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowh) {
@@ -1020,7 +1035,7 @@ class pKillDetail extends pageAssembly
                 }
 
                 // med slots
-                for($i = InventoryFlag::$MED_SLOT_1; $i <= InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowm) {
@@ -1033,7 +1048,7 @@ class pKillDetail extends pageAssembly
                 }
 
                 // low slots
-                for($i =InventoryFlag::$LOW_SLOT_1; $i <=InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i =\InventoryFlag::$LOW_SLOT_1; $i <=\InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowl) {
@@ -1046,7 +1061,7 @@ class pKillDetail extends pageAssembly
                 }
 
                 // rig slots
-                for($i =InventoryFlag::$RIG_SLOT_1; $i <=InventoryFlag::$RIG_SLOT_8; $i++)
+                for($i =\InventoryFlag::$RIG_SLOT_1; $i <=\InventoryFlag::$RIG_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowr) {
@@ -1059,7 +1074,7 @@ class pKillDetail extends pageAssembly
                 }
 
                 // subsystems
-                for($i =InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
+                for($i =\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowr) {
@@ -1073,7 +1088,7 @@ class pKillDetail extends pageAssembly
 
 		//Fitting - KE, sort the fitted items into name order, so that several of the same item apear next to each other. -end
                 // high slot ammo
-                for($i = InventoryFlag::$HIGH_SLOT_1; $i <= InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1142,7 +1157,7 @@ class pKillDetail extends pageAssembly
                     }
                 }
 
-                for($i = InventoryFlag::$MED_SLOT_1; $i <= InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1204,7 +1219,7 @@ class pKillDetail extends pageAssembly
                 }
                 
                 
-                for($i = InventoryFlag::$LOW_SLOT_1; $i <= InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i = \InventoryFlag::$LOW_SLOT_1; $i <= \InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1247,7 +1262,7 @@ class pKillDetail extends pageAssembly
                 
                 // high slots
                 $highSlots = array();
-                for($i = InventoryFlag::$HIGH_SLOT_1; $i <= InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1258,7 +1273,7 @@ class pKillDetail extends pageAssembly
                 
                 // med slots
                 $medSlots = array();
-                for($i = InventoryFlag::$MED_SLOT_1; $i <= InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1269,7 +1284,7 @@ class pKillDetail extends pageAssembly
                 
                 // low slots
                 $lowSlots = array();
-                for($i =InventoryFlag::$LOW_SLOT_1; $i <=InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i =\InventoryFlag::$LOW_SLOT_1; $i <=\InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1280,7 +1295,7 @@ class pKillDetail extends pageAssembly
                 
                 // rig slots
                 $rigSlots = array();
-                for($i =InventoryFlag::$RIG_SLOT_1; $i <=InventoryFlag::$RIG_SLOT_8; $i++)
+                for($i =\InventoryFlag::$RIG_SLOT_1; $i <=\InventoryFlag::$RIG_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1291,7 +1306,7 @@ class pKillDetail extends pageAssembly
                 
                 // subsystem slots
                 $subsystemSlots = array();
-                for($i =InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
+                for($i =\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1323,7 +1338,7 @@ class pKillDetail extends pageAssembly
                 }
 
 		//get the actual slot count for each vessel - for the fitting panel
-		$dogma = Cacheable::factory('dogma',
+		$dogma = \Cacheable::factory('dogma',
 				$this->kill->getVictimShipExternalID());
 		$lowcount = (int) $dogma->attrib['lowSlots']['value'];
 		$medcount = (int) $dogma->attrib['medSlots']['value'];
@@ -1338,7 +1353,7 @@ class pKillDetail extends pageAssembly
 				$lookupRef = $subfit["itemID"];
 				$sql = 'SELECT `attributeID`, `value` FROM `kb3_dgmtypeattributes` WHERE '.
 						'`attributeID` IN (1374, 1375, 1376) AND `typeID` = '.$lookupRef.';';
-				$qry = DBFactory::getDBQuery();
+				$qry = \DBFactory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					switch ($row["attributeID"]) {
@@ -1432,9 +1447,9 @@ class pKillDetail extends pageAssembly
 	function menuSetup()
 	{
 		$this->addMenuItem("caption", "View");
-		$this->addMenuItem("link", "Killmail", edkURI::page(
+		$this->addMenuItem("link", "Killmail", \edkURI::page(
 				'kill_mail', $this->kill->getID(), 'kll_id'), 0, 0,
-				"sndReq('".edkURI::page(
+				"sndReq('".\edkURI::page(
 						'kill_mail', $this->kill->getID(), 'kll_id')
 				."');ReverseContentDisplay('popup')");
                 // expose CREST url (if kill was posted via CREST)
@@ -1445,12 +1460,12 @@ class pKillDetail extends pageAssembly
                 }
                 
 		if (Config::get('kd_EFT')) {
-			$this->addMenuItem("link", "EFT Fitting", edkURI::page(
+			$this->addMenuItem("link", "EFT Fitting", \edkURI::page(
 					'eft_fitting', $this->kill->getID(), 'kll_id'), 0, 0,
-					"sndReq('".edkURI::page(
+					"sndReq('".\edkURI::page(
 							'eft_fitting', $this->kill->getID(),'kll_id')
 					."');ReverseContentDisplay('popup')");
-			$this->addMenuItem("link", "EvE Fitting", edkURI::page(
+			$this->addMenuItem("link", "EvE Fitting", \edkURI::page(
 					'eve_fitting', $this->kill->getID(), 'kll_id'));
                         
                         if (!IS_IGB) {
@@ -1471,23 +1486,23 @@ class pKillDetail extends pageAssembly
 			$this->addMenuItem("link", "Related kills ("
 					.$this->kill->relatedKillCount()."/"
 					.$this->kill->relatedLossCount().")",
-					edkURI::build(array('a', 'kill_related', true),
+					\edkURI::build(array('a', 'kill_related', true),
 							array('kll_id', $this->kill->getID(), true)));
 		}
 
 		if ($this->page->isAdmin()) {
 			$this->addMenuItem("caption", "Admin");
-			$this->addMenuItem("link", "Delete", edkURI::page(
+			$this->addMenuItem("link", "Delete", \edkURI::page(
 					'admin_kill_delete', $this->kill->getID(), 'kll_id'), 0, 0,
-					"openWindow('".edkURI::page(
+					"openWindow('".\edkURI::page(
 						'admin_kill_delete', $this->kill->getID(), 'kll_id')
 					."', null, 420, 300, '' );");
 
 			if (isset($_GET['view']) && $_GET['view'] == 'FixSlot') {
-				$this->addMenuItem("link", "Adjust Values", edkURI::page(
+				$this->addMenuItem("link", "Adjust Values", \edkURI::page(
 						'kill_detail', $this->kill->getID(), 'kll_id'));
 			} else {
-				$url = edkURI::build(
+				$url = \edkURI::build(
 						array('kll_id', $this->kill->getID(), true),
 						array('view', 'FixSlot', false));
 				$this->addMenuItem("link", "Fix Slots", $url);
@@ -1505,7 +1520,7 @@ class pKillDetail extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new Box("Menu");
+		$menubox = new \Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			call_user_func_array(array($menubox, 'addOption'), $options);
@@ -1527,7 +1542,7 @@ class pKillDetail extends pageAssembly
 	{
 		if (!Config::get('kill_points')) return '';
 
-		$scorebox = new Box("Points");
+		$scorebox = new \Box("Points");
 		$scorebox->addOption("points", $this->kill->getKillPoints());
 		return $scorebox->generate();
 	}
@@ -1541,26 +1556,26 @@ class pKillDetail extends pageAssembly
 	{
 		//Admin is able to see classsified systems
 		if ((!$this->kill->isClassified()) || ($this->page->isAdmin())) {
-			$mapbox = new Box("Map");
+			$mapbox = new \Box("Map");
 			if (IS_IGB) {
-				$mapbox->addOption("img", imageURL::getURL('map',
+				$mapbox->addOption("img", \imageURL::getURL('map',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(3, "
 						.$this->kill->getSystem()->getRegionID().")");
-				$mapbox->addOption("img", imageURL::getURL('region',
+				$mapbox->addOption("img", \imageURL::getURL('region',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(4, "
 						.$this->kill->getSystem()->getConstellationID().")");
-				$mapbox->addOption("img", imageURL::getURL('cons',
+				$mapbox->addOption("img", \imageURL::getURL('cons',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(5, "
 						.$this->kill->getSystem()->getExternalID().")");
 			} else {
-				$mapbox->addOption("img", imageURL::getURL('map',
+				$mapbox->addOption("img", \imageURL::getURL('map',
 						$this->kill->getSystem()->getID(), 145));
-				$mapbox->addOption("img", imageURL::getURL('region',
+				$mapbox->addOption("img", \imageURL::getURL('region',
 						$this->kill->getSystem()->getID(), 145));
-				$mapbox->addOption("img", imageURL::getURL('cons',
+				$mapbox->addOption("img", \imageURL::getURL('cons',
 						$this->kill->getSystem()->getID(), 145));
 			}
 			return $mapbox->generate();
@@ -1591,7 +1606,7 @@ class pKillDetail extends pageAssembly
 		if (Config::get('item_values')) {
 			if (isset($_POST['submit']) && $_POST['submit'] == 'UpdateValue') {
 				// Send new value for item to the database
-				$qry = DBFactory::getDBQuery();
+				$qry = \DBFactory::getDBQuery();
 				$qry->autocommit(false);
 				if (isset($_POST['SID'])) {
 					$SID = intval($_POST['SID']);
@@ -1627,7 +1642,7 @@ class pKillDetail extends pageAssembly
 			$val = (int) $_POST[$IID];
 			$table = ($_POST['TYPE'] == 'dropped' ? 'dropped' : 'destroyed');
 			$old = (int) $_POST['OLDSLOT'];
-			$qry = DBFactory::getDBQuery();
+			$qry = \DBFactory::getDBQuery();
 			$qry->execute("UPDATE kb3_items_".$table." SET itd_itl_id ='".$val."' WHERE itd_itm_id=".$IID
 					." AND itd_kll_id = ".$KID." AND itd_itl_id = ".$old);
 		}
@@ -1641,7 +1656,7 @@ class pKillDetail extends pageAssembly
 	public function source()
 	{
 		global $smarty;
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$sql = "SELECT log_ip_address, log_timestamp FROM kb3_log WHERE"
 				." log_kll_id = ".$this->kll_id;
 		$qry->execute($sql);
@@ -1692,7 +1707,7 @@ class pKillDetail extends pageAssembly
             // group by slot groups..
             foreach($destroyedItems AS $destroyedItem)
             {
-                $location = InventoryFlag::collapse($destroyedItem->getLocationID());
+                $location = \InventoryFlag::collapse($destroyedItem->getLocationID());
                 $typeID = $destroyedItem->getItem()->getID();
                 $singleton = $destroyedItem->getSingleton();
                 if(!isset($destroyedItemsGroupedByLocation[$location][$singleton][$typeID]))
@@ -1712,7 +1727,7 @@ class pKillDetail extends pageAssembly
                 {
                     // we already have an item of this type for this slot, add up quantities
                     $quantityGrouped = $destroyedItemsGroupedByLocation[$location][$singleton][$typeID]->getQuantity() + $destroyedItem->getQuantity();
-                    $destroyedItemsGroupedByLocation[$location][$singleton][$typeID] = new DestroyedItem($destroyedItem->getItem(), $quantityGrouped, $destroyedItem->getSingleton(), null, $location);
+                    $destroyedItemsGroupedByLocation[$location][$singleton][$typeID] = new \DestroyedItem($destroyedItem->getItem(), $quantityGrouped, $destroyedItem->getSingleton(), null, $location);
                 }
             }
 
@@ -1732,15 +1747,3 @@ class pKillDetail extends pageAssembly
             return $destroyedItemsGrouped;
         }
 }
-
-$killDetail = new pKillDetail();
-event::call("killDetail_assembling", $killDetail);
-$html = $killDetail->assemble();
-$killDetail->page->setContent($html);
-
-$killDetail->context();
-event::call("killDetail_context_assembling", $killDetail);
-$context = $killDetail->assemble();
-$killDetail->page->addContext($context);
-
-$killDetail->page->generate();

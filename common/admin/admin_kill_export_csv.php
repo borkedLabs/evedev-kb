@@ -11,6 +11,8 @@
  * If you use and like these tools, please donate some isk!
  */
 
+use EDK\Page\Page;
+
 $plt_id = $_GET['plt_id'];
 
 // Make the pilot

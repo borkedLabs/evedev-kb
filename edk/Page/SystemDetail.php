@@ -5,12 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
+
 use EDK\Core\Config;
 
 /*
  * @package EDK
  */
-class pSystemDetail extends pageAssembly
+class SystemDetail extends \pageAssembly
 {
 	/** @var Page */
 	public $page = null;
@@ -39,6 +41,21 @@ class pSystemDetail extends pageAssembly
 		$this->queue("killList");
 	}
 
+
+	public function generate()
+	{
+		\event::call("systemdetail_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("systemdetail_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+	
 	/**
 
 	 * Start constructing the page.
@@ -48,9 +65,9 @@ class pSystemDetail extends pageAssembly
 	 */
 	function start()
 	{
-		$this->sys_id = (int)edkURI::getArg('sys_id', 1, true);
+		$this->sys_id = (int)\edkURI::getArg('sys_id', 1, true);
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '',
-						edkURI::getArg('view', 2, true));
+						\edkURI::getArg('view', 2, true));
 
 		global $smarty;
 		$this->smarty = $smarty;
@@ -66,9 +83,9 @@ class pSystemDetail extends pageAssembly
 		}
 
 		$this->page->addHeader("<link rel='canonical' href='".
-				edkURI::build($this->args)."' />");
+				\edkURI::build($this->args)."' />");
 
-		$this->system = new SolarSystem($this->sys_id);
+		$this->system = new \SolarSystem($this->sys_id);
 		$this->menuOptions = array();
 		$this->page->setTitle('System details - '.$this->system->getName());
 		$this->smarty->assign('sys_id', $this->sys_id);
@@ -84,14 +101,14 @@ class pSystemDetail extends pageAssembly
 	 */
 	function statSetup()
 	{
-		$this->kill_summary = new KillSummaryTable();
+		$this->kill_summary = new \KillSummaryTable();
 		$this->kill_summary->setSystem($this->sys_id);
 		if (Config::get('kill_classified')) {
 			$this->kill_summary->setEndDate(
 					gmdate('Y-m-d H:i', strtotime('now - '
 					.(Config::get('kill_classified')).' hours')));
 		}
-		involved::load($this->kill_summary, 'kill');
+		\involved::load($this->kill_summary, 'kill');
 		$this->kill_summary->generate();
 		return "";
 	}
@@ -118,14 +135,14 @@ class pSystemDetail extends pageAssembly
 			return call_user_func_array(
 					$this->viewList[$this->view], array(&$this));
 		}
-		$scl_id = (int)edkURI::getArg('scl_id');
+		$scl_id = (int)\edkURI::getArg('scl_id');
 
-		$klist = new KillList();
+		$klist = new \KillList();
 		$klist->setOrdered(true);
 		if ($this->view == 'losses') {
-			involved::load($klist, 'loss');
+			\involved::load($klist, 'loss');
 		} else {
-			involved::load($klist, 'kill');
+			\involved::load($klist, 'kill');
 		}
 		$klist->addSystem($this->system);
 		if (Config::get('kill_classified')) {
@@ -149,9 +166,9 @@ class pSystemDetail extends pageAssembly
 
 		$klist->setPageSplit(Config::get('killcount'));
 
-		$pagesplitter = new PageSplitter($klist->getCount(), Config::get('killcount'));
+		$pagesplitter = new \PageSplitter($klist->getCount(), Config::get('killcount'));
 
-		$table = new KillListTable($klist);
+		$table = new \KillListTable($klist);
 		$smarty->assign('klsplit', $pagesplitter->generate());
 		$smarty->assign('kltable', $table->generate());
 		$html = $smarty->fetch(get_tpl('system_detail'));
@@ -181,11 +198,11 @@ class pSystemDetail extends pageAssembly
 		$args[] = array('sys_id', $this->sys_id, true);
 		$this->addMenuItem("caption", "Navigation");
 		$this->addMenuItem("link", "All kills",
-				edkURI::build($args, array('view', 'kills', true)));
+				\edkURI::build($args, array('view', 'kills', true)));
 		$this->addMenuItem("link", "All losses",
-				edkURI::build($args, array('view', 'losses', true)));
+				\edkURI::build($args, array('view', 'losses', true)));
 		$this->addMenuItem("link", "Recent Activity",
-				edkURI::build($args, array('view', 'recent', true)));
+				\edkURI::build($args, array('view', 'recent', true)));
 		return "";
 	}
 
@@ -196,7 +213,7 @@ class pSystemDetail extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2]))
@@ -241,14 +258,3 @@ class pSystemDetail extends pageAssembly
 		return $this->view;
 	}
 }
-$systemDetail = new pSystemDetail();
-event::call("systemdetail_assembling", $systemDetail);
-$html = $systemDetail->assemble();
-$systemDetail->page->setContent($html);
-
-$systemDetail->context();
-event::call("systemdetail_context_assembling", $systemDetail);
-$context = $systemDetail->assemble();
-$systemDetail->page->addContext($context);
-
-$systemDetail->page->generate();

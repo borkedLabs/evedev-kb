@@ -5,13 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
 
 use EDK\Core\Config;
 
 /*
  * @package EDK
  */
-class pContractDetail extends pageAssembly
+class ContractDetail extends \pageAssembly
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -43,6 +44,21 @@ class pContractDetail extends pageAssembly
 		$this->queue("killList");
 
 	}
+	
+	public function generate()
+	{
+		\event::call("contractDetail_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("contractDetail_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+	
 	/**
 	 *  Reset the assembly object to prepare for creating the context.
 	 */
@@ -61,14 +77,14 @@ class pContractDetail extends pageAssembly
 	function start()
 	{
 		$this->page = new Page();
-		$this->ctr_id = (int)edkURI::getArg('ctr_id', 1);
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 2));
+		$this->ctr_id = (int)\edkURI::getArg('ctr_id', 1);
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 2));
 
 		$this->viewList = array();
 
 		$this->menuOptions = array();
 
-		$this->contract = new Contract($this->ctr_id);
+		$this->contract = new \Contract($this->ctr_id);
 		if(!$this->contract->validate())
 		{
 			$this->page = new Page('Campaign details');
@@ -91,12 +107,12 @@ class pContractDetail extends pageAssembly
 	function topLists()
 	{
 		$tklist = new \EDK\Toplist\ContractKills();
-		$tklist->setContract(new Contract($this->ctr_id));
+		$tklist->setContract(new \Contract($this->ctr_id));
 		involved::load($tklist,'kill');
 
 		$tklist->generate();
 		$campaign = "campaign";
-		$tkbox = new AwardBox($tklist, "Top killers", "kills in this ".$campaign, "kills", "eagle");
+		$tkbox = new \AwardBox($tklist, "Top killers", "kills in this ".$campaign, "kills", "eagle");
 
 		$html = $tkbox->generate();
 
@@ -107,7 +123,7 @@ class pContractDetail extends pageAssembly
 			involved::load($tklist,'kill');
 
 			$tklist->generate();
-			$tkbox = new AwardBox($tklist, "Top scorers", "points in this ".$campaign, "points", "redcross");
+			$tkbox = new \AwardBox($tklist, "Top scorers", "points in this ".$campaign, "points", "redcross");
 			$html .= $tkbox->generate();
 		}
 		return $html;
@@ -119,7 +135,7 @@ class pContractDetail extends pageAssembly
 	{
 		$klist = $this->contract->getKillList();
 		$llist = $this->contract->getLossList();
-		$killsummary = new KillSummaryTable($klist, $llist);
+		$killsummary = new \KillSummaryTable($klist, $llist);
 		if ($view == "") $killsummary->setFilter(false);
 
 		return $killsummary->generate();
@@ -174,7 +190,7 @@ class pContractDetail extends pageAssembly
 					array(&$this));
 		}
 
-		$scl_id = (int)edkURI::getArg('scl_id');
+		$scl_id = (int)\edkURI::getArg('scl_id');
 		
 		global $smarty;
 
@@ -183,7 +199,7 @@ class pContractDetail extends pageAssembly
 		switch ($this->view)
 		{
 			case "":
-				$qrylength=DBFactory::getDBQuery();
+				$qrylength=\DBFactory::getDBQuery();
 				// set break at half of the number of valid classes - excludes noob ships, drones and unknown
 				$qrylength->execute("SELECT count(*) - 3 AS cnt FROM kb3_ship_classes");
 				if($qrylength->recordCount())
@@ -199,7 +215,7 @@ class pContractDetail extends pageAssembly
 				{
 					$kl = &$target->getKillList();
 					$ll = &$target->getLossList();
-					$summary = new KillSummaryTable($kl, $ll);
+					$summary = new \KillSummaryTable($kl, $ll);
 					$summary->setVerbose(true);
 					$summary->setView('combined');
 
@@ -216,7 +232,7 @@ class pContractDetail extends pageAssembly
 					$curtargets['total_losses'] = $summary->getTotalLosses();
 					$curtargets['total_kill_isk'] = round($summary->getTotalKillISK()/1000000000, 2);
 					$curtargets['total_loss_isk'] = round($summary->getTotalLossISK()/1000000000, 2);
-					$bar = new BarGraph($curtargets['efficiency'], 100, 120);
+					$bar = new \BarGraph($curtargets['efficiency'], 100, 120);
 					$curtargets['bar'] = $bar->generate();
 					$targets[] = $curtargets;
 				}
@@ -224,7 +240,7 @@ class pContractDetail extends pageAssembly
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "recent_activity":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \Contract($this->ctr_id);
 				$klist = $this->contract->getKillList();
 				$klist->setOrdered(true);
 				if ($scl_id)
@@ -232,7 +248,7 @@ class pContractDetail extends pageAssembly
 				else
 					$klist->setPodsNoobShips(config::get('podnoobs'));
 
-				$table = new KillListTable($klist);
+				$table = new \KillListTable($klist);
 				$table->setLimit(10);
 				$table->setDayBreak(false);
 				$smarty->assign('killtable', $table->generate());
@@ -244,14 +260,14 @@ class pContractDetail extends pageAssembly
 				else
 					$llist->setPodsNoobShips(config::get('podnoobs'));
 
-				$table = new KillListTable($llist);
+				$table = new \KillListTable($llist);
 				$table->setLimit(10);
 				$table->setDayBreak(false);
 				$smarty->assign('losstable', $table->generate());
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "kills":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \Contract($this->ctr_id);
 				$list = $this->contract->getKillList();
 				$list->setOrdered(true);
 				if ($scl_id)
@@ -260,15 +276,15 @@ class pContractDetail extends pageAssembly
 					$list->setPodsNoobShips(config::get('podnoobs'));
 
 				$list->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), config::get('killcount'));
-				$table = new KillListTable($list);
+				$pagesplitter = new \PageSplitter($list->getCount(), config::get('killcount'));
+				$table = new \KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('killtable', $table->generate());
 				$smarty->assign('splitter', $pagesplitter->generate());
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "losses":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \Contract($this->ctr_id);
 				$llist = $this->contract->getLossList();
 				$llist->setOrdered(true);
 				if ($scl_id)
@@ -277,8 +293,8 @@ class pContractDetail extends pageAssembly
 					$llist->setPodsNoobShips(config::get('podnoobs'));
 
 				$llist->setPageSplit(config::get('killcount'));
-				$pagesplitter = new PageSplitter($llist->getCount(), config::get('killcount'));
-				$table = new KillListTable($llist);
+				$pagesplitter = new \PageSplitter($llist->getCount(), config::get('killcount'));
+				$table = new \KillListTable($llist);
 				$table->setDayBreak(false);
 				$smarty->assign('losstable', $table->generate());
 				$smarty->assign('splitter', $pagesplitter->generate());
@@ -309,7 +325,7 @@ class pContractDetail extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -353,15 +369,3 @@ class pContractDetail extends pageAssembly
 		return $this->view;
 	}
 }
-
-$contractDetail = new pContractDetail();
-event::call("contractDetail_assembling", $contractDetail);
-$html = $contractDetail->assemble();
-$contractDetail->page->setContent($html);
-
-$contractDetail->context();
-event::call("contractDetail_context_assembling", $contractDetail);
-$context = $contractDetail->assemble();
-$contractDetail->page->addContext($context);
-
-$contractDetail->page->generate();

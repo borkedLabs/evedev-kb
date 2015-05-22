@@ -5,6 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Page\Page;
+
 
 $URL_FETCHING_TEST_URL = 'http://www.evekb.org/downloads/update2.xml';
 
@@ -107,7 +109,7 @@ else
 	$trouble['Connectivity'][] = array('passed'=>false, 'text'=> $html);
 }
 
-if(API_Helpers::isCurlSupported())
+if(\EDK\EVEAPI\Helpers::isCurlSupported())
 {
 	$html =  '  cURL with SSL support is available.';
 	$trouble['Connectivity'][] = array('passed'=>true, 'text'=> $html);
@@ -121,7 +123,7 @@ else
 //yes this is a mess, pew pew and programming dont mix =P
 function find_SQL_Version()
 {
-	$conn = new DBConnection();
+	$conn = new \EDK\Database\Connection();
 	$value = (float) mysqli_get_server_info($conn->id());
 	return $value;
 }

@@ -1,10 +1,12 @@
 <?php
+namespace EDK\Page;
+
 use EDK\Core\Config;
 
 /*
  * @package EDK
  */
-class pInvtype extends pageAssembly
+class InvType extends \pageAssembly
 {
 	/** @var integer */
 	public $typeID;
@@ -21,9 +23,24 @@ class pInvtype extends pageAssembly
 		$this->queue("details");
 	}
 
+	public function generate()
+	{
+		\event::call("invtype_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("invtype_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+
+	
 	function start()
 	{
-		$this->typeID = edkURI::getArg('id', 1);
+		$this->typeID = \edkURI::getArg('id', 1);
 		$this->page = new Page('Item Details');
 	}
 
@@ -33,7 +50,7 @@ class pInvtype extends pageAssembly
 	function context()
 	{
 		parent::__construct();
-		$item = new dogma($this->typeID);
+		$item = new \dogma($this->typeID);
 
 		if (!$item->isValid())
 		{
@@ -59,9 +76,9 @@ class pInvtype extends pageAssembly
 		$args = array();
 		$args[] = array('id', $this->typeID, true);
 
-		$this->addMenuItem("link","Description", edkURI::build($args));
-		$this->addMenuItem("link","Kills", edkURI::build($args, array('view', 'kills', true)));
-		$this->addMenuItem("link","Losses", edkURI::build($args, array('view', 'losses', true)));
+		$this->addMenuItem("link","Description", \edkURI::build($args));
+		$this->addMenuItem("link","Kills", \edkURI::build($args, array('view', 'kills', true)));
+		$this->addMenuItem("link","Losses", \edkURI::build($args, array('view', 'losses', true)));
 
 		return "";
 	}
@@ -73,7 +90,7 @@ class pInvtype extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -105,7 +122,7 @@ class pInvtype extends pageAssembly
 	function details()
 	{
 		global $smarty;
-		$item = new dogma($this->typeID);
+		$item = new \dogma($this->typeID);
 
 		if (!$item->isValid())
 		{
@@ -120,20 +137,20 @@ class pInvtype extends pageAssembly
 		if ($item->get('itt_cat') == 6)
 		{
 			//we have a ship, so get it from the db
-			$ship = Ship::getByID($item->get('typeID'));
+			$ship = \Ship::getByID($item->get('typeID'));
 			$smarty->assign('shipImage', $ship->getImage(64));
 			$smarty->assign('traits', $ship->getTraitsHtml());
 
-			$view = edkURI::getArg('view', 2);
+			$view = \edkURI::getArg('view', 2);
 			$killList = '';
 			if($view == 'kills')
 			{
-				$list = new KillList();
+				$list = new \KillList();
 				$list->setOrdered(true);
 				$list->addInvolvedShipType($this->typeID);
 				$list->setPageSplit(Config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
-				$table = new KillListTable($list);
+				$pagesplitter = new \PageSplitter($list->getCount(), Config::get('killcount'));
+				$table = new \KillListTable($list);
 				$table->setDayBreak(false);
 				$html = $smarty->fetch(get_tpl('invtype_ship_killlist'));
 
@@ -143,13 +160,13 @@ class pInvtype extends pageAssembly
 			}
 			else if($view == 'losses')
 			{
-				$list = new KillList();
+				$list = new \KillList();
 				$list->setOrdered(true);
 				$list->addVictimShipType($this->typeID);
 				$list->setPageSplit(Config::get('killcount'));
-				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
+				$pagesplitter = new \PageSplitter($list->getCount(), Config::get('killcount'));
 
-				$table = new KillListTable($list);
+				$table = new \KillListTable($list);
 				$table->setDayBreak(false);
 				$html = $smarty->fetch(get_tpl('invtype_ship_killlist'));
 
@@ -183,23 +200,10 @@ class pInvtype extends pageAssembly
 		}
 		else
 		{
-			$i = new Item($this->typeID);
+			$i = new \Item($this->typeID);
 			$smarty->assign('itemImage', $i->getIcon(64, false));
 			$html = $smarty->fetch(get_tpl('invtype_item'));
 		}
 		return $html;
 	}
 }
-
-
-$invtype = new pInvtype();
-event::call("invtype_assembling", $invtype);
-$html = $invtype->assemble();
-$invtype->page->setContent($html);
-
-$invtype->context();
-event::call("invtype_context_assembling", $invtype);
-$context = $invtype->assemble();
-$invtype->page->addContext($context);
-
-$invtype->page->generate();

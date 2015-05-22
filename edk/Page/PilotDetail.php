@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\Page;
+
 use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -14,7 +16,7 @@ use EDK\Entity\Alliance;
 /*
  * @package EDK
  */
-class pPilotDetail extends pageAssembly
+class PilotDetail extends \pageAssembly
 {
 	/** @var Page */
 	public $page = null;
@@ -50,6 +52,20 @@ class pPilotDetail extends pageAssembly
 		$this->queue("killList");
 	}
 
+	public function generate()
+	{
+		\event::call("pilotDetail_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->context();
+		\event::call("pilotDetail_context_assembling", $this);
+		$context = $this->assemble();
+		$this->page->addContext($context);
+
+		$this->page->generate();
+	}
+	
 	/**
 	 *  Reset the assembly object to prepare for creating the context.
 	 */
@@ -72,11 +88,11 @@ class pPilotDetail extends pageAssembly
 	{
 		$this->page = new Page();
 
-		$this->plt_id = (int)edkURI::getArg('plt_id');
+		$this->plt_id = (int)\edkURI::getArg('plt_id');
 		if (!$this->plt_id) {
-			$this->plt_external_id = (int)edkURI::getArg('plt_ext_id');
+			$this->plt_external_id = (int)\edkURI::getArg('plt_ext_id');
 			if (!$this->plt_external_id) {
-				$id = (int)edkURI::getArg('id', 1);
+				$id = (int)\edkURI::getArg('id', 1);
 				// Arbitrary number bigger than we expect to reach locally
 				if ($id > 1000000) {
 					$this->plt_external_id = $id;
@@ -86,7 +102,7 @@ class pPilotDetail extends pageAssembly
 			}
 		}
 
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 2));
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 2));
 		if($this->view) {
 			$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
 		}
@@ -116,8 +132,8 @@ class pPilotDetail extends pageAssembly
 			exit;
 		}
 
-		if($this->plt_external_id) $this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
-		else $this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
+		if($this->plt_external_id) $this->page->addHeader("<link rel='canonical' href='".\edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
+		else $this->page->addHeader("<link rel='canonical' href='".\edkURI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
 
 		$this->corp = $this->pilot->getCorp();
 		$this->alliance = $this->corp->getAlliance();
@@ -129,7 +145,7 @@ class pPilotDetail extends pageAssembly
 	{
 		if(!isset($this->summary))
 		{
-			$this->summary = new KillSummaryTable();
+			$this->summary = new \KillSummaryTable();
 			$this->summary->addInvolvedPilot($this->plt_id);
 			if ($this->view == "ships_weapons") $this->summary->setFilter(false);
 		}
@@ -220,7 +236,7 @@ class pPilotDetail extends pageAssembly
 			return call_user_func_array($this->viewList[$this->view],
 					array(&$this));
 		}
-		$scl_id = (int)edkURI::getArg('scl_id');
+		$scl_id = (int)\edkURI::getArg('scl_id');
 
 		switch ($this->view)
 		{
@@ -273,7 +289,7 @@ class pPilotDetail extends pageAssembly
 
 				break;
 			default:
-				$list = new KillList();
+				$list = new \KillList();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
@@ -283,11 +299,11 @@ class pPilotDetail extends pageAssembly
 					$list->addVictimShipClass($scl_id);
 				else
 					$list->setPodsNoobships(Config::get('podnoobs'));
-				$table = new KillListTable($list);
+				$table = new \KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('kills', $table->generate());
 
-				$list = new KillList();
+				$list = new \KillList();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
@@ -297,7 +313,7 @@ class pPilotDetail extends pageAssembly
 					$list->addVictimShipClass($scl_id);
 				else
 					$list->setPodsNoobships(Config::get('podnoobs'));
-				$table = new KillListTable($list);
+				$table = new \KillListTable($list);
 				$table->setDayBreak(false);
 				$table->setDayBreak(false);
 				$smarty->assign('losses', $table->generate());
@@ -321,11 +337,11 @@ class pPilotDetail extends pageAssembly
 			$args[] = array('plt_id', $this->plt_id, true);
 		}
 		$this->addMenuItem("caption","Kills &amp; losses");
-		$this->addMenuItem("link","Recent activity", edkURI::build($args, array('view', 'recent', true)));
-		$this->addMenuItem("link","Kills", edkURI::build($args, array('view', 'kills', true)));
-		$this->addMenuItem("link","Losses", edkURI::build($args, array('view', 'losses', true)));
+		$this->addMenuItem("link","Recent activity", \edkURI::build($args, array('view', 'recent', true)));
+		$this->addMenuItem("link","Kills", \edkURI::build($args, array('view', 'kills', true)));
+		$this->addMenuItem("link","Losses", \edkURI::build($args, array('view', 'losses', true)));
 		$this->addMenuItem("caption","Statistics");
-		$this->addMenuItem("link","Ships &amp; weapons", edkURI::build($args, array('view', 'ships_weapons', true)));
+		$this->addMenuItem("link","Ships &amp; weapons", \edkURI::build($args, array('view', 'ships_weapons', true)));
 		return "";
 	}
 	/**
@@ -335,7 +351,7 @@ class pPilotDetail extends pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new box("Menu");
+		$menubox = new \box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -352,19 +368,19 @@ class pPilotDetail extends pageAssembly
 		$html = '';
 		if (Config::get('kill_points') && !empty($this->points))
 		{
-			$scorebox = new Box("Kill points");
+			$scorebox = new \Box("Kill points");
 			$scorebox->addOption("points", $this->points);
 			$html .= $scorebox->generate();
 		}
 		if (Config::get('loss_points') && !empty($this->lpoints))
 		{
-			$scorebox = new Box("Loss points");
+			$scorebox = new \Box("Loss points");
 			$scorebox->addOption("points", $this->lpoints);
 			$html .= $scorebox->generate();
 		}
 		if (Config::get('total_points') && !empty($this->lpoints))
 		{
-			$scorebox = new Box("Total points");
+			$scorebox = new \Box("Total points");
 			$scorebox->addOption("points", $this->points-$this->lpoints);
 			$html .= $scorebox->generate();
 		}
@@ -408,17 +424,3 @@ class pPilotDetail extends pageAssembly
 		return $this->view;
 	}
 }
-
-
-
-$pilotDetail = new pPilotDetail();
-event::call("pilotDetail_assembling", $pilotDetail);
-$html = $pilotDetail->assemble();
-$pilotDetail->page->setContent($html);
-
-$pilotDetail->context();
-event::call("pilotDetail_context_assembling", $pilotDetail);
-$context = $pilotDetail->assemble();
-$pilotDetail->page->addContext($context);
-
-$pilotDetail->page->generate();

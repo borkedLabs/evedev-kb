@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Page\Page;
+
 $page = new Page('Administration - Deletion of Kill ID "'.intval($_GET['kll_id']).'"');
 $page->setAdmin();
 

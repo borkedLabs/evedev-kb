@@ -16,6 +16,7 @@ use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Page\Page;
 
 // set this to 1 if you are running a master killboard and want
 // to even fetch mails not related to your corp / alliance

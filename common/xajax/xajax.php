@@ -4,7 +4,8 @@
  */
 use EDK\Core\Config;
 
-$xajax = new xajax();
+global $xajax;
+$xajax = new \xajax();
 event::register('page_assembleheader', 'edk_xajax::insertHTML');
 
 // if mods depend on xajax they can register to xajax_initialised
@@ -32,12 +33,11 @@ class edk_xajax
 	// on page assembly check whether or not xajax is needed
 	public static function insertHTML($obj)
 	{
-		global $xajax_enable;
+		global $xajax_enable, $xajax;
 		if (!isset($xajax_enable)) {
 			return;
 		}
-
-		global $xajax;
+		
 		$obj->addHeader($xajax->getJavascript());
 	}
 

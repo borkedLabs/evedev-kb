@@ -5,6 +5,9 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Entity\Pilot;
+use EDK\Entity\Corporation;
+use EDK\Page\Page;
 
 $pilot = new Pilot(intval($_GET['plt_id']));
 

@@ -8,6 +8,7 @@
 
 require_once('common/admin/admin_menu.php');
 
+use EDK\Page\Page;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;

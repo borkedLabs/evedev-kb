@@ -6,10 +6,11 @@
  * @package EDK
  */
 
+namespace EDK\Page;
 /*
  * @package EDK
  */
-class pLocked extends pageAssembly
+class Locked extends \pageAssembly
 {
 	/** @var Page */
 	public $page = null;
@@ -20,6 +21,15 @@ class pLocked extends pageAssembly
 
 		$this->queue("start");
 		$this->queue("content");
+	}
+	
+	public function generate()
+	{
+		\event::call("locked_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->page->generate();
 	}
 
 	function start()
@@ -33,10 +43,3 @@ class pLocked extends pageAssembly
 		return $smarty->fetch(get_tpl("locked"));
 	}
 }
-
-$locked = new pLocked();
-event::call("locked_assembling", $locked);
-$html = $locked->assemble();
-$locked->page->setContent($html);
-
-$locked->page->generate();

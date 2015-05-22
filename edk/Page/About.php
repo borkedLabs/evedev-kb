@@ -6,10 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Page;
+
 /*
  * @package EDK
  */
-class pAbout extends pageAssembly
+class About extends \pageAssembly
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -26,10 +28,19 @@ class pAbout extends pageAssembly
 		$this->queue("mods");
 		$this->queue("bottom");
 	}
+
+	public function generate()
+	{
+		\event::call("about_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->page->generate();
+	}
 	
 	function start()
 	{
-		$this->page = new Page(language::get('page_about'));
+		$this->page = new Page(\Language::get('page_about'));
 	}
 	
 	function developers()
@@ -77,7 +88,7 @@ class pAbout extends pageAssembly
 	function stats()
 	{
 		global $smarty;
-		$qry = DBFactory::getDBQuery();;
+		$qry = \DBFactory::getDBQuery();;
 		$qry->execute("SELECT COUNT(*) AS cnt FROM kb3_kills");
 		$row = $qry->getRow();
 		$kills = $row['cnt'];
@@ -130,11 +141,3 @@ class pAbout extends pageAssembly
 		return $smarty->fetch(get_tpl('about_bottom'));
 	}
 }
-
-
-$about = new pAbout();
-event::call("about_assembling", $about);
-$html = $about->assemble();
-$about->page->setContent($html);
-
-$about->page->generate();

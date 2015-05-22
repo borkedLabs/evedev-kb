@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\Page;
+
 use EDK\Core\Config;
 /**
  * Construct an output page.
@@ -33,7 +35,7 @@ class Page
 	{
 		global $timeStarted;
 		$this->timestart = &$timeStarted;
-		event::call('page_initialisation', $this);
+		\event::call('page_initialisation', $this);
 		if (!Config::get('public_stats')) {
 			Config::set('public_stats', 'do nothing');
 		}
@@ -146,10 +148,10 @@ class Page
 		}
 
 		// header
-		event::call('page_assembleheader', $this);
+		\event::call('page_assembleheader', $this);
 		$smarty->assign('page_headerlines', join("\n", $this->headlines));
 
-		event::call('page_assemblebody', $this);
+		\event::call('page_assemblebody', $this);
 		$smarty->assign('page_bodylines', join("\n", $this->bodylines));
 
 		if (Config::get('cfg_mainsite')) {
@@ -160,7 +162,7 @@ class Page
 		$smarty->assign('banner_x', Config::get('style_banner_x'));
 		$smarty->assign('banner_y', Config::get('style_banner_y'));
 
-		$nav = new Navigation();
+		$nav = new \Navigation();
 		$menu = $nav->generateMenu();
 		if (!count($menu->get())) $w = 100;
 		else $w = floor(100 / count($menu->get()));
@@ -181,7 +183,7 @@ class Page
 
 		$processingtime = number_format((microtime(true) - $this->timestart), 4);
 
-		$qry = DBFactory::getDBQuery();
+		$qry = \DBFactory::getDBQuery();
 		$smarty->assign('profile_sql_cached', $qry->queryCachedCount());
 		$smarty->assign('profile_sql', $qry->queryCount());
 		$smarty->assign('profile_time', $processingtime);
@@ -197,13 +199,13 @@ class Page
 		}
 		$smarty->assign('context_html', implode($this->contexthtml));
 		$smarty->assignByRef('context_divs', $this->contexthtml);
-		event::call('smarty_displayindex', $smarty);
+		\event::call('smarty_displayindex', $smarty);
 
 		$html = $smarty->fetch(get_tpl('index'));
 		if (!$this->cachable) {
 			Config::put('cache_enabled', false);
 		}
-		event::call('final_content', $html);
+		\event::call('final_content', $html);
 		// Reduce page size by about 10%
 		//TODO: enable for prod
 		//$html = preg_replace('/\s+\<\//', ' </', $html);
@@ -265,8 +267,8 @@ class Page
 	 */
 	public function setAdmin()
 	{
-		if (!Session::isAdmin()) {
-			$page = edkURI::getArg("a");
+		if (!\Session::isAdmin()) {
+			$page = \edkURI::getArg("a");
 			$link = html_entity_decode(edkURI::page("login", $page, "page"));
 
 			header("Location: $link");
@@ -282,7 +284,7 @@ class Page
 	 */
 	public function isAdmin()
 	{
-		return Session::isAdmin();
+		return \Session::isAdmin();
 	}
 
 	/**
@@ -292,7 +294,7 @@ class Page
 	 */
 	public function isSuperAdmin()
 	{
-		return Session::isSuperAdmin();
+		return \Session::isSuperAdmin();
 	}
 
 	/**
@@ -300,7 +302,7 @@ class Page
 	 */
 	public function setSuperAdmin()
 	{
-		if (!Session::isSuperAdmin()) {
+		if (!\Session::isSuperAdmin()) {
 			header("Location: ".KB_HOST."/?a=login");
 		}
 	}

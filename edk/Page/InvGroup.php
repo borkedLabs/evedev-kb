@@ -5,10 +5,12 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page;
+
 /*
  * @package EDK
  */
-class pInvtype extends pageAssembly
+class InvGroup extends \pageAssembly
 {
 	/** @var Page */
 	public $page = null;
@@ -23,11 +25,19 @@ class pInvtype extends pageAssembly
 		$this->queue("details");
 	}
 
+	public function generate()
+	{
+		\event::call("invtype_assembling", $this);
+		$html = $this->assemble();
+		$this->page->setContent($html);
+
+		$this->page->generate();
+	}
+	
 	function start()
 	{
-		$this->groupID = (int)edkURI::getArg('id', 1);
+		$this->groupID = (int)\edkURI::getArg('id', 1);
 		$this->page = new Page('Item Database');
-
 	}
 
 	function details()
@@ -40,7 +50,7 @@ class pInvtype extends pageAssembly
 		}
 		$sql = 'SELECT * FROM kb3_item_types d'.
 				' WHERE d.itt_id = '.$this->groupID;
-		$qry = DBFactory::getDBQuery();;
+		$qry = \DBFactory::getDBQuery();;
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -49,7 +59,7 @@ class pInvtype extends pageAssembly
 		$sql = 'SELECT * FROM kb3_invtypes d'.
 				' WHERE d.groupID = '.$this->groupID.
 				' ORDER BY d.typeName ASC';
-		$qry = DBFactory::getDBQuery();;
+		$qry = \DBFactory::getDBQuery();;
 		$qry->execute($sql);
 		$rows= array();
 		while($row = $qry->getRow()) {
@@ -59,11 +69,3 @@ class pInvtype extends pageAssembly
 		return $smarty->fetch(get_tpl('groupdb'));
 	}
 }
-
-
-$invtype = new pInvtype();
-event::call("invtype_assembling", $invtype);
-$html = $invtype->assemble();
-$invtype->page->setContent($html);
-
-$invtype->page->generate();
