@@ -6,10 +6,11 @@
  * @package EDK
  */
 
+namespace EDK\Toplist;
 // Create a box to display the top pilots at something. Subclasses of TopList
 // define the something.
 
-class TopList_ContractKills extends TopList_Kills
+class ContractScore extends Score
 {
 	function generate()
 	{

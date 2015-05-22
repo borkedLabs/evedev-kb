@@ -18,26 +18,6 @@ spl_autoload_register('edkloader::load');
 // Set up the external class files with the autoloader.
 
 // Ugly hacks to make things work until other changes are made with the file structure
-edkloader::register('TopList', 'class.toplist.php');
-edkloader::register('TopKillsList', 'class.toplist.php');
-edkloader::register('TopCorpKillsList', 'class.toplist.php');
-edkloader::register('TopScoreList', 'class.toplist.php');
-edkloader::register('TopLossesList', 'class.toplist.php');
-edkloader::register('TopCorpLossesList', 'class.toplist.php');
-edkloader::register('TopFinalBlowList', 'class.toplist.php');
-edkloader::register('TopDamageDealerList', 'class.toplist.php');
-edkloader::register('TopSoloKillerList', 'class.toplist.php');
-edkloader::register('TopPodKillerList', 'class.toplist.php');
-edkloader::register('TopGrieferList', 'class.toplist.php');
-edkloader::register('TopCapitalShipKillerList', 'class.toplist.php');
-edkloader::register('TopContractKillsList', 'class.toplist.php');
-edkloader::register('TopContractScoreList', 'class.toplist.php');
-edkloader::register('TopPilotTable', 'class.toplist.php');
-edkloader::register('TopCorpTable', 'class.toplist.php');
-edkloader::register('TopShipList', 'class.toplist.php');
-edkloader::register('TopShipListTable', 'class.toplist.php');
-edkloader::register('TopWeaponList', 'class.toplist.php');
-edkloader::register('TopWeaponListTable', 'class.toplist.php');
 edkloader::register('thumbInt', 'class.thumb.php');
 
 require_once(__DIR__.'/db.php');

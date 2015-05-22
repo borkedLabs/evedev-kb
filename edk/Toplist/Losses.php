@@ -6,11 +6,11 @@
  * @package EDK
  */
 
-use EDK\Core\Config;
-// Create a box to display the top pilots at something. Subclasses of TopList
-// define the something.
+namespace EDK\Toplist;
 
-class TopList_Losses extends TopList_Base
+use EDK\Core\Config;
+
+class Losses extends Base
 {
 	function generate()
 	{

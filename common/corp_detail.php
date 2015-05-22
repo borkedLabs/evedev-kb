@@ -386,7 +386,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_kills', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_kills', true), $nyear, $nmonth));
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -394,7 +394,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Kills");
@@ -415,7 +415,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_scores', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_scores', true), $nyear, $nmonth));
 
-				$list = new TopList_Score();
+				$list = new \EDK\Toplist\Score();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -423,7 +423,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Points");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Score();
+				$list = new \EDK\Toplist\Score();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Points");
@@ -444,7 +444,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_solo', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_solo', true), $nyear, $nmonth));
 
-				$list = new TopList_SoloKiller();
+				$list = new \EDK\Toplist\SoloKiller();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -452,7 +452,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Solokills");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_SoloKiller();
+				$list = new \EDK\Toplist\SoloKiller();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Solokills");
@@ -474,7 +474,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_damage', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_damage', true), $nyear, $nmonth));
 
-				$list = new TopList_DamageDealer();
+				$list = new \EDK\Toplist\DamageDealer();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -482,7 +482,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_DamageDealer();
+				$list = new \EDK\Toplist\DamageDealer();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Kills");
@@ -504,7 +504,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_griefer', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_griefer', true), $nyear, $nmonth));
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addVictimShipClass(20); // freighter
 				$list->addVictimShipClass(22); // exhumer
 				$list->addVictimShipClass(7); // industrial
@@ -517,7 +517,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addVictimShipClass(20); // freighter
 				$list->addVictimShipClass(22); // exhumer
 				$list->addVictimShipClass(7); // industrial
@@ -543,7 +543,7 @@ class pCorpDetail extends pageAssembly
 				$smarty->assign('url_previous', edkURI::build($args, array('view', 'pilot_losses', true), $pyear, $pmonth));
 				$smarty->assign('url_next', edkURI::build($args, array('view', 'pilot_losses', true), $nyear, $nmonth));
 
-				$list = new TopList_Losses();
+				$list = new \EDK\Toplist\Losses();
 				$list->addVictimCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -551,7 +551,7 @@ class pCorpDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, "Losses");
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Losses();
+				$list = new \EDK\Toplist\Losses();
 				$list->addVictimCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, "Losses");
@@ -561,12 +561,12 @@ class pCorpDetail extends pageAssembly
 
 				break;
 			case "ships_weapons":
-				$shiplist = new TopList_Ship();
+				$shiplist = new \EDK\Toplist\Ship();
 				$shiplist->addInvolvedCorp($this->crp_id);
 				$shiplisttable = new TopTable_Ship($shiplist);
 				$smarty->assign('ships', $shiplisttable->generate());
 
-				$weaponlist = new TopList_Weapon();
+				$weaponlist = new \EDK\Toplist\Weapon();
 				$weaponlist->addInvolvedCorp($this->crp_id);
 				$weaponlisttable = new TopTable_Weapon($weaponlist);
 				$smarty->assign('weapons', $weaponlisttable->generate());

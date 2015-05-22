@@ -13,7 +13,7 @@ use EDK\Core\Config;
  * Retrieve Character Info from CCP API
  * @package EDK
  */
-class API_CharacterInfo extends API
+class CharacterInfo extends API
 {
 	private $API_ID = '';
 	private $data = array();

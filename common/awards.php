@@ -102,7 +102,7 @@ class pAwards extends pageAssembly
 		global $smarty;
 		$awardboxes = array();
 		// top killers
-		$tklist = new TopList_Kills();
+		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -113,7 +113,7 @@ class pAwards extends pageAssembly
 		// top scorers
 		if (Config::get('kill_points'))
 		{
-			$tklist = new TopList_Score();
+			$tklist = new \EDK\Toplist\Score();
 			$tklist->setMonth($this->month);
 			$tklist->setYear($this->year);
 			involved::load($tklist,'kill');
@@ -123,7 +123,7 @@ class pAwards extends pageAssembly
 			$awardboxes[] = $tkbox->generate();
 		}
 		// top solo killers
-		$tklist = new TopList_SoloKiller();
+		$tklist = new \EDK\Toplist\SoloKiller();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -132,7 +132,7 @@ class pAwards extends pageAssembly
 		$tkbox = new AwardBox($tklist, Language::get('top_solo'), Language::get('top_solo_desc'), "kills", "cross");
 		$awardboxes[] = $tkbox->generate();
 		// top damage dealers
-		$tklist = new TopList_DamageDealer();
+		$tklist = new \EDK\Toplist\DamageDealer();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -142,7 +142,7 @@ class pAwards extends pageAssembly
 		$awardboxes[] = $tkbox->generate();
 
 		// top final blows
-		$tklist = new TopList_FinalBlow();
+		$tklist = new \EDK\Toplist\FinalBlow();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -151,7 +151,7 @@ class pAwards extends pageAssembly
 		$tkbox = new AwardBox($tklist, Language::get('top_final'), Language::get('top_final_desc'), "kills", "skull");
 		$awardboxes[] = $tkbox->generate();
 		// top podkillers
-		$tklist = new TopList_Kills();
+		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -162,7 +162,7 @@ class pAwards extends pageAssembly
 		$tkbox = new AwardBox($tklist, Language::get('top_podkill'), Language::get('top_podkill_desc'), "kills", "globe");
 		$awardboxes[] = $tkbox->generate();
 		// top griefers
-		$tklist = new TopList_Kills();
+		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');
@@ -181,7 +181,7 @@ class pAwards extends pageAssembly
 		$tkbox = new AwardBox($tklist, Language::get('top_griefer'), Language::get('top_griefer_desc'), "kills", "star");
 		$awardboxes[] = $tkbox->generate();
 		// top capital killers
-		$tklist = new TopList_Kills();
+		$tklist = new \EDK\Toplist\Kills();
 		$tklist->setMonth($this->month);
 		$tklist->setYear($this->year);
 		involved::load($tklist,'kill');

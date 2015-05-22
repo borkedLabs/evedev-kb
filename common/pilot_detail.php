@@ -256,12 +256,12 @@ class pPilotDetail extends pageAssembly
 				
 				break;
 			case "ships_weapons":
-				$shiplist = new TopList_Ship();
+				$shiplist = new \EDK\Toplist\Ship();
 				$shiplist->addInvolvedPilot($this->pilot);
 				$shiplisttable = new TopTable_Ship($shiplist);
 				$smarty->assign('ships', $shiplisttable->generate());
 
-				$weaponlist = new TopList_Weapon();
+				$weaponlist = new \EDK\Toplist\Weapon();
 				$weaponlist->addInvolvedPilot($this->pilot);
 				$weaponlisttable = new TopTable_Weapon($weaponlist);
 

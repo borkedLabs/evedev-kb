@@ -438,7 +438,7 @@ class pAllianceDetail extends pageAssembly
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
-				$list = new TopList_CorpKills();
+				$list = new \EDK\Toplist\CorpKills();
 				$list->addInvolvedAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -446,7 +446,7 @@ class pAllianceDetail extends pageAssembly
 				$table = new TopTable_Corp($list, Language::get('kills'));
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_CorpKills();
+				$list = new \EDK\Toplist\CorpKills();
 				$list->addInvolvedAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Corp($list, Language::get('kills'));
@@ -471,7 +471,7 @@ class pAllianceDetail extends pageAssembly
 				$ships = array();
 
 				foreach ($shipclass as $shp) {
-					$list = new TopList_CorpKills();
+					$list = new \EDK\Toplist\CorpKills();
 					$list->addInvolvedAlliance($this->alliance);
 					$list->addVictimShipClass($shp);
 					$table = new TopTable_Corp($list, Language::get('kills'));
@@ -497,7 +497,7 @@ class pAllianceDetail extends pageAssembly
 					$shipclass[] = new Shipclass($row['scl_id']);
 				}
 				foreach ($shipclass as $shp) {
-					$list = new TopList_Kills();
+					$list = new \EDK\Toplist\Kills();
 					$list->addInvolvedAlliance($this->alliance);
 					$list->addVictimShipClass($shp);
 					$table = new TopTable_Pilot($list, Language::get('kills'));
@@ -522,7 +522,7 @@ class pAllianceDetail extends pageAssembly
 					$shipclass[] = new Shipclass($row['scl_id']);
 				}
 				foreach ($shipclass as $shp) {
-					$list = new TopList_CorpLosses();
+					$list = new \EDK\Toplist\CorpLosses();
 					$list->addVictimAlliance($this->alliance);
 					$list->addVictimShipClass($shp);
 					$table = new TopTable_Corp($list, Language::get('losses'));
@@ -548,7 +548,7 @@ class pAllianceDetail extends pageAssembly
 					$shipclass[] = new Shipclass($row['scl_id']);
 				}
 				foreach ($shipclass as $shp) {
-					$list = new TopList_Losses();
+					$list = new \EDK\Toplist\Losses();
 					$list->addVictimAlliance($this->alliance);
 					$list->addVictimShipClass($shp);
 					$table = new TopTable_Pilot($list, Language::get('losses'));
@@ -578,7 +578,7 @@ class pAllianceDetail extends pageAssembly
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
-				$list = new TopList_CorpLosses();
+				$list = new \EDK\Toplist\CorpLosses();
 				$list->addVictimAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -586,7 +586,7 @@ class pAllianceDetail extends pageAssembly
 				$table = new TopTable_Corp($list, Language::get('losses'));
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_CorpLosses();
+				$list = new \EDK\Toplist\CorpLosses();
 				$list->addVictimAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Corp($list, Language::get('losses'));
@@ -613,7 +613,7 @@ class pAllianceDetail extends pageAssembly
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addInvolvedAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -621,7 +621,7 @@ class pAllianceDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, Language::get('kills'));
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Kills();
+				$list = new \EDK\Toplist\Kills();
 				$list->addInvolvedAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, Language::get('kills'));
@@ -648,14 +648,14 @@ class pAllianceDetail extends pageAssembly
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
-				$list = new TopList_Score();
+				$list = new \EDK\Toplist\Score();
 				$list->addInvolvedAlliance($this->alliance);
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
 				$table = new TopTable_Pilot($list, Language::get('top_points'));
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Score();
+				$list = new \EDK\Toplist\Score();
 				$list->addInvolvedAlliance($this->alliance);
 				$table = new TopTable_Pilot($list, Language::get('top_points'));
 				$smarty->assign('total_stats', $table->generate());
@@ -681,7 +681,7 @@ class pAllianceDetail extends pageAssembly
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
-				$list = new TopList_Losses();
+				$list = new \EDK\Toplist\Losses();
 				$list->addVictimAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
@@ -689,7 +689,7 @@ class pAllianceDetail extends pageAssembly
 				$table = new TopTable_Pilot($list, Language::get('losses'));
 				$smarty->assign('monthly_stats', $table->generate());
 
-				$list = new TopList_Losses();
+				$list = new \EDK\Toplist\Losses();
 				$list->addVictimAlliance($this->alliance);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$table = new TopTable_Pilot($list, Language::get('losses'));
@@ -700,12 +700,12 @@ class pAllianceDetail extends pageAssembly
 				break;
 			case "ships_weapons":
 				$view = "ships_weapons";
-				$shiplist = new TopList_Ship();
+				$shiplist = new \EDK\Toplist\Ship();
 				$shiplist->addInvolvedAlliance($this->alliance);
 				$shiplisttable = new TopTable_Ship($shiplist);
 				$smarty->assign('ships', $shiplisttable->generate());
 
-				$weaponlist = new TopList_Weapon();
+				$weaponlist = new \EDK\Toplist\Weapon();
 				$weaponlist->addInvolvedAlliance($this->alliance);
 				$weaponlisttable = new TopTable_Weapon($weaponlist);
 				$smarty->assign('title', Language::get('ships_weapons'));

@@ -6,10 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Toplist;
+
 // Create a box to display the top pilots at something. Subclasses of TopList
 // define the something.
 
-class TopList_Base
+class Base
 {
 	protected $exc_vic_scl = array();
 	protected $inc_vic_scl = array();
@@ -97,32 +99,32 @@ class TopList_Base
 
 	function addInvolvedPilot($pilot)
 	{
-		involved::add($this->inv_plt,$pilot);
+		\involved::add($this->inv_plt,$pilot);
 	}
 
 	function addInvolvedCorp($corp)
 	{
-		involved::add($this->inv_crp,$corp);
+		\involved::add($this->inv_crp,$corp);
 	}
 
 	function addInvolvedAlliance($alliance)
 	{
-		involved::add($this->inv_all,$alliance);
+		\involved::add($this->inv_all,$alliance);
 	}
 
 	function addVictimPilot($pilot)
 	{
-		involved::add($this->vic_plt,$pilot);
+		\involved::add($this->vic_plt,$pilot);
 	}
 
 	function addVictimCorp($corp)
 	{
-		involved::add($this->vic_crp,$corp);
+		\involved::add($this->vic_crp,$corp);
 	}
 
 	function addVictimAlliance($alliance)
 	{
-		involved::add($this->vic_all,$alliance);
+		\involved::add($this->vic_all,$alliance);
 	}
 
 	/**
@@ -478,7 +480,7 @@ class TopList_Base
 
 		$this->sql_ .= " ".$this->sqlbottom_;
 		$this->sql_ .= " /* ".get_class($this)." */";
-		$this->qry = DBFactory::getDBQuery();
+		$this->qry = \DBFactory::getDBQuery();
 		$this->qry->execute($this->sql_);
 	}
 

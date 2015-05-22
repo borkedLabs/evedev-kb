@@ -6,10 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Toplist;
+
 // Create a box to display the top pilots at something. Subclasses of TopList
 // define the something.
 
-class TopList_CapitalShipKiller extends TopList_Base
+class CapitalShipKiller extends Base
 {
 	function __construct()
 	{

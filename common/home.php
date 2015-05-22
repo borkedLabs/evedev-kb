@@ -344,7 +344,7 @@ class pHome extends pageAssembly
 	{
 		// Display the top pilot lists.
 		if ($this->view != 'losses') {
-			$tklist = new TopList_Kills();
+			$tklist = new \EDK\Toplist\Kills();
 			$this->loadTime($tklist);
 			involved::load($tklist, 'kill');
 
@@ -353,7 +353,7 @@ class pHome extends pageAssembly
 					.$this->getCurrentPeriod(), "kills", "eagle");
 			$html = $tkbox->generate();
 
-			$tklist = new TopList_Score();
+			$tklist = new \EDK\Toplist\Score();
 			$this->loadTime($tklist);
 			involved::load($tklist, 'kill');
 
@@ -362,7 +362,7 @@ class pHome extends pageAssembly
 					.$this->getCurrentPeriod(), "points", "redcross");
 			$html .= $tkbox->generate();
 		} else {
-			$tllist = new TopList_Losses();
+			$tllist = new \EDK\Toplist\Losses();
 			$this->loadTime($tllist);
 			involved::load($tllist, 'loss');
 

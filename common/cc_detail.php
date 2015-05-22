@@ -90,7 +90,7 @@ class pContractDetail extends pageAssembly
 	 */
 	function topLists()
 	{
-		$tklist = new TopList_ContractKills();
+		$tklist = new \EDK\Toplist\ContractKills();
 		$tklist->setContract(new Contract($this->ctr_id));
 		involved::load($tklist,'kill');
 
@@ -102,7 +102,7 @@ class pContractDetail extends pageAssembly
 
 		if (config::get('kill_points'))
 		{
-			$tklist = new TopList_ContractScore();
+			$tklist = new \EDK\Toplist\ContractScore();
 			$tklist->setContract(new Contract($this->ctr_id));
 			involved::load($tklist,'kill');
 

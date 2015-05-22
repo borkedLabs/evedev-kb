@@ -6,8 +6,7 @@
  * @package EDK
  */
 
-// Create a box to display the top pilots at something. Subclasses of TopList
-// define the something.
+namespace EDK\Toplist;
 
 class TopList_PodKiller extends TopList_Kills
 {
