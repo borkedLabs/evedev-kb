@@ -21,8 +21,8 @@ use \KillList;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
-use \TopTable_Ship;
-use \TopTable_Weapon;
+use \EDK\PageComponent\TopTable\Ship;
+use \EDK\PageComponent\TopTable\Weapon;
 
 
 /*
@@ -289,12 +289,12 @@ class PilotDetail extends \pageAssembly
 			case "ships_weapons":
 				$shiplist = new \EDK\Toplist\Ship();
 				$shiplist->addInvolvedPilot($this->pilot);
-				$shiplisttable = new TopTable_Ship($shiplist);
+				$shiplisttable = new \EDK\PageComponent\TopTable\Ship($shiplist);
 				$smarty->assign('ships', $shiplisttable->generate());
 
 				$weaponlist = new \EDK\Toplist\Weapon();
 				$weaponlist->addInvolvedPilot($this->pilot);
-				$weaponlisttable = new TopTable_Weapon($weaponlist);
+				$weaponlisttable = new \EDK\PageComponent\TopTable\Weapon($weaponlist);
 
 				$smarty->assign('weapons', $weaponlisttable->generate());
 				return $smarty->fetch(get_tpl('detail_kl_ships_weapons'));

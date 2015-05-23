@@ -17,7 +17,6 @@ use \KillList;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
-use \TopTable_Pilot;
 
 /*
  * @package EDK
@@ -416,13 +415,13 @@ class CorpDetail extends \pageAssembly
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\Kills();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
-				$table = new TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -445,13 +444,13 @@ class CorpDetail extends \pageAssembly
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new TopTable_Pilot($list, "Points");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Points");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\Score();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
-				$table = new \TopTable_Pilot($list, "Points");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Points");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -474,13 +473,13 @@ class CorpDetail extends \pageAssembly
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new \TopTable_Pilot($list, "Solokills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Solokills");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\SoloKiller();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
-				$table = new \TopTable_Pilot($list, "Solokills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Solokills");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -504,13 +503,13 @@ class CorpDetail extends \pageAssembly
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new \TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\DamageDealer();
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
-				$table = new \TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -539,7 +538,7 @@ class CorpDetail extends \pageAssembly
 				$list->addInvolvedCorp($this->crp_id);
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new \TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\Kills();
@@ -549,7 +548,7 @@ class CorpDetail extends \pageAssembly
 				$list->addVictimShipClass(12); // barge
 				$list->addVictimShipClass(14); // transport
 				$list->addInvolvedCorp($this->crp_id);
-				$table = new \TopTable_Pilot($list, "Kills");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Kills");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -573,13 +572,13 @@ class CorpDetail extends \pageAssembly
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->setMonth($this->month);
 				$list->setYear($this->year);
-				$table = new \TopTable_Pilot($list, "Losses");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Losses");
 				$smarty->assign('monthly_stats', $table->generate());
 
 				$list = new \EDK\Toplist\Losses();
 				$list->addVictimCorp($this->crp_id);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
-				$table = new \TopTable_Pilot($list, "Losses");
+				$table = new \EDK\PageComponent\TopTable\Pilot($list, "Losses");
 				$smarty->assign('total_stats', $table->generate());
 
 				return $smarty->fetch(get_tpl('detail_kl_monthly'));
@@ -588,12 +587,12 @@ class CorpDetail extends \pageAssembly
 			case "ships_weapons":
 				$shiplist = new \EDK\Toplist\Ship();
 				$shiplist->addInvolvedCorp($this->crp_id);
-				$shiplisttable = new \TopTable_Ship($shiplist);
+				$shiplisttable = new \EDK\PageComponent\TopTable\Ship($shiplist);
 				$smarty->assign('ships', $shiplisttable->generate());
 
 				$weaponlist = new \EDK\Toplist\Weapon();
 				$weaponlist->addInvolvedCorp($this->crp_id);
-				$weaponlisttable = new \TopTable_Weapon($weaponlist);
+				$weaponlisttable = new \EDK\PageComponent\TopTable\Weapon($weaponlist);
 				$smarty->assign('weapons', $weaponlisttable->generate());
 				return $smarty->fetch(get_tpl('detail_kl_ships_weapons'));
 

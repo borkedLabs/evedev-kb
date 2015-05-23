@@ -6,10 +6,12 @@
  * @package EDK
  */
 
-use EDK\Core\URI;
-use EDK\Entity\Pilot;
+namespace EDK\PageComponent\TopTable;
 
-class TopTable_Pilot
+use EDK\Core\URI;
+use \imageURL;
+
+class Pilot
 {
 	function __construct($toplist, $entity)
 	{
@@ -26,7 +28,7 @@ class TopTable_Pilot
 		$rows = array();
 		while ($row = $this->toplist->getRow())
 		{
-			$pilot = Pilot::getByID($row['plt_id']);
+			$pilot = \EDK\Entity\Pilot::getByID($row['plt_id']);
 			if($row['plt_externalid']) {
 				$uri = URI::build(array('a', 'pilot_detail', true),
 						array('plt_ext_id', $row['plt_externalid'], true));

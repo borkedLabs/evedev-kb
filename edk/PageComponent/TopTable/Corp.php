@@ -6,7 +6,12 @@
  * @package EDK
  */
 
-class TopTable_Corp
+namespace EDK\PageComponent\TopTable;
+
+use \Cacheable;
+use \imageURL;
+
+class Corp
 {
 	function __construct($toplist, $entity)
 	{

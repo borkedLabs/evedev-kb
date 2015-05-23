@@ -6,11 +6,14 @@
  * @package EDK
  */
 
-use EDK\Core\URI;
+namespace EDK\PageComponent\TopTable;
 
-class TopTable_Weapon
+use EDK\Core\URI;
+use \Language;
+
+class Ship
 {
-	function __construct(\EDK\Toplist\Base $toplist)
+	function __construct($toplist)
 	{
 		$this->toplist = $toplist;
 	}
@@ -22,20 +25,24 @@ class TopTable_Weapon
 
 		while ($row = $this->toplist->getRow())
 		{
-			$item = new Item($row['itm_id']);
+			$ship = \Ship::getByID($row['shp_id']);
+			$shipclass = $ship->getClass();
+			$shipclass->getName();
+
 			$rows[] = array(
 				'rank' => false,
-				'name' => $item->getName(),
-				'uri' => URI::build(array('a', 'invtype', true),
-						array('id', $item->getID(), true)),
-				'icon' => $item->getIcon(32),
+				'name' => $ship->getName(),
+				'subname' => $shipclass->getName(),
+				'uri' => URI::page('invtype', $ship->getID()),
+				'portrait' => $ship->getImage(32),
 				'count' => $row['cnt']);
 		}
 
-		$smarty->assign('tl_name', Language::get('weapon'));
+		$smarty->assign('tl_name', Language::get('ship'));
 		$smarty->assign('tl_type', Language::get('kills'));
 		$smarty->assignByRef('tl_rows', $rows);
 
 		return $smarty->fetch(get_tpl('toplisttable'));
 	}
 }
+
