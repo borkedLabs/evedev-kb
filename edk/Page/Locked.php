@@ -7,6 +7,7 @@
  */
 
 namespace EDK\Page;
+use EDK\Core\Event;
 /*
  * @package EDK
  */
@@ -25,7 +26,7 @@ class Locked extends \pageAssembly
 	
 	public function generate()
 	{
-		\event::call("locked_assembling", $this);
+		Event::call("locked_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 

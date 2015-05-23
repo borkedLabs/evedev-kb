@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -63,12 +64,12 @@ class PilotDetail extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("pilotDetail_assembling", $this);
+		Event::call("pilotDetail_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context();
-		\event::call("pilotDetail_context_assembling", $this);
+		Event::call("pilotDetail_context_assembling", $this);
 		$context = $this->assemble();
 		$this->page->addContext($context);
 

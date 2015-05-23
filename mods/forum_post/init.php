@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Event;
 
 $modInfo['forum_post']['name'] = "Forum Post";
 $modInfo['forum_post']['abstract'] = "Adds a link to contracts and kill_related that gives a summary of the results.";

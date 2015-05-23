@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\PageComponent\Box;
 
 /*
@@ -48,12 +49,12 @@ class ContractDetail extends \pageAssembly
 	
 	public function generate()
 	{
-		\event::call("contractDetail_assembling", $this);
+		Event::call("contractDetail_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context();
-		\event::call("contractDetail_context_assembling", $this);
+		Event::call("contractDetail_context_assembling", $this);
 		$context = $this->assemble();
 		$this->page->addContext($context);
 

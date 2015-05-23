@@ -6,10 +6,11 @@
  * @package EDK
  */
 
+namespace EDK\Core;
 /**
  * @package EDK
  */
-class event
+class Event
 {
 	private static $events = array();
 

@@ -8,6 +8,7 @@
 namespace EDK\Page;
  
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 use EDK\PageComponent\Clock;
@@ -61,12 +62,12 @@ class Home extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("home_assembling", $this);
+		Event::call("home_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context(); //This resets the queue and queues context items.
-		\event::call("home_context_assembling", $this);
+		Event::call("home_context_assembling", $this);
 		$contextHTML = $this->assemble();
 		$this->page->addContext($contextHTML);
 

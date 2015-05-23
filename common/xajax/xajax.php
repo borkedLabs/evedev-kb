@@ -3,6 +3,7 @@
  * @package EDK
  */
 use EDK\Core\Config;
+use EDK\Core\Event;
 
 global $xajax;
 $xajax = new \xajax();

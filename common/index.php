@@ -26,6 +26,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;

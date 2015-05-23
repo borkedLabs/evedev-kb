@@ -7,6 +7,7 @@
  */
 namespace EDK\Page;
 
+use EDK\Core\Event;
 /*
  * @package EDK
  */
@@ -26,7 +27,7 @@ class Login extends \pageAssembly
 	
 	public function generate()
 	{
-		\event::call(login_assembling);
+		Event::call(login_assembling);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 

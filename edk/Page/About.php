@@ -8,6 +8,8 @@
 
 namespace EDK\Page;
 
+use EDK\Core\Event;
+
 /*
  * @package EDK
  */
@@ -31,7 +33,7 @@ class About extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("about_assembling", $this);
+		Event::call("about_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 

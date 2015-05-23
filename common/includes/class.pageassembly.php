@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+use EDK\Core\Event;
+
 /**
  * @package EDK
  */
@@ -25,7 +27,7 @@ class pageAssembly
 	 */
 	function assemble()
 	{
-		event::call('pageAssembly_assemble', $this);
+		Event::call('pageAssembly_assemble', $this);
 
 		$output = '';
 		foreach ($this->assemblyQueue as $id => $object) {

@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Entity\Alliance;
 use EDK\Entity\Corporation;
 

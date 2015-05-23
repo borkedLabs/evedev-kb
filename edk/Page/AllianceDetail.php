@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
@@ -76,12 +77,12 @@ class AllianceDetail extends \pageAssembly
 	
 	public function generate()
 	{
-		\event::call("allianceDetail_assembling", $this);
+		Event::call("allianceDetail_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context(); //This resets the queue and queues context items.
-		\event::call("allianceDetail_context_assembling", $this);
+		Event::call("allianceDetail_context_assembling", $this);
 		$contextHTML = $this->assemble();
 		$this->page->addContext($contextHTML);
 

@@ -7,6 +7,8 @@
  */
 
 namespace EDK\Page;
+
+use EDK\Core\Event;
 use EDK\PageComponent\Box;
 
 $page = new Page('Campaigns');
@@ -43,12 +45,12 @@ class Campaigns extends \pageAssembly
 	
 	public function generate()
 	{
-		\event::call("campaignList_assembling", $this);
+		Event::call("campaignList_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context();
-		\event::call("campaignList_context_assembling", $this);
+		Event::call("campaignList_context_assembling", $this);
 		$context = $this->assemble();
 		$this->page->addContext($context);
 

@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -39,7 +40,7 @@ class SelfDetail extends \pageAssembly
 			+ count(Config::get('cfg_pilotid')) > 1)
 		{
 
-			\event::call("self_assembling", $this);
+			Event::call("self_assembling", $this);
 			$html = $this->assemble();
 			$this->page->setContent($html);
 

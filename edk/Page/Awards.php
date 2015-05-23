@@ -6,6 +6,7 @@
  * @package EDK
  */
 namespace EDK\Page;
+use EDK\Core\Event;
 
 use EDK\Core\Config;
 use EDK\PageComponent\AwardBox;
@@ -48,12 +49,12 @@ class Awards extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("award_assembling", $this);
+		Event::call("award_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context(); //This resets the queue and queues context items.
-		\event::call("award_context_assembling", $this);
+		Event::call("award_context_assembling", $this);
 		$contextHTML = $this->assemble();
 		$this->page->addContext($contextHTML);
 

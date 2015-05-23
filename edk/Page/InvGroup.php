@@ -7,6 +7,9 @@
  */
 namespace EDK\Page;
 
+use EDK\Core\Event;
+use \DBFactory;
+
 /*
  * @package EDK
  */
@@ -27,7 +30,7 @@ class InvGroup extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("invtype_assembling", $this);
+		Event::call("invtype_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
@@ -50,7 +53,7 @@ class InvGroup extends \pageAssembly
 		}
 		$sql = 'SELECT * FROM kb3_item_types d'.
 				' WHERE d.itt_id = '.$this->groupID;
-		$qry = \DBFactory::getDBQuery();;
+		$qry = DBFactory::getDBQuery();;
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -59,7 +62,7 @@ class InvGroup extends \pageAssembly
 		$sql = 'SELECT * FROM kb3_invtypes d'.
 				' WHERE d.groupID = '.$this->groupID.
 				' ORDER BY d.typeName ASC';
-		$qry = \DBFactory::getDBQuery();;
+		$qry = DBFactory::getDBQuery();;
 		$qry->execute($sql);
 		$rows= array();
 		while($row = $qry->getRow()) {

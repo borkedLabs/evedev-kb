@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\PageComponent\Box;
 
 /*
@@ -63,12 +64,12 @@ class KillRelated extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("killRelated_assembling", $this);
+		Event::call("killRelated_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context();
-		\event::call("killRelated_context_assembling", $this);
+		Event::call("killRelated_context_assembling", $this);
 		$context = $this->assemble();
 		$this->page->addContext($context);
 

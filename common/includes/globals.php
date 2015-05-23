@@ -8,6 +8,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 
 function slashfix($fix)
 {

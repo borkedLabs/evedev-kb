@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\PageComponent\Navigation;
 use \edkURI;
 use \DBFactory;
@@ -40,7 +41,7 @@ class Page
 	{
 		global $timeStarted;
 		$this->timestart = &$timeStarted;
-		\event::call('page_initialisation', $this);
+		Event::call('page_initialisation', $this);
 		if (!Config::get('public_stats')) {
 			Config::set('public_stats', 'do nothing');
 		}
@@ -153,10 +154,10 @@ class Page
 		}
 
 		// header
-		\event::call('page_assembleheader', $this);
+		Event::call('page_assembleheader', $this);
 		$smarty->assign('page_headerlines', join("\n", $this->headlines));
 
-		\event::call('page_assemblebody', $this);
+		Event::call('page_assemblebody', $this);
 		$smarty->assign('page_bodylines', join("\n", $this->bodylines));
 
 		if (Config::get('cfg_mainsite')) {
@@ -204,13 +205,13 @@ class Page
 		}
 		$smarty->assign('context_html', implode($this->contexthtml));
 		$smarty->assignByRef('context_divs', $this->contexthtml);
-		\event::call('smarty_displayindex', $smarty);
+		Event::call('smarty_displayindex', $smarty);
 
 		$html = $smarty->fetch(get_tpl('index'));
 		if (!$this->cachable) {
 			Config::put('cache_enabled', false);
 		}
-		\event::call('final_content', $html);
+		Event::call('final_content', $html);
 		// Reduce page size by about 10%
 		//TODO: enable for prod
 		//$html = preg_replace('/\s+\<\//', ' </', $html);

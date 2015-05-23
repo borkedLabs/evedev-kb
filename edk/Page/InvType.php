@@ -2,6 +2,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\PageComponent\Box;
 
 /*
@@ -26,12 +27,12 @@ class InvType extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("invtype_assembling", $this);
+		Event::call("invtype_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
 		$this->context();
-		\event::call("invtype_context_assembling", $this);
+		Event::call("invtype_context_assembling", $this);
 		$context = $this->assemble();
 		$this->page->addContext($context);
 

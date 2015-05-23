@@ -8,6 +8,8 @@
 
 namespace EDK\Page;
 
+use EDK\Core\Event;
+
 // An ajax search function for this page is in common/includes/xajax.functions.php
 require_once(__DIR__.'/../../common/includes/xajax.functions.php');
 
@@ -49,7 +51,7 @@ class Search extends \pageAssembly
 
 	public function generate()
 	{
-		\event::call("search_assembling", $this);
+		Event::call("search_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\Event;
+
 /**
  * @package EDK
  */
