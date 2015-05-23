@@ -134,21 +134,21 @@ if (isset($_SESSION['admin_kill_export']['select']))
 			case "pilot":
 				$sql = "select plt.plt_id, plt.plt_name, crp.crp_name
                         from kb3_pilots plt, kb3_corps crp
-                        where lower( plt.plt_name ) like lower( '%".slashfix($_POST['searchphrase'])."%' )
+                        where lower( plt.plt_name ) like lower( '%".\EDK\Core\EDK::slashfix($_POST['searchphrase'])."%' )
                         and plt.plt_crp_id = crp.crp_id
                         order by plt.plt_name";
 				break;
 			case "corp":
 				$sql = "select crp.crp_id, crp.crp_name, ali.all_name
                         from kb3_corps crp, kb3_alliances ali
-                        where lower( crp.crp_name ) like lower( '%".slashfix($_POST['searchphrase'])."%' )
+                        where lower( crp.crp_name ) like lower( '%".\EDK\Core\EDK::slashfix($_POST['searchphrase'])."%' )
                         and crp.crp_all_id = ali.all_id
                         order by crp.crp_name";
 				break;
 			case "alliance":
 				$sql = "select ali.all_id, ali.all_name
                         from kb3_alliances ali
-                        where lower( ali.all_name ) like lower( '%".slashfix($_POST['searchphrase'])."%' )
+                        where lower( ali.all_name ) like lower( '%".\EDK\Core\EDK::slashfix($_POST['searchphrase'])."%' )
                         order by ali.all_name";
 				break;
 		}

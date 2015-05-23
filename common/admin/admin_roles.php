@@ -15,7 +15,7 @@ $page->setTitle('Administration - Role Management');
 if ($_POST['action'] == 'search')
 {
 	$hitlist = array();
-	$search = slashfix($_POST['search']);
+	$search = \EDK\Core\EDK::slashfix($_POST['search']);
 	$qry = DBFactory::getDBQuery();
 	$qry->execute('select usr_login from kb3_user where usr_login like '."'%".$search."%'");
 	while ($row = $qry->getRow())

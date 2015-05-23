@@ -136,22 +136,22 @@ if ($_GET['op'] == "edit")
 				case 0:
 					$sql = "select crp.crp_id as id, crp.crp_name as name
                       from kb3_corps crp
-                     where lower( crp.crp_name ) like '%".slashfix(strtolower($_POST['add_name']))."%'";
+                     where lower( crp.crp_name ) like '%".\EDK\Core\EDK::slashfix(strtolower($_POST['add_name']))."%'";
 					break;
 				case 1:
 					$sql = "select ali.all_id as id, ali.all_name as name
                       from kb3_alliances ali
-                     where lower( ali.all_name ) like '%".slashfix(strtolower($_POST['add_name']))."%'";
+                     where lower( ali.all_name ) like '%".\EDK\Core\EDK::slashfix(strtolower($_POST['add_name']))."%'";
 					break;
 				case 2:
 					$sql = "select reg_id as id, reg_name as name
                       from kb3_regions
-                     where lower( reg_name ) like '%".slashfix(strtolower($_POST['add_name']))."%'";
+                     where lower( reg_name ) like '%".\EDK\Core\EDK::slashfix(strtolower($_POST['add_name']))."%'";
 					break;
 				case 3:
 					$sql = "select sys_id as id, sys_name as name
                       from kb3_systems
-                     where lower( sys_name ) like '%".slashfix(strtolower($_POST['add_name']))."%'";
+                     where lower( sys_name ) like '%".\EDK\Core\EDK::slashfix(strtolower($_POST['add_name']))."%'";
 					break;
 			}
 

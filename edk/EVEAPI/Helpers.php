@@ -164,7 +164,7 @@ class Helpers
 		if ( (strlen($corpName) != 0) && ($corpID != 0) )
 		{
 			$qry = \DBFactory::getDBQuery();
-			$qry->execute( "SELECT * FROM `kb3_corps` WHERE `crp_name` = '" . slashfix($corpName) . "'");
+			$qry->execute( "SELECT * FROM `kb3_corps` WHERE `crp_name` = '" . \EDK\Core\EDK::slashfix($corpName) . "'");
 
 			if ($qry->recordCount() != 0)
 			{
@@ -185,7 +185,7 @@ class Helpers
 		if ( ($allianceName != "NONE") && ($allianceID != 0) )
 		{
 			$qry = \DBFactory::getDBQuery();
-			$qry->execute( "SELECT * FROM `kb3_alliances` WHERE `all_name` = '" . slashfix($allianceName) . "'");
+			$qry->execute( "SELECT * FROM `kb3_alliances` WHERE `all_name` = '" . \EDK\Core\EDK::slashfix($allianceName) . "'");
 
 			if ($qry->recordCount() != 0)
 			{

@@ -116,7 +116,7 @@ class Fetcher
 					$name = trim(str_replace("\r", '', $name));
 					$name = preg_replace("/ \(laid the final blow\)/", "", $name);
 					if(strpos($name, '/')) continue;
-					$namelist[slashfix($name)] = $newall;
+					$namelist[\EDK\Core\EDK::slashfix($name)] = $newall;
 				}
 				Fetcher::addCorpNames($namelist);
 
@@ -142,7 +142,7 @@ class Fetcher
 						$newcorp = Corporation::lookup($cname);
 						$corps[$cname] = $newcorp;
 					}
-					$namelist[slashfix($name)] = $corps[$cname];
+					$namelist[\EDK\Core\EDK::slashfix($name)] = $corps[$cname];
 				}
 				// Involved parties
 				$pos = 0;
@@ -165,7 +165,7 @@ class Fetcher
 						$newcorp = Corporation::lookup($cname);
 						$corps[$cname] = $newcorp;
 					}
-					$namelist[slashfix($name)] = $corps[$cname];
+					$namelist[\EDK\Core\EDK::slashfix($name)] = $corps[$cname];
 				}
 				Fetcher::addPilotNames($namelist);
 				unset($corps);
@@ -448,12 +448,12 @@ class Fetcher
 		if(!is_array($myNames)) die("Name fetch error : ".$myNames);
 		foreach($myNames as $name)
 		{
-			if(isset($names[slashfix($name['name'])]))
+			if(isset($names[\EDK\Core\EDK::slashfix($name['name'])]))
 			{
-				Pilot::add(slashfix($name['name']), $names[slashfix($name['name'])], '0000-00-00', $name['characterID']);
+				Pilot::add(\EDK\Core\EDK::slashfix($name['name']), $names[\EDK\Core\EDK::slashfix($name['name'])], '0000-00-00', $name['characterID']);
 // Adding all at once is faster but skips checks for name/id clashes.
-//if($sql == '') $sql = "INSERT INTO kb3_pilots (plt_name, plt_crp_id, plt_externalid, plt_updated) values ('".slashfix($name['name'])."', ".$names[slashfix($name['name'])]->getID().', '.$name['characterID'].", '0000-00-00')";
-//else $sql .= ", ('".slashfix($name['name'])."', ".$names[slashfix($name['name'])]->getID().', '.$name['characterID'].", '0000-00-00')";
+//if($sql == '') $sql = "INSERT INTO kb3_pilots (plt_name, plt_crp_id, plt_externalid, plt_updated) values ('".\EDK\Core\EDK::slashfix($name['name'])."', ".$names[\EDK\Core\EDK::slashfix($name['name'])]->getID().', '.$name['characterID'].", '0000-00-00')";
+//else $sql .= ", ('".\EDK\Core\EDK::slashfix($name['name'])."', ".$names[\EDK\Core\EDK::slashfix($name['name'])]->getID().', '.$name['characterID'].", '0000-00-00')";
 			}
 		}
 		if($sql) $qry->execute($sql);
@@ -489,12 +489,12 @@ class Fetcher
 		}
 		foreach($myNames as $name)
 		{
-			if(isset($names[slashfix($name['name'])]) && $name['characterID'])
+			if(isset($names[\EDK\Core\EDK::slashfix($name['name'])]) && $name['characterID'])
 			{
-				$newcorp = Corporation::add(slashfix($name['name']), $names[slashfix($name['name'])], '0000-00-00', $name['characterID']);
+				$newcorp = Corporation::add(\EDK\Core\EDK::slashfix($name['name']), $names[\EDK\Core\EDK::slashfix($name['name'])], '0000-00-00', $name['characterID']);
 // Adding all at once is faster but skips checks for name/id clashes.
-//if($sql == '') $sql = "INSERT INTO kb3_corps (crp_name, crp_all_id, crp_updated, crp_external_id) VALUES ('".slashfix($name['name'])."', ".$names[slashfix($name['name'])]->getID().", '0000-00-00', ".$name['characterID'].")";
-//else $sql .= ",\n ('".slashfix($name['name'])."', ".$names[slashfix($name['name'])]->getID().", '0000-00-00', ".$name['characterID'].")";
+//if($sql == '') $sql = "INSERT INTO kb3_corps (crp_name, crp_all_id, crp_updated, crp_external_id) VALUES ('".\EDK\Core\EDK::slashfix($name['name'])."', ".$names[\EDK\Core\EDK::slashfix($name['name'])]->getID().", '0000-00-00', ".$name['characterID'].")";
+//else $sql .= ",\n ('".\EDK\Core\EDK::slashfix($name['name'])."', ".$names[\EDK\Core\EDK::slashfix($name['name'])]->getID().", '0000-00-00', ".$name['characterID'].")";
 			}
 		}
 		if($sql) $qry->execute($sql);

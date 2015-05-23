@@ -32,7 +32,7 @@ if ($_POST['searchphrase'] != "" && strlen($_POST['searchphrase']) >= 3)
 {
     $sql = "select plt.plt_id, plt.plt_name, crp.crp_name
                   from kb3_pilots plt, kb3_corps crp
-                 where lower( plt.plt_name ) like lower( '%".slashfix($_POST['searchphrase'])."%' )
+                 where lower( plt.plt_name ) like lower( '%".\EDK\Core\EDK::slashfix($_POST['searchphrase'])."%' )
                    and plt.plt_crp_id = crp.crp_id
                  order by plt.plt_name";
     $header = "<td>Pilot</td><td>Corporation</td>";

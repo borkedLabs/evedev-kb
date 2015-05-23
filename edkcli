@@ -9,7 +9,7 @@ $cronStartTime = microtime(true);
 @error_reporting(E_ALL ^ E_NOTICE);
 
 // load mods
-loadMods();
+/EDK/Core/EDK::loadMods();
 
 $consoleArgs = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 if( $consoleArgs == null || count($consoleArgs) < 2 )

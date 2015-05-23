@@ -44,7 +44,7 @@ class Search extends \pageAssembly
     function start()
     {
         $this->page = new Page('Search');
-        $this->searchphrase = is_null($_POST['searchphrase']) ? slashfix($_GET['searchphrase']) : slashfix($_POST['searchphrase']);
+        $this->searchphrase = is_null($_POST['searchphrase']) ? \EDK\Core\EDK::slashfix($_GET['searchphrase']) : \EDK\Core\EDK::slashfix($_POST['searchphrase']);
         $this->searchphrase = preg_replace('/\*/', '%', $this->searchphrase);
         $this->searchphrase = trim($this->searchphrase);
         $this->searchtype = is_null($_POST['searchtype']) ? $_GET['searchtype'] : $_POST['searchtype'];

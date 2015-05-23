@@ -10,21 +10,7 @@
 use EDK\Core\Config;
 use EDK\Core\Event;
 
-function slashfix($fix)
-{
-	return addslashes(stripslashes($fix));
-}
 
-function roundsec($sec)
-{
-	if ($sec <= 0) {
-		$s = 0.0;
-	} else {
-		$s = $sec;
-	}
-
-	return number_format(round($s, 1), 1);
-}
 
 /**
  * Check if a version of this template exists in this theme or for the igb.
@@ -262,45 +248,4 @@ function isNewerVersion($newVersion, $baseVersion)
     
     // at this point none parts in $newVersion is bigger than the corresponding part in $baseVersion
     return FALSE;
-}
-
-
-function loadMods()
-{
-    $mods_active = explode(',', Config::get('mods_active'));
-    $modOverrides = false;
-    $modconflicts = array();
-
-    $modInfo = array();
-    foreach ($mods_active as $mod) {
-            // load all active modules which need initialization
-            if (file_exists('mods/'.$mod.'/init.php')) {
-                    include('mods/'.$mod.'/init.php');
-            }
-            if(!isset($modInfo[$mod])) {
-                    $modInfo[$mod] = array("name"=>$mod,
-                            "abstract"=>"Purpose unknown",
-                            "about"=>"");
-            }
-            if (file_exists('mods/'.$mod.'/'.$page.'.php')) {
-                    $modconflicts[] = $mod;
-                    $modOverrides = true;
-                    $modOverride = $mod;
-            }
-    }
-    if(count($modconflicts) > 1) {
-            echo "<html><head></head><body>There are multiple active mods ".
-                            "for this page. Only one may be active at a time. All others ".
-                            "must be deactivated in the admin panel.<br>";
-            foreach($modconflicts as $modname) {
-                    echo $modname." <br> ";
-            }
-            echo "</body>";
-            die();
-    }
-
-    $none = '';
-    event::call('mods_initialised', $none);
-	
-    return $modInfo;
 }

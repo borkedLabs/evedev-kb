@@ -21,14 +21,14 @@ if ($_REQUEST['searchphrase'] != "" && strlen($_REQUEST['searchphrase']) >= 3) {
 		case 'corp':
 			$sql = "select crp.crp_id, crp.crp_name, ali.all_name
                     from kb3_corps crp, kb3_alliances ali
-                    where lower( crp.crp_name ) like lower( '%" . slashfix($_REQUEST['searchphrase']) . "%' )
+                    where lower( crp.crp_name ) like lower( '%" . \EDK\Core\EDK::slashfix($_REQUEST['searchphrase']) . "%' )
                     and crp.crp_all_id = ali.all_id
                     order by crp.crp_name";
 			break;
 		case 'alliance':
 			$sql = "select ali.all_id, ali.all_name
                     from kb3_alliances ali
-                    where lower( ali.all_name ) like lower( '%" . slashfix($_REQUEST['searchphrase']) . "%' )
+                    where lower( ali.all_name ) like lower( '%" . \EDK\Core\EDK::slashfix($_REQUEST['searchphrase']) . "%' )
                     order by ali.all_name";
 			break;
 	}
@@ -64,7 +64,7 @@ if ($val = $_REQUEST['standing']) {
 		$fields[] = $fromtyp;
 		$fields[] = substr($_REQUEST['sta_id'], 0, 1);
 		$fields[] = str_replace(',', '.', $val);
-		$fields[] = slashfix($_REQUEST['comment']);
+		$fields[] = \EDK\Core\EDK::slashfix($_REQUEST['comment']);
 
 		$qry->execute('INSERT INTO kb3_standings VALUES (\'' . join("','", $fields) . '\')');
 	}
@@ -76,7 +76,7 @@ if ($val = $_REQUEST['standing']) {
 		$fields[] = $fromtyp;
 		$fields[] = substr($_REQUEST['sta_id'], 0, 1);
 		$fields[] = str_replace(',', '.', $val);
-		$fields[] = slashfix($_REQUEST['comment']);
+		$fields[] = \EDK\Core\EDK::slashfix($_REQUEST['comment']);
 
 		$qry->execute('INSERT INTO kb3_standings VALUES (\'' . join("','", $fields) . '\')');
 	}

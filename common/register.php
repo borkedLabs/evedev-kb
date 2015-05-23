@@ -51,7 +51,7 @@ if (isset($_POST['submit']))
     {
         $pilot = null;
         $id = null;
-        user::register(slashfix($_POST['usrlogin']), slashfix($_POST['usrpass']), $pilot, $id);
+        user::register(\EDK\Core\EDK::slashfix($_POST['usrlogin']), \EDK\Core\EDK::slashfix($_POST['usrpass']), $pilot, $id);
         $page->setContent('Account registered.');
         $page->generate();
         return;

@@ -10,7 +10,8 @@ if (!defined('LATEST_DB_UPDATE')) {
 	define('LATEST_DB_UPDATE', "037");
 }
 
-define('KB_CACHEDIR', __DIR__.'/../cache');
+define('KB_ROOT', realpath(__DIR__.'/../'));
+define('KB_CACHEDIR', KB_ROOT.'/cache');
 define('KB_CACHEURL', '/cache');
 define('KB_PAGECACHEDIR', KB_CACHEDIR.'/page');
 define('KB_MAILCACHEDIR', KB_CACHEDIR.'/mails');

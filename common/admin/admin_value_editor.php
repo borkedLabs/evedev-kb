@@ -63,7 +63,7 @@ $sql = "SELECT itm.typeID, itm.typeName, val.price FROM kb3_invtypes as itm LEFT
 // Filter it if there's a search phrase
 if (isset($_REQUEST['searchphrase']) && $_REQUEST['searchphrase'] != "" && strlen($_REQUEST['searchphrase']) >= 3) {
     	$smarty->assign('search', true);
-	$where[] = "itm.typeName like '%" . slashfix($_REQUEST['searchphrase']) ."%'";
+	$where[] = "itm.typeName like '%" . \EDK\Core\EDK::slashfix($_REQUEST['searchphrase']) ."%'";
 }
 // If a particular type was requested, filter on that type
 (isset($_REQUEST['item_type'])) ? $type = $_REQUEST['item_type'] : $type = 25; // Default to frigates
