@@ -13,6 +13,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -30,7 +31,7 @@ $page->setCachable(false);
 $page->setAdmin();
 $validurl = "/^(http|https):\/\/([A-Za-z0-9_]+(:[A-Za-z0-9_]+)?@)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*((:[0-9]{1,5})?\/.*)?$/i";
 $html .= "<script language=\"JavaScript\">function checkAll(checkname, exby) {for (i = 0; i < checkname.length; i++)checkname[i].checked = exby.checked? true:false}</script>";
-$html .= "<div class='block-header2'>The new feed syndication is more reliable and faster. Support for the old feeds will be removed in EDK 4.1<br /><a href='".edkURI::page("admin_idfeedsyndication")."'>Feed Syndication</a></div>";
+$html .= "<div class='block-header2'>The new feed syndication is more reliable and faster. Support for the old feeds will be removed in EDK 4.1<br /><a href='".URI::page("admin_idfeedsyndication")."'>Feed Syndication</a></div>";
 $html .= "<table class='kb-subtable'>";
 
 if (Config::get('fetch_feed_count'))

@@ -3,6 +3,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
 /*
@@ -42,7 +43,7 @@ class InvType extends \pageAssembly
 	
 	function start()
 	{
-		$this->typeID = \edkURI::getArg('id', 1);
+		$this->typeID = URI::getArg('id', 1);
 		$this->page = new Page('Item Details');
 	}
 
@@ -78,9 +79,9 @@ class InvType extends \pageAssembly
 		$args = array();
 		$args[] = array('id', $this->typeID, true);
 
-		$this->addMenuItem("link","Description", \edkURI::build($args));
-		$this->addMenuItem("link","Kills", \edkURI::build($args, array('view', 'kills', true)));
-		$this->addMenuItem("link","Losses", \edkURI::build($args, array('view', 'losses', true)));
+		$this->addMenuItem("link","Description", URI::build($args));
+		$this->addMenuItem("link","Kills", URI::build($args, array('view', 'kills', true)));
+		$this->addMenuItem("link","Losses", URI::build($args, array('view', 'losses', true)));
 
 		return "";
 	}
@@ -143,7 +144,7 @@ class InvType extends \pageAssembly
 			$smarty->assign('shipImage', $ship->getImage(64));
 			$smarty->assign('traits', $ship->getTraitsHtml());
 
-			$view = \edkURI::getArg('view', 2);
+			$view = URI::getArg('view', 2);
 			$killList = '';
 			if($view == 'kills')
 			{

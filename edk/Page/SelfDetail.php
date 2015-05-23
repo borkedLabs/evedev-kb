@@ -10,6 +10,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -52,9 +53,9 @@ class SelfDetail extends \pageAssembly
 			/* @var $alliance Alliance */
 			$alliance = \Cacheable::factory('\EDK\Entity\Alliance', $alls[0]);
 			if ($alliance->getExternalID()) {
-				$url = \edkURI::page('alliance_detail', $alliance->getExternalID(), 'all_ext_id');
+				$url = URI::page('alliance_detail', $alliance->getExternalID(), 'all_ext_id');
 			} else {
-				$url = \edkURI::page('alliance_detail', $alls[0], 'all_id');
+				$url = URI::page('alliance_detail', $alls[0], 'all_id');
 			}
 			header("Location: ".htmlspecialchars_decode($url));
 			die;
@@ -65,9 +66,9 @@ class SelfDetail extends \pageAssembly
 			/* @var $corp Corporation */
 			$corp = \Cacheable::factory('\EDK\Entity\Corporation', $corps[0]);
 			if ($corp->getExternalID()) {
-				$url = \edkURI::page('corp_detail', $corp->getExternalID(), 'crp_ext_id');
+				$url = URI::page('corp_detail', $corp->getExternalID(), 'crp_ext_id');
 			} else {
-				$url = \edkURI::page('corp_detail', $corps[0], 'crp_id');
+				$url = URI::page('corp_detail', $corps[0], 'crp_id');
 			}
 			header("Location: ".htmlspecialchars_decode($url));
 			die;
@@ -78,10 +79,10 @@ class SelfDetail extends \pageAssembly
 			/* @var $pilot Pilot */
 			$pilot = \Cacheable::factory('\EDK\Entity\Pilot', $pilots[0]);
 			if ($pilot->getExternalID()) {
-				$url = \edkURI::page('pilot_detail', $pilot->getExternalID(),
+				$url = URI::page('pilot_detail', $pilot->getExternalID(),
 						'plt_ext_id');
 			} else {
-				$url = \edkURI::page('pilot_detail', $pilots[0],
+				$url = URI::page('pilot_detail', $pilots[0],
 						'plt_id');
 			}
 			header("Location: ".htmlspecialchars_decode($url));
@@ -117,10 +118,10 @@ class SelfDetail extends \pageAssembly
 			{
 				$alliance = new Alliance($entity);
 				if ($alliance->getExternalID()) {
-					$url = \edkURI::page('alliance_detail', $alliance->getExternalID(),
+					$url = URI::page('alliance_detail', $alliance->getExternalID(),
 							'all_ext_id');
 				} else {
-					$url = \edkURI::page('alliance_detail', $alliance->getID(),
+					$url = URI::page('alliance_detail', $alliance->getID(),
 							'all_id');
 				}
 				$alls[] = array('id' => $alliance->getID(),
@@ -138,10 +139,10 @@ class SelfDetail extends \pageAssembly
 			{
 				$corp = new Corporation($entity);
 				if ($corp->getExternalID()) {
-					$url = \edkURI::page('corp_detail', $corp->getExternalID(),
+					$url = URI::page('corp_detail', $corp->getExternalID(),
 							'crp_ext_id');
 				} else {
-					$url = \edkURI::page('corp_detail', $corp->getID(),
+					$url = URI::page('corp_detail', $corp->getID(),
 							'crp_id');
 				}
 				$corps[] = array('id' => $corp->getID(),
@@ -159,10 +160,10 @@ class SelfDetail extends \pageAssembly
 			{
 				$pilot = new Pilot($entity);
 				if ($pilot->getExternalID()) {
-					$url = \edkURI::page('pilot_detail', $pilot->getExternalID(),
+					$url = URI::page('pilot_detail', $pilot->getExternalID(),
 							'plt_ext_id');
 				} else {
-					$url = \edkURI::page('pilot_detail', $pilot->getID(),
+					$url = URI::page('pilot_detail', $pilot->getID(),
 							'plt_id');
 				}
 				$pilots[] = array('id' => $pilot->getID(),

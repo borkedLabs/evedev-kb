@@ -9,6 +9,7 @@
 require_once('common/admin/admin_menu.php');
 
 use EDK\Page\Page;
+use EDK\Core\URI;
 
 $page = new Page();
 $page->setAdmin();
@@ -27,10 +28,10 @@ if ($_POST) {
     exit();
 }
 
-if (!edkURI::getArg('field', 1)
-		|| !edkURI::getArg('sub', 1)
-		|| edkURI::getArg('field', 1) == 'Advanced'
-				&& edkURI::getArg('sub', 2) == 'Configuration') {
+if (!URI::getArg('field', 1)
+		|| !URI::getArg('sub', 1)
+		|| URI::getArg('field', 1) == 'Advanced'
+				&& URI::getArg('sub', 2) == 'Configuration') {
 	$page->setTitle('Administration - Board Configuration (Current version: '
 			.KB_VERSION.' '.KB_RELEASE.')');
 }

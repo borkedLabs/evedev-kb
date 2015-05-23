@@ -10,17 +10,19 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
-use \edkURI;
 use \DBFactory;
 use \Cacheable;
 use \KillList;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
+use \TopTable_Ship;
+use \TopTable_Weapon;
 
 
 /*
@@ -98,11 +100,11 @@ class PilotDetail extends \pageAssembly
 	{
 		$this->page = new Page();
 
-		$this->plt_id = (int)\edkURI::getArg('plt_id');
+		$this->plt_id = (int)URI::getArg('plt_id');
 		if (!$this->plt_id) {
-			$this->plt_external_id = (int)\edkURI::getArg('plt_ext_id');
+			$this->plt_external_id = (int)URI::getArg('plt_ext_id');
 			if (!$this->plt_external_id) {
-				$id = (int)\edkURI::getArg('id', 1);
+				$id = (int)URI::getArg('id', 1);
 				// Arbitrary number bigger than we expect to reach locally
 				if ($id > 1000000) {
 					$this->plt_external_id = $id;
@@ -112,7 +114,7 @@ class PilotDetail extends \pageAssembly
 			}
 		}
 
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 2));
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', URI::getArg('view', 2));
 		if($this->view) {
 			$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
 		}
@@ -142,8 +144,8 @@ class PilotDetail extends \pageAssembly
 			exit;
 		}
 
-		if($this->plt_external_id) $this->page->addHeader("<link rel='canonical' href='".\edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
-		else $this->page->addHeader("<link rel='canonical' href='".\edkURI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
+		if($this->plt_external_id) $this->page->addHeader("<link rel='canonical' href='".URI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
+		else $this->page->addHeader("<link rel='canonical' href='".URI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
 
 		$this->corp = $this->pilot->getCorp();
 		$this->alliance = $this->corp->getAlliance();
@@ -246,7 +248,7 @@ class PilotDetail extends \pageAssembly
 			return call_user_func_array($this->viewList[$this->view],
 					array(&$this));
 		}
-		$scl_id = (int)\edkURI::getArg('scl_id');
+		$scl_id = (int)URI::getArg('scl_id');
 
 		switch ($this->view)
 		{
@@ -347,11 +349,11 @@ class PilotDetail extends \pageAssembly
 			$args[] = array('plt_id', $this->plt_id, true);
 		}
 		$this->addMenuItem("caption","Kills &amp; losses");
-		$this->addMenuItem("link","Recent activity", \edkURI::build($args, array('view', 'recent', true)));
-		$this->addMenuItem("link","Kills", \edkURI::build($args, array('view', 'kills', true)));
-		$this->addMenuItem("link","Losses", \edkURI::build($args, array('view', 'losses', true)));
+		$this->addMenuItem("link","Recent activity", URI::build($args, array('view', 'recent', true)));
+		$this->addMenuItem("link","Kills", URI::build($args, array('view', 'kills', true)));
+		$this->addMenuItem("link","Losses", URI::build($args, array('view', 'losses', true)));
 		$this->addMenuItem("caption","Statistics");
-		$this->addMenuItem("link","Ships &amp; weapons", \edkURI::build($args, array('view', 'ships_weapons', true)));
+		$this->addMenuItem("link","Ships &amp; weapons", URI::build($args, array('view', 'ships_weapons', true)));
 		return "";
 	}
 	/**

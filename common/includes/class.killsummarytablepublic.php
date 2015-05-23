@@ -8,6 +8,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 
 /**
  * @package EDK
@@ -120,8 +121,8 @@ class KillSummaryTablePublic extends KillSummaryTable
 		$summary = array();
 		$count = 0;
 
-		$args = edkURI::parseURI();
-		if (edkURI::getArg('scl_id')) {
+		$args = URI::parseURI();
+		if (URI::getArg('scl_id')) {
 			foreach ($args as $key => $value) {
 				if ($value[0] == 'scl_id') {
 					unset($args[$key]);
@@ -129,7 +130,7 @@ class KillSummaryTablePublic extends KillSummaryTable
 				}
 			}
 		}
-		$qrystring = edkURI::build($args);
+		$qrystring = URI::build($args);
 		$clearfilter = $qrystring;
 		if (strpos($qrystring, '?') === false) {
 			$qrystring .= "?";
@@ -172,7 +173,7 @@ class KillSummaryTablePublic extends KillSummaryTable
 			$smarty->assign('kcount', $this->tkcount);
 		}
 
-		if (edkURI::getArg('scl_id')) {
+		if (URI::getArg('scl_id')) {
 			$smarty->assign('clearfilter', $clearfilter);
 		}
 

@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Page\Page;
 
 require_once("common/admin/admin_menu.php");
@@ -15,7 +16,7 @@ $page = new Page("Settings - Kill Log API");
 $page->setCachable(false);
 $page->setAdmin();
 
-if (is_string($key_id = edkURI::getArg('delete')) ) {
+if (is_string($key_id = URI::getArg('delete')) ) {
 	$qry2 = new DBQuery();
 	$sql = "DELETE from kb3_api_keys WHERE key_id = '".$key_id."' AND key_kbsite = '".KB_SITE."'";
 	$qry2->execute($sql);

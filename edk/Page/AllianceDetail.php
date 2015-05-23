@@ -10,10 +10,10 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
-use \edkURI;
 use \DBFactory;
 use \Cacheable;
 use \KillList;
@@ -97,11 +97,11 @@ class AllianceDetail extends \pageAssembly
 	{
 		$this->page = new Page();
 
-		$this->all_id = (int) \edkURI::getArg('all_id');
-		$this->all_external_id = (int) \edkURI::getArg('all_ext_id');
+		$this->all_id = (int) URI::getArg('all_id');
+		$this->all_external_id = (int) URI::getArg('all_ext_id');
 
 		if (!$this->all_id && !$this->all_external_id) {
-			$this->all_id = (int) \edkURI::getArg('id', 1);
+			$this->all_id = (int) URI::getArg('id', 1);
 			// And now a bit of magic to test if this is an external ID
 			if (($this->all_id > 500000 && $this->all_id < 500021)
 					|| $this->all_id > 1000000) {
@@ -110,7 +110,7 @@ class AllianceDetail extends \pageAssembly
 			}
 		}
 
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '', \edkURI::getArg('view', 2));
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '', URI::getArg('view', 2));
 
 		// Search engines should only index the main view.
 		if ($this->view) {
@@ -140,11 +140,11 @@ class AllianceDetail extends \pageAssembly
 				.$this->alliance->getDetailsURL()."' />");
 
 		if ($this->view) {
-			$this->year = (int) \edkURI::getArg('y', 3);
-			$this->month = (int) \edkURI::getArg('m', 4);
+			$this->year = (int) URI::getArg('y', 3);
+			$this->month = (int) URI::getArg('m', 4);
 		} else {
-			$this->year = (int) \edkURI::getArg('y', 2);
-			$this->month = (int) \edkURI::getArg('m', 3);
+			$this->year = (int) URI::getArg('y', 2);
+			$this->month = (int) URI::getArg('m', 3);
 		}
 
 		if (!$this->month) {
@@ -360,7 +360,7 @@ class AllianceDetail extends \pageAssembly
 			return call_user_func_array($this->viewList[$this->view],
 					array(&$this));
 		}
-		$scl_id = (int) \edkURI::getArg('scl_id');
+		$scl_id = (int) URI::getArg('scl_id');
 
 		switch ($this->view) {
 			default:
@@ -456,11 +456,11 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args, array('view', 'corp_kills', true),
+						URI::build($args, array('view', 'corp_kills', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args, array('view', 'corp_kills', true),
+						URI::build($args, array('view', 'corp_kills', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
@@ -596,11 +596,11 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args, array('view', 'corp_losses', true),
+						URI::build($args, array('view', 'corp_losses', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args, array('view', 'corp_losses', true),
+						URI::build($args, array('view', 'corp_losses', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
@@ -631,11 +631,11 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args, array('view', 'pilot_kills', true),
+						URI::build($args, array('view', 'pilot_kills', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args, array('view', 'pilot_kills', true),
+						URI::build($args, array('view', 'pilot_kills', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
@@ -666,11 +666,11 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args, array('view', 'pilot_scores', true),
+						URI::build($args, array('view', 'pilot_scores', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args, array('view', 'pilot_scores', true),
+						URI::build($args, array('view', 'pilot_scores', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
@@ -699,11 +699,11 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args, array('view', 'pilot_losses', true),
+						URI::build($args, array('view', 'pilot_losses', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args, array('view', 'pilot_losses', true),
+						URI::build($args, array('view', 'pilot_losses', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
 
@@ -749,12 +749,12 @@ class AllianceDetail extends \pageAssembly
 				$smarty->assign('nyear', $this->nyear);
 				$smarty->assign('all_id', $this->all_id);
 				$smarty->assign('url_previous',
-						\edkURI::build($args,
+						URI::build($args,
 								array('view', 'violent_systems', true),
 								array('y', $this->pyear, true),
 								array('m', $this->pmonth, true)));
 				$smarty->assign('url_next',
-						\edkURI::build($args,
+						URI::build($args,
 								array('view', 'violent_systems', true),
 								array('y', $this->nyear, true),
 								array('m', $this->nmonth, true)));
@@ -896,40 +896,40 @@ class AllianceDetail extends \pageAssembly
 		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		$this->addMenuItem("caption", "Kills &amp; losses");
-		$this->addMenuItem("link", "Recent activity", \edkURI::build($args));
+		$this->addMenuItem("link", "Recent activity", URI::build($args));
 		$this->addMenuItem("link", "Kills",
-				\edkURI::build($args, array('view', 'kills', true)));
+				URI::build($args, array('view', 'kills', true)));
 		$this->addMenuItem("link", "Losses",
-				\edkURI::build($args, array('view', 'losses', true)));
+				URI::build($args, array('view', 'losses', true)));
 		$this->addMenuItem("caption", "Corp statistics");
 		$this->addMenuItem("link", "Corp List",
-				\edkURI::build($args, array('view', 'corp_list', true)));
+				URI::build($args, array('view', 'corp_list', true)));
 		$this->addMenuItem("link", "Top killers",
-				\edkURI::build($args, array('view', 'corp_kills', true)));
+				URI::build($args, array('view', 'corp_kills', true)));
 		$this->addMenuItem("link", "Top losers",
-				\edkURI::build($args, array('view', 'corp_losses', true)));
+				URI::build($args, array('view', 'corp_losses', true)));
 		$this->addMenuItem("link", "Destroyed ships",
-				\edkURI::build($args, array('view', 'corp_kills_class', true)));
+				URI::build($args, array('view', 'corp_kills_class', true)));
 		$this->addMenuItem("link", "Lost ships",
-				\edkURI::build($args, array('view', 'corp_losses_class', true)));
+				URI::build($args, array('view', 'corp_losses_class', true)));
 		$this->addMenuItem("caption", "Pilot statistics");
 		$this->addMenuItem("link", "Top killers",
-				\edkURI::build($args, array('view', 'pilot_kills', true)));
+				URI::build($args, array('view', 'pilot_kills', true)));
 		if (Config::get('kill_points')) {
 			$this->addMenuItem('link', "Top scorers",
-					\edkURI::build($args, array('view', 'pilot_scores', true)));
+					URI::build($args, array('view', 'pilot_scores', true)));
 		}
 		$this->addMenuItem("link", "Top losers",
-				\edkURI::build($args, array('view', 'pilot_losses', true)));
+				URI::build($args, array('view', 'pilot_losses', true)));
 		$this->addMenuItem("link", "Destroyed ships",
-				\edkURI::build($args, array('view', 'kills_class', true)));
+				URI::build($args, array('view', 'kills_class', true)));
 		$this->addMenuItem("link", "Lost ships",
-				\edkURI::build($args, array('view', 'losses_class', true)));
+				URI::build($args, array('view', 'losses_class', true)));
 		$this->addMenuItem("caption", "Global statistics");
 		$this->addMenuItem("link", "Ships &amp; weapons",
-				\edkURI::build($args, array('view', 'ships_weapons', true)));
+				URI::build($args, array('view', 'ships_weapons', true)));
 		$this->addMenuItem("link", "Most violent systems",
-				\edkURI::build($args, array('view', 'violent_systems', true)));
+				URI::build($args, array('view', 'violent_systems', true)));
 	}
 
 	/**

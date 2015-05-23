@@ -9,6 +9,7 @@ namespace EDK\Page;
  
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 use EDK\PageComponent\Clock;
@@ -78,10 +79,10 @@ class Home extends \pageAssembly
 	{
 		$this->page = new Page();
 		$this->page->addHeader(
-				"<link rel='canonical' href='".\edkURI::page()."' />");
+				"<link rel='canonical' href='".URI::page()."' />");
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '',
-				\edkURI::getArg('view', 1));
-		$period = \edkURI::getArg('period');
+				URI::getArg('view', 1));
+		$period = URI::getArg('period');
 
 		$day = $week = $month = $year = 0;
 		// First argument is either the view or the year
@@ -95,15 +96,15 @@ class Home extends \pageAssembly
 			$datestart = 2;
 		}
 
-		$year = \edkURI::getArg('y', $datestart);
+		$year = URI::getArg('y', $datestart);
 
 		if((int)$year && !$period) {
 			$year = (int)$year;
 			$this->dateSet = true;
 			if (Config::get('show_monthly')) {
-				$month = (int) \edkURI::getArg('m', $datestart + 1);
+				$month = (int) URI::getArg('m', $datestart + 1);
 			} else {
-				$week = (int) \edkURI::getArg('w', $datestart + 1);
+				$week = (int) URI::getArg('w', $datestart + 1);
 			}
 		} else if ($year || $period) {
 			if (!$period) {
@@ -112,25 +113,25 @@ class Home extends \pageAssembly
 			$datestart++;
 			switch($period) {
 				case "month":
-					$year = (int) \edkURI::getArg('y', $datestart);
+					$year = (int) URI::getArg('y', $datestart);
 					if((int)$year) {
-						$month = (int) \edkURI::getArg('m', $datestart + 1);
+						$month = (int) URI::getArg('m', $datestart + 1);
 						$this->dateSet = true;
 					}
 					break;
 				case "week":
-					$year = (int) \edkURI::getArg('y', $datestart);
+					$year = (int) URI::getArg('y', $datestart);
 					if((int)$year) {
-						$week = (int) \edkURI::getArg('w', $datestart + 1);
+						$week = (int) URI::getArg('w', $datestart + 1);
 						$this->dateSet = true;
 					}
 					break;
 				case "day":
-					$year = (int) \edkURI::getArg('y', $datestart);
+					$year = (int) URI::getArg('y', $datestart);
 					if((int)$year) {
-						$month = (int) \edkURI::getArg('m', $datestart + 1);
+						$month = (int) URI::getArg('m', $datestart + 1);
 						if((int)$month) {
-							$day = (int) \edkURI::getArg('d', $datestart + 2);
+							$day = (int) URI::getArg('d', $datestart + 2);
 							$this->dateSet = true;
 						}
 					}
@@ -140,13 +141,13 @@ class Home extends \pageAssembly
 
 		$this->setTime($week, $year, $month, $day);
 
-		if (\edkURI::getArg('scl_id') === false
-				|| \edkURI::getArg('y', 1) === false) {
+		if (URI::getArg('scl_id') === false
+				|| URI::getArg('y', 1) === false) {
 			$this->page->addHeader(
 					'<meta name="robots" content="index, follow" />');
 		}
 
-		$this->scl_id = (int) \edkURI::getArg('scl_id');
+		$this->scl_id = (int) URI::getArg('scl_id');
 
 		$this->showcombined = Config::get('show_comb_home')
 				&& (count(Config::get('cfg_allianceid'))
@@ -307,16 +308,16 @@ class Home extends \pageAssembly
 			$combinedLink[] = $sclarg;
 		}
 		$this->addMenuItem("link", "Previous ".$this->getPeriodName(),
-				\edkURI::build($previous));
+				URI::build($previous));
 		if (!$this->isCurrentPeriod()) {
 			$this->addMenuItem("link", "Next ".$this->getPeriodName(),
-					\edkURI::build($next));
+					URI::build($next));
 		}
-		$this->addMenuItem("link", "Kills", \edkURI::build($killLink));
-		$this->addMenuItem("link", "Losses", \edkURI::build($lossLink));
+		$this->addMenuItem("link", "Kills", URI::build($killLink));
+		$this->addMenuItem("link", "Losses", URI::build($lossLink));
 		if (Config::get('show_comb_home')) {
 			$this->addMenuItem("link", $weektext."All Kills",
-					\edkURI::build($combinedLink));
+					URI::build($combinedLink));
 		}
 		return "";
 	}

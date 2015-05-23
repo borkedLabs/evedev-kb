@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
 $page = new Page('Campaigns');
@@ -36,7 +37,7 @@ class Campaigns extends \pageAssembly
 	{
 		parent::__construct();
 
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 1));
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', URI::getArg('view', 1));
 
 		$this->queue("start");
 		$this->queue("listCampaigns");
@@ -83,7 +84,7 @@ class Campaigns extends \pageAssembly
 		if(isset($this->viewList[$this->view])) {
 			return call_user_func_array($this->viewList[$this->view], array(&$this));
 		}
-		$pageNum = (int)\edkURI::getArg('page');
+		$pageNum = (int)URI::getArg('page');
 
 		switch ($this->view)
 		{

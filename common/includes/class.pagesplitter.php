@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
 /**
  * @package EDK
  */
@@ -35,9 +36,9 @@ class PageSplitter
 			return;
 
 		$endpage = ceil($this->max_ / $this->split_);
-		$args = edkURI::parseURI();
-		if ($page = edkURI::getArg('page')) {
-			if (edkURI::getArg('page')) {
+		$args = URI::parseURI();
+		if ($page = URI::getArg('page')) {
+			if (URI::getArg('page')) {
 				foreach ($args as $key => $value) {
 					if($value[0] == 'page') {
 						unset($args[$key]);
@@ -48,7 +49,7 @@ class PageSplitter
 		} else {
 			$page = 1;
 		}
-		$url = edkURI::build($args);
+		$url = URI::build($args);
 		if(strpos($url, '?') === false) {
 			$url .= "?";
 		} else {

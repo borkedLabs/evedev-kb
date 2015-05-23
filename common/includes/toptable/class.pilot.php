@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 
 class TopTable_Pilot
@@ -27,11 +28,11 @@ class TopTable_Pilot
 		{
 			$pilot = Pilot::getByID($row['plt_id']);
 			if($row['plt_externalid']) {
-				$uri = edkURI::build(array('a', 'pilot_detail', true),
+				$uri = URI::build(array('a', 'pilot_detail', true),
 						array('plt_ext_id', $row['plt_externalid'], true));
 				$img = imageURL::getURL('Pilot', $row['plt_externalid'], 32);
 			} else {
-				$uri = edkURI::build(array('a', 'pilot_detail', true),
+				$uri = URI::build(array('a', 'pilot_detail', true),
 						array('plt_id', $row['plt_id'], true));
 
 				$img = $pilot->getPortraitURL(32);

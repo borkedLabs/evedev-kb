@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -356,7 +357,7 @@ class Ship extends Cacheable
             // 1378
             $typeID = substr($showInfoLink, strpos($showInfoLink, ':')+1, strlen($showInfoLink)-strpos($showInfoLink, ':'));
 
-            return edkURI::page('invtype', $typeID);
+            return URI::page('invtype', $typeID);
         }
 
 }

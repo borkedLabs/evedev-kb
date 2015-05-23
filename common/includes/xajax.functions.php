@@ -9,6 +9,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Database\PreparedQuery;
 
 require_once(__DIR__.'/../xajax/xajax.php');
@@ -113,19 +114,19 @@ function doAjaxSearch($searchphrase='', $type='pilot', $limit = 10)
 				switch($type)
 				{
 					case "pilot":
-						$result .= edkURI::page('pilot_detail', $id, 'plt_id')."'>";
+						$result .= URI::page('pilot_detail', $id, 'plt_id')."'>";
 						break;
 					case "corp":
-						$result .= edkURI::page('corp_detail', $id, 'crp_id')."'>";
+						$result .= URI::page('corp_detail', $id, 'crp_id')."'>";
 						break;
 					case "alliance":
-						$result .= edkURI::page('alliance_detail', $id, 'all_id')."'>";
+						$result .= URI::page('alliance_detail', $id, 'all_id')."'>";
 						break;
 					case "system":
-						$result .= edkURI::page('system_detail', $id, 'sys_id')."'>";
+						$result .= URI::page('system_detail', $id, 'sys_id')."'>";
 						break;
 					case "item":
-						$result .= edkURI::page('invtype', $id)."'>";
+						$result .= URI::page('invtype', $id)."'>";
 						break;
 				}
 				$result .= $name1."</a></td><td>".$name2."</td></tr>";

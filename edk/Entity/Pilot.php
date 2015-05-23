@@ -8,6 +8,7 @@
 
 namespace EDK\Entity;
 
+use EDK\Core\URI;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -178,10 +179,10 @@ class Pilot extends Entity
 	function getDetailsURL()
 	{
 		if ($this->getExternalID()) {
-			return \edkURI::page('pilot_detail', $this->externalid,
+			return URI::page('pilot_detail', $this->externalid,
 					'plt_ext_id');
 		} else {
-			return \edkURI::page('pilot_detail', $this->id, 'plt_id');
+			return URI::page('pilot_detail', $this->id, 'plt_id');
 		}
 	}
 

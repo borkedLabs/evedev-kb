@@ -9,11 +9,11 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
-use \edkURI;
 use \DBFactory;
 
 if (Config::get('comments')) {
@@ -112,16 +112,16 @@ class KillDetail extends \pageAssembly
 	 */
 	function start()
 	{
-		$this->kll_id = (int) \edkURI::getArg('kll_id');
+		$this->kll_id = (int) URI::getArg('kll_id');
 		$this->kll_external_id = 0;
 		if (!$this->kll_id) {
-			$this->kll_external_id = (int) \edkURI::getArg('kll_ext_id');
+			$this->kll_external_id = (int) URI::getArg('kll_ext_id');
 			if (!$this->kll_external_id) {
 				// internal and external ids easily overlap so we can't guess which
-				$this->kll_id = (int) \edkURI::getArg('id', 1);
+				$this->kll_id = (int) URI::getArg('id', 1);
 			}
 		}
-		$this->nolimit = \edkURI::getArg('nolimit', 2);
+		$this->nolimit = URI::getArg('nolimit', 2);
 
 		$this->menuOptions = array();
 
@@ -150,11 +150,11 @@ class KillDetail extends \pageAssembly
 
 		if ($this->kll_external_id) {
 			$this->page->addHeader("<link rel='canonical' href='"
-					.\edkURI::build(array('kll_ext_id', $this->kll_external_id,
+					.URI::build(array('kll_ext_id', $this->kll_external_id,
 						true))."' />");
 		} else {
 			$this->page->addHeader("<link rel='canonical' href='"
-					.\edkURI::build(array('kll_id', $this->kll_id, true))
+					.URI::build(array('kll_id', $this->kll_id, true))
 					."' />");
 		}
 
@@ -171,7 +171,7 @@ class KillDetail extends \pageAssembly
 		$this->page->addMetaTag('twitter:title',$pageTitle);
 		$this->page->addMetaTag('og:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
 		$this->page->addMetaTag('twitter:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
-		$this->page->addMetaTag('og:url',\edkURI::build(array('kll_id', $this->kll_id, true)));
+		$this->page->addMetaTag('og:url',URI::build(array('kll_id', $this->kll_id, true)));
 		$this->page->addMetaTag('twitter:card', 'summary');
 
 		$this->commenthtml = '';
@@ -222,7 +222,7 @@ class KillDetail extends \pageAssembly
 		}
 		$smarty->assign('panel_colour', Config::get('fp_theme'));
 		$smarty->assign('showiskd', Config::get('kd_showiskd'));
-		$smarty->assign('formURL', \edkURI::build(\edkURI::parseURI()));
+		$smarty->assign('formURL', URI::build(URI::parseURI()));
 
 		$this->involvedSetup();
 		$this->fittingSetup();
@@ -279,7 +279,7 @@ class KillDetail extends \pageAssembly
 					(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => \edkURI::page('invtype', $i_id),
+					'url' => URI::page('invtype', $i_id),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -385,7 +385,7 @@ class KillDetail extends \pageAssembly
 				$this->drop_array[$i_location][] = array(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => \edkURI::page('invtype', $i_id),
+					'url' => URI::page('invtype', $i_id),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -516,7 +516,7 @@ class KillDetail extends \pageAssembly
 			$this->involved[$i]['shipName'] = $ship->getName();
 			$this->involved[$i]['shipID'] = $ship->getID();
 			if($ship->getID()) {
-				$this->involved[$i]['shipURL'] = \edkURI::page('invtype', $ship->getID());
+				$this->involved[$i]['shipURL'] = URI::page('invtype', $ship->getID());
 				$this->involved[$i]['shipClass'] = $ship->getClass()->getName();
 			} else {
 				$this->involved[$i]['shipURL'] = false;
@@ -524,13 +524,13 @@ class KillDetail extends \pageAssembly
 			}
 
 			$this->involved[$i]['corpURL'] =
-					\edkURI::build(array('a', 'corp_detail', true),
+					URI::build(array('a', 'corp_detail', true),
 							array('crp_id', $corp->getID(), true));
 			$this->involved[$i]['corpName'] = $corp->getName();
 
 			if($alliance && strcasecmp($alliance->getName(), "None") != 0) {
 				$this->involved[$i]['alliURL'] =
-						\edkURI::build(array('a', 'alliance_detail', true),
+						URI::build(array('a', 'alliance_detail', true),
 								array('all_id', $alliance->getID(), true));
 			} else {
 				$this->involved[$i]['alliURL'] = false;
@@ -549,7 +549,7 @@ class KillDetail extends \pageAssembly
 
 			if (!$pilot->getID() || $tpilot == $weapon->getName()) {
 				$this->involved[$i]['pilotURL'] =
-						\edkURI::page('invtype', $weapon->getID());
+						URI::page('invtype', $weapon->getID());
 				$this->involved[$i]['pilotName'] = $weapon->getName();
 				$this->involved[$i]['secStatus'] = 0;
 				$this->involved[$i]['portrait'] = $corp->getPortraitURL(64);
@@ -562,7 +562,7 @@ class KillDetail extends \pageAssembly
 				$this->involved[$i]['typeID'] = 2; //type number for corporations.
 
 				$this->involved[$i]['pilotURL'] =
-						\edkURI::page('invtype', $weapon->getID());
+						URI::page('invtype', $weapon->getID());
 				$this->involved[$i]['shipImage'] = \imageURL::getURL('Ship',
 						$weapon->getID(), 64);
 				$this->involved[$i]['shipURL'] = false;
@@ -572,12 +572,12 @@ class KillDetail extends \pageAssembly
 				$this->involved[$i]['weaponName'] = "Unknown";
 			} else {
 				if ($pilot->getExternalID(true)) {
-					$this->involved[$i]['pilotURL'] = \edkURI::build(
+					$this->involved[$i]['pilotURL'] = URI::build(
 							array('a', 'pilot_detail', true),
 							array('plt_ext_id', $pilot->getExternalID(), true));
 				} else {
 					$this->involved[$i]['pilotURL'] =
-							\edkURI::build(array('a', 'pilot_detail', true),
+							URI::build(array('a', 'pilot_detail', true),
 									array('plt_id', $pilot->getID(), true));
 				}
 				$this->involved[$i]['typeID'] = 1377; //type number for characters.
@@ -598,7 +598,7 @@ class KillDetail extends \pageAssembly
 						&& $weapon->getName() != $ship->getName()) {
 					$this->involved[$i]['weaponName'] = $weapon->getName();
 					$this->involved[$i]['weaponID'] = $weapon->getID();
-					$this->involved[$i]['weaponURL'] = \edkURI::page('invtype', $weapon->getID());
+					$this->involved[$i]['weaponURL'] = URI::page('invtype', $weapon->getID());
 				} else {
 					$this->involved[$i]['weaponName'] = "Unknown";
 				}
@@ -752,19 +752,19 @@ class KillDetail extends \pageAssembly
 			$corp = new Corporation($this->kill->getVictimCorpID());
 			$smarty->assign('victimPortrait', $corp->getPortraitURL(64));
 			$smarty->assign('victimExtID', 0);
-			$smarty->assign('victimURL', \edkURI::page('invtype',
+			$smarty->assign('victimURL', URI::page('invtype',
 					$item->getID()));
 		} else {
 			$smarty->assign('victimPortrait', $plt->getPortraitURL(64));
 			$smarty->assign('victimExtID', $plt->getExternalID());
-			$smarty->assign('victimURL', \edkURI::page('pilot_detail',
+			$smarty->assign('victimURL', URI::page('pilot_detail',
 					$this->kill->getVictimID(), 'plt_id'));
 		}
 		$smarty->assign('victimName', $this->kill->getVictimName());
-		$smarty->assign('victimCorpURL', \edkURI::page('corp_detail',
+		$smarty->assign('victimCorpURL', URI::page('corp_detail',
 				$this->kill->getVictimCorpID(), 'crp_id'));
 		$smarty->assign('victimCorpName', $this->kill->getVictimCorpName());
-		$smarty->assign('victimAllianceURL', \edkURI::page('alliance_detail',
+		$smarty->assign('victimAllianceURL', URI::page('alliance_detail',
 				$this->kill->getVictimAllianceID(), 'all_id'));
 		$smarty->assign('victimAllianceName',
 				$this->kill->getVictimAllianceName());
@@ -972,7 +972,7 @@ class KillDetail extends \pageAssembly
 		$smarty->assign('victimShipIsFaction', $ship->isFaction());
 		$smarty->assign('victimShipName', $ship->getName());
 		$smarty->assign('victimShipID', $ship->getID());
-		$smarty->assign('victimShipURL', \edkURI::page('invtype', $ship->getID()));
+		$smarty->assign('victimShipURL', URI::page('invtype', $ship->getID()));
 		$smarty->assign('victimShipClassName', $shipclass->getName());
 		if ($this->page->isAdmin()) $smarty->assign('ship', $ship);
 
@@ -1000,7 +1000,7 @@ class KillDetail extends \pageAssembly
 			$smarty->assign('systemID', $this->kill->getSystem()->getID());
 			$smarty->assign('system', $this->kill->getSystem()->getName());
 			$smarty->assign('systemURL',
-					\edkURI::build(
+					URI::build(
 					array('a', 'system_detail', true),
 					array('sys_id', $this->kill->getSystem()->getID(), true)));
 			$smarty->assign('systemSecurity',
@@ -1450,9 +1450,9 @@ class KillDetail extends \pageAssembly
 	function menuSetup()
 	{
 		$this->addMenuItem("caption", "View");
-		$this->addMenuItem("link", "Killmail", \edkURI::page(
+		$this->addMenuItem("link", "Killmail", URI::page(
 				'kill_mail', $this->kill->getID(), 'kll_id'), 0, 0,
-				"sndReq('".\edkURI::page(
+				"sndReq('".URI::page(
 						'kill_mail', $this->kill->getID(), 'kll_id')
 				."');ReverseContentDisplay('popup')");
                 // expose CREST url (if kill was posted via CREST)
@@ -1463,12 +1463,12 @@ class KillDetail extends \pageAssembly
                 }
                 
 		if (Config::get('kd_EFT')) {
-			$this->addMenuItem("link", "EFT Fitting", \edkURI::page(
+			$this->addMenuItem("link", "EFT Fitting", URI::page(
 					'eft_fitting', $this->kill->getID(), 'kll_id'), 0, 0,
-					"sndReq('".\edkURI::page(
+					"sndReq('".URI::page(
 							'eft_fitting', $this->kill->getID(),'kll_id')
 					."');ReverseContentDisplay('popup')");
-			$this->addMenuItem("link", "EvE Fitting", \edkURI::page(
+			$this->addMenuItem("link", "EvE Fitting", URI::page(
 					'eve_fitting', $this->kill->getID(), 'kll_id'));
                         
                         if (!IS_IGB) {
@@ -1489,23 +1489,23 @@ class KillDetail extends \pageAssembly
 			$this->addMenuItem("link", "Related kills ("
 					.$this->kill->relatedKillCount()."/"
 					.$this->kill->relatedLossCount().")",
-					\edkURI::build(array('a', 'kill_related', true),
+					URI::build(array('a', 'kill_related', true),
 							array('kll_id', $this->kill->getID(), true)));
 		}
 
 		if ($this->page->isAdmin()) {
 			$this->addMenuItem("caption", "Admin");
-			$this->addMenuItem("link", "Delete", \edkURI::page(
+			$this->addMenuItem("link", "Delete", URI::page(
 					'admin_kill_delete', $this->kill->getID(), 'kll_id'), 0, 0,
-					"openWindow('".\edkURI::page(
+					"openWindow('".URI::page(
 						'admin_kill_delete', $this->kill->getID(), 'kll_id')
 					."', null, 420, 300, '' );");
 
 			if (isset($_GET['view']) && $_GET['view'] == 'FixSlot') {
-				$this->addMenuItem("link", "Adjust Values", \edkURI::page(
+				$this->addMenuItem("link", "Adjust Values", URI::page(
 						'kill_detail', $this->kill->getID(), 'kll_id'));
 			} else {
-				$url = \edkURI::build(
+				$url = URI::build(
 						array('kll_id', $this->kill->getID(), true),
 						array('view', 'FixSlot', false));
 				$this->addMenuItem("link", "Fix Slots", $url);

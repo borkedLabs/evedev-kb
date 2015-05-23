@@ -9,6 +9,7 @@
 namespace EDK\Entity;
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 /**
  * Creates a new Alliance or fetches an existing one from the database.
  * @package EDK
@@ -343,10 +344,10 @@ class Alliance extends Entity
 	function getDetailsURL()
 	{
 		if ($this->getExternalID()) {
-			return \edkURI::page('alliance_detail', $this->externalid,
+			return URI::page('alliance_detail', $this->externalid,
 					'all_ext_id');
 		} else {
-			return \edkURI::page('alliance_detail', $this->id, 'all_id');
+			return URI::page('alliance_detail', $this->id, 'all_id');
 		}
 	}
 

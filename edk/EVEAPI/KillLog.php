@@ -8,6 +8,7 @@
 namespace EDK\EVEAPI;
  
 use EDK\Core\Config;
+use EDK\Core\URI;
 
 define('NUMBER_OF_CALLS_DEFAULT', 1);
 
@@ -176,7 +177,7 @@ class KillLog extends API
 					$output .= "<div class='block-header2'>Posted</div>\n";
 					foreach ($posted as $killid) {
 						$output .= "<div><a href='"
-										.\edkURI::page('kill_detail', $killid[2], 'kll_id')
+										.URI::page('kill_detail', $killid[2], 'kll_id')
 										."'>Kill ".$killid[0]."</a></div>";
 					}
 				}

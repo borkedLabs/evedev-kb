@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\PageComponent\Box;
 
@@ -116,17 +117,17 @@ class user
 		$box->setIcon('menu-item.gif');
 
 		if (!user::loggedin()) {
-			$box->addOption('link', 'Login', edkURI::build(array('a', 'login', true)));
+			$box->addOption('link', 'Login', URI::build(array('a', 'login', true)));
 			$box->addOption('link', 'Register',
-							edkURI::build(array('a', 'register', true)));
+							URI::build(array('a', 'register', true)));
 		} else {
 			if (user::get('usr_pilot_id')) {
 				$plt = Pilot::getByID((int) user::get('usr_pilot_id'));
 				$box->addOption('link', $plt->getName(),
-								edkURI::build(array('a', 'pilot_detail', true),
+								URI::build(array('a', 'pilot_detail', true),
 												array('plt_id', $plt->getID(), true)));
 			}
-			$box->addOption('link', 'Logout', edkURI::build(array('a', 'logout', true)));
+			$box->addOption('link', 'Logout', URI::build(array('a', 'logout', true)));
 		}
 
 		event::call('user_menu_create', $box);

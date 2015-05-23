@@ -10,6 +10,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
 /*
@@ -88,12 +89,12 @@ class KillRelated extends \pageAssembly
 		$this->page = new Page('Related kills & losses');
 		$this->page->addHeader('<meta name="robots" content="index, nofollow" />');
 
-		$this->kll_id = (int) \edkURI::getArg('kll_id', 1);
+		$this->kll_id = (int) URI::getArg('kll_id', 1);
 		if (!$this->kll_id) {
-			$this->kll_external_id = (int) \edkURI::getArg('kll_ext_id');
+			$this->kll_external_id = (int) URI::getArg('kll_ext_id');
 			if (!$this->kll_external_id) {
 				// internal and external ids easily overlap so we can't guess which
-				$this->kll_id = (int) \edkURI::getArg(null, 1);
+				$this->kll_id = (int) URI::getArg(null, 1);
 				$this->kill = Kill::getByID($this->kll_id);
 			} else {
 				$this->kill = new Kill($this->kll_external_id, true);
@@ -102,8 +103,8 @@ class KillRelated extends \pageAssembly
 		} else {
 			$this->kill = \Kill::getByID($this->kll_id);
 		}
-		$this->adjacent = \edkURI::getArg('adjacent');
-		$this->scl_id = (int) \edkURI::getArg('scl_id');
+		$this->adjacent = URI::getArg('adjacent');
+		$this->scl_id = (int) URI::getArg('scl_id');
 
 		$this->menuOptions = array();
 
@@ -567,13 +568,13 @@ class KillRelated extends \pageAssembly
 			}
 			$this->pilots[$side][$row['ind_plt_id']][] = array(
 				'name' => $row['plt_name'],
-				'plt_url' => \edkURI::page('pilot_detail', $row['ind_plt_id']),
+				'plt_url' => URI::page('pilot_detail', $row['ind_plt_id']),
 				'corp' => $row['crp_name'],
 				'cid' => $row['ind_crp_id'],
-				'crp_url' => \edkURI::page('corp_detail', $row['ind_crp_id']),
+				'crp_url' => URI::page('corp_detail', $row['ind_crp_id']),
 				'alliance' => $row['all_name'],
 				'aid' => $row['ind_all_id'],
-				'all_url' => \edkURI::page('alliance_detail', $row['ind_all_id']),
+				'all_url' => URI::page('alliance_detail', $row['ind_all_id']),
 				'ts' => strtotime($kill->getTimeStamp()),
 				'weapon' => $row['itm_name'],
 				'sid' => $row['ind_shp_id'],
@@ -619,7 +620,7 @@ class KillRelated extends \pageAssembly
 						$this->pilots[$side][$kill->getVictimId()][$id]['kll_id']
 								= $kill->getID();
 						$this->pilots[$side][$kill->getVictimId()][$id]['kll_url']
-								= \edkURI::page('kill_detail', $kill->getID(), 'kll_id');
+								= URI::page('kill_detail', $kill->getID(), 'kll_id');
 					}
 					return;
 				}
@@ -628,16 +629,16 @@ class KillRelated extends \pageAssembly
 
 		$this->pilots[$side][$kill->getVictimId()][] = array(
 			'kll_id' => $kill->getID(),
-			'kll_url' => \edkURI::page('kill_detail', $kill->getID(), "kll_id"),
+			'kll_url' => URI::page('kill_detail', $kill->getID(), "kll_id"),
 			'name' => $kill->getVictimName(),
-			'plt_url' => \edkURI::page('pilot_detail', $kill->getVictimId()),
+			'plt_url' => URI::page('pilot_detail', $kill->getVictimId()),
 			'destroyed' => true,
 			'corp' => $kill->getVictimCorpName(),
 			'cid' => $kill->getVictimCorpID(),
-			'crp_url' => \edkURI::page('corp_detail', $kill->getVictimCorpID()),
+			'crp_url' => URI::page('corp_detail', $kill->getVictimCorpID()),
 			'alliance' => $kill->getVictimAllianceName(),
 			'aid' => $kill->getVictimCorpID(),
-			'all_url' => \edkURI::page('alliance_detail', $kill->getVictimCorpID()),
+			'all_url' => URI::page('alliance_detail', $kill->getVictimCorpID()),
 			'ship' => $kill->getVictimShipname(),
 			'sid' => $ship->getID(),
 			'spic' => $ship->getImage(32),
@@ -650,14 +651,14 @@ class KillRelated extends \pageAssembly
 		$this->addMenuItem("caption", "View");
 		if ($this->adjacent) {
 			$this->addMenuItem("link", "Remove adjacent",
-					\edkURI::build(array('kll_id', $this->kll_id, true)));
+					URI::build(array('kll_id', $this->kll_id, true)));
 		} else {
 			$this->addMenuItem("link", "Include adjacent",
-					\edkURI::build(array('kll_id', $this->kll_id, true),
+					URI::build(array('kll_id', $this->kll_id, true),
 							array('adjacent', true, true)));
 		}
 		$this->addMenuItem("link", "Back to Killmail",
-				\edkURI::build(array('a', 'kill_detail', true),
+				URI::build(array('a', 'kill_detail', true),
 						array('kll_id', $this->kll_id, true)));
 	}
 

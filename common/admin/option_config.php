@@ -8,6 +8,7 @@
  */
  
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Entity\Corporation;
 
 options::cat('Advanced', 'Configuration', 'Available updates');
@@ -585,7 +586,7 @@ class update
 		/*
 		if (isNewerVersion(update::$codeVersion, KB_VERSION)) {
 			return "<div>Code updates are available, <a href='"
-					.edkURI::page('admin_upgrade')."'>here</a></div><br/>";
+					.URI::page('admin_upgrade')."'>here</a></div><br/>";
 		}
 		return "<div>No updates available</div>";*/
 	}
@@ -603,7 +604,7 @@ class update
 		update::checkStatus();
 		if (update::$dbVersion > Config::get('upd_dbVersion')) {
 			return "<div>Database updates are available, <a href='"
-					.edkURI::page('admin_upgrade')."'>here</a></div><br/>";
+					.URI::page('admin_upgrade')."'>here</a></div><br/>";
 		}
 		return "<div>No updates available</div>";
 	}

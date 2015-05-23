@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
+
 class TopTable_Weapon
 {
 	function __construct(\EDK\Toplist\Base $toplist)
@@ -24,7 +26,7 @@ class TopTable_Weapon
 			$rows[] = array(
 				'rank' => false,
 				'name' => $item->getName(),
-				'uri' => edkURI::build(array('a', 'invtype', true),
+				'uri' => URI::build(array('a', 'invtype', true),
 						array('id', $item->getID(), true)),
 				'icon' => $item->getIcon(32),
 				'count' => $row['cnt']);

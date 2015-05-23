@@ -8,6 +8,7 @@
  
 use EDK\Page\Page;
 use EDK\Core\Config;
+use EDK\Core\URI;
 require_once('common/admin/admin_menu.php');
 
 $page = new Page('Administration - Mods');
@@ -33,7 +34,7 @@ if ($handle = opendir('mods')) {
 		if (is_dir("mods/$file") && $file != ".." & $file != "." & $file != ".svn") {
 			$rows[$file] = array(
 				'name' => $file,
-				'url' => edkURI::page("settings_$file"),
+				'url' => URI::page("settings_$file"),
 				'checked' => in_array($file, $activemods),
 				'settings' => file_exists("mods/$file/settings.php"));
 		}

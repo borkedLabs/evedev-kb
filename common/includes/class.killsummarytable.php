@@ -8,6 +8,7 @@
 
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\StatSummary\AllianceSummary;
 use EDK\StatSummary\CorpSummary;
 use EDK\StatSummary\PilotSummary;
@@ -578,8 +579,8 @@ class KillSummaryTable
 		$summary = array();
 		$count = 0;
 
-		$args = edkURI::parseURI();
-		if (edkURI::getArg('scl_id')) {
+		$args = URI::parseURI();
+		if (URI::getArg('scl_id')) {
 			foreach ($args as $key => $value) {
 				if($value[0] == 'scl_id') {
 					unset($args[$key]);
@@ -587,7 +588,7 @@ class KillSummaryTable
 				}
 			}
 		}
-		$qrystring = edkURI::build($args);
+		$qrystring = URI::build($args);
 		$clearfilter = $qrystring;
 		if(strpos($qrystring, '?') === false) {
 			$qrystring .= "?";
@@ -598,7 +599,7 @@ class KillSummaryTable
 		foreach ($entry as $k => $v) {
 			if($v['id'] == 3) continue;
 			$v['break'] = 0;
-			if(edkURI::getArg('scl_id') == $v['id']) {
+			if(URI::getArg('scl_id') == $v['id']) {
 				$v['hl'] = 1;
 			} else {
 				$v['hl'] = 0;
@@ -635,7 +636,7 @@ class KillSummaryTable
 			$smarty->assign('lcount', $this->tlcount);
 		}
 
-		if (edkURI::getArg('scl_id')){
+		if (URI::getArg('scl_id')){
 			$smarty->assign('clearfilter',$clearfilter);
 		}
 

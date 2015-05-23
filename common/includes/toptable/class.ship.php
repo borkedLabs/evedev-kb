@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
+
 class TopTable_Ship
 {
 	function __construct($toplist)
@@ -28,7 +30,7 @@ class TopTable_Ship
 				'rank' => false,
 				'name' => $ship->getName(),
 				'subname' => $shipclass->getName(),
-				'uri' => edkURI::page('invtype', $ship->getID()),
+				'uri' => URI::page('invtype', $ship->getID()),
 				'portrait' => $ship->getImage(32),
 				'count' => $row['cnt']);
 		}

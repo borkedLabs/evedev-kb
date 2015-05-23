@@ -6,9 +6,10 @@
  * @package EDK
  */
 namespace EDK\Page;
-use EDK\Core\Event;
 
 use EDK\Core\Config;
+use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 
@@ -71,10 +72,10 @@ class Awards extends \pageAssembly
 		$this->page = new Page(\Language::get('page_awards'));
 		$this->page->addHeader('<meta name="robots" content="index, follow" />');
 
-		$this->page->addHeader("<link rel='canonical' href='".\edkURI::build(array('a', 'awards', true))."' />");
+		$this->page->addHeader("<link rel='canonical' href='".URI::build(array('a', 'awards', true))."' />");
 
-		$this->year = (int)\edkURI::getArg('y', 1);
-		$this->month = (int)\edkURI::getArg('m', 2);
+		$this->year = (int)URI::getArg('y', 1);
+		$this->month = (int)URI::getArg('m', 2);
 		if(!$this->month){
 			$this->month = kbdate('m') - 1;
 		}
@@ -87,10 +88,10 @@ class Awards extends \pageAssembly
 			$this->year = $this->year - 1;
 		}
 
-		if (!\edkURI::getArg('y', 1)) {
-			$this->view = \edkURI::getArg('view', 1);
+		if (!URI::getArg('y', 1)) {
+			$this->view = URI::getArg('view', 1);
 		} else {
-			$this->view = \edkURI::getArg('view', 3);
+			$this->view = URI::getArg('view', 3);
 		}
 		$this->listList = $this->listSetup();
 	}
@@ -276,9 +277,9 @@ class Awards extends \pageAssembly
 		}
 
 		$this->addMenuItem("caption", "Navigation");
-		$this->addMenuItem("link", "Previous month ", \edkURI::build(array('y', $pyear, true), array('m', $pmonth, true)));
+		$this->addMenuItem("link", "Previous month ", URI::build(array('y', $pyear, true), array('m', $pmonth, true)));
 		if (! ($this->month == kbdate("m") - 1 && $this->year == kbdate("Y")))
-			$this->addMenuItem("link", "Next month", \edkURI::build(array('y', $nyear, true), array('m', $nmonth, true)));
+			$this->addMenuItem("link", "Next month", URI::build(array('y', $nyear, true), array('m', $nmonth, true)));
 	}
 	/**
 	 * Add an item to the menu in standard box format.

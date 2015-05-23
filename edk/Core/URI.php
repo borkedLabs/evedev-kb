@@ -5,14 +5,13 @@
  * $HeadURL$
  * @package EDK
  */
-
-use EDK\Core\Config;
+namespace EDK\Core;
 
 /**
  * Generate and parse killboard URIs
  * @package EDK
  */
-class edkURI {
+class URI {
 	/** @var string URI for killboard */
 	private static $kb_host = null;
 

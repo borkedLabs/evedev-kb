@@ -9,6 +9,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
 /*
@@ -79,8 +80,8 @@ class ContractDetail extends \pageAssembly
 	function start()
 	{
 		$this->page = new Page();
-		$this->ctr_id = (int)\edkURI::getArg('ctr_id', 1);
-		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', \edkURI::getArg('view', 2));
+		$this->ctr_id = (int)URI::getArg('ctr_id', 1);
+		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', URI::getArg('view', 2));
 
 		$this->viewList = array();
 
@@ -192,7 +193,7 @@ class ContractDetail extends \pageAssembly
 					array(&$this));
 		}
 
-		$scl_id = (int)\edkURI::getArg('scl_id');
+		$scl_id = (int)URI::getArg('scl_id');
 		
 		global $smarty;
 

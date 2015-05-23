@@ -11,7 +11,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\PageComponent\Navigation;
-use \edkURI;
+use EDK\Core\URI;
 use \DBFactory;
 use \Session;
 
@@ -274,8 +274,8 @@ class Page
 	public function setAdmin()
 	{
 		if (!\Session::isAdmin()) {
-			$page = edkURI::getArg("a");
-			$link = html_entity_decode(edkURI::page("login", $page, "page"));
+			$page = URI::getArg("a");
+			$link = html_entity_decode(URI::page("login", $page, "page"));
 
 			header("Location: $link");
 			echo '<a href="'.$link.'">Login</a>';

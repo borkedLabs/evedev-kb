@@ -10,6 +10,7 @@
  * based on liq's feed syndication mod v1.5
  */
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -344,7 +345,7 @@ class Fetcher
 						else $logurl = $this->uurl.'?a=kill_detail&kll_id='.intval($this->title);
 						logger::logKill($killid, $logurl);
 
-						$this->html .= "Killmail ".intval($this->title)." successfully posted <a href=\"".edkURI::page('kill_detail', $killid, 'kll_id')."\">here</a>.<br />";
+						$this->html .= "Killmail ".intval($this->title)." successfully posted <a href=\"".URI::page('kill_detail', $killid, 'kll_id')."\">here</a>.<br />";
 
 						$this->killsAdded++;
 					}

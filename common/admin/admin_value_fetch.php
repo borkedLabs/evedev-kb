@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Page\Page;
 
 $page = new Page('Fetcher - Item Values from CREST');
@@ -65,7 +66,7 @@ else
 
     $html .= 'Last update: '.$time.'<br /><br />';
 
-    $html .= '<form method="post" action="'.edkURI::page("admin_value_fetch").'">';
+    $html .= '<form method="post" action="'.URI::page("admin_value_fetch").'">';
     $html .= '<table width="100%" border="1">';
     $html .= '<tr><td>Filename</td><td colspan="2"><input type="text" name="turl" id="turl" value="'.$url.'" size="110" /></td></tr>';
     $html .= '<tr><td colspan="3" align="center"><i>Leave above field empty to reset to default.</i></td></tr>';
@@ -75,7 +76,7 @@ else
     }
     $html .= '<tr><td colspan="3"><button value="submit" type="submit" name="submit">Fetch</button></td></tr>';
     $html .= '</table></form>';
-    $html .= '<br /><a href="'.edkURI::page('admin_value_editor').'">Manually update values</a>';
+    $html .= '<br /><a href="'.URI::page('admin_value_editor').'">Manually update values</a>';
 }
 
 $page->setContent($html);

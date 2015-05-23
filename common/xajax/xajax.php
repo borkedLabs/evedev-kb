@@ -4,16 +4,17 @@
  */
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 
 global $xajax;
 $xajax = new \xajax();
-event::register('page_assembleheader', 'edk_xajax::insertHTML');
+Event::register('page_assembleheader', 'edk_xajax::insertHTML');
 
 // if mods depend on xajax they can register to xajax_initialised
 // it gets called after all mods have been initialized
-event::register('mods_initialised', 'edk_xajax::lateProcess');
+Event::register('mods_initialised', 'edk_xajax::lateProcess');
 
-$uri = html_entity_decode(edkURI::build(edkURI::parseURI()));
+$uri = html_entity_decode(URI::build(URI::parseURI()));
 if(strpos($uri, "?") === false) $uri .= "?xajax=1";
 else $uri .= "&xajax=1";
 $xajax->configure('requestURI', $uri);

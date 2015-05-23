@@ -6,12 +6,13 @@
  * @package EDK
  */
 
+use EDK\Core\URI;
 use EDK\Page\Page;
 
 $page = new Page('Administration - Deletion of Kill ID "'.intval($_GET['kll_id']).'"');
 $page->setAdmin();
 
-$kll_id = (int)edkURI::getArg('kll_id', 1);
+$kll_id = (int)URI::getArg('kll_id', 1);
 
 if (isset($_GET['confirm']))
 {

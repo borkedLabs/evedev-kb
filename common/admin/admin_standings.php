@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Page\Page;
 
 require_once('common/admin/admin_menu.php');
@@ -81,8 +82,8 @@ if ($val = $_REQUEST['standing']) {
 	}
 }
 
-if (edkURI::getArg('del', 1)) {
-        $standingId = edkURI::getArg('del', 1);
+if (URI::getArg('del', 1)) {
+        $standingId = URI::getArg('del', 1);
 	$totyp = preg_replace('/[^ac]/', '', substr($standingId, 0, 1));
 	$toid = intval(substr($standingId, 1));
 
@@ -124,13 +125,13 @@ if (Config::get("cfg_corpid") || Config::get("cfg_allianceid")) {
 		if ($typ == 'a') {
 			$alliance = Alliance::getByID($row['sta_to']);
 			$text = $alliance->getName();
-			$link = edkURI::page('admin_standings', $typ . $row['sta_to'], 'del');
+			$link = URI::page('admin_standings', $typ . $row['sta_to'], 'del');
 			$permt[$typ][$row['sta_to']] = array('text' => $text, 'link' => $link, 'value' => $val, 'comment' => $row['sta_comment'], 'id' => $id);
 		}
 		if ($typ == 'c') {
 			$corp = Corporation::getByID($row['sta_to']);
 			$text = $corp->getName();
-			$link = edkURI::page('admin_standings', $typ . $row['sta_to'], 'del');
+			$link = URI::page('admin_standings', $typ . $row['sta_to'], 'del');
 			$permt[$typ][$row['sta_to']] = array('text' => $text, 'link' => $link, 'value' => $val, 'comment' => $row['sta_comment'], 'id' => $id);
 		}
 	}

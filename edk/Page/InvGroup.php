@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Event;
+use EDK\Core\URI;
 use \DBFactory;
 
 /*
@@ -39,7 +40,7 @@ class InvGroup extends \pageAssembly
 	
 	function start()
 	{
-		$this->groupID = (int)\edkURI::getArg('id', 1);
+		$this->groupID = (int)URI::getArg('id', 1);
 		$this->page = new Page('Item Database');
 	}
 

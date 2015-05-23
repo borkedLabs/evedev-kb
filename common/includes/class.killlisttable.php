@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Alliance;
 use EDK\Entity\Corporation;
 
@@ -184,26 +185,26 @@ class KillListTable
 				}
 				$kll['kill'] = !$kll['loss'];
 			}
-			$kll['urldetail'] = edkURI::build($kdpage,
+			$kll['urldetail'] = URI::build($kdpage,
 					array('kll_id', $kll['id'], true));
 			if (!$kill->isClassified()) {
-				$kll['urlrelated'] = edkURI::build($krpage,
+				$kll['urlrelated'] = URI::build($krpage,
 					array('kll_id', $kll['id'], true));
 			}
 			$kll['victimextid'] = $kill->getVictimExternalID();
-			$kll['urlvictim'] = edkURI::page('pilot_detail',
+			$kll['urlvictim'] = URI::page('pilot_detail',
 					$kll['victimextid'] ? $kll['victimextid'] : $kll['victimid'],
 					$kll['victimextid'] ? 'plt_ext_id' : 'plt_id');
-			$kll['urlfb'] = edkURI::page('pilot_detail',
+			$kll['urlfb'] = URI::page('pilot_detail',
 					$kll['fbplext'] ? $kll['fbplext'] : $kll['fbid'],
 					$kll['fbplext'] ? 'plt_ext_id' : 'plt_id');
 			if ($kll['allianceexists'] ){
-				$kll['urlvictimall'] = edkURI::page('alliance_detail',
+				$kll['urlvictimall'] = URI::page('alliance_detail',
 					$kll['victimallianceid'], 'all_id');
 			} 
-			$kll['urlvictimcorp'] = edkURI::page('corp_detail',
+			$kll['urlvictimcorp'] = URI::page('corp_detail',
 					$kll['victimcorpid'], 'crp_id');
-			$kll['urlfbcorp'] = edkURI::page('corp_detail',
+			$kll['urlfbcorp'] = URI::page('corp_detail',
 					$kll['fbcorpid'], 'crp_id');
 			event::call('killlist_table_kill', $kll);
 			$kills[] = $kll;

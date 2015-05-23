@@ -8,6 +8,7 @@
 
 namespace EDK\Entity;
 
+use EDK\Core\URI;
 /**
  * Creates a new Corporation or fetches an existing one from the database.
  * @package EDK

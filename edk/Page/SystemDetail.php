@@ -9,6 +9,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
 /*
@@ -67,9 +68,9 @@ class SystemDetail extends \pageAssembly
 	 */
 	function start()
 	{
-		$this->sys_id = (int)\edkURI::getArg('sys_id', 1, true);
+		$this->sys_id = (int)URI::getArg('sys_id', 1, true);
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/', '',
-						\edkURI::getArg('view', 2, true));
+						URI::getArg('view', 2, true));
 
 		global $smarty;
 		$this->smarty = $smarty;
@@ -85,7 +86,7 @@ class SystemDetail extends \pageAssembly
 		}
 
 		$this->page->addHeader("<link rel='canonical' href='".
-				\edkURI::build($this->args)."' />");
+				URI::build($this->args)."' />");
 
 		$this->system = new \SolarSystem($this->sys_id);
 		$this->menuOptions = array();
@@ -137,7 +138,7 @@ class SystemDetail extends \pageAssembly
 			return call_user_func_array(
 					$this->viewList[$this->view], array(&$this));
 		}
-		$scl_id = (int)\edkURI::getArg('scl_id');
+		$scl_id = (int)URI::getArg('scl_id');
 
 		$klist = new \KillList();
 		$klist->setOrdered(true);
@@ -200,11 +201,11 @@ class SystemDetail extends \pageAssembly
 		$args[] = array('sys_id', $this->sys_id, true);
 		$this->addMenuItem("caption", "Navigation");
 		$this->addMenuItem("link", "All kills",
-				\edkURI::build($args, array('view', 'kills', true)));
+				URI::build($args, array('view', 'kills', true)));
 		$this->addMenuItem("link", "All losses",
-				\edkURI::build($args, array('view', 'losses', true)));
+				URI::build($args, array('view', 'losses', true)));
 		$this->addMenuItem("link", "Recent Activity",
-				\edkURI::build($args, array('view', 'recent', true)));
+				URI::build($args, array('view', 'recent', true)));
 		return "";
 	}
 

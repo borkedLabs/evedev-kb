@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\PageComponent\Box;
 /*
  * Control handling of admin menu options.
@@ -74,12 +75,12 @@ class options
 	 * 
 	 * @param string $field
 	 * @param string $subfield
-	 * @param string|array $link Either a link or an array ready for use by EDKuri
+	 * @param string|array $link Either a link or an array ready for use by URI
 	 */
 	public static function oldMenu($field, $subfield, $link)
 	{
 		if (is_array($link)) {
-			self::$data[$field][$subfield] = edkURI::build($link);
+			self::$data[$field][$subfield] = URI::build($link);
 		} else {
 			self::$data[$field][$subfield] = $link;
 		}
@@ -135,8 +136,8 @@ class options
 	 */
 	public static function genOptionsPage()
 	{
-		$field = urldecode(edkURI::getArg('field', 1));
-		$sub = urldecode(edkURI::getArg('sub', 2));
+		$field = urldecode(URI::getArg('field', 1));
+		$sub = urldecode(URI::getArg('sub', 2));
 		if (!$field || !$sub) {
 			$field = "Advanced";
 			$sub = "Configuration";
@@ -295,7 +296,7 @@ class options
 
 				// we're not a category, make it clickable
 				$menubox->addOption('link', $subfield,
-						edkURI::build(
+						URI::build(
 								array(array('a', 'admin', true),
 									array('field', urlencode($field), true),
 									array('sub', urlencode($subfield), true))));

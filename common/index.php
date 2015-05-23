@@ -27,6 +27,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -106,9 +107,9 @@ define('IMG_URL', config::get('cfg_img'));
 if(substr(IMG_URL, -4) == '/img') define('IMG_HOST', substr(IMG_URL, 0, strpos(IMG_URL, "/img")));
 else  define('IMG_HOST', KB_HOST);
 
-$page = edkURI::getArg('a', 0);
-edkURI::usePath(config::get('cfg_pathinfo'));
-if (defined('KB_PHP')) edkURI::setRoot(KB_PHP);
+$page = URI::getArg('a', 0);
+URI::usePath(config::get('cfg_pathinfo'));
+if (defined('KB_PHP')) URI::setRoot(KB_PHP);
 
 if(isset($_GET['xajax'])) require_once('common/includes/xajax.functions.php');
 
@@ -325,8 +326,8 @@ if ($settingsPage)
 {
 	if (!session::isAdmin())
 	{
-		header('Location: '.edkURI::build(array('a', 'login', true)));
-		echo '<a href="'.edkURI::build(array('a', 'login', true)).'">Login</a>';
+		header('Location: '.URI::build(array('a', 'login', true)));
+		echo '<a href="'.URI::build(array('a', 'login', true)).'">Login</a>';
 		exit;
 	}
 

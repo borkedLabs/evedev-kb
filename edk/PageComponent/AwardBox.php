@@ -9,8 +9,8 @@
 namespace EDK\PageComponent;
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Entity\Pilot;
-use edkURI;
 
 /**
  * Create a box to display TopList awards.
@@ -59,7 +59,7 @@ class AwardBox
 		$smarty->assign('pilot_portrait', $pilot->getPortraitURL(64));
 		$smarty->assign('award_img',
 				config::get('cfg_img')."/awards/".$this->award_.".png");
-		$smarty->assign('url', edkURI::build(array('a', 'pilot_detail', true),
+		$smarty->assign('url', URI::build(array('a', 'pilot_detail', true),
 						array('plt_id', $rows[0]['plt_id'], true)));
 		$smarty->assign('name', $pilot->getName());
 
@@ -78,7 +78,7 @@ class AwardBox
 			}
 			$bar = new BarGraph($rows[$i - 1]['cnt'], $max);
 			$top[$i] = array(
-				'url' => edkURI::build(array('a', 'pilot_detail', true),
+				'url' => URI::build(array('a', 'pilot_detail', true),
 						array('plt_id', $rows[$i-1]['plt_id'], true)),
 				'name' => $pilotname,
 				'bar' => $bar->generate(),

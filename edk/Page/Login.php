@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Event;
+use EDK\Core\URI;
 /*
  * @package EDK
  */
@@ -65,7 +66,7 @@ class Login extends \pageAssembly
 					\session::create(true);
 
 					session_write_close();
-					header('Location: '.html_entity_decode(\edkURI::page('admin')));
+					header('Location: '.html_entity_decode(URI::page('admin')));
 					die;
 				}
 			} else if ($_POST['usrlogin'] == ''
@@ -73,14 +74,14 @@ class Login extends \pageAssembly
 				\session::create(true);
 
 				session_write_close();
-				$page = preg_replace('/[^a-zA-Z0-9-_]/', '', \edkURI::getArg("page", 1));
+				$page = preg_replace('/[^a-zA-Z0-9-_]/', '', URI::getArg("page", 1));
 				$page = $page ? $page : "admin";
-				header('Location: '.html_entity_decode(\edkURI::page($page)));
+				header('Location: '.html_entity_decode(URI::page($page)));
 				die;
 			} else {
 				$result = \user::login($_POST['usrlogin'], $_POST['usrpass']);
 				if ($result) {
-					header('Location: '.html_entity_decode(\edkURI::page('home')));
+					header('Location: '.html_entity_decode(URI::page('home')));
 					die;
 				} else {
 					$smarty->assign('error',

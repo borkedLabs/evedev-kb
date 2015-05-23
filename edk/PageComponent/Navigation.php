@@ -8,6 +8,7 @@
 namespace EDK\PageComponent;
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use \DBFactory;
 use \Killboard;
 use \Language;
@@ -114,15 +115,15 @@ class Navigation
 			return false;
 		}
 		$sql = "INSERT INTO `kb3_navigation` (`nav_type`,`intern`,`descr` ,`url` ,`target`,`posnr`,`page` ,`hidden`,`KBSITE`) VALUES".
-			" ('top',1,'Home','".edkURI::build(array('a', 'home', true))."','_self',1,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Campaigns','".edkURI::build(array('a', 'campaigns', true))."','_self',2,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Post Kill','".edkURI::build(array('a', 'post', true))."','_self',3,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Stats','".edkURI::build(array('a', 'self_detail', true))."','_self',4,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Awards','".edkURI::build(array('a', 'awards', true))."','_self',5,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Standings','".edkURI::build(array('a', 'standings', true))."','_self',6,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Search','".edkURI::build(array('a', 'search', true))."','_self',7,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'Admin','".edkURI::build(array('a', 'admin', true))."','_self',8,'ALL_PAGES',0,'".$this->site."'),".
-			" ('top',1,'About','".edkURI::build(array('a', 'about', true))."','_self',9,'ALL_PAGES',0,'".$this->site."');";
+			" ('top',1,'Home','".URI::build(array('a', 'home', true))."','_self',1,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Campaigns','".URI::build(array('a', 'campaigns', true))."','_self',2,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Post Kill','".URI::build(array('a', 'post', true))."','_self',3,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Stats','".URI::build(array('a', 'self_detail', true))."','_self',4,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Awards','".URI::build(array('a', 'awards', true))."','_self',5,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Standings','".URI::build(array('a', 'standings', true))."','_self',6,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Search','".URI::build(array('a', 'search', true))."','_self',7,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'Admin','".URI::build(array('a', 'admin', true))."','_self',8,'ALL_PAGES',0,'".$this->site."'),".
+			" ('top',1,'About','".URI::build(array('a', 'about', true))."','_self',9,'ALL_PAGES',0,'".$this->site."');";
 		$qry->execute($sql);
 		$qry->autocommit(true);
 		return true;
