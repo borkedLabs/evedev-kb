@@ -7,6 +7,8 @@
  */
 
 namespace EDK\Page;
+use EDK\PageComponent\Box;
+
 $page = new Page('Campaigns');
 /*
  * @package EDK
@@ -120,7 +122,7 @@ class Campaigns extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{

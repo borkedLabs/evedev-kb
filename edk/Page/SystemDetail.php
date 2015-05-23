@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\PageComponent\Box;
 
 /*
  * @package EDK
@@ -213,7 +214,7 @@ class SystemDetail extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2]))

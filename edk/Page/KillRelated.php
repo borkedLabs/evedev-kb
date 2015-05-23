@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\PageComponent\Box;
 
 /*
  * Build the related kills page.
@@ -661,7 +662,7 @@ class KillRelated extends \pageAssembly
 
 	public function menu()
 	{
-		$menubox = new \Box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2]))

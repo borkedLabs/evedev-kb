@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\PageComponent\Box;
 
 // include all admin modules
 // this doesnt need to check for itself because its already loaded

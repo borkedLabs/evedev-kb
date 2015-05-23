@@ -5,8 +5,12 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\PageComponent;
 
 use EDK\Core\Config;
+use \DBFactory;
+use \Killboard;
+use \Language;
 /**
  * @package EDK
  */

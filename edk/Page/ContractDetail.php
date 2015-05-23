@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Config;
+use EDK\PageComponent\Box;
 
 /*
  * @package EDK
@@ -325,7 +326,7 @@ class ContractDetail extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \Box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{

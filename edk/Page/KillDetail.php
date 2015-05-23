@@ -7,11 +7,13 @@
  */
 namespace EDK\Page;
 
- 
 use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\PageComponent\Box;
+use \edkURI;
+use \DBFactory;
 
 if (Config::get('comments')) {
 	require_once(__DIR__.'/../../common/includes/xajax.functions.php');
@@ -1520,14 +1522,10 @@ class KillDetail extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \Box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			call_user_func_array(array($menubox, 'addOption'), $options);
-//			if(isset($options[2]))
-//				$menubox->addOption($options[0],$options[1], $options[2]);
-//			else
-//				$menubox->addOption($options[0],$options[1]);
 		}
 
 		return $menubox->generate();
@@ -1542,7 +1540,7 @@ class KillDetail extends \pageAssembly
 	{
 		if (!Config::get('kill_points')) return '';
 
-		$scorebox = new \Box("Points");
+		$scorebox = new Box("Points");
 		$scorebox->addOption("points", $this->kill->getKillPoints());
 		return $scorebox->generate();
 	}
@@ -1556,7 +1554,7 @@ class KillDetail extends \pageAssembly
 	{
 		//Admin is able to see classsified systems
 		if ((!$this->kill->isClassified()) || ($this->page->isAdmin())) {
-			$mapbox = new \Box("Map");
+			$mapbox = new Box("Map");
 			if (IS_IGB) {
 				$mapbox->addOption("img", \imageURL::getURL('map',
 						$this->kill->getSystem()->getID(), 145),
@@ -1606,7 +1604,7 @@ class KillDetail extends \pageAssembly
 		if (Config::get('item_values')) {
 			if (isset($_POST['submit']) && $_POST['submit'] == 'UpdateValue') {
 				// Send new value for item to the database
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->autocommit(false);
 				if (isset($_POST['SID'])) {
 					$SID = intval($_POST['SID']);
@@ -1656,7 +1654,7 @@ class KillDetail extends \pageAssembly
 	public function source()
 	{
 		global $smarty;
-		$qry = \DBFactory::getDBQuery();
+		$qry = DBFactory::getDBQuery();
 		$sql = "SELECT log_ip_address, log_timestamp FROM kb3_log WHERE"
 				." log_kll_id = ".$this->kll_id;
 		$qry->execute($sql);

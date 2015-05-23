@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\PageComponent;
 
 use EDK\Core\Config;
 

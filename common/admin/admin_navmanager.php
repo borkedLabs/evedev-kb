@@ -6,6 +6,7 @@
  * @package EDK
  */
 use EDK\Page\Page;
+use EDK\PageComponent\Navigation;
 
 require_once('common/admin/admin_menu.php');
 

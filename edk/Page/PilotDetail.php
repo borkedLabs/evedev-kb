@@ -12,6 +12,15 @@ use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\PageComponent\Box;
+use \edkURI;
+use \DBFactory;
+use \Cacheable;
+use \KillList;
+use \KillListTable;
+use \KillSummaryTable;
+use \PageSplitter;
+
 
 /*
  * @package EDK
@@ -145,7 +154,7 @@ class PilotDetail extends \pageAssembly
 	{
 		if(!isset($this->summary))
 		{
-			$this->summary = new \KillSummaryTable();
+			$this->summary = new KillSummaryTable();
 			$this->summary->addInvolvedPilot($this->plt_id);
 			if ($this->view == "ships_weapons") $this->summary->setFilter(false);
 		}
@@ -289,7 +298,7 @@ class PilotDetail extends \pageAssembly
 
 				break;
 			default:
-				$list = new \KillList();
+				$list = new KillList();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
@@ -299,11 +308,11 @@ class PilotDetail extends \pageAssembly
 					$list->addVictimShipClass($scl_id);
 				else
 					$list->setPodsNoobships(Config::get('podnoobs'));
-				$table = new \KillListTable($list);
+				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('kills', $table->generate());
 
-				$list = new \KillList();
+				$list = new KillList();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
@@ -313,7 +322,7 @@ class PilotDetail extends \pageAssembly
 					$list->addVictimShipClass($scl_id);
 				else
 					$list->setPodsNoobships(Config::get('podnoobs'));
-				$table = new \KillListTable($list);
+				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$table->setDayBreak(false);
 				$smarty->assign('losses', $table->generate());
@@ -351,7 +360,7 @@ class PilotDetail extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach($this->menuOptions as $options)
 		{
@@ -368,19 +377,19 @@ class PilotDetail extends \pageAssembly
 		$html = '';
 		if (Config::get('kill_points') && !empty($this->points))
 		{
-			$scorebox = new \Box("Kill points");
+			$scorebox = new Box("Kill points");
 			$scorebox->addOption("points", $this->points);
 			$html .= $scorebox->generate();
 		}
 		if (Config::get('loss_points') && !empty($this->lpoints))
 		{
-			$scorebox = new \Box("Loss points");
+			$scorebox = new Box("Loss points");
 			$scorebox->addOption("points", $this->lpoints);
 			$html .= $scorebox->generate();
 		}
 		if (Config::get('total_points') && !empty($this->lpoints))
 		{
-			$scorebox = new \Box("Total points");
+			$scorebox = new Box("Total points");
 			$scorebox->addOption("points", $this->points-$this->lpoints);
 			$html .= $scorebox->generate();
 		}

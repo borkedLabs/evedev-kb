@@ -8,6 +8,9 @@
 namespace EDK\Page;
  
 use EDK\Core\Config;
+use EDK\PageComponent\AwardBox;
+use EDK\PageComponent\Box;
+use EDK\PageComponent\Clock;
 /*
  * @package EDK
  */
@@ -326,7 +329,7 @@ class Home extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2])) {
@@ -347,7 +350,7 @@ class Home extends \pageAssembly
 		// Show the Eve time.
 		if (Config::get('show_clock')) {
 			$this->page->addOnLoad("setInterval('updateClock()', 60000 )");
-			$clock = new \Clock();
+			$clock = new Clock();
 			return $clock->generate();
 		}
 	}
@@ -365,7 +368,7 @@ class Home extends \pageAssembly
 			\involved::load($tklist, 'kill');
 
 			$tklist->generate();
-			$tkbox = new \AwardBox($tklist, "Top killers", "kills in "
+			$tkbox = new AwardBox($tklist, "Top killers", "kills in "
 					.$this->getCurrentPeriod(), "kills", "eagle");
 			$html = $tkbox->generate();
 
@@ -374,7 +377,7 @@ class Home extends \pageAssembly
 			\involved::load($tklist, 'kill');
 
 			$tklist->generate();
-			$tkbox = new \AwardBox($tklist, "Top scorers", "points in "
+			$tkbox = new AwardBox($tklist, "Top scorers", "points in "
 					.$this->getCurrentPeriod(), "points", "redcross");
 			$html .= $tkbox->generate();
 		} else {
@@ -383,7 +386,7 @@ class Home extends \pageAssembly
 			\involved::load($tllist, 'loss');
 
 			$tllist->generate();
-			$tlbox = new \AwardBox($tllist, "Top losers", "losses in "
+			$tlbox = new AwardBox($tllist, "Top losers", "losses in "
 					.$this->getCurrentPeriod(), "losses", "moon");
 			$html = $tlbox->generate();
 		}

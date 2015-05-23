@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+namespace EDK\PageComponent;
 
 /**
  * A simple clock implementation

@@ -5,9 +5,12 @@
  * $HeadURL: https://evedev-kb.googlecode.com/svn/trunk/common/includes/class.box.php $
  * @package EDK
  */
+ 
+namespace EDK\PageComponent;
 
 use EDK\Core\Config;
 use EDK\Entity\Pilot;
+use edkURI;
 
 /**
  * Create a box to display TopList awards.

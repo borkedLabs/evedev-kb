@@ -7,6 +7,7 @@
  */
 
 use EDK\Entity\Pilot;
+use EDK\PageComponent\Box;
 
 /**
  * @package EDK

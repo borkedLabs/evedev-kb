@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\PageComponent\Box;
 /*
  * Control handling of admin menu options.
  */

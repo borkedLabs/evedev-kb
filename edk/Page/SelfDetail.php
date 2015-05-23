@@ -28,7 +28,6 @@ class SelfDetail extends \pageAssembly
         parent::__construct();
 
         $this->queue("start");
-        //$this->queue("summaryTable");
         $this->queue("display");
     }
 	

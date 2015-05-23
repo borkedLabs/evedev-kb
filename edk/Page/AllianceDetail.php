@@ -11,7 +11,15 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
-
+use EDK\PageComponent\Box;
+use \edkURI;
+use \DBFactory;
+use \Cacheable;
+use \KillList;
+use \KillListTable;
+use \KillSummaryTable;
+use \PageSplitter;
+use \Shipclass;
 /**
  * Display alliance details.
  * @package EDK
@@ -479,7 +487,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -508,7 +516,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -533,7 +541,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -559,7 +567,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -768,7 +776,7 @@ class AllianceDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;
@@ -805,7 +813,7 @@ class AllianceDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = \DBFactory::getDBQuery();
+				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;
@@ -858,7 +866,7 @@ class AllianceDetail extends \pageAssembly
 	 */
 	function menu()
 	{
-		$menubox = new \Box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		foreach ($this->menuOptions as $options) {
 			if (isset($options[2])) {
@@ -884,7 +892,7 @@ class AllianceDetail extends \pageAssembly
 			$args[] = array('all_id', $this->all_id, true);
 		}
 
-		$menubox = new \Box("Menu");
+		$menubox = new Box("Menu");
 		$menubox->setIcon("menu-item.gif");
 		$this->addMenuItem("caption", "Kills &amp; losses");
 		$this->addMenuItem("link", "Recent activity", \edkURI::build($args));

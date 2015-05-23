@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\PageComponent;
+
 /**
  * @package EDK
  */
