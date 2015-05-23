@@ -8,8 +8,8 @@
 
 namespace EDK\PageComponent\TopTable;
 
+use EDK\Core\ImageURL;
 use \Cacheable;
-use \imageURL;
 
 class Corp
 {
@@ -38,7 +38,7 @@ class Corp
 				'rank' => $i,
 				'name' => $corp->getName(),
 				'uri' => $uri,
-				'portrait' => imageURL::getURL('Corporation', $corp->getExternalID(false), 32),
+				'portrait' => ImageURL::getURL('Corporation', $corp->getExternalID(false), 32),
 				'count' => $row['cnt']);
 			$i++;
 		}

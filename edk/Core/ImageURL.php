@@ -7,12 +7,12 @@
  * @package EDK
  */
 
-use EDK\Core\Config;
+namespace EDK\Core;
 /**
  * Generate the correct URL for an image.
  * @package EDK
  */
-class imageURL
+class ImageURL
 {
 	private static $callbacks = array();
 	

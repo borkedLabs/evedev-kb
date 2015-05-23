@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\ImageURL;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 
@@ -372,7 +373,7 @@ class thumbInt extends thumb
 
 				if($this->id)
 				{
-					$url = imageURL::getURL('Pilot', $this->id, $size);
+					$url = ImageURL::getURL('Pilot', $this->id, $size);
 					header(html_entity_decode("Location: $url"));
 					die;
 				}
@@ -393,7 +394,7 @@ class thumbInt extends thumb
 				$this->id = $corp->getExternalID();
 				if($this->id)
 				{
-					$url = imageURL::getURL('Corporation', $this->id, $size);
+					$url = ImageURL::getURL('Corporation', $this->id, $size);
 					header("Location: $url");
 					die;
 				}

@@ -9,6 +9,8 @@
 namespace EDK\Entity;
 
 use EDK\Core\URI;
+use EDK\Core\ImageURL;
+
 /**
  * Creates a new Corporation or fetches an existing one from the database.
  * @package EDK
@@ -68,9 +70,9 @@ class Corporation extends Entity
 
 		// NPC alliances can be recorded as corps on killmails.
 		if($this->externalid > 500000 && $this->externalid < 500021)
-			return \imageURL::getURL('Alliance', $this->externalid, $size);
+			return ImageURL::getURL('Alliance', $this->externalid, $size);
 
-		return \imageURL::getURL('Corporation', $this->externalid, $size);
+		return ImageURL::getURL('Corporation', $this->externalid, $size);
 	}
 
 	/**
@@ -138,7 +140,7 @@ class Corporation extends Entity
 	{
 		$qry = \DBFactory::getDBQuery();
 		$qry->execute("select crp_id from kb3_corps where crp_name = '"
-				.slashfix($name)."'");
+				.\EDK\Core\EDK::slashfix($name)."'");
 		if($qry->recordCount()) {
 			$row = $qry->getRow();
 			return \Cacheable::factory('\EDK\Entity\Corporation', (int)$row['crp_id']);
@@ -430,7 +432,7 @@ class Corporation extends Entity
 		if (!$alliance) {
 			return false;
 		}
-		$crp = Corporation::add(slashfix($myAPI->getCorporationName()), $alliance,
+		$crp = Corporation::add(\EDK\Core\EDK::slashfix($myAPI->getCorporationName()), $alliance,
 				$myAPI->getCurrentTime(), intval($myAPI->getCorporationID()));
 
 		$this->name = $crp->name;

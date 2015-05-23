@@ -9,6 +9,7 @@
 namespace EDK\Entity;
 
 use EDK\Core\Config;
+use EDK\Core\ImageURL;
 use EDK\Core\URI;
 /**
  * Creates a new Alliance or fetches an existing one from the database.
@@ -309,7 +310,7 @@ class Alliance extends Entity
 		
 		if( Config::get('cfg_ccpimages') )
 		{
-			return \imageURL::getURL('Alliance', $this->getExternalID(), $size);;
+			return ImageURL::getURL('Alliance', $this->getExternalID(), $size);;
 		}
 		
 		if (file_exists("img/alliances/".$this->getUnique().".png")) {
@@ -327,11 +328,11 @@ class Alliance extends Entity
 			}
 			$this->putCache();
 		} else if ($this->getExternalID()) {
-			$this->imgurl[$size] = \imageURL::getURL('Alliance', $this->getExternalID(),
+			$this->imgurl[$size] = ImageURL::getURL('Alliance', $this->getExternalID(),
 					$size);
 			$this->putCache();
 		} else {
-			$this->imgurl[$size] = \imageURL::getURL('Alliance', 1, $size);
+			$this->imgurl[$size] = ImageURL::getURL('Alliance', 1, $size);
 		}
 		return $this->imgurl[$size];
 	}

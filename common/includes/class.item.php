@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\ImageURL;
 
 /**
  * Contains the details about an Item.
@@ -69,7 +70,7 @@ class Item extends Cacheable
 	{
 		$this->execQuery();
 		global $smarty;
-		$img = imageURL::getURL('InventoryType', $this->id, $size);
+		$img = ImageURL::getURL('InventoryType', $this->id, $size);
 
 		if (!$full) {
 			return $img;

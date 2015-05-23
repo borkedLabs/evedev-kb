@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\ImageURL;
 use EDK\Entity\Pilot;
 use EDK\Entity\Alliance;
 
@@ -457,7 +458,7 @@ class KillWrapper extends Kill
 	 */
 	function getVictimShipImage($size)
 	{
-		return imageURL::getURL('Ship', $this->victimshipid, $size);
+		return ImageURL::getURL('Ship', $this->victimshipid, $size);
 	}
 
 	/**

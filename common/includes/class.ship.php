@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\ImageURL;
 use EDK\Core\URI;
 use EDK\Database\PreparedQuery;
 
@@ -163,7 +164,7 @@ class Ship extends Cacheable
 			$this->execQuery();
 		}
 
-		return imageURL::getURL('Ship', $this->id, $size);
+		return ImageURL::getURL('Ship', $this->id, $size);
 	}
 
 	/**

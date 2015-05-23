@@ -9,6 +9,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\ImageURL;
 use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -563,7 +564,7 @@ class KillDetail extends \pageAssembly
 
 				$this->involved[$i]['pilotURL'] =
 						URI::page('invtype', $weapon->getID());
-				$this->involved[$i]['shipImage'] = \imageURL::getURL('Ship',
+				$this->involved[$i]['shipImage'] = ImageURL::getURL('Ship',
 						$weapon->getID(), 64);
 				$this->involved[$i]['shipURL'] = false;
 				$this->involved[$i]['shipName'] = $weapon->getName();
@@ -1557,24 +1558,24 @@ class KillDetail extends \pageAssembly
 		if ((!$this->kill->isClassified()) || ($this->page->isAdmin())) {
 			$mapbox = new Box("Map");
 			if (IS_IGB) {
-				$mapbox->addOption("img", \imageURL::getURL('map',
+				$mapbox->addOption("img", ImageURL::getURL('map',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(3, "
 						.$this->kill->getSystem()->getRegionID().")");
-				$mapbox->addOption("img", \imageURL::getURL('region',
+				$mapbox->addOption("img", ImageURL::getURL('region',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(4, "
 						.$this->kill->getSystem()->getConstellationID().")");
-				$mapbox->addOption("img", \imageURL::getURL('cons',
+				$mapbox->addOption("img", ImageURL::getURL('cons',
 						$this->kill->getSystem()->getID(), 145),
 						"javascript:CCPEVE.showInfo(5, "
 						.$this->kill->getSystem()->getExternalID().")");
 			} else {
-				$mapbox->addOption("img", \imageURL::getURL('map',
+				$mapbox->addOption("img", ImageURL::getURL('map',
 						$this->kill->getSystem()->getID(), 145));
-				$mapbox->addOption("img", \imageURL::getURL('region',
+				$mapbox->addOption("img", ImageURL::getURL('region',
 						$this->kill->getSystem()->getID(), 145));
-				$mapbox->addOption("img", \imageURL::getURL('cons',
+				$mapbox->addOption("img", ImageURL::getURL('cons',
 						$this->kill->getSystem()->getID(), 145));
 			}
 			return $mapbox->generate();

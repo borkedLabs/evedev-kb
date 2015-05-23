@@ -8,6 +8,7 @@
 
 namespace EDK\Entity;
 
+use EDK\Core\ImageURL;
 use EDK\Core\URI;
 use EDK\Database\PreparedQuery;
 
@@ -167,7 +168,7 @@ class Pilot extends Entity
 		if (!$this->externalid) {
 			return KB_HOST."/thumb.php?type=pilot&amp;id=".$this->id."&amp;size=$size&amp;int=1";
 		} else {
-			return \imageURL::getURL('Pilot', $this->externalid, $size);
+			return ImageURL::getURL('Pilot', $this->externalid, $size);
 		}
 	}
 

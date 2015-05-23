@@ -9,7 +9,7 @@
 namespace EDK\PageComponent\TopTable;
 
 use EDK\Core\URI;
-use \imageURL;
+use EDK\Core\ImageURL;
 
 class Pilot
 {
@@ -32,7 +32,7 @@ class Pilot
 			if($row['plt_externalid']) {
 				$uri = URI::build(array('a', 'pilot_detail', true),
 						array('plt_ext_id', $row['plt_externalid'], true));
-				$img = imageURL::getURL('Pilot', $row['plt_externalid'], 32);
+				$img = ImageURL::getURL('Pilot', $row['plt_externalid'], 32);
 			} else {
 				$uri = URI::build(array('a', 'pilot_detail', true),
 						array('plt_id', $row['plt_id'], true));

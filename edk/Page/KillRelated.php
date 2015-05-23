@@ -10,6 +10,7 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\ImageURL;
 use EDK\Core\URI;
 use EDK\PageComponent\Box;
 
@@ -578,7 +579,7 @@ class KillRelated extends \pageAssembly
 				'ts' => strtotime($kill->getTimeStamp()),
 				'weapon' => $row['itm_name'],
 				'sid' => $row['ind_shp_id'],
-				'spic' => \imageURL::getURL('Ship', $row['ind_shp_id'], 32),
+				'spic' => ImageURL::getURL('Ship', $row['ind_shp_id'], 32),
 				'ship' => ($row['ind_shp_id'] ? $row['shp_name'] : Language::get("Unknown")),
 				'scl' => $row['scl_points'],
 				'shpclass' => $row['scl_id']);
