@@ -213,7 +213,8 @@ $pageMap = array('kill_detail' => 'KillDetail',
 				'invtype' => 'InvType',
 				'kill_related' => 'KillRelated',
 				'cc_detail' => 'ContractDetail',
-				'groupdb' => 'InvGroup'
+				'groupdb' => 'InvGroup',
+				'login' => 'Login'
 				);
 
 $className = '';

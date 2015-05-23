@@ -8,6 +8,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Event;
+use EDK\Core\Language;
 use EDK\Core\URI;
 /*
  * @package EDK
@@ -28,7 +29,7 @@ class Login extends \pageAssembly
 	
 	public function generate()
 	{
-		Event::call(login_assembling);
+		Event::call("login_assembling", $this);
 		$html = $this->assemble();
 		$this->page->setContent($html);
 
@@ -37,7 +38,7 @@ class Login extends \pageAssembly
 
 	function start()
 	{
-		$this->page = new Page(\Language::get('page_login'));
+		$this->page = new Page(Language::get('page_login'));
 	}
 
 	function content()

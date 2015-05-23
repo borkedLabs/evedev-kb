@@ -9,7 +9,7 @@
 namespace EDK\PageComponent\TopTable;
 
 use EDK\Core\URI;
-use \Language;
+use EDK\Core\Language;
 use \Item;
 
 class Weapon

@@ -8,10 +8,10 @@
 namespace EDK\PageComponent;
 
 use EDK\Core\Config;
+use EDK\Core\Language;
 use EDK\Core\URI;
 use \DBFactory;
 use \Killboard;
-use \Language;
 /**
  * @package EDK
  */

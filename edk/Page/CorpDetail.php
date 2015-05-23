@@ -648,7 +648,7 @@ class CorpDetail extends \pageAssembly
 						"counter"=>$counter,
 						"url"=>"?a=system_detail&amp;sys_id=".$row['sys_id'],
 						"name"=>$row['sys_name'],
-						"sec"=>roundsec($row['sys_sec']),
+						"sec"=>\EDK\Core\EDK::roundsec($row['sys_sec']),
 						"kills"=>$row['kills']);
 					$counter++;
 				}
@@ -688,7 +688,7 @@ class CorpDetail extends \pageAssembly
 						"counter"=>$counter,
 						"url"=>"?a=system_detail&amp;sys_id=".$row['sys_id'],
 						"name"=>$row['sys_name'],
-						"sec"=>roundsec($row['sys_sec']),
+						"sec"=>\EDK\Core\EDK::roundsec($row['sys_sec']),
 						"kills"=>$row['kills']);
 					$counter++;
 				}

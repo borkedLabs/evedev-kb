@@ -5,9 +5,10 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Core;
 
-use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
+use \DBFactory;
 
 /**
  * Wrapper class to pick the correct language from config settings and return
@@ -23,8 +24,9 @@ class Language {
 		if(!Config::get("cfg_language")) {
 			Config::set("cfg_language", "en");
 		}
-		@include_once("common/language/".Config::get("cfg_language").".php");
-		include_once("common/language/en.php");
+		
+		@include_once(KB_ROOT."/common/language/".Config::get("cfg_language").".php");
+		include_once(KB_ROOT."/common/language/en.php");
 		self::$lang = $language;
 	}
 

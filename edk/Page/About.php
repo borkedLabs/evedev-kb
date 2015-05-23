@@ -9,6 +9,7 @@
 namespace EDK\Page;
 
 use EDK\Core\Event;
+use EDK\Core\Language;
 
 /*
  * @package EDK
@@ -42,7 +43,7 @@ class About extends \pageAssembly
 	
 	function start()
 	{
-		$this->page = new Page(\Language::get('page_about'));
+		$this->page = new Page(Language::get('page_about'));
 	}
 	
 	function developers()
