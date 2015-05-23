@@ -3,5 +3,10 @@
         "3rdpartyeve/phealng": "~2.0",
 		"xajax/xajax": "dev-master",
 		"smarty/smarty": "3.1.19"
-    }
+    },
+	"autoload": {
+		"psr-4": {
+			"EDK\\": "edk/"
+		}
+	}
 }

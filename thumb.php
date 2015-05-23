@@ -7,7 +7,6 @@
  * @package EDK
  */
  
-require __DIR__.'/vendor/autoload.php';
 require __DIR__ .'/bootstrap/edk.php';
 
 use EDK\Core\Config;
