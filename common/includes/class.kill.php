@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\Event;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -1638,8 +1639,8 @@ class Kill extends Cacheable
 		//Update cache tables.
 		summaryCache::addKill($this);
 		$qry->autocommit(true);
-		// call the event that we added this mail
-		event::call('killmail_added', $this);
+		// call the Event that we added this mail
+		Event::call('killmail_added', $this);
 		cache::notifyKillAdded();
 		return $this->id;
 	}
@@ -1652,7 +1653,7 @@ class Kill extends Cacheable
 		$qry = DBFactory::getDBQuery();
 		$qry->autocommit(false);
 
-		event::call('killmail_delete', $this);
+		Event::call('killmail_delete', $this);
 		summaryCache::delKill($this);
 
 		$qry->execute("delete from kb3_inv_detail where ind_kll_id = ".$this->id);
