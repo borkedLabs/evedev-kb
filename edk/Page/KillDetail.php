@@ -15,6 +15,7 @@ use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
+use EDK\Killmail;
 use \DBFactory;
 
 if (Config::get('comments')) {
@@ -136,7 +137,7 @@ class KillDetail extends \pageAssembly
 		}
 
 		if ($this->kll_id) {
-			$this->kill = \Cacheable::factory('Kill', $this->kll_id);
+			$this->kill = \Cacheable::factory('\EDK\Killmail\Kill', $this->kll_id);
 		} else {
 			$this->kill = new Kill($this->kll_external_id, true);
 			$this->kll_id = $this->kill->getID();
@@ -247,7 +248,7 @@ class KillDetail extends \pageAssembly
 					$formatted = $destroyed->getFormattedValue();
                                         
                                         // check for Blueprint -> catgory 9 = Blueprint
-                                        // don't need to chack for BPOs, this is handled by the \DestroyedItem->getValue() method
+                                        // don't need to chack for BPOs, this is handled by the Killmail\DestroyedItem->getValue() method
 					if ($item->getAttribute('itt_cat') == 9)
                                         {
                                             $this->bp_value += $value * $i_qty;
@@ -255,7 +256,7 @@ class KillDetail extends \pageAssembly
 				}
 
 				$i_name = $item->getName();
-				$i_location = \InventoryFlag::collapse($destroyed->getLocationID());
+				$i_location = Killmail\InventoryFlag::collapse($destroyed->getLocationID());
 				$i_id = $item->getID();
 				$i_usedgroup = $item->get_used_launcher_group();
                                 
@@ -270,7 +271,7 @@ class KillDetail extends \pageAssembly
 				
 				// BPCs
                                 $bpc = false;
-				if($destroyed->getSingleton() == \InventoryFlag::$SINGLETON_COPY) {
+				if($destroyed->getSingleton() == Killmail\InventoryFlag::$SINGLETON_COPY) {
 					$i_name = $i_name." (Copy)";
 					$value = $formatted = 0;
 					$bpc = true;
@@ -296,9 +297,9 @@ class KillDetail extends \pageAssembly
                                 );
 
 				//Fitting, KE - add destroyed items to an array of all fitted items.
-				if ($i_location ==\InventoryFlag::$LOW_SLOT_1 || $i_location ==  \InventoryFlag::$MED_SLOT_1 || $i_location ==  \InventoryFlag::$HIGH_SLOT_1 || $i_location ==\InventoryFlag::$SUB_SYSTEM_SLOT_1 || $i_location ==\InventoryFlag::$RIG_SLOT_1) {
+				if ($i_location ==Killmail\InventoryFlag::$LOW_SLOT_1 || $i_location ==  Killmail\InventoryFlag::$MED_SLOT_1 || $i_location ==  Killmail\InventoryFlag::$HIGH_SLOT_1 || $i_location ==Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_1 || $i_location ==Killmail\InventoryFlag::$RIG_SLOT_1) {
 					if (($i_usedgroup != 0)) {
-						if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
+						if ($i_location == Killmail\InventoryFlag::$HIGH_SLOT_1) {
 							$i_ammo = $item->get_ammo_size($i_name);
 							if ($i_usedgroup == 481) {
 								$i_ammo = 0;
@@ -321,7 +322,7 @@ class KillDetail extends \pageAssembly
 						// Avoids timeouts on badly faked mails.
 						// TODO: Refuse to show fitting and display an invalid message.
 						for ($count = 0; $count < min($i_qty, 8); $count++) {
-							if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
+							if ($i_location == Killmail\InventoryFlag::$HIGH_SLOT_1) {
 								$i_charge = $item->get_used_charge_size();
 							} else {
 								$i_charge = 0;
@@ -362,7 +363,7 @@ class KillDetail extends \pageAssembly
 				}
 
 				$i_name = $item->getName();
-				$i_location = \InventoryFlag::collapse($dropped->getLocationID());
+				$i_location = Killmail\InventoryFlag::collapse($dropped->getLocationID());
 				$i_id = $item->getID();
 				$i_usedgroup = $item->get_used_launcher_group();
                                 
@@ -377,7 +378,7 @@ class KillDetail extends \pageAssembly
 
 				// BPCs
                                 $bpc = false;
-				if($dropped->getSingleton() == \InventoryFlag::$SINGLETON_COPY) {
+				if($dropped->getSingleton() == Killmail\InventoryFlag::$SINGLETON_COPY) {
 					$i_name = $i_name." (Copy)";
 					$value = $formatted = 0;
 					$bpc = true;
@@ -402,9 +403,9 @@ class KillDetail extends \pageAssembly
                                 );
 
 				//Fitting -KE, add dropped items to the list
-				if (($i_location != \InventoryFlag::$CARGO )&& ($i_location != \InventoryFlag::$DRONE_BAY)) {
+				if (($i_location != Killmail\InventoryFlag::$CARGO )&& ($i_location != Killmail\InventoryFlag::$DRONE_BAY)) {
 					if (($i_usedgroup != 0)) {
-						if ($i_location >= \InventoryFlag::$HIGH_SLOT_1 && $i_location <= \InventoryFlag::$HIGH_SLOT_8) {
+						if ($i_location >= Killmail\InventoryFlag::$HIGH_SLOT_1 && $i_location <= Killmail\InventoryFlag::$HIGH_SLOT_8) {
 							$i_ammo = $item->get_ammo_size($i_name);
 
 							if ($i_usedgroup == 481) {
@@ -426,7 +427,7 @@ class KillDetail extends \pageAssembly
 						// Use a max of 8 as a sanity check.
 						// Avoids timeouts on badly faked mails.
 						for ($count = 0; $count < min($i_qty, 8); $count++) {
-							if ($i_location == \InventoryFlag::$HIGH_SLOT_1) {
+							if ($i_location == Killmail\InventoryFlag::$HIGH_SLOT_1) {
 								$i_charge = $item->get_used_charge_size();
 							} else {
 								$i_charge = 0;
@@ -811,7 +812,7 @@ class KillDetail extends \pageAssembly
 		// preparing slot layout
                 // we predefine some flags/slots which are supposed to be at the top/bottom
                 // High slots
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$HIGH_SLOT_1);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$HIGH_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "High Slot",
@@ -819,7 +820,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Med slots
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$MED_SLOT_1);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$MED_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Medium Slot",
@@ -827,7 +828,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Low slots
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$LOW_SLOT_1);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$LOW_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Low Slot",
@@ -835,7 +836,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Rig slots
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$RIG_SLOT_1);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$RIG_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Rig Slot",
@@ -843,7 +844,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Subsystem slots
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$SUB_SYSTEM_SLOT_1);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_1);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => "Subsystem Slot",
@@ -851,7 +852,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Drone Bay
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$DRONE_BAY);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$DRONE_BAY);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => $InventoryFlag->getText(),
@@ -859,7 +860,7 @@ class KillDetail extends \pageAssembly
                 );
                 
                 // Cargo
-                $InventoryFlag = new \InventoryFlag(\InventoryFlag::$CARGO);
+                $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$CARGO);
                 $slot_array[$InventoryFlag->getID()] = array(
                         'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                         'text' => $InventoryFlag->getText(),
@@ -882,9 +883,9 @@ class KillDetail extends \pageAssembly
                 $genericSlotsInKill = array();
                 foreach($this->dest_array AS $flagID => $item)
                 {
-                    if(!isset($slot_array[$flagID]) && $flagID != \InventoryFlag::$OTHER)
+                    if(!isset($slot_array[$flagID]) && $flagID != Killmail\InventoryFlag::$OTHER)
                     {
-                        $InventoryFlag = new \InventoryFlag($flagID);
+                        $InventoryFlag = new Killmail\InventoryFlag($flagID);
                         $genericSlotsInKill[$flagID] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -895,9 +896,9 @@ class KillDetail extends \pageAssembly
                 
                 foreach($this->drop_array AS $flagID => $item)
                 {
-                    if(!isset($slot_array[$flagID]) && $flagID != \InventoryFlag::$OTHER)
+                    if(!isset($slot_array[$flagID]) && $flagID != Killmail\InventoryFlag::$OTHER)
                     {
-                        $InventoryFlag = new \InventoryFlag($flagID);
+                        $InventoryFlag = new Killmail\InventoryFlag($flagID);
                         $genericSlotsInKill[$flagID] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -914,9 +915,9 @@ class KillDetail extends \pageAssembly
                 $slot_array += $slot_array + $genericSlotsInKill;
                 
                 // now add pre-defined suffix flags
-                if((array_key_exists(\InventoryFlag::$OTHER, $this->dest_array) || array_key_exists(\InventoryFlag::$OTHER, $this->drop_array)))
+                if((array_key_exists(Killmail\InventoryFlag::$OTHER, $this->dest_array) || array_key_exists(Killmail\InventoryFlag::$OTHER, $this->drop_array)))
                 {
-                    $InventoryFlag = new \InventoryFlag(\InventoryFlag::$OTHER);
+                    $InventoryFlag = new Killmail\InventoryFlag(Killmail\InventoryFlag::$OTHER);
                         $slot_array[$InventoryFlag->getID()] = array(
                                 'img' => 'icon'.$InventoryFlag->getIcon().'.png',
                                 'text' => $InventoryFlag->getText(),
@@ -1026,7 +1027,7 @@ class KillDetail extends \pageAssembly
 		global $smarty;
                 
                 // high slots
-                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$HIGH_SLOT_1; $i <= Killmail\InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowh) {
@@ -1039,7 +1040,7 @@ class KillDetail extends \pageAssembly
                 }
 
                 // med slots
-                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$MED_SLOT_1; $i <= Killmail\InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowm) {
@@ -1052,7 +1053,7 @@ class KillDetail extends \pageAssembly
                 }
 
                 // low slots
-                for($i =\InventoryFlag::$LOW_SLOT_1; $i <=\InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$LOW_SLOT_1; $i <=Killmail\InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowl) {
@@ -1065,7 +1066,7 @@ class KillDetail extends \pageAssembly
                 }
 
                 // rig slots
-                for($i =\InventoryFlag::$RIG_SLOT_1; $i <=\InventoryFlag::$RIG_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$RIG_SLOT_1; $i <=Killmail\InventoryFlag::$RIG_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowr) {
@@ -1078,7 +1079,7 @@ class KillDetail extends \pageAssembly
                 }
 
                 // subsystems
-                for($i =\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
                 {
                     if (is_array($this->fitting_array[$i])) {
                             foreach ($this->fitting_array[$i] as $array_rowr) {
@@ -1092,7 +1093,7 @@ class KillDetail extends \pageAssembly
 
 		//Fitting - KE, sort the fitted items into name order, so that several of the same item apear next to each other. -end
                 // high slot ammo
-                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$HIGH_SLOT_1; $i <= Killmail\InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1161,7 +1162,7 @@ class KillDetail extends \pageAssembly
                     }
                 }
 
-                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$MED_SLOT_1; $i <= Killmail\InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1223,7 +1224,7 @@ class KillDetail extends \pageAssembly
                 }
                 
                 
-                for($i = \InventoryFlag::$LOW_SLOT_1; $i <= \InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$LOW_SLOT_1; $i <= Killmail\InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     $length = count($this->ammo_array[$i]);
 
@@ -1266,7 +1267,7 @@ class KillDetail extends \pageAssembly
                 
                 // high slots
                 $highSlots = array();
-                for($i = \InventoryFlag::$HIGH_SLOT_1; $i <= \InventoryFlag::$HIGH_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$HIGH_SLOT_1; $i <= Killmail\InventoryFlag::$HIGH_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1277,7 +1278,7 @@ class KillDetail extends \pageAssembly
                 
                 // med slots
                 $medSlots = array();
-                for($i = \InventoryFlag::$MED_SLOT_1; $i <= \InventoryFlag::$MED_SLOT_8; $i++)
+                for($i = Killmail\InventoryFlag::$MED_SLOT_1; $i <= Killmail\InventoryFlag::$MED_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1288,7 +1289,7 @@ class KillDetail extends \pageAssembly
                 
                 // low slots
                 $lowSlots = array();
-                for($i =\InventoryFlag::$LOW_SLOT_1; $i <=\InventoryFlag::$LOW_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$LOW_SLOT_1; $i <=Killmail\InventoryFlag::$LOW_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1299,7 +1300,7 @@ class KillDetail extends \pageAssembly
                 
                 // rig slots
                 $rigSlots = array();
-                for($i =\InventoryFlag::$RIG_SLOT_1; $i <=\InventoryFlag::$RIG_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$RIG_SLOT_1; $i <=Killmail\InventoryFlag::$RIG_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1310,7 +1311,7 @@ class KillDetail extends \pageAssembly
                 
                 // subsystem slots
                 $subsystemSlots = array();
-                for($i =\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
+                for($i =Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_1; $i <=Killmail\InventoryFlag::$SUB_SYSTEM_SLOT_8; $i++)
                 {
                     if(isset($this->fitting_array[$i]) && is_array($this->fitting_array[$i]))
                     {
@@ -1707,7 +1708,7 @@ class KillDetail extends \pageAssembly
             // group by slot groups..
             foreach($destroyedItems AS $destroyedItem)
             {
-                $location = \InventoryFlag::collapse($destroyedItem->getLocationID());
+                $location = Killmail\InventoryFlag::collapse($destroyedItem->getLocationID());
                 $typeID = $destroyedItem->getItem()->getID();
                 $singleton = $destroyedItem->getSingleton();
                 if(!isset($destroyedItemsGroupedByLocation[$location][$singleton][$typeID]))
@@ -1727,7 +1728,7 @@ class KillDetail extends \pageAssembly
                 {
                     // we already have an item of this type for this slot, add up quantities
                     $quantityGrouped = $destroyedItemsGroupedByLocation[$location][$singleton][$typeID]->getQuantity() + $destroyedItem->getQuantity();
-                    $destroyedItemsGroupedByLocation[$location][$singleton][$typeID] = new \DestroyedItem($destroyedItem->getItem(), $quantityGrouped, $destroyedItem->getSingleton(), null, $location);
+                    $destroyedItemsGroupedByLocation[$location][$singleton][$typeID] = new Killmail\DestroyedItem($destroyedItem->getItem(), $quantityGrouped, $destroyedItem->getSingleton(), null, $location);
                 }
             }
 

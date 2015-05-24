@@ -8,6 +8,7 @@
 namespace EDK\StatSummary;
 
 use \DBFactory;
+use EDK\Killmail;
 
 /**
  * Store summary statistics for Pilots.
@@ -110,12 +111,12 @@ select $plt_id as psm_plt_id, losses.psm_shp_id, ifnull(kills.knb,0), ifnull(kil
 			GROUP BY shp_class) kills on (kills.psm_shp_id = losses.psm_shp_id)";
 		$qry->execute($sql);
 
-		$klist = new \KillList();
+		$klist = new Killmail\Collection();
 		$klist->addInvolvedPilot($plt_id);
 		$klist->getAllKills();
 		$kpoints = $klist->getPoints();
 		unset($klist);
-		$llist = new \KillList();
+		$llist = new Killmail\Collection();
 		$llist->addVictimPilot($plt_id);
 		$llist->getAllKills();
 		$lpoints = $llist->getPoints();

@@ -5,6 +5,9 @@ use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Killmail\Kill;
+use EDK\Killmail\InvolvedParty;
+use EDK\Killmail\DestroyedItem;
 
 /**
  * @package EDK

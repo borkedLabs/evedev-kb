@@ -6,6 +6,10 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+
+use \DBFactory;
+
 /**
  * @package EDK
  */

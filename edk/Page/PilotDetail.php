@@ -14,10 +14,10 @@ use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Killmail;
 use EDK\PageComponent\Box;
 use \DBFactory;
 use \Cacheable;
-use \KillList;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
@@ -253,7 +253,7 @@ class PilotDetail extends \pageAssembly
 		switch ($this->view)
 		{
 			case "kills":
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addInvolvedPilot($this->pilot);
 				if ($scl_id) $list->addVictimShipClass($scl_id);
@@ -268,7 +268,7 @@ class PilotDetail extends \pageAssembly
 
 				break;
 			case "losses":
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addVictimPilot($this->pilot);
 				if ($scl_id)
@@ -301,7 +301,7 @@ class PilotDetail extends \pageAssembly
 
 				break;
 			default:
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);
@@ -315,7 +315,7 @@ class PilotDetail extends \pageAssembly
 				$table->setDayBreak(false);
 				$smarty->assign('kills', $table->generate());
 
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) $list->setCountComments(true);
 				if (Config::get('killlist_involved')) $list->setCountInvolved(true);

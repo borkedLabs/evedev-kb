@@ -13,7 +13,7 @@ use EDK\Core\URI;
 use EDK\Entity\Corporation;
 use EDK\PageComponent\Box;
 use \DBFactory;
-use \KillList;
+use EDK\Killmail;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
@@ -337,7 +337,7 @@ class CorpDetail extends \pageAssembly
 		switch ($this->view)
 		{
 			case "":
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->setLimit(10);
 				$list->addInvolvedCorp($this->crp_id);
@@ -351,7 +351,7 @@ class CorpDetail extends \pageAssembly
 				$ktab->setDayBreak(false);
 				$smarty->assign('kills', $ktab->generate());
 
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->setLimit(10);
 				$list->addVictimCorp($this->crp_id);
@@ -368,7 +368,7 @@ class CorpDetail extends \pageAssembly
 
 				break;
 			case "kills":
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addInvolvedCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);
@@ -383,7 +383,7 @@ class CorpDetail extends \pageAssembly
 
 				break;
 			case "losses":
-				$list = new KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addVictimCorp($this->crp_id);
 				if ($this->scl_id) $list->addVictimShipClass($this->scl_id);

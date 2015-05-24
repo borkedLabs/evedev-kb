@@ -6,7 +6,10 @@
  * and open the template in the editor.
  */
 
+namespace EDK\Killmail;
+
 use EDK\Database\PreparedQuery;
+use \Cacheable;
 
 /**
  * represents an InventoryFlag used to describe the position of items in a kill

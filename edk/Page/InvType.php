@@ -4,6 +4,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Killmail;
 use EDK\PageComponent\Box;
 
 /*
@@ -148,7 +149,7 @@ class InvType extends \pageAssembly
 			$killList = '';
 			if($view == 'kills')
 			{
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addInvolvedShipType($this->typeID);
 				$list->setPageSplit(Config::get('killcount'));
@@ -163,7 +164,7 @@ class InvType extends \pageAssembly
 			}
 			else if($view == 'losses')
 			{
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addVictimShipType($this->typeID);
 				$list->setPageSplit(Config::get('killcount'));

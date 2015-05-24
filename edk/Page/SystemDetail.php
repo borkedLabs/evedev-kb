@@ -10,6 +10,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Killmail;
 use EDK\PageComponent\Box;
 
 /*
@@ -140,7 +141,7 @@ class SystemDetail extends \pageAssembly
 		}
 		$scl_id = (int)URI::getArg('scl_id');
 
-		$klist = new \KillList();
+		$klist = new Killmail\Collection();
 		$klist->setOrdered(true);
 		if ($this->view == 'losses') {
 			\involved::load($klist, 'loss');

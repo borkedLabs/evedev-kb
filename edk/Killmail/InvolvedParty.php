@@ -6,6 +6,9 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+use \Cacheable;
+
 /**
  * A simple wrapper for involved party information.
  * @package EDK

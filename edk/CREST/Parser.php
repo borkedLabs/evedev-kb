@@ -12,7 +12,10 @@ use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
- 
+use EDK\Killmail\Kill;
+use EDK\Killmail\InvolvedParty;
+use EDK\Killmail\DestroyedItem;
+
 class ParserException extends \Exception{}
 
 /**
@@ -176,7 +179,7 @@ class Parser
                 }
                
                 // create the kill
-                $Kill = new \Kill();
+                $Kill = new Kill();
                 // set external ID
                 $Kill->setExternalID($this->externalID);
                 // set timestamp
@@ -603,7 +606,7 @@ class Parser
                 $Pilot = Pilot::add($involvedPartyName, $Corp, $timestamp, $involvedCharacterID, $loadPilotExternals);
 
                 // create involvedParty
-                $IParty = new \InvolvedParty($Pilot->getID(), $Corp->getID(),
+                $IParty = new InvolvedParty($Pilot->getID(), $Corp->getID(),
 				$Alliance->getID(),  $involvedParty['securityStatus'],
 						$Ship->getID(), $Weapon->getID(),
 						$involvedParty['damageDone']);
@@ -674,11 +677,11 @@ class Parser
            
             if($item['qtyDropped']) {
                $Kill->addDroppedItem(
-                   new \DestroyedItem($Item, $item['qtyDropped'], $singleton, '', $location));
+                   new DestroyedItem($Item, $item['qtyDropped'], $singleton, '', $location));
             }
             if($item['qtyDestroyed']) {
                     $Kill->addDestroyedItem(
-                        new \DestroyedItem($Item, $item['qtyDestroyed'], $singleton, '',  $location));
+                        new DestroyedItem($Item, $item['qtyDestroyed'], $singleton, '',  $location));
             }
             
             // process container-items

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+
 use EDK\Core\Config;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;

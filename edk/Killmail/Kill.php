@@ -6,26 +6,32 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use \DBFactory;
+use \ItemList;
+use \Cacheable;
+use \summaryCache;
+use \cache;
  
 /**
  * thrown whenever anything goes wrong while handling a kill
  */
-class KillException extends Exception {}
+class KillException extends \Exception {}
 
 /**
  * @package EDK
  */
-class Kill extends Cacheable
+class Kill extends \Cacheable
 {
-    
-        /** @const the base URL for the public CREST killmail endpoint */
-        static $CREST_KILLMAIL_ENDPOINT = "http://public-crest.eveonline.com/killmails/";
+	/** @const the base URL for the public CREST killmail endpoint */
+	static $CREST_KILLMAIL_ENDPOINT = "http://public-crest.eveonline.com/killmails/";
 
 	/**
 	 * The ID for this kill
@@ -1525,7 +1531,7 @@ class Kill extends Cacheable
 		$notfirstc = false;
 
 		// Make sure involved parties are ordered by damage done.
-		usort($this->involvedparties_, array('Kill','involvedComparator'));
+		usort($this->involvedparties_, array('\EDK\Killmail\Kill','involvedComparator'));
 
 		foreach ($this->involvedparties_ as $inv) {
 			$ship = $inv->getShip();

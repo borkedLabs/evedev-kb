@@ -6,10 +6,14 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+
 use EDK\Core\Config;
 use EDK\Core\ImageURL;
 use EDK\Entity\Pilot;
 use EDK\Entity\Alliance;
+
+use \Ship;
 
 /**
  * @package EDK
@@ -19,7 +23,7 @@ use EDK\Entity\Alliance;
  * This is used by killlists to construct several kills at once from a single
  * db query.
  */
-class KillWrapper extends Kill
+class Wrapper extends Kill
 {
 
 	/**

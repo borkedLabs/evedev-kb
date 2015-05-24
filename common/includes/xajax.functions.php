@@ -10,6 +10,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Page\Page;
 use EDK\Database\PreparedQuery;
 
 require_once(__DIR__.'/../xajax/xajax.php');

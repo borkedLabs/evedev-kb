@@ -5,12 +5,13 @@
  * $HeadURL$
  * @package EDK
  */
-
+use EDK\Core\URI;
+use EDK\Killmail\InventoryFlag;
 // Original by TEKAI
 // Ammo addition and little modifications by Wes Lave
 
-$kll_id = (int)edkURI::getArg('kll_id', 1);
-$kill = Cacheable::factory('Kill', $kll_id);
+$kll_id = (int)URI::getArg('kll_id', 1);
+$kill = Cacheable::factory('\EDK\Killmail\Kill', $kll_id);
 $ship = $kill->getVictimShip();
 $pilotname = $kill->getVictimName();
 $shipclass = $ship->getClass();

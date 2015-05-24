@@ -13,6 +13,7 @@ use EDK\Core\URI;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 use EDK\PageComponent\Clock;
+use EDK\Killmail;
 /*
  * @package EDK
  */
@@ -174,11 +175,9 @@ class Home extends \pageAssembly
 		// Display the summary table.
 		if (Config::get('summarytable')) {
 			if (Config::get('public_summarytable')) {
-				//$kslist = new KillList();
 				$summarytable = new \KillSummaryTablePublic();
 				$this->loadTime($summarytable);
 				\involved::load($summarytable, 'kill');
-				//$summarytable = new KillSummaryTablePublic($kslist);
 			} else {
 				$summarytable = new \KillSummaryTable();
 				$this->loadTime($summarytable);
@@ -221,7 +220,7 @@ class Home extends \pageAssembly
 
 		global $smarty;
 
-		$klist = new \KillList();
+		$klist = new Killmail\Collection();
 		$klist->setOrdered(true);
 		// We'll be needing comment counts so set the killlist to retrieve them
 		if (Config::get('comments_count')) {

@@ -5,12 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Core\URI;
+use EDK\Killmail\InventoryFlag;
 
 // Original by TEKAI
 // Ammo addition and little modifications by Wes Lave
 
-$kll_id = (int)edkURI::getArg('kll_id', 1);
-$kill = Cacheable::factory('Kill', $kll_id);
+$kll_id = (int)URI::getArg('kll_id', 1);
+$kill = Cacheable::factory('\EDK\Killmail\Kill', $kll_id);
 $ship = $kill->getVictimShip();
 $pilotname = $kill->getVictimName();
 $shipclass = $ship->getClass();
@@ -145,51 +147,6 @@ $slots = array(InventoryFlag::$LOW_SLOT_1 => "low slot",
 	InventoryFlag::$RIG_SLOT_1 => "rig slot",
 	InventoryFlag::$SUB_SYSTEM_SLOT_1 => "subsystem slot",
 	InventoryFlag::$DRONE_BAY => "drone bay");
-
-
-// Some tools require xml formatted with indents.
-// So let's do this the ugly way
-/*
-$xml = "<?xml version=\"1.0\" ?>
-	<fittings>
-	</fittings>\n";
-
-$sxe = new SimpleXMLElement($xml);
-$fittingxml = $sxe->addChild('fitting');
-$fittingxml->addAttribute('name', $killtitle);
-$desc = $fittingxml->addChild('description');
-$desc->addAttribute("value", "From ".KB_HOST."?a=kill_detail&amp;kll_id=".$kll_id);
-$shiptype = $fittingxml->addChild('shipType');
-$shiptype->addAttribute('value', $shipname);
-
-foreach ($slots as $i => $empty)
-{
-	if (!empty($fitting_array[$i]))
-	{
-		$usedslots = 0;
-		foreach ($fitting_array[$i] as $k => $a_item)
-		{
-			$item = $a_item['Name'];
-			$hardware = $fittingxml->addChild('hardware');
-			if($i == 6)
-			{
-				$hardware->addAttribute('slot', $slots[$i]);
-				$hardware->addAttribute('type', $a_item['Name']);
-				$hardware->addAttribute('quantity', '1');
-			}
-			else
-			{
-				$hardware->addAttribute('slot', $slots[$i].' '.$usedslots);
-				$hardware->addAttribute('type', $a_item['Name']);
-			}
-
-			$usedslots++;
-		}
-	}
-}
-
-echo $sxe->asXML();
-*/
 
 $xml = "<?xml version=\"1.0\" ?>
 	<fittings>\n";

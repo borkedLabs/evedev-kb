@@ -14,10 +14,10 @@ use EDK\Core\Language;
 use EDK\Core\URI;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Killmail;
 use EDK\PageComponent\Box;
 use \DBFactory;
 use \Cacheable;
-use \KillList;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
@@ -365,7 +365,7 @@ class AllianceDetail extends \pageAssembly
 
 		switch ($this->view) {
 			default:
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) {
 					$list->setCountComments(true);
@@ -386,7 +386,7 @@ class AllianceDetail extends \pageAssembly
 				$ktab->setDayBreak(false);
 				$smarty->assign('kills', $ktab->generate());
 
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				if (Config::get('comments_count')) {
 					$list->setCountComments(true);
@@ -411,7 +411,7 @@ class AllianceDetail extends \pageAssembly
 
 				break;
 			case "kills":
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->addInvolvedAlliance($this->alliance);
 				if ($scl_id) {
@@ -428,7 +428,7 @@ class AllianceDetail extends \pageAssembly
 
 				break;
 			case "losses":
-				$list = new \KillList();
+				$list = new Killmail\Collection();
 				$list->setOrdered(true);
 				$list->setPodsNoobShips(Config::get('podnoobs'));
 				$list->addVictimAlliance($this->alliance);

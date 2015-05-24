@@ -11,7 +11,10 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\ImageURL;
+use EDK\Core\Language;
 use EDK\Core\URI;
+use EDK\Killmail;
+use EDK\Killmail\Kill;
 use EDK\PageComponent\Box;
 
 /*
@@ -102,7 +105,7 @@ class KillRelated extends \pageAssembly
 				$this->kll_id = $this->kill->getID();
 			}
 		} else {
-			$this->kill = \Kill::getByID($this->kll_id);
+			$this->kill = Kill::getByID($this->kll_id);
 		}
 		$this->adjacent = URI::getArg('adjacent');
 		$this->scl_id = (int) URI::getArg('scl_id');
@@ -220,7 +223,7 @@ class KillRelated extends \pageAssembly
 		$this->firstts = array_shift($times);
 		$this->lastts = array_pop($times);
 
-		$this->kslist = new \KillList();
+		$this->kslist = new Killmail\Collection();
 		$this->kslist->setOrdered(true);
 		foreach ($this->systems as $system)
 			$this->kslist->addSystem($system);
@@ -232,7 +235,7 @@ class KillRelated extends \pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->kslist->addInvolvedAlliance($ia);
 
-		$this->lslist = new \KillList();
+		$this->lslist = new Killmail\Collection();
 		$this->lslist->setOrdered(true);
 		foreach ($this->systems as $system)
 			$this->lslist->addSystem($system);
@@ -244,7 +247,7 @@ class KillRelated extends \pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->lslist->addVictimAlliance($ia);
 
-		$this->klist = new \KillList();
+		$this->klist = new Killmail\Collection();
 		$this->klist->setOrdered(true);
 		$this->klist->setCountComments(true);
 		$this->klist->setCountInvolved(true);
@@ -258,7 +261,7 @@ class KillRelated extends \pageAssembly
 		foreach ($this->invAll as $ia)
 			$this->klist->addInvolvedAlliance($ia);
 
-		$this->llist = new \KillList();
+		$this->llist = new Killmail\Collection();
 		$this->llist->setOrdered(true);
 		$this->llist->setCountComments(true);
 		$this->llist->setCountInvolved(true);

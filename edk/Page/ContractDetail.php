@@ -10,6 +10,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Killmail;
 use EDK\PageComponent\Box;
 
 /*

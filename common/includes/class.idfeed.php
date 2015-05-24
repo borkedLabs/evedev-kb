@@ -11,6 +11,9 @@ use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Killmail\Kill;
+use EDK\Killmail\InvolvedParty;
+use EDK\Killmail\DestroyedItem;
 
 /**
  * EDK IDFeed Syndication reader class.

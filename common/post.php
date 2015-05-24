@@ -1,7 +1,9 @@
 <?php
 
 use EDK\Core\Config;
+use EDK\Core\URI;
 use EDK\Page\Page;
+use EDK\Killmail\Parser;
 
 $page = new Page('Post kill');
 
@@ -103,7 +105,7 @@ function post()
 		} else {
 
 			logger::logKill($killid);
-			header("Location: ".html_entity_decode(edkURI::page('kill_detail',
+			header("Location: ".html_entity_decode(URI::page('kill_detail',
 							$killid, 'kll_id')));
 			exit;
 		}
@@ -161,7 +163,7 @@ function post_crest()
             return $html;
         }
 
-        header("Location: ".html_entity_decode(edkURI::page('kill_detail',
+        header("Location: ".html_entity_decode(URI::page('kill_detail',
                                         $killid, 'kll_id')));
         exit();
     } 
