@@ -6,16 +6,18 @@
  * @package EDK
  */
 
+namespace EDK\CREST;
+
 use EDK\Core\Config;
 use EDK\Database;
 
-class ValueFetcherCrestException extends Exception {}
+class ValueFetcherCrestException extends \Exception {}
 /**
  * Fetches average item prices from CREST
  * 
  * @package EDK
  */
-class ValueFetcherCrest
+class ValueFetcher
 {
     
     /** CREST url pointing to average item prices */
@@ -54,7 +56,7 @@ class ValueFetcherCrest
         $qry = Database\Factory::getDBQuery();
 
         // fetch and decode JSON
-        $data = \EDK\CREST\CREST::getReferenceByUrl($this->url);
+        $data = CREST::getReferenceByUrl($this->url);
 
         if(!isset($data->items) || count($data->items) < 1)
         {

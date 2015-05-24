@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\CREST\ValueFetcher;
 use EDK\Page\Page;
 
 $page = new Page('Fetcher - Item Values from CREST');
@@ -32,12 +33,12 @@ if($_POST['submit'])
     // If not set, use default
     if (!$url) 
     {
-        $url = ValueFetcherCrest::$CREST_URL;
+        $url = ValueFetcher::$CREST_URL;
     }
 
     Config::set('fetchurl', $url);
 
-    $ValueFetcherCrest = new ValueFetcherCrest($url);
+    $ValueFetcherCrest = new ValueFetcher($url);
 
     $html = "<center>";
     try
@@ -61,7 +62,7 @@ else
     $time = date('r', $timestamp);
     if ($url == null)
     {
-        $url = ValueFetcherCrest::$CREST_URL;
+        $url = ValueFetcher::$CREST_URL;
     }
 
     $html .= 'Last update: '.$time.'<br /><br />';

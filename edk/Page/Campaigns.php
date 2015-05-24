@@ -90,7 +90,7 @@ class Campaigns extends \pageAssembly
 		switch ($this->view)
 		{
 			case '':
-				$activelist = new EDK\Contract\Collection();
+				$activelist = new Contract\Collection();
 				$activelist->setActive('yes');
 				$this->page->setTitle('Active campaigns');
 				$table = new \ContractListTable($activelist);
@@ -98,7 +98,7 @@ class Campaigns extends \pageAssembly
 				return $table->generate();
 				break;
 			case 'past':
-				$pastlist = new EDK\Contract\Collection();
+				$pastlist = new Contract\Collection();
 				$pastlist->setActive('no');
 				$this->page->setTitle('Past campaigns');
 				$table = new \ContractListTable($pastlist);

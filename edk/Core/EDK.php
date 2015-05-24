@@ -27,7 +27,7 @@ class EDK
 		return number_format(round($s, 1), 1);
 	}
 
-	public static function loadMods()
+	public static function loadMods($page)
 	{
 		$mods_active = explode(',', Config::get('mods_active'));
 		$modOverrides = false;

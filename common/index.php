@@ -200,7 +200,7 @@ if(file_exists("themes/".$themename."/init.php")) {
 	include_once("themes/".$themename."/init.php");
 }
 
-$modOverrides = \EDK\Core\EDK::loadMods();
+$modOverrides = \EDK\Core\EDK::loadMods($page);
 
 $pageMap = array('kill_detail' => 'KillDetail',
 				'home' => 'Home',

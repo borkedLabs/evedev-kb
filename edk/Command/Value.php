@@ -3,6 +3,7 @@
 namespace EDK\Command;
 
 use EDK\Core\Config;
+use EDK\CREST\ValueFetcher;
 
 class Value extends Command
 {
@@ -11,10 +12,10 @@ class Value extends Command
 		$url = Config::get('itemPriceCrestUrl');
 		if ($url == null || $url == "")
 		{
-			$url = \ValueFetcherCrest::$CREST_URL;
+			$url = ValueFetcher::$CREST_URL;
 		}
 
-		$fetch = new \ValueFetcherCrest($url);
+		$fetch = new ValueFetcher($url);
 
 		// Fetch
 		$count = $fetch->fetchValues();
