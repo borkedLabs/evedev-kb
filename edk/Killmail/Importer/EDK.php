@@ -9,6 +9,8 @@
  * EDK Feed Syndication v1.9
  * based on liq's feed syndication mod v1.5
  */
+namespace EDK\Killmail\Importer;
+
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
@@ -24,7 +26,7 @@ $feedversion = "v1.9";
  * fetched kills to the board and returns the id of the highest kill fetched.
  * @package EDK
  */
-class Fetcher
+class EDK
 {
 	public $lastkllid_ = 0;
 	public $finalkllid_ = 0;

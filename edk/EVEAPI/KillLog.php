@@ -10,6 +10,7 @@ namespace EDK\EVEAPI;
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\Killmail\Importer\IDFeed;
 
 define('NUMBER_OF_CALLS_DEFAULT', 1);
 
@@ -142,7 +143,7 @@ class KillLog extends API
 					}
 				}
                                 
-				$feedfetch = new \IDFeed();
+				$feedfetch = new IDFeed();
 				$feedfetch->setXML($this->pheal->xml);
 				$feedfetch->setLogName("API");
 				$feedfetch->read();

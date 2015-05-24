@@ -10,6 +10,7 @@
 require __DIR__ .'/bootstrap/edk.php';
 
 use EDK\Core\Config;
+use EDK\PageComponent\MapView;
 
 @error_reporting(E_ERROR);
 

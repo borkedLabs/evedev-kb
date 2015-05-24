@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\Core;
+
 use EDK\Database;
 
 /*
@@ -22,7 +24,7 @@ use EDK\Database;
 * @package EDK
 */
 
-class role
+class Role
 {
 	private static $roles;
 
@@ -34,7 +36,7 @@ class role
 	public static function register($role_name, $role_descr)
 	{
 		// store role as hardcoded
-		role::_put($role_name, $role_descr, true);
+		Role::_put($role_name, $role_descr, true);
 	}
 
 	public static function init()
@@ -48,7 +50,7 @@ class role
 				self::$roles['keys'][$row['rol_name']] = $row['rol_descr'];
 				self::$roles['hard'][$row['rol_name']] = $row['rol_descr'];
 			}
-			role::register('admin', 'Basic Admin Role');
+			Role::register('admin', 'Basic Admin Role');
 		}
 
 	}

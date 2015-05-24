@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+namespace EDK\Killmail\Importer;
+
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Database;
@@ -16,6 +18,11 @@ use EDK\Entity\Alliance;
 use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
+use \SolarSystem;
+use \Item;
+use \Ship;
+use \logger;
+use \http_request;
 
 /**
  * EDK IDFeed Syndication reader class.

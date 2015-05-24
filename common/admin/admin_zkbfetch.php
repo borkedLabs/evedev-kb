@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Page\Page;
+use EDK\Killmail\Importer;
 
 require_once('common/admin/admin_menu.php');
 
@@ -35,7 +36,7 @@ if($_POST['add'])
         $newFetchTimestamp = trim($_POST['newFetchTimestamp']);
         $newFetchTimestamp = strtotime($newFetchTimestamp);
 
-        $NewZKBFetch = new ZKBFetch();
+        $NewZKBFetch = new Importer\ZKB();
         $NewZKBFetch->setUrl($newFetchUrl);
         $NewZKBFetch->setLastKillTimestamp($newFetchTimestamp);
 
@@ -51,7 +52,7 @@ if($_POST['add'])
     }
 }
 
-$fetchConfigs = ZKBFetch::getAll();
+$fetchConfigs = Importer\ZKB::getAll();
 
 
 // saving urls and options
@@ -84,13 +85,13 @@ if ($_POST['submit'] || $_POST['fetch'])
             
             if ($_POST['delete'] && in_array ($id, $_POST['delete'])) 
             {
-                ZKBFetch::delete($id);
+                Importer\ZKB::delete($id);
             }
         } 
         
         else 
         {
-            ZKBFetch::delete($id);
+            Importer\ZKB::delete($id);
 	}
     }
 
@@ -113,7 +114,7 @@ if ($_POST['submit'] || $_POST['fetch'])
 }
 
 // update fetch configs again, since we could have deleted some above
-$fetchConfigs = ZKBFetch::getAll();
+$fetchConfigs = Importer\ZKB::getAll();
 
 // building the request query and fetching of the feeds
 if ($_POST['fetch'])
@@ -149,7 +150,7 @@ $smarty->assign('post_no_npc_only_zkb', Config::get('post_no_npc_only_zkb'));
 $killTimestampOffset = Config::get('killTimestampOffset');
 if(is_null($killTimestampOffset) || !is_numeric($killTimestampOffset))
 {
-    $killTimestampOffset = ZKBFetch::$KILL_TIMESTAMP_OFFSET_DEFAULT;
+    $killTimestampOffset = Importer\ZKB::$KILL_TIMESTAMP_OFFSET_DEFAULT;
 }
 $smarty->assign('killTimestampOffset', $killTimestampOffset);
 $smarty->assign("currentTimeUtc", gmdate("Y-m-d H:i:s", time()));

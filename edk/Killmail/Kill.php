@@ -8,6 +8,7 @@
 
 namespace EDK\Killmail;
 
+use EDK\Cache\Cache;
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
@@ -18,7 +19,6 @@ use EDK\Entity\Alliance;
 use EDK\Database;
 use \ItemList;
 use \summaryCache;
-use \cache;
  
 /**
  * thrown whenever anything goes wrong while handling a kill
@@ -1647,7 +1647,7 @@ class Kill extends Cacheable
 		$qry->autocommit(true);
 		// call the Event that we added this mail
 		Event::call('killmail_added', $this);
-		cache::notifyKillAdded();
+		Cache::notifyKillAdded();
 		return $this->id;
 	}
 

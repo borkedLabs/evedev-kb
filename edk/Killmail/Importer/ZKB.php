@@ -1,5 +1,7 @@
 <?php
 
+namespace EDK\Killmail\Importer;
+
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Database;
@@ -10,18 +12,22 @@ use EDK\Entity\Alliance;
 use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
+use \SolarSystem;
+use \Item;
+use \Ship;
+use \logger;
 
 /**
  * @package EDK
  */
 
-class ZKBFetchException extends Exception {}
+class ZKBFetchException extends \Exception {}
 /**
  * imports kills from zkillboard.
  *
  * @author Salvoxia
  */
-class ZKBFetch 
+class ZKB
 {
     /** @param array list of external alliance ID */
     protected $allianceIds = array();
@@ -101,7 +107,7 @@ class ZKBFetch
      */
     public static function getByID($id)
     {
-        $ZKBFetch = new ZKBFetch($id);
+        $ZKBFetch = new ZKB($id);
         return $ZKBFetch;
     }
     
@@ -172,7 +178,7 @@ class ZKBFetch
         $qry->execute('SELECT fetchID FROM kb3_zkbfetch ORDER BY fetchID ASC');
         while($result = $qry->getRow())
         {
-            $resultObjects[] = ZKBFetch::getByID($result['fetchID']);
+            $resultObjects[] = ZKB::getByID($result['fetchID']);
         }
         
         return $resultObjects;

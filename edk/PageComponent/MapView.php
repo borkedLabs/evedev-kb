@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\PageComponent;
+
 use EDK\Database;
 /**
  * @package EDK

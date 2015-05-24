@@ -9,7 +9,7 @@
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
-use EDK\Database\DBQuery;
+use EDK\Database\Query;
 use EDK\Page\Page;
 
 require_once("common/admin/admin_menu.php");
@@ -19,7 +19,7 @@ $page->setCachable(false);
 $page->setAdmin();
 
 if (is_string($key_id = URI::getArg('delete')) ) {
-	$qry2 = new DBQuery();
+	$qry2 = new Query();
 	$sql = "DELETE from kb3_api_keys WHERE key_id = '".$key_id."' AND key_kbsite = '".KB_SITE."'";
 	$qry2->execute($sql);
 }
@@ -101,7 +101,7 @@ if ($_POST['import'] || isset($_GET['Process'])) {
 
 	if (Config::get("API_MultipleMode")) { // save output to file and load when complete
 		$i = $processindex;
-		$qry = new DBQuery();
+		$qry = new Query();
 		$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '".KB_SITE."' ORDER BY key_name");
 		$count = 0;
 		while ($row = $qry->getRow()) {
@@ -127,7 +127,7 @@ if ($_POST['import'] || isset($_GET['Process'])) {
 			}
 		}
 	} else {
-		$qry = new DBQuery();
+		$qry = new Query();
 		$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '".KB_SITE."' ORDER BY key_name");
 		while ($row = $qry->getRow()) {
 			$myEveAPI->Output_ .= "Importing Mails for ".$row['key_name']."<br />";
@@ -275,7 +275,7 @@ if ($_POST['apilog']) {
 	$html .= "<thead><tr><td>Name</td><td>ID</td><td>Owner</td><td>Corp</td><td>Char</td><td style=\"width: 200px;\">Status</td><td></td></tr></thead>";
 
 
-	$qry = new DBQuery();
+	$qry = new Query();
 	$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '".KB_SITE."' ORDER BY key_name");
 	while ($row = $qry->getRow()) {
 		$html .= ($cycle) ? "<tr class='kb-table-row-even'>" : "<tr class='kb-table-row-odd'>";
@@ -324,7 +324,7 @@ if ($_POST['apilog']) {
 					// no error so user didn't have '256' access
 				}
 			}
-			$qry2 = new DBQuery();
+			$qry2 = new Query();
 			$sql = "UPDATE kb3_api_keys SET key_flags = $flags WHERE key_name='"
 					.$qry->escape($row['key_name'])."' AND key_id='"
 					.$qry->escape($row['key_id'])."' AND key_key='"

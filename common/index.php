@@ -28,6 +28,7 @@
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Core\Role;
 use EDK\Core\Session;
 use EDK\Cache\Cache;
 use EDK\Entity\Pilot;
