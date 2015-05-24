@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /* Class containing utility functions to log a kill as added and find the IP
  * to log a kill as added from.
  * @package EDK
@@ -89,7 +90,7 @@ class logger
 			$note = "IP:".logger::getip();
 		}
 
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$qry->execute("INSERT INTO kb3_log (log_kll_id, log_site,"
 				." log_ip_address, log_timestamp) values(".$killid
 				.",'".KB_SITE."','".$qry->escape($note)."', UTC_TIMESTAMP())");

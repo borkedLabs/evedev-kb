@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Database;
 
 class ValueFetcherCrestException extends Exception {}
 /**
@@ -50,7 +51,7 @@ class ValueFetcherCrest
     public function fetchValues()
     {
         // New query
-        $qry = DBFactory::getDBQuery();
+        $qry = Database\Factory::getDBQuery();
 
         // fetch and decode JSON
         $data = \EDK\CREST\CREST::getReferenceByUrl($this->url);

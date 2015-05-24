@@ -6,8 +6,10 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -215,7 +217,7 @@ class Ship extends Cacheable
 				return;
 			}
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 
 			$sql = "SELECT typeName, shp_id, shp_class, basePrice, price FROM kb3_ships
 						   INNER JOIN kb3_invtypes ON typeID=shp_id";
@@ -278,7 +280,7 @@ class Ship extends Cacheable
 			$pqry->fetch();
 		}
 		if ($scl_id == null && $id) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("INSERT INTO kb3_ships (shp_id, shp_class) values($id, 18)");
 			$scl_id = 18; // "Unknown"
 		}
@@ -304,7 +306,7 @@ class Ship extends Cacheable
          */
         public function getTraitsHtml()
         {
-            $qry = DBFactory::getDBQuery();
+            $qry = Database\Factory::getDBQuery();
 
             $sql = "SELECT 
                 itr.typeID AS typeID, it.typeName AS skillName, itr.bonus, eu.displayName AS unit, bonusText   

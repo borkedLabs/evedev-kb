@@ -9,7 +9,7 @@ namespace EDK\Page;
 
 use EDK\Core\Event;
 use EDK\Core\URI;
-use \DBFactory;
+use EDK\Database;
 
 /*
  * @package EDK
@@ -54,7 +54,7 @@ class InvGroup extends \pageAssembly
 		}
 		$sql = 'SELECT * FROM kb3_item_types d'.
 				' WHERE d.itt_id = '.$this->groupID;
-		$qry = DBFactory::getDBQuery();;
+		$qry = Database\Factory::getDBQuery();;
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -63,7 +63,7 @@ class InvGroup extends \pageAssembly
 		$sql = 'SELECT * FROM kb3_invtypes d'.
 				' WHERE d.groupID = '.$this->groupID.
 				' ORDER BY d.typeName ASC';
-		$qry = DBFactory::getDBQuery();;
+		$qry = Database\Factory::getDBQuery();;
 		$qry->execute($sql);
 		$rows= array();
 		while($row = $qry->getRow()) {

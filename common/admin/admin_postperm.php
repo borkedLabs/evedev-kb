@@ -6,8 +6,9 @@
  * @package EDK
  */
 
-use EDK\Page\Page;
 use EDK\Core\Config;
+use EDK\Database;
+use EDK\Page\Page;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -44,7 +45,7 @@ if ($_POST['searchphrase'] != "" && strlen($_POST['searchphrase']) >= 3)
 			break;
 	}
 
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	if (!$qry->execute($sql))
 	{
 		die($qry->getErrorMsg());

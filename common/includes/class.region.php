@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -39,7 +40,7 @@ class Region
 
     function execQuery()
     {
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("select * from kb3_regions where reg_id = ".$this->id);
 		$row = $qry->getRow();
 		$this->name = $row['reg_name'];

@@ -7,6 +7,7 @@
  */
 
 namespace EDK\EVEAPI;
+use EDK\Database;
 
 /**
  * Retrieve Character list from CCP API
@@ -43,7 +44,7 @@ class Char extends API
 			// check if chars eveid exists in kb
 			$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "' . $char['Name'] . '"';
 
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute($sql);
 			if ($qry->recordCount() != 0)
 			{

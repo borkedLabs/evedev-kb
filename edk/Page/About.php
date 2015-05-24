@@ -10,6 +10,7 @@ namespace EDK\Page;
 
 use EDK\Core\Event;
 use EDK\Core\Language;
+use EDK\Database;
 
 /*
  * @package EDK
@@ -91,7 +92,7 @@ class About extends \pageAssembly
 	function stats()
 	{
 		global $smarty;
-		$qry = \DBFactory::getDBQuery();;
+		$qry = Database\Factory::getDBQuery();;
 		$qry->execute("SELECT COUNT(*) AS cnt FROM kb3_kills");
 		$row = $qry->getRow();
 		$kills = $row['cnt'];

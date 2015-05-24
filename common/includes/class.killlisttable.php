@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\Session;
 use EDK\Core\URI;
 use EDK\Entity\Alliance;
 use EDK\Entity\Corporation;

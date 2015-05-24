@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 use EDK\Page\Page;
 
@@ -72,7 +73,7 @@ $where = join (' AND ', $where);
 // And make it alphabetical
 $sql .= $where . " ORDER BY itm.typeName";
 
-$qry = DBFactory::getDBQuery();;
+$qry = Database\Factory::getDBQuery();;
 $qry->execute($sql);
 
 while ($row = $qry->getRow())

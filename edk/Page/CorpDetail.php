@@ -7,12 +7,13 @@
  */
 namespace EDK\Page;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Corporation;
 use EDK\PageComponent\Box;
-use \DBFactory;
 use EDK\Killmail;
 use \KillListTable;
 use \KillSummaryTable;
@@ -140,7 +141,7 @@ class CorpDetail extends \pageAssembly
 				exit;
 			}
 		} else {
-			$this->corp = \Cacheable::factory('\EDK\Entity\Corporation', $this->crp_id);
+			$this->corp = Cacheable::factory('\EDK\Entity\Corporation', $this->crp_id);
 			$this->crp_external_id = $this->corp->getExternalID();
 		}
 
@@ -625,7 +626,7 @@ class CorpDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;
@@ -665,7 +666,7 @@ class CorpDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;

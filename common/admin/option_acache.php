@@ -6,6 +6,7 @@
  * @package EDK
  */
  
+use EDK\Database;
 use EDK\PageComponent\Options;
 
 /*
@@ -93,7 +94,7 @@ class admin_acache
 	function clearSumCache()
 	{
         if ($_POST['option_clear_sum'] == 'on') {
-			$qry = DBFactory::getDBQuery();;
+			$qry = Database\Factory::getDBQuery();;
 			$qry->execute("DELETE FROM kb3_sum_alliance");
 			$qry->execute("DELETE FROM kb3_sum_corp");
 			$qry->execute("DELETE FROM kb3_sum_pilot");

@@ -8,6 +8,7 @@
 
 namespace EDK\Page;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -51,7 +52,7 @@ class SelfDetail extends \pageAssembly
 		{
 			$alls = Config::get('cfg_allianceid');
 			/* @var $alliance Alliance */
-			$alliance = \Cacheable::factory('\EDK\Entity\Alliance', $alls[0]);
+			$alliance = Cacheable::factory('\EDK\Entity\Alliance', $alls[0]);
 			if ($alliance->getExternalID()) {
 				$url = URI::page('alliance_detail', $alliance->getExternalID(), 'all_ext_id');
 			} else {
@@ -64,7 +65,7 @@ class SelfDetail extends \pageAssembly
 		{
 			$corps = Config::get('cfg_corpid');
 			/* @var $corp Corporation */
-			$corp = \Cacheable::factory('\EDK\Entity\Corporation', $corps[0]);
+			$corp = Cacheable::factory('\EDK\Entity\Corporation', $corps[0]);
 			if ($corp->getExternalID()) {
 				$url = URI::page('corp_detail', $corp->getExternalID(), 'crp_ext_id');
 			} else {
@@ -77,7 +78,7 @@ class SelfDetail extends \pageAssembly
 		{
 			$pilots = Config::get('cfg_pilotid');
 			/* @var $pilot Pilot */
-			$pilot = \Cacheable::factory('\EDK\Entity\Pilot', $pilots[0]);
+			$pilot = Cacheable::factory('\EDK\Entity\Pilot', $pilots[0]);
 			if ($pilot->getExternalID()) {
 				$url = URI::page('pilot_detail', $pilot->getExternalID(),
 						'plt_ext_id');

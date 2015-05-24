@@ -8,8 +8,10 @@
 
 namespace EDK\Entity;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -228,7 +230,7 @@ class Pilot extends Entity
 				$this->executed = true;
 				return;
 			}
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$sql = 'SELECT * FROM kb3_pilots plt'
 					.' LEFT JOIN kb3_corps crp ON plt_crp_id = crp_id'
 					.' LEFT JOIN kb3_alliances ali ON crp_all_id = all_id'
@@ -273,7 +275,7 @@ class Pilot extends Entity
 			$this->execQuery();
 		}
 
-		$this->corp = \Cacheable::factory('\EDK\Entity\Corporation', $this->corpid);
+		$this->corp = Cacheable::factory('\EDK\Entity\Corporation', $this->corpid);
 		return $this->corp;
 	}
 
@@ -311,10 +313,10 @@ class Pilot extends Entity
 			die;
 		}
 		// Check if pilot exists with a non-cached query.
-		$qry = \DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$name = stripslashes($name);
 		// Insert or update a pilot with a cached query to update cache.
-		$qryI = \DBFactory::getDBQuery(true);
+		$qryI = Database\Factory::getDBQuery(true);
 		$qry->execute("SELECT * FROM kb3_pilots WHERE plt_name = '".$qry->escape($name)."'");
 
 		if (!$qry->recordCount()) {
@@ -339,7 +341,7 @@ class Pilot extends Entity
 					$qryI->execute("UPDATE kb3_pilots SET plt_name = '".$qry->escape($name)
 							."' WHERE plt_externalid = ".$externalID);
 					if ($qryI->affectedRows() > 0) {
-						\Cacheable::delCache($pilot);
+						Cacheable::delCache($pilot);
 					}
 					$qryI->execute("UPDATE kb3_pilots SET plt_crp_id = "
 							.$corp->getID().", plt_updated = "
@@ -349,7 +351,7 @@ class Pilot extends Entity
 							." AND ( plt_updated < date_format( '".$timestamp
 							."', '%Y-%m-%d %H:%i') OR plt_updated is null )");
 					if ($qryI->affectedRows() > 0) {
-						\Cacheable::delCache($pilot);
+						Cacheable::delCache($pilot);
 					}
 					return $pilot;
 				}
@@ -407,7 +409,7 @@ class Pilot extends Entity
 				return false;
 			}
 		}
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("select plt_id
                         from kb3_pilots
                        where plt_id = ".$this->id."
@@ -438,7 +440,7 @@ class Pilot extends Entity
 		}
 		
 
-		$qry = \DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$qry->execute("SELECT plt_id FROM kb3_pilots WHERE plt_externalid = "
 				.$externalID." AND plt_id <> ".$this->id);
 		if ($qry->recordCount()) {
@@ -471,7 +473,7 @@ class Pilot extends Entity
                 }
                     
                 $this->externalid = $externalID;
-		\Cacheable::delCache($this);
+		Cacheable::delCache($this);
 		$this->valid = true;
 		return true;
 	}
@@ -484,7 +486,7 @@ class Pilot extends Entity
 	 */
 	public static function lookup($name)
 	{
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT plt_id, plt_externalid, plt_crp_id, plt_updated "
 				."FROM kb3_pilots WHERE plt_name = '"
 				.$qry->escape(stripslashes($name))."'");
@@ -540,6 +542,6 @@ class Pilot extends Entity
 	 */
 	static function getByID($id)
 	{
-		return \Cacheable::factory(get_class(), $id);
+		return Cacheable::factory(get_class(), $id);
 	}
 }

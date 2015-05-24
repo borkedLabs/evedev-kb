@@ -9,6 +9,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 
 /**
  * @package EDK
@@ -30,7 +31,7 @@ class KillSummaryTablePublic extends KillSummaryTable
 		$sql = "select scl_id, scl_class from kb3_ship_classes
                where scl_class not in ('Drone','Unknown') order by scl_class";
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		while ($row = $qry->getRow()) {
 			$this->entry[$row['scl_class']] = array('id' => $row['scl_id'],
@@ -72,7 +73,7 @@ class KillSummaryTablePublic extends KillSummaryTable
 		}
 		$sql .= ' order by scl.scl_class';
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		while ($row = $qry->getRow()) {
 			$this->entry[$row['scl_class']]['kills'] = $row['knb'];
@@ -92,7 +93,7 @@ class KillSummaryTablePublic extends KillSummaryTable
                    where scl_class not in ( 'Drone', 'Unknown' )
                   order by scl_class";
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute($sql) or die($qry->getErrorMsg());
 			while ($row = $qry->getRow()) {
 				if (!$row['scl_id']) {

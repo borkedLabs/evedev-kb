@@ -8,7 +8,7 @@
 
 namespace EDK\Killmail;
 
-use \DBFactory;
+use EDK\Database;
 
 /**
  * @package EDK
@@ -116,7 +116,7 @@ class DestroyedItem
 			return $this->value;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT basePrice, price
 					FROM kb3_invtypes
 					LEFT JOIN kb3_item_price ON kb3_invtypes.typeID=kb3_item_price.typeID

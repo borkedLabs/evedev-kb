@@ -9,6 +9,7 @@
 namespace EDK\EVEAPI;
  
 use EDK\Core\Config;
+use EDK\Database;
 
 class EDKApiConnectionException extends \Exception {}
 
@@ -27,7 +28,7 @@ class Helpers
 		$id = intval($id);
 		$sql = 'select inv.typeName from kb3_invtypes inv where inv.typeID = ' . $id;
 
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		if($qry->recordCount())
 		{
@@ -61,7 +62,7 @@ class Helpers
 	{
 		$sql = 'select inv.groupID from kb3_invtypes inv where inv.typeID = ' . $id;
 
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -75,7 +76,7 @@ class Helpers
 	{
 		$sql = 'select itt.itt_name from kb3_item_types itt where itt.itt_id = ' . $id;
 
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -89,7 +90,7 @@ class Helpers
 	{
 		$sql = 'select att.value from kb3_dgmtypeattributes att where att.typeID = ' . $id . ' and att.attributeID = 275';
 
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -103,7 +104,7 @@ class Helpers
 	{
 		if ($id != 0)
 		{
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$sql = 'select itemName FROM kb3_moons WHERE itemID = '.$id;
 
 			$qry->execute($sql);
@@ -123,7 +124,7 @@ class Helpers
 	{
 		if (!is_null($moonName))
 		{
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$sql = "select itemID FROM kb3_moons WHERE itemName = '".$qry->escape($moonName)."'";
 
 			$qry->execute($sql);
@@ -142,7 +143,7 @@ class Helpers
 	{ // round about now would probably be a good time for apologising about my sense of humour :oD
 		$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "Captain Thunk"';
 
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		$row = $qry->getRow();
 
@@ -163,7 +164,7 @@ class Helpers
 	{
 		if ( (strlen($corpName) != 0) && ($corpID != 0) )
 		{
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute( "SELECT * FROM `kb3_corps` WHERE `crp_name` = '" . \EDK\Core\EDK::slashfix($corpName) . "'");
 
 			if ($qry->recordCount() != 0)
@@ -184,7 +185,7 @@ class Helpers
 	{
 		if ( ($allianceName != "NONE") && ($allianceID != 0) )
 		{
-			$qry = \DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute( "SELECT * FROM `kb3_alliances` WHERE `all_name` = '" . \EDK\Core\EDK::slashfix($allianceName) . "'");
 
 			if ($qry->recordCount() != 0)

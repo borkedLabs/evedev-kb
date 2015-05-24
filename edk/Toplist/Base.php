@@ -8,6 +8,8 @@
 
 namespace EDK\Toplist;
 
+use EDK\Database;
+
 // Create a box to display the top pilots at something. Subclasses of TopList
 // define the something.
 
@@ -480,7 +482,7 @@ class Base
 
 		$this->sql_ .= " ".$this->sqlbottom_;
 		$this->sql_ .= " /* ".get_class($this)." */";
-		$this->qry = \DBFactory::getDBQuery();
+		$this->qry = Database\Factory::getDBQuery();
 		$this->qry->execute($this->sql_);
 	}
 

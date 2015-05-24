@@ -28,6 +28,8 @@
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Core\Session;
+use EDK\Cache\Cache;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -153,8 +155,8 @@ define('THEME_URL', config::get('cfg_kbhost').'/themes/'.$themename);
 role::init();
 //title::init();
 
-// start session management
-session::init();
+// start Session management
+Session::init();
 
 // Check if the KB internal database structure needs updating
 // or if we need to install a new CCP DB
@@ -187,7 +189,7 @@ if((config::get('DBUpdate') < LATEST_DB_UPDATE) || (config::get('CCPDbVersion') 
 if (substr($page, 0, 5) == 'admin') {
 	require_once('common/admin/admin_menu.php');
 	$page = 'admin/'.$page;
-} else if(config::get('cfg_locked') && $page != 'login' && !session::isAdmin()) {
+} else if(config::get('cfg_locked') && $page != 'login' && !Session::isAdmin()) {
 	$page = "locked";
 }
 
@@ -235,7 +237,7 @@ cache::check($page);
  * @global Smarty $smarty
  */
 $smarty = new Smarty();
-if(!session::isAdmin()) {
+if(!Session::isAdmin()) {
 	// Disable checking of timestamps for templates to improve performance.
 	$smarty->compile_check = false;
 }
@@ -293,7 +295,7 @@ else $smarty->assign('kb_owner', implode(',', $owners));
 if(isset($boardMessage)) $smarty->assign('message', $boardMessage);
 if ($settingsPage)
 {
-	if (!session::isAdmin())
+	if (!Session::isAdmin())
 	{
 		header('Location: '.URI::build(array('a', 'login', true)));
 		echo '<a href="'.URI::build(array('a', 'login', true)).'">Login</a>';

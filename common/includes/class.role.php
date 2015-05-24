@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 
 /*
 * This class handles the roles.
@@ -40,7 +41,7 @@ class role
 	{
 		if (!isset(self::$roles))
 		{
-			$qry = DBFactory::getDBQuery();;
+			$qry = Database\Factory::getDBQuery();;
 			$qry->execute('select rol_id,rol_name, rol_descr from kb3_roles where rol_site=\''.KB_SITE."' order by rol_name");
 			while ($row = $qry->getRow())
 			{
@@ -88,7 +89,7 @@ class role
 				$id = self::generateId($key);
 
 				// insert it into the database
-				$db = DBFactory::getDBQuery();;
+				$db = Database\Factory::getDBQuery();;
 				$db->execute('INSERT INTO `kb3_roles` VALUES("'.$id.'", "'.KB_SITE.'", "'.$key.'", "'.$data.'");');
 			}
 		}

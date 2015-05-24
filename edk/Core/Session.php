@@ -6,10 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Core;
+
 /**
  * @package EDK
  */
-class session
+class Session
 {
 	private static $vars;
 

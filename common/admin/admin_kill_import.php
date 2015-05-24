@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Core\Session;
 use EDK\Page\Page;
 
 @set_time_limit(0);

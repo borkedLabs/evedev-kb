@@ -9,6 +9,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\StatSummary\AllianceSummary;
 use EDK\StatSummary\CorpSummary;
 use EDK\StatSummary\PilotSummary;
@@ -302,7 +303,7 @@ class KillSummaryTable
 					
 					if(!in_array($key, array(-1,2,3,11) )) $this->trkcount += $row['killcount'];
 				}
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 
 				$qry->execute("SELECT plt_lpoints, plt_kpoints FROM kb3_pilots WHERE plt_id=".$this->inv_plt[0]);
 				if($qry->recordCount())
@@ -324,7 +325,7 @@ class KillSummaryTable
 		$startdate = makeStartDate($this->weekno, $this->yearno, $this->monthno, $this->startweekno, $this->startDate);
 		$enddate = makeEndDate($this->weekno, $this->yearno, $this->monthno, $this->endDate);
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		while ($row = $qry->getRow())
 		{
@@ -401,7 +402,7 @@ class KillSummaryTable
 
 		$sql .= 'GROUP BY scl_class order by scl_class';
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		while ($row = $qry->getRow())
 		{
@@ -501,7 +502,7 @@ class KillSummaryTable
 		}
 		$sql .= 'GROUP BY scl_class order by scl_class';
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		while ($row = $qry->getRow())
 		{
@@ -529,7 +530,7 @@ class KillSummaryTable
                    where scl_class not in ( 'Drone', 'Unknown' )
                   order by scl_class";
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute($sql) or die($qry->getErrorMsg());
 			while ($row = $qry->getRow())
 			{

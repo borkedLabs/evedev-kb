@@ -6,10 +6,13 @@
  * @package EDK
  */
 
+namespace EDK\Database;
+
+
 /**
  * @package EDK
  */
-class DBDebug
+class Debug
 {
 	private static $qerrfile = "cache/EDKprofile.lst";
 	public static function recordError($text)

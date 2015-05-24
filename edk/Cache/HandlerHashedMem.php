@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+namespace EDK\Cache;
 
 /**
  * Hashed object caching class backed by memcache
@@ -13,7 +14,7 @@
  * using the given filename a key is used to create a hashed name.
  * @package EDK
  */
-class CacheHandlerHashedMem extends CacheHandlerHashed
+class HandlerHashedMem extends HandlerHashed
 {
 	private static $maxage = 43200;
 	

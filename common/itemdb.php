@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 use EDK\Page\Page;
 
 $index = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
@@ -23,7 +24,7 @@ foreach ($index as $il)
        $html .= '<td><a href="'.KB_HOST.'/?a=itemdb&id='.$il.'">'.$il.'</a></td>';
 }
 $html .= "</tr></table><br><br>";
-$qry = DBFactory::getDBQuery();
+$qry = Database\Factory::getDBQuery();
 $qry->execute($sql);
 
 $html .= "<table class=kb-table cellspacing=1>";

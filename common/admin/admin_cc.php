@@ -8,10 +8,11 @@
 
 require_once('common/admin/admin_menu.php');
 
-use EDK\Page\Page;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Page\Page;
 
 $page = new Page();
 $page->setAdmin();
@@ -155,7 +156,7 @@ if ($_GET['op'] == "edit")
 					break;
 			}
 
-			$qry = DBFactory::getDBQuery();;
+			$qry = Database\Factory::getDBQuery();;
 			$qry->execute($sql) or die($qry->getErrorMsg());
 
 			if ($qry->recordCount() > 0)

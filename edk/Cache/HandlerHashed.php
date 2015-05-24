@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+namespace EDK\Cache;
 
 /**
  * Hashed object caching class
@@ -13,7 +14,7 @@
  * using the given filename a key is used to create a hashed name.
  * @package EDK
  */
-class CacheHandlerHashed extends CacheHandler
+class HandlerHashed extends Handler
 {
 	/**
 	 * Add a file to the cache.

@@ -7,6 +7,8 @@
  */
 
 use EDK\Core\Config;
+use EDK\Core\Session;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -153,7 +155,7 @@ if (isset($_SESSION['admin_kill_export']['select']))
 				break;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		;
 		$qry->execute($sql);
 

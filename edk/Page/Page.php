@@ -10,10 +10,10 @@ namespace EDK\Page;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\Session;
 use EDK\PageComponent\Navigation;
 use EDK\Core\URI;
-use \DBFactory;
-use \Session;
+use EDK\Database;
 
 /**
  * Construct an output page.
@@ -189,7 +189,7 @@ class Page
 
 		$processingtime = number_format((microtime(true) - $this->timestart), 4);
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$smarty->assign('profile_sql_cached', $qry->queryCachedCount());
 		$smarty->assign('profile_sql', $qry->queryCount());
 		$smarty->assign('profile_time', $processingtime);
@@ -273,7 +273,7 @@ class Page
 	 */
 	public function setAdmin()
 	{
-		if (!\Session::isAdmin()) {
+		if (!Session::isAdmin()) {
 			$page = URI::getArg("a");
 			$link = html_entity_decode(URI::page("login", $page, "page"));
 

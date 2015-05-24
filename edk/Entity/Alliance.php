@@ -8,9 +8,12 @@
  
 namespace EDK\Entity;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
+use EDK\Database;
+
 /**
  * Creates a new Alliance or fetches an existing one from the database.
  * @package EDK
@@ -129,7 +132,7 @@ class Alliance extends Entity
 				$this->executed = $cache->executed;
 				$this->name = $cache->name;
 			} else {
-				$qry = \DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$sql = "select all_id, all_name, all_external_id from kb3_alliances where ";
 				if ($this->externalid) {
 					$sql .= "all_external_id = ".$this->externalid;
@@ -169,7 +172,7 @@ class Alliance extends Entity
 	 */
 	static function add($name, $externalid = 0)
 	{
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$name = stripslashes($name);
 		$qry->execute("select all_id, all_name, all_external_id"
 				." from kb3_alliances where all_name = '".$qry->escape($name)."'");
@@ -193,7 +196,7 @@ class Alliance extends Entity
 					$qry->execute("UPDATE kb3_alliances SET all_name = '".$qry->escape($name)
 							."' WHERE all_external_id = ".$externalid);
 
-					$all = \Cacheable::factory('\EDK\Entity\Alliance', (int) $qry->getInsertID());
+					$all = Cacheable::factory('\EDK\Entity\Alliance', (int) $qry->getInsertID());
 				} else {
 					$qry->execute("insert into kb3_alliances ".
 							"(all_id, all_name, all_external_id) values ".
@@ -385,6 +388,6 @@ class Alliance extends Entity
 	 */
 	static function getByID($id)
 	{
-		return \Cacheable::factory(get_class(), $id);
+		return Cacheable::factory(get_class(), $id);
 	}
 }

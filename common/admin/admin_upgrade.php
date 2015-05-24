@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Page\Page;
 
 require_once('common/admin/option_acache.php');
@@ -203,7 +204,7 @@ if (count($page_error) == 0) {
 					$page_error[] = $readingZip->getErrors();
 				} else {
 					Config::set('upd_CodeVersion', $piece['version']);
-					$qry = DBFactory::getDBQuery(true);
+					$qry = Database\Factory::getDBQuery(true);
 					$qry->execute("INSERT INTO `kb3_config` (cfg_site, cfg_key, cfg_value) ".
 									"SELECT cfg_site, 'upd_codeVersion', '{$piece['version']}' FROM `kb3_config` ".
 									"GROUP BY cfg_site ON DUPLICATE KEY UPDATE cfg_value = '{$piece['version']}';");

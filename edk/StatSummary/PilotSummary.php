@@ -7,7 +7,7 @@
  */
 namespace EDK\StatSummary;
 
-use \DBFactory;
+use EDK\Database;
 use EDK\Killmail;
 
 /**
@@ -43,7 +43,7 @@ class PilotSummary extends StatSummary
 			return false;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_pilot WHERE psm_plt_id = ".$this->plt_id);
 		if (!$qry->recordCount()) {
 			self::buildSummary($this->plt_id);
@@ -77,7 +77,7 @@ class PilotSummary extends StatSummary
 		if (!$plt_id) {
 			return false;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->autocommit(false);
 
 		// insert into summary ((select all kills) union (select all losses))
@@ -136,7 +136,7 @@ select $plt_id as psm_plt_id, losses.psm_shp_id, ifnull(kills.knb,0), ifnull(kil
 	public static function addKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_pilot WHERE psm_plt_id = ".$kill->getVictimID());
 		if ($qry->recordCount()) {
 			$sql = "INSERT INTO kb3_sum_pilot (psm_plt_id, psm_shp_id, psm_loss_count, psm_loss_isk) ".
@@ -179,7 +179,7 @@ select $plt_id as psm_plt_id, losses.psm_shp_id, ifnull(kills.knb,0), ifnull(kil
 	public static function delKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_pilot WHERE psm_plt_id = "
 				.$kill->getVictimID());
 		// No summary table to remove kill from so skip.
@@ -230,7 +230,7 @@ select $plt_id as psm_plt_id, losses.psm_shp_id, ifnull(kills.knb,0), ifnull(kil
 	{
 		$difference = (float)$difference;
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_pilot WHERE psm_plt_id = "
 				.$kill->getVictimID());
 		// No summary table to remove kill from so skip.

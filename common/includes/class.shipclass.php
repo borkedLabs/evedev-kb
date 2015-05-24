@@ -6,7 +6,9 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
+use EDK\Database;
 
 /**
  * Contains the attributes of a Ship Class.
@@ -150,7 +152,7 @@ class ShipClass extends Cacheable
 					." FROM kb3_ship_classes"
 					." WHERE scl_id = ".$this->id;
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 
 			$qry->execute($sql);
 			$row = $qry->getRow();

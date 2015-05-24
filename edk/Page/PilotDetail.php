@@ -8,6 +8,7 @@
 
 namespace EDK\Page;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -16,8 +17,6 @@ use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\Killmail;
 use EDK\PageComponent\Box;
-use \DBFactory;
-use \Cacheable;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\Killmail;
+
 /**
  * @package EDK
  */

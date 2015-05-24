@@ -8,16 +8,16 @@
  */
 namespace EDK\Page;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\Killmail;
 use EDK\PageComponent\Box;
-use \DBFactory;
-use \Cacheable;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
@@ -489,7 +489,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -518,7 +518,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -543,7 +543,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -569,7 +569,7 @@ class AllianceDetail extends \pageAssembly
 				$sql = "select scl_id, scl_class from kb3_ship_classes
 					where scl_class not in ('Drone','Unknown') order by scl_class";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					$shipclass[] = new Shipclass($row['scl_id']);
@@ -778,7 +778,7 @@ class AllianceDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;
@@ -815,7 +815,7 @@ class AllianceDetail extends \pageAssembly
 							order by kills desc, sys.sys_name asc
 							limit 25";
 
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				$odd = false;
 				$counter = 1;

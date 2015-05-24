@@ -7,8 +7,8 @@
  */
 namespace EDK\Core;
 
+use EDK\Database;
 use EDK\Database\PreparedQuery;
-use \DBFactory;
 
 /**
  * Wrapper class to pick the correct language from config settings and return
@@ -130,7 +130,7 @@ class Language {
 			return $word;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT $column AS text FROM $table WHERE $type=$keyID");
 		if (!$qry->recordCount()) {
 			return $word;

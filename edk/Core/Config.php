@@ -6,6 +6,8 @@
  * @package EDK
  */
 namespace EDK\Core;
+
+use EDK\Database;
 /*
  * @package EDK
  */
@@ -52,7 +54,7 @@ class Config
 	{
 		if (self::$initialised) return;
 
-		self::$qry = \DBFactory::getDBQuery();
+		self::$qry = Database\Factory::getDBQuery();
 
 		// If a super KB is defined then fetch its settings first.
 		if(defined('SUPERKB_SITE'))

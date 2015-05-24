@@ -9,6 +9,7 @@
 namespace EDK\EVEAPI;
  
 use EDK\Core\Config;
+use EDK\Database;
 
 /**
  * API Character Sheet - char/CharacterSheet
@@ -114,7 +115,7 @@ class API_CharacterSheet
 
 			$sql = 'select plts.plt_id, plts.plt_externalid from kb3_pilots plts where plts.plt_name = "' . $usersname . '"';
 
-    		$qry = \DBFactory::getDBQuery();;
+    		$qry = Database\Factory::getDBQuery();;
 			$qry->execute($sql);
    		 	$row = $qry->getRow();
 

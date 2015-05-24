@@ -9,13 +9,14 @@
 
 namespace EDK\Entity;
 
+use EDK\Cache\Cacheable;
 /**
  * Base class for entities - pilot/corp/alliance/items
  *
  * Cache handlers are used to cache entities between uses.
  * @package EDK
  */
-abstract class Entity extends \Cacheable {
+abstract class Entity extends Cacheable {
 	/**
 	 * Return the entity's ID.
 	 *

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
+
 $kll_id = (int)\EDK\Core\URI::getArg('kll_id', 1);
 $kill = Cacheable::factory('\EDK\Killmail\Kill', $kll_id);
 ?>

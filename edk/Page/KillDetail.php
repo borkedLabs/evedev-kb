@@ -7,16 +7,17 @@
  */
 namespace EDK\Page;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\PageComponent\Box;
 use EDK\Killmail;
-use \DBFactory;
 
 if (Config::get('comments')) {
 	require_once(__DIR__.'/../../common/includes/xajax.functions.php');
@@ -137,7 +138,7 @@ class KillDetail extends \pageAssembly
 		}
 
 		if ($this->kll_id) {
-			$this->kill = \Cacheable::factory('\EDK\Killmail\Kill', $this->kll_id);
+			$this->kill = Cacheable::factory('\EDK\Killmail\Kill', $this->kll_id);
 		} else {
 			$this->kill = new Kill($this->kll_external_id, true);
 			$this->kll_id = $this->kill->getID();
@@ -180,7 +181,7 @@ class KillDetail extends \pageAssembly
 		// Check for posted comments.
 		// If a comment is being posted then we won't exit this block.
 		if (isset($_POST['comment']) && Config::get('comments')) {
-			$comments = new Comments($this->kll_id);
+			$comments = new Killmail\Comments($this->kll_id);
 			$pw = false;
 			if (!Config::get('comments_pw') || $this->page->isAdmin()) {
 				$pw = true;
@@ -634,8 +635,8 @@ class KillDetail extends \pageAssembly
 				foreach ($nameIDPair as $idpair) {
 					//store the IDs
 					foreach ($this->kill->getInvolved() as $inv) {
-						$pilot = \Cacheable::factory('\EDK\Entity\Pilot', $inv->getPilotID());
-						$corp = \Cacheable::factory('\EDK\Entity\Corporation', $inv->getCorpID());
+						$pilot = Cacheable::factory('\EDK\Entity\Pilot', $inv->getPilotID());
+						$corp = Cacheable::factory('\EDK\Entity\Corporation', $inv->getCorpID());
 
 						if ($idpair['name'] == $corp->getName()) {
 							$corp->setExternalID($idpair['characterID']);
@@ -785,7 +786,7 @@ class KillDetail extends \pageAssembly
 	{
 		if (Config::get('comments')) {
 			$this->page->addOnLoad("xajax_getComments({$this->kll_id});");
-			$comments = new \Comments(0);
+			$comments = new Killmail\Comments(0);
 
 			global $smarty;
 			$smarty->assignByRef('page', $this->page);
@@ -1343,7 +1344,7 @@ class KillDetail extends \pageAssembly
                 }
 
 		//get the actual slot count for each vessel - for the fitting panel
-		$dogma = \Cacheable::factory('dogma',
+		$dogma = Cacheable::factory('dogma',
 				$this->kill->getVictimShipExternalID());
 		$lowcount = (int) $dogma->attrib['lowSlots']['value'];
 		$medcount = (int) $dogma->attrib['medSlots']['value'];
@@ -1358,7 +1359,7 @@ class KillDetail extends \pageAssembly
 				$lookupRef = $subfit["itemID"];
 				$sql = 'SELECT `attributeID`, `value` FROM `kb3_dgmtypeattributes` WHERE '.
 						'`attributeID` IN (1374, 1375, 1376) AND `typeID` = '.$lookupRef.';';
-				$qry = \DBFactory::getDBQuery();
+				$qry = \Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
 					switch ($row["attributeID"]) {
@@ -1607,7 +1608,7 @@ class KillDetail extends \pageAssembly
 		if (Config::get('item_values')) {
 			if (isset($_POST['submit']) && $_POST['submit'] == 'UpdateValue') {
 				// Send new value for item to the database
-				$qry = DBFactory::getDBQuery();
+				$qry = Database\Factory::getDBQuery();
 				$qry->autocommit(false);
 				if (isset($_POST['SID'])) {
 					$SID = intval($_POST['SID']);
@@ -1643,7 +1644,7 @@ class KillDetail extends \pageAssembly
 			$val = (int) $_POST[$IID];
 			$table = ($_POST['TYPE'] == 'dropped' ? 'dropped' : 'destroyed');
 			$old = (int) $_POST['OLDSLOT'];
-			$qry = \DBFactory::getDBQuery();
+			$qry = \Database\Factory::getDBQuery();
 			$qry->execute("UPDATE kb3_items_".$table." SET itd_itl_id ='".$val."' WHERE itd_itm_id=".$IID
 					." AND itd_kll_id = ".$KID." AND itd_itl_id = ".$old);
 		}
@@ -1657,7 +1658,7 @@ class KillDetail extends \pageAssembly
 	public function source()
 	{
 		global $smarty;
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "SELECT log_ip_address, log_timestamp FROM kb3_log WHERE"
 				." log_kll_id = ".$this->kll_id;
 		$qry->execute($sql);

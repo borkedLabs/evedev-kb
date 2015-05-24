@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Database;
 use EDK\Page\Page;
 
 if(isset($_GET['c_id'])) $_GET['c_id'] = intval($_GET['c_id']);
@@ -16,14 +17,14 @@ $page->setAdmin();
 
 if ($_POST['confirm'])
 {
-    $qry = DBFactory::getDBQuery();
+    $qry = Database\Factory::getDBQuery();
     $qry->execute("DELETE FROM kb3_comments WHERE id='".$_GET['c_id']."'");
 	$smarty->assign('deleted', true);
 	$smarty->assign('id', $_GET['c_id']);
 }
 else
 {
-    $qry = DBFactory::getDBQuery();;
+    $qry = Database\Factory::getDBQuery();;
     $qry->execute("SELECT id, name, comment FROM kb3_comments WHERE `id`='".$_GET['c_id']."'");
     if ($qry->recordCount() == 0)
     {

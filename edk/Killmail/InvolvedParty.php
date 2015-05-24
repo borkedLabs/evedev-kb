@@ -7,7 +7,8 @@
  */
 
 namespace EDK\Killmail;
-use \Cacheable;
+
+use EDK\Cache\Cacheable;
 
 /**
  * A simple wrapper for involved party information.

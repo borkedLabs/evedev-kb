@@ -6,8 +6,10 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\ImageURL;
+use EDK\Database;
 
 /**
  * Contains the details about an Item.
@@ -153,7 +155,7 @@ class Item extends Cacheable
                             return 0;
                         }
                         
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$query = "select itt_slot from kb3_item_types
 						inner join kb3_dgmtypeattributes d
 						where itt_id = d.value
@@ -183,7 +185,7 @@ class Item extends Cacheable
 				return;
 			}
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 
 			$sql = "select inv.*, kb3_item_types.*, dga.value as techlevel,
 				   itp.price, dc.value as usedcharge, dl.value as usedlauncher
@@ -215,7 +217,7 @@ class Item extends Cacheable
 			return $cache_name[$name];
 		}
 		$name = trim(stripslashes($name));
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$query = "select typeID as itm_id from kb3_invtypes itm
 				  where typeName = '".$qry->escape($name)."'";
 		$qry->execute($query);
@@ -235,7 +237,7 @@ class Item extends Cacheable
 	 */
 	public static function get_item_id($name)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$query = "select typeID as itm_id
 				  from kb3_invtypes
 				  where typeName = '".$qry->escape($name)."'";
@@ -252,7 +254,7 @@ class Item extends Cacheable
 		if (is_null($name) && $this->executed) {
 			return $this->row_['usedlauncher'];
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// I dont think CCP will change this attribute in near future ;-)
 		$query = "SELECT value
 					 FROM kb3_dgmtypeattributes d
@@ -268,7 +270,7 @@ class Item extends Cacheable
 		if (is_null($name) && $this->executed) {
 			return $this->row_['usedcharge'];
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// I dont think CCP will change this attribute in near future ;-)
 		if (is_null($name)) {
 			$query = "SELECT value
@@ -315,7 +317,7 @@ class Item extends Cacheable
 		if (is_null($name) && $this->executed) {
 			return $this->row_['groupID'];
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		if (is_null($name)) {
 			$query = "select groupID
 						from kb3_invtypes

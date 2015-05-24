@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -58,7 +59,7 @@ class Contract
 	{
 		if ($this->executed)
 			return;
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// general
 		$sql = "select * from kb3_contracts ctr
                 where ctr.ctr_id = ".$this->ctr_id;
@@ -79,7 +80,7 @@ class Contract
                 where ctd.ctd_ctr_id = ".$row['ctr_id']."
 	            order by 3, 2, 1 -- get corps & alliances for contract";
 
-		$caqry = DBFactory::getDBQuery();
+		$caqry = Database\Factory::getDBQuery();
 		if (!$caqry->execute($sql))
 		{
 			check_contracts();
@@ -360,7 +361,7 @@ class Contract
 	 */
 	function add($name, $type, $startdate, $enddate = "", $comment = "")
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// null doesn't work inside the quotes.
 		if ($enddate != "") $enddate = "'".$qry->escape($enddate." 23:59:59")."'";
 		else $enddate = "null";
@@ -392,7 +393,7 @@ class Contract
 	 */
 	function remove()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 
 		$qry->execute("DELETE kb3_contracts, kb3_contract_details"
 						." FROM kb3_contracts"
@@ -406,7 +407,7 @@ class Contract
 	 */
 	function validate()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 
 		$qry->execute("select * from kb3_contracts
                        where ctr_id = ".$this->ctr_id."
@@ -420,7 +421,7 @@ class Contract
 	 */
 	function setComment($comment)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("UPDATE kb3_contracts
 					   SET ctr_comment = '" . $qry->escape($comment) . "'
 					   WHERE ctr_id = {$this->ctr_id}");

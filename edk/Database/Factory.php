@@ -6,15 +6,13 @@
  * @package EDK
  */
 
- use EDK\Database\NormalQuery;
- use EDK\Database\CachedQuery;
- use EDK\Database\MemCachedQuery;
+namespace EDK\Database;
  
 /**
  * Factory class to create dbquery objects.
  * @package EDK
  */
-class DBFactory
+class Factory
 {
 	/**
 	 * Create and return a db query object.

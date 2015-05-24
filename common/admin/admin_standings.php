@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Page\Page;
 
 require_once('common/admin/admin_menu.php');
@@ -33,7 +34,7 @@ if ($_REQUEST['searchphrase'] != "" && strlen($_REQUEST['searchphrase']) >= 3) {
 			break;
 	}
 
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute($sql);
 
 	while ($row = $qry->getRow()) {
@@ -55,7 +56,7 @@ if ($_REQUEST['searchphrase'] != "" && strlen($_REQUEST['searchphrase']) >= 3) {
 	$smarty->assign('search', true);
 }
 if ($val = $_REQUEST['standing']) {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	foreach (Config::get('cfg_corpid') as $id) {
 		$fromtyp = 'c';
 		$fields = array();
@@ -87,7 +88,7 @@ if (URI::getArg('del', 1)) {
 	$totyp = preg_replace('/[^ac]/', '', substr($standingId, 0, 1));
 	$toid = intval(substr($standingId, 1));
 
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	if (Config::get('cfg_corpid')) {
 		$qry->execute('DELETE FROM kb3_standings WHERE sta_from IN ('
 				. join(',', Config::get('cfg_corpid'))
@@ -104,7 +105,7 @@ if (URI::getArg('del', 1)) {
 
 $permt = array();
 if (Config::get("cfg_corpid") || Config::get("cfg_allianceid")) {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$ent = array();
 	if (Config::get("cfg_corpid")) {
 		$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_corpid"))

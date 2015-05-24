@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -72,7 +73,7 @@ class ContractTarget
 	{
 		if ($this->name_ == "")
 		{
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			switch ($this->type_)
 			{
 				case "corp":
@@ -129,7 +130,7 @@ class ContractTarget
 
 	function add()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "insert into kb3_contract_details
                      values ( ".$this->contract_->getID().",";
 		switch ($this->type_)
@@ -152,7 +153,7 @@ class ContractTarget
 
 	function remove()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "delete from kb3_contract_details
                     where ctd_ctr_id = ".$this->contract_->getID();
 		switch ($this->type_)

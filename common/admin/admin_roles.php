@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 use EDK\Page\Page;
 
 $page = new Page();
@@ -16,7 +17,7 @@ if ($_POST['action'] == 'search')
 {
 	$hitlist = array();
 	$search = \EDK\Core\EDK::slashfix($_POST['search']);
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute('select usr_login from kb3_user where usr_login like '."'%".$search."%'");
 	while ($row = $qry->getRow())
 	{
@@ -32,7 +33,7 @@ if ($_POST['action'] == 'search')
 }
 elseif ($_POST['action'] == 'assign')
 {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$tmp = role::_get($_POST['role']);
 	var_dump($tmp);
 	#$qry->execute('select usr_login from kb3_user where usr_login like '."'%".$search."%'");

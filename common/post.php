@@ -2,6 +2,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Page\Page;
 use EDK\Killmail\Parser;
 
@@ -9,7 +10,7 @@ $page = new Page('Post kill');
 
 if (isset($_POST['undelete']) && isset($_POST['kll_id']) && $page->isAdmin()) {
 	$kll_id = intval($_POST['kll_id']);
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute("DELETE FROM kb3_mails WHERE kll_id = ".$kll_id);
 	if (isset($_POST['submit']) && isset($_POST['killmail'])) {
 		$html = post();

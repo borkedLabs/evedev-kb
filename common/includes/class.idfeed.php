@@ -7,7 +7,9 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -475,7 +477,7 @@ class IDFeed
 			$skip = true;
 		}
 		if (!$skip && !$id = $this->killExists($row)) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 
 			$kill = new Kill();
 			if ($externalID) 
@@ -573,7 +575,7 @@ class IDFeed
 				} else if ($id < 0) {
 					$id = $kill->getDupe(true);
 					if ($externalID  && $id) {
-						$qry = DBFactory::getDBQuery(true);
+						$qry = Database\Factory::getDBQuery(true);
 						$qry->execute( "INSERT IGNORE INTO kb3_mails (  `kll_id`,"
 								." `kll_timestamp`, `kll_external_id`, `kll_hash`,"
 								." `kll_trust`, `kll_modified_time`)"
@@ -923,7 +925,7 @@ class IDFeed
 	 */
 	private function killExists(&$row)
 	{
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		if (strlen($row['hash']) > 1) {
 			$qry->execute("SELECT kll_id, kll_external_id, kll_trust FROM kb3_mails"
 					." WHERE kll_hash = 0x".$qry->escape(strval($row['hash'])));
@@ -1062,7 +1064,7 @@ class IDFeed
 			$involved->addAttribute('columns',
 					'characterID,characterName,corporationID,corporationName,allianceID,allianceName,factionID,factionName,securityStatus,damageDone,finalBlow,weaponTypeID,shipTypeID');
 
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$sql = "SELECT ind_sec_status, ind_all_id, ind_crp_id,
 				ind_shp_id, ind_wep_id, ind_order, ind_dmgdone, plt_id, plt_name,
 				plt_externalid, crp_name, crp_external_id,
@@ -1124,7 +1126,7 @@ class IDFeed
 			}
 			$sql = "SELECT * FROM kb3_items_destroyed WHERE itd_kll_id = ".$kill->getID();
 			$qry->execute($sql);
-			$qry2 = DBFactory::getDBQuery();
+			$qry2 = Database\Factory::getDBQuery();
 			$sql = "SELECT * FROM kb3_items_dropped WHERE itd_kll_id = ".$kill->getID();
 			$qry2->execute($sql);
 

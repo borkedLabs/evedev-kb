@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * Fetches a information for each item in a list.
  *
@@ -36,7 +37,7 @@ class ItemList
 			$this->itemarray = $itemarray;
 		}
 		$this->price = $price;
-		$this->qry = DBFactory::getDBQuery();
+		$this->qry = Database\Factory::getDBQuery();
 	}
 
 	/**

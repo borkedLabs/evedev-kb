@@ -6,9 +6,12 @@
  * $HeadURL$
  * @package EDK
  */
+ 
+namespace EDK\Cache;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\Session;
 
 /**
  * Page caching class
@@ -16,7 +19,7 @@ use EDK\Core\Event;
  * Contains methods to create and retrieve a complete cache of the current page.
  * @package EDK
  */
-class cache
+class Cache
 {
 
 	private static $cacheName = null;
@@ -62,7 +65,7 @@ class cache
 	protected static function shouldCache($page = '')
 	{
 		// never cache for admins
-		if (session::isAdmin()) {
+		if (Session::isAdmin()) {
 			return false;
 		}
 		// Don't cache the image files.
@@ -100,9 +103,9 @@ class cache
 				&& !ini_get('zlib.output_compression');
 		$cachefile = cache::genCacheName();
 		if (defined('DB_USE_MEMCACHE') && DB_USE_MEMCACHE == true) {
-			$cachehandler = new CacheHandlerHashedMem();
+			$cachehandler = new HandlerHashedMem();
 		} else {
-			$cachehandler = new CacheHandlerHashed();
+			$cachehandler = new HandlerHashed();
 		}
 		// If the cache doesn't exist then we don't need to check times.
 		if (cache::shouldCache($page)
@@ -188,9 +191,9 @@ class cache
 			$cachefile = cache::genCacheName();
 
 			if (DB_USE_MEMCACHE) {
-				$cachehandler = new CacheHandlerHashedMem();
+				$cachehandler = new HandlerHashedMem();
 			} else {
-				$cachehandler = new CacheHandlerHashed();
+				$cachehandler = new HandlerHashed();
 			}
 			$cachehandler->put($cachefile,
 					preg_replace('/profile -->.*<!-- \/profile/',
@@ -242,9 +245,9 @@ class cache
 		$cachefile = cache::genCacheName();
 
 		if (DB_USE_MEMCACHE) {
-			$cachehandler = new CacheHandlerHashedMem();
+			$cachehandler = new HandlerHashedMem();
 		} else {
-			$cachehandler = new CacheHandlerHashed();
+			$cachehandler = new HandlerHashed();
 		}
 		$cachehandler->remove($cachefile);
 	}

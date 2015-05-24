@@ -10,7 +10,7 @@ namespace EDK\PageComponent;
 use EDK\Core\Config;
 use EDK\Core\Language;
 use EDK\Core\URI;
-use \DBFactory;
+use EDK\Database;
 use \Killboard;
 /**
  * @package EDK
@@ -29,7 +29,7 @@ class Navigation
 
 	private function execQuery()
 	{
-		$this->qry = DBFactory::getDBQuery();
+		$this->qry = Database\Factory::getDBQuery();
 		$query = "SELECT * FROM kb3_navigation".
 			" WHERE nav_type = '$this->type'";
 
@@ -94,7 +94,7 @@ class Navigation
 	private function check_navigationtable()
 	{
 		$sql = "select count(KBSITE) as cnt from kb3_navigation WHERE KBSITE = '".$this->site."'";
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		// return false if query fails
 		if(!$qry->execute($sql) || !($row = $qry->getRow())) {
 			return false;
@@ -107,7 +107,7 @@ class Navigation
 	public function reset()
 	{
 		$sql = "DELETE from kb3_navigation WHERE KBSITE = '".$this->site."'";
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$qry->autocommit(false);
 		$qry->execute($sql);
 		// return false if query fails

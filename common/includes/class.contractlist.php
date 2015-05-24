@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * Generate a list of campaigns.
  * @package EDK
@@ -39,7 +40,7 @@ class ContractList
 			$sql .= " and ( now() >= ctr_ended )";
 		}
 		$sql .= " order by ctr_ended, ctr_started desc";
-		$this->qry = DBFactory::getDBQuery();
+		$this->qry = Database\Factory::getDBQuery();
 		$this->qry->execute($sql);
 		$this->executed = true;
 	}

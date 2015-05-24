@@ -10,6 +10,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Killmail;
 use EDK\PageComponent\Box;
 
@@ -203,7 +204,7 @@ class ContractDetail extends \pageAssembly
 		switch ($this->view)
 		{
 			case "":
-				$qrylength=\DBFactory::getDBQuery();
+				$qrylength=Database\Factory::getDBQuery();
 				// set break at half of the number of valid classes - excludes noob ships, drones and unknown
 				$qrylength->execute("SELECT count(*) - 3 AS cnt FROM kb3_ship_classes");
 				if($qrylength->recordCount())

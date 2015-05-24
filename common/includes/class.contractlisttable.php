@@ -8,6 +8,7 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 
 /**
  * @package EDK
@@ -47,7 +48,7 @@ class ContractListTable
 	 */
 	function getTableStats()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		while ($contract = $this->contractlist->getContract())
 		{
 			// Losses

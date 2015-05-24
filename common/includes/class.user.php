@@ -6,7 +6,9 @@
  * @package EDK
  */
 
+use EDK\Core\Session;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\PageComponent\Box;
 
@@ -36,7 +38,7 @@ class user
 		if (user::loggedin()) {
 			return true;
 		}
-		$db = DBFactory::getDBQuery(true);
+		$db = Database\Factory::getDBQuery(true);
 		$db->execute("SELECT usr_id,usr_login,usr_pass,usr_pilot_id FROM kb3_user"
             ." WHERE usr_login='".$db->escape($login)
 						."' AND usr_state=0 and usr_site='".KB_SITE
@@ -152,7 +154,7 @@ class user
 	 */
 	public static function register($login, $password, $pilotid = null)
 	{
-		$db = DBFactory::getDBQuery(true);
+		$db = Database\Factory::getDBQuery(true);
 
 		$values[] = KB_SITE;
 		$values[] = $db->escape($login);
@@ -173,7 +175,7 @@ class user
 	 */
 	public static function delete($login, $site = KB_SITE)
 	{
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$name = $qry->escape($login);
 		$site = $qry->escape($site);
 

@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Cache\Cacheable;
 use EDK\Core\URI;
 use EDK\Killmail\InventoryFlag;
 

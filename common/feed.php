@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -221,13 +222,13 @@ if (!$kid)
 {
 	asort($kills);
 }
-$qry = DBFactory::getDBQuery();
+$qry = Database\Factory::getDBQuery();
 // If kills returned = $maxreturned assume that it was limited and set
 // last kill as the lower of highest kill id returned or highest non-classified
 // kill
 if($klist->getCount() != $maxreturned)
 {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	if(Config::get('kill_classified'))
 	{
 		$qry->execute('SELECT max(kll_id) as finalkill FROM kb3_kills WHERE kll_timestamp < "'.(date('Y-m-d H:i:s',time()-Config::get('kill_classified')*60*60)).'"');

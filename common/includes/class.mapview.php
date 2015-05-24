@@ -6,6 +6,7 @@
  * @package EDK
  */
 
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -119,7 +120,7 @@ class MapView
 			and con.con_id = sys.sys_con_id
 			and  sys.sys_id = '.intval($systemid);
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql);
 		if(!$qry->recordCount()) die;
 		$row = $qry->getRow();
@@ -194,7 +195,7 @@ class MapView
         else
             $sql .= " AND sys.sys_id < 31000001";
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($sql) or die($qry->getErrorMsg());
 
 		$img = imagecreatetruecolor($this->imgwidth_, $this->imgheight_);

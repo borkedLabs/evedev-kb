@@ -9,6 +9,7 @@
  
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Corporation;
 use EDK\PageComponent\Options;
 
@@ -136,7 +137,7 @@ class admin_config
 	public static function createPilot()
 	{
 		$numeric = false;
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$plt_id = PILOT_ID;
 		if (isset($_POST['option_add_pilotid'])
 				&& $_POST['option_add_pilotid']) {
@@ -225,7 +226,7 @@ class admin_config
 
 	public static function createCorp()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$numeric = false;
 		$crp_id = 0;
 
@@ -316,7 +317,7 @@ class admin_config
 
 	public static function createAlliance()
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$numeric = false;
 		$all_id = 0;
 

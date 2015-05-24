@@ -7,6 +7,8 @@
  * @package EDK
  */
 
+namespace EDK\Cache;
+
 use EDK\Core\Config;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -147,9 +149,9 @@ abstract class Cacheable {
 	private static function init()
 	{
 		if(defined('DB_USE_MEMCACHE') && DB_USE_MEMCACHE == true) {
-			self::$cachehandler = new CacheHandlerHashedMem();
+			self::$cachehandler = new HandlerHashedMem();
 		} else {
-			self::$cachehandler = new CacheHandlerHashed();
+			self::$cachehandler = new HandlerHashed();
 		}
 	}
 

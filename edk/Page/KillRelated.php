@@ -13,6 +13,7 @@ use EDK\Core\Event;
 use EDK\Core\ImageURL;
 use EDK\Core\Language;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Killmail;
 use EDK\Killmail\Kill;
 use EDK\PageComponent\Box;
@@ -160,7 +161,7 @@ class KillRelated extends \pageAssembly
 	public function buildStats()
 	{
 		// this is a fast query to get the system and timestamp
-		$rqry = \DBFactory::getDBQuery();
+		$rqry = Database\Factory::getDBQuery();
 		if ($this->adjacent) {
 			$rsql = 'SELECT kll_timestamp, sjp_to as sys_id from kb3_kills
 				join kb3_systems a ON (a.sys_id = kll_system_id)
@@ -183,7 +184,7 @@ class KillRelated extends \pageAssembly
 				') AND kll.kll_timestamp <= "'.(date('Y-m-d H:i:s', strtotime($basetime) + 4 * 60 * 60)).'"'.
 				' AND kll.kll_timestamp >= "'.(date('Y-m-d H:i:s', strtotime($basetime) - 4 * 60 * 60)).'"'.
 				' ORDER BY kll.kll_timestamp ASC';
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute($query);
 		$ts = array();
 		while ($row = $qry->getRow()) {
@@ -529,7 +530,7 @@ class KillRelated extends \pageAssembly
 	private function handle_involved($kill, $side)
 	{
 		// we need to get all involved pilots, killlists dont supply them
-		$qry = \DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "select ind_plt_id, ind_crp_id, ind_all_id, ind_sec_status, ind_shp_id, ind_wep_id,
 				wtype.typeName, plt_name, crp_name, all_name, stype.typeName AS shp_name, scl_points, scl_id
 				from kb3_inv_detail

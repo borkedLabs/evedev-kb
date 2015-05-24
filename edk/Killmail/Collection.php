@@ -9,7 +9,7 @@
 namespace EDK\Killmail;
 
 use EDK\Core\Event;
-use \DBFactory;
+use EDK\Database;
 use \Involved;
 
 /**
@@ -68,7 +68,7 @@ class Collection
 
 	function __construct()
 	{
-		$this->qry_ = DBFactory::getDBQuery();
+		$this->qry_ = Database\Factory::getDBQuery();
 		$this->expr = array("kll.kll_id",
 			"kll.kll_timestamp",
 			"kll.kll_external_id",
@@ -595,7 +595,7 @@ class Collection
 			if ($this->limit_) $this->sql_ .= " limit ".$this->limit_." OFFSET ".$this->offset_;
 			elseif ($this->plimit_)
 			{
-				$splitq = DBFactory::getDBQuery();
+				$splitq = Database\Factory::getDBQuery();
 				$ssql = 'SELECT DISTINCT kll_id FROM '.$this->sqlinner_.$this->sql_;
 				$splitq->execute($ssql);
 

@@ -7,7 +7,7 @@
  */
 namespace EDK\StatSummary;
 
-use \DBFactory;
+use EDK\Database;
 /**
  * Store summary statistics for Alliances.
  * @package EDK
@@ -42,7 +42,7 @@ class AllianceSummary extends StatSummary
 			return false;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_alliance WHERE asm_all_id = ".$this->all_id);
 		if (!$qry->recordCount()) {
 			self::buildSummary($this->all_id);
@@ -76,7 +76,7 @@ class AllianceSummary extends StatSummary
 		if (!$all_id) {
 			return false;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->autocommit(false);
 
 		// insert into summary ((select all kills) union (select all losses))
@@ -131,7 +131,7 @@ class AllianceSummary extends StatSummary
 	public static function addKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_alliance WHERE asm_all_id = ".$kill->getVictimAllianceID());
 		if ($qry->recordCount()) {
 			$sql = "INSERT INTO kb3_sum_alliance (asm_all_id, asm_shp_id, asm_loss_count, asm_loss_isk) ".
@@ -169,7 +169,7 @@ class AllianceSummary extends StatSummary
 	public static function delKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_alliance WHERE asm_all_id = "
 				.$kill->getVictimAllianceID());
 		// No summary table to remove kill from so skip.
@@ -208,7 +208,7 @@ class AllianceSummary extends StatSummary
 	{
 		$difference = (float)$difference;
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_alliance WHERE asm_all_id = "
 				.$kill->getVictimAllianceID());
 		// No summary table to remove kill from so skip.

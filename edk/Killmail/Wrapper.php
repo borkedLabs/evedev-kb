@@ -10,6 +10,7 @@ namespace EDK\Killmail;
 
 use EDK\Core\Config;
 use EDK\Core\ImageURL;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Alliance;
 
@@ -82,7 +83,7 @@ class Wrapper extends Kill
 	{
 		$id = intval($id);
 		if ($id && $external) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("SELECT kll_id FROM kb3_kills WHERE kll_external_id = " . $id);
 			if ($qry->recordCount()) {
 				$result = $qry->getRow();
@@ -649,7 +650,7 @@ class Wrapper extends Kill
 		}
 		$value += $this->victimship->getPrice();
 		if ($update) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("UPDATE kb3_kills SET kll_isk_loss = '$value' WHERE
 				kll_id = '" . $this->id . "'");
 			if ($this->iskloss) {

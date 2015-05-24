@@ -8,6 +8,8 @@
 
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
+use EDK\Database\DBQuery;
 use EDK\Page\Page;
 
 require_once("common/admin/admin_menu.php");
@@ -49,7 +51,7 @@ if ($_POST['clearapicache']) {
 }
 
 if ($_POST['add'] ) {
-	$qry = DBFactory::getDBQuery(true);
+	$qry = Database\Factory::getDBQuery(true);
 	$key_name = $qry->escape($_POST['keyname']);
 	$key_id = $qry->escape($_POST['keyid']);
 	$key_key = $qry->escape($_POST['keycode']);
@@ -160,7 +162,7 @@ function dirsize($pattern) {
 }
 
 if ($_POST['clearlog']) {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute("DELETE FROM kb3_apilog WHERE log_site = '".KB_SITE."'");
 }
 
@@ -173,7 +175,7 @@ if ($_POST['apilog']) {
 			WHERE log_site = "' .KB_SITE . '"
 			ORDER BY log_timestamp DESC limit 250';
 
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute($sql) or die($qry->getErrorMsg());
 
 	$html .= '<table class="kb-table" style="width:740px; margin-left:10px;">';
@@ -450,7 +452,7 @@ function getPlayerDetails($characteridentitifier)
 	$sql = 'select plts.plt_id, plts.plt_name from kb3_pilots plts where plts.plt_externalid = "'
 			.$qry->escape($characteridentitifier).'"';
 
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute($sql);
 	$row = $qry->getRow();
 

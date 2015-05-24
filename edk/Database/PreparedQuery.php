@@ -9,7 +9,7 @@
 // TODO Check if caching is enabled and flag tables as dirty even if we don't
 // cache prepared queries.
 
- namespace EDK\Database;
+namespace EDK\Database;
  
 /**
  * mysqli uncached query class. Manages SQL queries to a MySQL DB using mysqli.
@@ -80,7 +80,7 @@ class PreparedQuery
 			&& strtolower(substr($this->sql, 0, 6)) != 'select'
 			&& strtolower(substr($this->sql, 0, 4)) != 'show')
 		{
-			$qc = DBFactory::getDBQuery();
+			$qc = Factory::getDBQuery();
 			$qc->markAffectedTables($this->sql);
 		}
 

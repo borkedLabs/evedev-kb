@@ -5,7 +5,9 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Killmail;
 
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 
 /**
@@ -45,7 +47,7 @@ class Comments
 	{
 		global $smarty;
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// NULL site id is shown on all boards
 		$qry->execute("SELECT *,id FROM kb3_comments WHERE `kll_id` = '".
 				$this->id_."' AND (site = '".KB_SITE
@@ -106,7 +108,7 @@ class Comments
 	 */
 	function delComment($c_id)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$c_id = (int) $c_id;
 		$qry->execute("DELETE FROM kb3_comments WHERE id='".$c_id);
 	}

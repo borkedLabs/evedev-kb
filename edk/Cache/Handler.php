@@ -6,13 +6,15 @@
  * @package EDK
  */
 
+namespace EDK\Cache;
+
 /**
  * Cache handling methods.
  *
  * Contains methods to handle the killboard's cache directory.
  * @package EDK
  */
-class CacheHandler
+class Handler
 {
 	/** @var string Internal root path. */
 	protected static $internalroot = KB_CACHEDIR;

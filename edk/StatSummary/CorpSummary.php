@@ -7,7 +7,7 @@
  */
 namespace EDK\StatSummary;
 
-use \DBFactory;
+use EDK\Database;
 
 /**
  * Store summary statistics for Corporations.
@@ -43,7 +43,7 @@ class CorpSummary extends StatSummary
 			return false;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_corp WHERE csm_crp_id = ".$this->crp_id);
 		if (!$qry->recordCount()) self::buildSummary($this->crp_id);
 
@@ -75,7 +75,7 @@ class CorpSummary extends StatSummary
 		if (!$crp_id) {
 			return false;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->autocommit(false);
 
 		// insert into summary ((select all kills) union (select all losses))
@@ -130,7 +130,7 @@ class CorpSummary extends StatSummary
 	public static function addKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_corp WHERE csm_crp_id = ".$kill->getVictimcorpID());
 		if ($qry->recordCount()) {
 			$sql = "INSERT INTO kb3_sum_corp (csm_crp_id, csm_shp_id, csm_loss_count, csm_loss_isk) ".
@@ -166,7 +166,7 @@ class CorpSummary extends StatSummary
 	public static function delKill($kill)
 	{
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_corp WHERE csm_crp_id = ".$kill->getVictimCorpID());
 		// No summary table to remove kill from so skip.
 		if ($qry->recordCount()) {
@@ -203,7 +203,7 @@ class CorpSummary extends StatSummary
 	{
 		$difference = (float)$difference;
 		$alls = array();
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute("SELECT 1 FROM kb3_sum_corp WHERE csm_crp_id = "
 				.$kill->getVictimCorpID());
 		// No summary table to remove kill from so skip.

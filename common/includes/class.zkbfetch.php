@@ -1,6 +1,8 @@
 <?php
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -166,7 +168,7 @@ class ZKBFetch
     {
         $resultObjects = array();
         
-        $qry = DBFactory::getDBQuery(true);
+        $qry = Database\Factory::getDBQuery(true);
         $qry->execute('SELECT fetchID FROM kb3_zkbfetch ORDER BY fetchID ASC');
         while($result = $qry->getRow())
         {
@@ -450,7 +452,7 @@ class ZKBFetch
             throw new ZKBFetchException("Invalid format for kill, skipping");
         }
         
-        $qry = DBFactory::getDBQuery();
+        $qry = Database\Factory::getDBQuery();
 
         // Check hashes with a prepared query.
         // Make it static so we can reuse the same query for feed fetches.

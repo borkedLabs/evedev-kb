@@ -1,5 +1,6 @@
 <?php
 
+namespace EDK\Killmail;
 
 class CombinedCollection extends Collection
 {

@@ -6,10 +6,12 @@
  * @package EDK
  */
 
+namespace EDK\Database;
+
 /**
  * @package EDK
  */
-class DBQuery
+class Query
 {
 	var $object;
 
@@ -18,7 +20,7 @@ class DBQuery
 	// object actions to it
 	function __construct($forceNormal = false)
 	{
-		$this->object = DBFactory::getDBQuery($forceNormal);
+		$this->object = Factory::getDBQuery($forceNormal);
 	}
 
 	function __call($name, $args)

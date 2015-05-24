@@ -8,8 +8,8 @@
 
 namespace EDK\PageComponent\TopTable;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\ImageURL;
-use \Cacheable;
 
 class Corp
 {

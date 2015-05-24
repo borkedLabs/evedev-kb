@@ -9,6 +9,7 @@ namespace EDK\Page;
 
 use EDK\Core\Event;
 use EDK\Core\Language;
+use EDK\Core\Session;
 use EDK\Core\URI;
 /*
  * @package EDK
@@ -64,7 +65,7 @@ class Login extends \pageAssembly
 					file_put_contents("kbconfig.php", trim($kbconfig));
 					chmod("kbconfig.php", 0440);
 
-					\session::create(true);
+					Session::create(true);
 
 					session_write_close();
 					header('Location: '.html_entity_decode(URI::page('admin')));
@@ -72,7 +73,7 @@ class Login extends \pageAssembly
 				}
 			} else if ($_POST['usrlogin'] == ''
 					&& crypt($_POST['usrpass'], ADMIN_PASSWORD) == ADMIN_PASSWORD) {
-				\session::create(true);
+				Session::create(true);
 
 				session_write_close();
 				$page = preg_replace('/[^a-zA-Z0-9-_]/', '', URI::getArg("page", 1));

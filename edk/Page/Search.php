@@ -10,6 +10,7 @@ namespace EDK\Page;
 
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Database;
 
 // An ajax search function for this page is in common/includes/xajax.functions.php
 require_once(__DIR__.'/../../common/includes/xajax.functions.php');
@@ -104,7 +105,7 @@ class Search extends \pageAssembly
                     $sql = "select typeID, typeName from kb3_invtypes where typeName like ('%".$this->searchphrase."%')";
                     break;
             }
-			$qry = \DBFactory::getDBQuery();;
+			$qry = Database\Factory::getDBQuery();;
             if (!$qry->execute($sql))
             {
                 die ($qry->getErrorMsg());

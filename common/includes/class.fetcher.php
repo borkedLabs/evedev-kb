@@ -11,6 +11,7 @@
  */
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
@@ -277,7 +278,7 @@ class Fetcher
 					}
 					elseif($this->trust <= $this->accepttrust && $this->apiID = intval($this->apiID))
 					{
-						$qry = DBFactory::getDBQuery();
+						$qry = Database\Factory::getDBQuery();
 						$qry->execute("SELECT 1 FROM kb3_kills WHERE kll_external_id = ".$this->apiID);
 						if(!$qry->recordCount())
 						{
@@ -300,7 +301,7 @@ class Fetcher
 					}
 					elseif($this->hash != '' && !$this->apikills)
 					{
-						$qry = DBFactory::getDBQuery();
+						$qry = Database\Factory::getDBQuery();
 						$sql = "SELECT kll_trust FROM kb3_mails WHERE kll_timestamp = '".
 								$qry->escape($this->time)."' AND kll_hash = 0x".
 								$qry->escape($this->hash);
@@ -422,7 +423,7 @@ class Fetcher
 	 */
 	function addPilotNames($names)
 	{
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$checklist = array();
 		foreach($names as $pilot => $corp)
 		{
@@ -465,7 +466,7 @@ class Fetcher
 	 */
 	function addCorpNames($names)
 	{
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		$checklist = array();
 		foreach($names as $corp => $all)
 		{

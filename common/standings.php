@@ -7,12 +7,13 @@
  */
 
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Page\Page;
 
 $page = new Page();
 $page->setTitle('Standings');
 
-$qry = DBFactory::getDBQuery();
+$qry = Database\Factory::getDBQuery();
 $ent = array();
 if (Config::get("cfg_corpid")) {
 	$ent[] = 'sta_from IN (' . join(',', Config::get("cfg_corpid"))

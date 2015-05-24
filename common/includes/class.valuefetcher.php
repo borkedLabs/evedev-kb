@@ -7,6 +7,7 @@
  */
 
 use EDK\Core\Config;
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -97,7 +98,7 @@ class valueFetcher
 	public function fetch_values($fetchfaction = false)
 	{
 		// New query
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$items = array();
 
 

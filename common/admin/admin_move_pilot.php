@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Page\Page;
@@ -25,7 +26,7 @@ if (!$pilot->exists())
 if($_POST['confirm'])
 {
 	$sql = "UPDATE `kb3_pilots` SET `plt_crp_id` = '".intval($_POST['crp_id'])."' WHERE `plt_id` =".intval($_POST['plt_id']);
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$qry->execute($sql);
 	$html .= "Pilot Moved";
 }
@@ -43,7 +44,7 @@ if($_REQUEST['crp'])
 
 if($_POST['search'])
 {
-	$qry = DBFactory::getDBQuery();
+	$qry = Database\Factory::getDBQuery();
 	$sql = "SELECT * FROM `kb3_corps` WHERE crp_name LIKE '%".$qry->escape($_POST['search'])."%'";
 	$qry->execute($sql);
 										//$html .= $sql ;

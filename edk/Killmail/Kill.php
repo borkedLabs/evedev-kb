@@ -8,15 +8,15 @@
 
 namespace EDK\Killmail;
 
+use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
-use \DBFactory;
+use EDK\Database;
 use \ItemList;
-use \Cacheable;
 use \summaryCache;
 use \cache;
  
@@ -28,7 +28,7 @@ class KillException extends \Exception {}
 /**
  * @package EDK
  */
-class Kill extends \Cacheable
+class Kill extends Cacheable
 {
 	/** @const the base URL for the public CREST killmail endpoint */
 	static $CREST_KILLMAIL_ENDPOINT = "http://public-crest.eveonline.com/killmails/";
@@ -79,7 +79,7 @@ class Kill extends \Cacheable
 	{
 		$id = intval($id);
 		if($id && $external) {
-			$qry = DBFactory::getDBQuery(true);
+			$qry = Database\Factory::getDBQuery(true);
 			$qry->execute("SELECT kll_id FROM kb3_kills WHERE kll_external_id = ".$id);
 			if($qry->recordCount()) {
 				$result = $qry->getRow();
@@ -555,7 +555,7 @@ class Kill extends \Cacheable
 
 		static $locations;
 		if(!isset($locations)) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("SELECT itl_flagID, itl_flagText FROM kb3_item_locations");
 			while($row = $qry->getRow()) {
 				$locations[$row['itl_flagID']] = $row['itl_flagText'];
@@ -780,7 +780,7 @@ class Kill extends \Cacheable
 			}
 		}
 		$this->dupeid = 0;
-		$qry = DBFactory::getDBQuery(true);
+		$qry = Database\Factory::getDBQuery(true);
 		if (!$this->fbpilotid || !$this->victimid) {
 			return 0;
 		}
@@ -820,7 +820,7 @@ class Kill extends \Cacheable
 					." AND kll_dmgtaken = ".intval($this->dmgtaken)
 					." AND kll_id != ".$this->id;
 		$qry->execute($sql);
-		$qryinv = DBFactory::getDBQuery(true);
+		$qryinv = Database\Factory::getDBQuery(true);
 
 		while ($row = $qry->getRow()) {
 			$kll_id = $row['kll_id'];
@@ -882,7 +882,7 @@ class Kill extends \Cacheable
 					return $this->valid;
 				}
 			}
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 
 			$sql = "select kll.kll_id, kll.kll_external_id, kll.kll_timestamp,
 						kll.kll_victim_id, kll.kll_crp_id, kll.kll_all_id,
@@ -1005,7 +1005,7 @@ class Kill extends \Cacheable
 		if(isset($this->involvedcount)) {
 			return $this->involvedcount;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute(
 				"select count(*) inv from kb3_inv_detail where ind_kll_id = "
 				.$this->getID());
@@ -1101,7 +1101,7 @@ class Kill extends \Cacheable
 				AND kll_system_id = ".$this->getSystem()->getID();
 		}
 		$sql .= " /* related kill count */ ";
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		if(!$qry->execute($sql)) {
 			return 0;
 		}
@@ -1156,7 +1156,7 @@ class Kill extends \Cacheable
 			$sql .= " AND (".implode(' OR ', $sqlInv).") AND (".implode(' OR ', $sqlVic).") ";
 		}
 		$sql .= "/* related loss count */";
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		if(!$qry->execute($sql)) {
 			return 0;
 		}
@@ -1171,7 +1171,7 @@ class Kill extends \Cacheable
 		if(isset($this->commentcount)) {
 			return $this->commentcount;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "SELECT count(id) as comments FROM kb3_comments "
 				."WHERE kll_id = '$kll_id' AND (site = '".KB_SITE
 				."' OR site IS NULL)";
@@ -1358,7 +1358,7 @@ class Kill extends \Cacheable
 		}
 		$value += $this->getVictimShip()->getPrice();
 		if($update) {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("UPDATE kb3_kills SET kll_isk_loss = '$value' WHERE
 				kll_id = '".$this->id."'");
 			if($this->iskloss) {
@@ -1414,7 +1414,7 @@ class Kill extends \Cacheable
 		}
 
 		// Start a transaction here to capture the duplicate check.
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->autocommit(false);
 		// Set these to make sure we don't try to load the kill from the db before it exists.
 		$this->executed = true;
@@ -1486,7 +1486,7 @@ class Kill extends \Cacheable
 			$this->dmgtaken = 0;
 		}
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$sql = "INSERT INTO kb3_kills
             (kll_id , kll_timestamp , kll_victim_id , kll_all_id , kll_crp_id , kll_ship_id , kll_system_id , kll_fb_plt_id , kll_points , kll_dmgtaken, kll_external_id, kll_isk_loss)
             VALUES (".$qid.",
@@ -1656,7 +1656,7 @@ class Kill extends \Cacheable
 		if (!$this->id) {
 			return;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->autocommit(false);
 
 		Event::call('killmail_delete', $this);
@@ -1720,7 +1720,7 @@ class Kill extends \Cacheable
 			if($hex) return bin2hex($this->hash);
 			else return $this->hash;
 		}
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		// Get the mail and trust as well since we're fetching the row anyway.
 		if($this->id)
 			$qry->execute("SELECT kll_hash, kll_trust FROM kb3_mails WHERE kll_id = ".$this->id);
@@ -1799,7 +1799,7 @@ class Kill extends \Cacheable
 	{
 		$this->execQuery();
 
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		if(@$qry->execute("UPDATE kb3_kills SET kll_external_id = ".
 				$this->externalid." WHERE kll_id = ".$this->id)) {
 			$qry->execute("UPDATE kb3_mails SET kll_external_id = ".

@@ -9,6 +9,7 @@
 namespace EDK\Killmail;
 
 use EDK\Core\Config;
+use EDK\Database;
 use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -136,7 +137,7 @@ class Parser
 	
 	function parse($checkauth = true)
 	{
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 
 		// Check hashes with a prepared query.
 		// Make it static so we can reuse the same query for feed fetches.

@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\Database;
 use EDK\Page\Page;
 use EDK\PageComponent\Navigation;
 
@@ -40,7 +41,7 @@ if ($_GET['incPrio']) {
 		$nav->reset();
 	}
 }
-$qry = DBFactory::getDBQuery(true);
+$qry = Database\Factory::getDBQuery(true);
 $query = "select * from kb3_navigation WHERE intern = 1 AND KBSITE = '".KB_SITE."' AND descr <> 'About';";
 
 $internal = array();
@@ -78,7 +79,7 @@ $page->generate();
 function increasePriority($id)
 {
 	$id = (int) $id;
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
 	$qry->autocommit(false);
     $query = "SELECT posnr FROM kb3_navigation WHERE ID = $id AND KBSITE = '".KB_SITE."'";
     $qry->execute($query);
@@ -95,7 +96,7 @@ function increasePriority($id)
 function decreasePriority($id)
 {
 	$id = (int) $id;
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
 	$qry->autocommit(false);
     $query = "SELECT posnr FROM kb3_navigation WHERE ID = $id AND KBSITE = '".KB_SITE."'";
     $qry->execute($query);
@@ -113,7 +114,7 @@ function decreasePriority($id)
 function renamePage($id, $name)
 {
 	$id = (int) $id;
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
 	$name = $qry->escape($name);
     $query = "UPDATE kb3_navigation SET descr ='$name' WHERE ID=$id AND KBSITE = '".KB_SITE."'";
     $qry->execute($query);
@@ -121,7 +122,7 @@ function renamePage($id, $name)
 
 function changeUrl($id, $url)
 {
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
 	$id = (int)$id;
 	$url = $qry->escape($url);
     $query = "UPDATE kb3_navigation SET url ='$url' WHERE ID=$id AND KBSITE = '".KB_SITE."'";
@@ -130,7 +131,7 @@ function changeUrl($id, $url)
 
 function newPage($descr, $url)
 {
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
     $descr = $qry->escape(preg_replace('/[^\w\d]/', '', $descr));
     $url = $qry->escape($url);
     $query = "SELECT max(posnr) as nr FROM kb3_navigation WHERE nav_type='top' AND KBSITE = '".KB_SITE."'";
@@ -144,7 +145,7 @@ function newPage($descr, $url)
 function delPage($id)
 {
 	$id = (int) $id;
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
     $query = "DELETE FROM kb3_navigation WHERE ID=$id AND KBSITE = '".KB_SITE."'";
     $qry->execute($query);
 }
@@ -153,7 +154,7 @@ function chgHideStatus($id, $status)
 {
 	$id = (int) $id;
 	$status = (int) $status % 2;
-    $qry = DBFactory::getDBQuery(true);
+    $qry = Database\Factory::getDBQuery(true);
     $query = "UPDATE kb3_navigation SET hidden ='$status' WHERE ID=$id AND KBSITE = '".KB_SITE."'";
     $qry->execute($query);
 }

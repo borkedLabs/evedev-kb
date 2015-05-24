@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -96,7 +98,7 @@ class SolarSystem extends Cacheable
 				$this->row = $cache->row;
 				$this->executed = true;
 			} else {
-		        $qry = DBFactory::getDBQuery();
+		        $qry = Database\Factory::getDBQuery();
 				$sql = "select *
 						   from kb3_systems sys, kb3_constellations con,
 						   kb3_regions reg
@@ -119,7 +121,7 @@ class SolarSystem extends Cacheable
 	 */
     static function lookup($name)
     {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$qry->execute("SELECT sys_id FROM kb3_systems "
 			." WHERE sys_name = '".$qry->escape($name)."'");
 

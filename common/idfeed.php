@@ -1,5 +1,6 @@
 <?php
 
+use EDK\Database;
 /**
  * $Date$
  * $Revision$
@@ -64,7 +65,7 @@ if (isset($_GET['limit'])) {
 	$list->setLimit($maxkillsreturned);
 }
 
-$qry = DBFactory::getDBQuery();
+$qry = Database\Factory::getDBQuery();
 
 if (isset($_GET['alliance'])) {
 	$arr = explode(',', $_GET['alliance']);

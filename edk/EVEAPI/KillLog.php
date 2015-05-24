@@ -9,6 +9,7 @@ namespace EDK\EVEAPI;
  
 use EDK\Core\Config;
 use EDK\Core\URI;
+use EDK\Database;
 
 define('NUMBER_OF_CALLS_DEFAULT', 1);
 
@@ -103,7 +104,7 @@ class KillLog extends API
 						}
 					} else if (!$posted && !$skipped) {
 						// Something went wrong and no kills were found.
-						$qry = \DBFactory::getDBQuery();
+						$qry = Database\Factory::getDBQuery();
 						$logtype = "Cron Job";
 
 						$qry->execute("insert into kb3_apilog	values( '".KB_SITE."', '"
@@ -122,7 +123,7 @@ class KillLog extends API
 						break;
 					} else {
 						// We found kills!
-						$qry = \DBFactory::getDBQuery();
+						$qry = Database\Factory::getDBQuery();
 						$logtype = "Cron Job";
 
 						$qry->execute("insert into kb3_apilog values( '".KB_SITE."', '"
@@ -152,7 +153,7 @@ class KillLog extends API
                                 if ($this->getError() == null)
                                 {
                                     // We found kills!
-                                    $qry = \DBFactory::getDBQuery();
+                                    $qry = Database\Factory::getDBQuery();
 
                                     $qry->execute("insert into kb3_apilog values( '".KB_SITE."', '"
                                                                     .addslashes($name)."',"

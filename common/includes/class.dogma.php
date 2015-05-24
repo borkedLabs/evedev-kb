@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\Cache\Cacheable;
+use EDK\Database;
 /**
  * @package EDK
  */
@@ -35,7 +37,7 @@ class dogma extends Cacheable
 			$this->effects = $cache->effects;
 			$this->valid = true;
 		} else {
-			$qry = DBFactory::getDBQuery();
+			$qry = Database\Factory::getDBQuery();
 			$query = 'select * from kb3_invtypes
 						left join kb3_item_types on itt_id = groupID
 						where typeID = '.$itemID;
@@ -122,7 +124,7 @@ class dogma extends Cacheable
 	public static function resolveTypeID($id)
 	{
 		$id = intval($id);
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute('select typeName from kb3_invtypes where typeID='.$id);
 		$row = $qry->getRow();
 		return $row['typeName'];
@@ -137,7 +139,7 @@ class dogma extends Cacheable
 	public static function resolveGroupID($id)
 	{
 		$id = intval($id);
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute('select itt_name from kb3_item_types where itt_id='.$id);
 		$row = $qry->getRow();
 		return $row['itt_name'];
@@ -152,7 +154,7 @@ class dogma extends Cacheable
 	public static function resolveAttributeID($id)
 	{
 		$id = intval($id);
-		$qry = DBFactory::getDBQuery();
+		$qry = Database\Factory::getDBQuery();
 		$qry->execute('select displayName from kb3_dgmattributetypes where attributeID='.$id);
 		$row = $qry->getRow();
 		return $row['displayName'];

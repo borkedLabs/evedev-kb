@@ -8,8 +8,8 @@
 
 namespace EDK\Killmail;
 
+use EDK\Cache\Cacheable;
 use EDK\Database\PreparedQuery;
-use \Cacheable;
 
 /**
  * represents an InventoryFlag used to describe the position of items in a kill
