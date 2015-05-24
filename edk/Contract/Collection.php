@@ -6,12 +6,14 @@
  * @package EDK
  */
 
+namespace EDK\Contract;
+
 use EDK\Database;
 /**
  * Generate a list of campaigns.
  * @package EDK
  */
-class ContractList
+class Collection
 {
 	/** @var string */
 	private $active = 'both';

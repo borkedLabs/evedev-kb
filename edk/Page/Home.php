@@ -7,6 +7,7 @@
  */
 namespace EDK\Page;
  
+use EDK\Contract;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -14,6 +15,7 @@ use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 use EDK\PageComponent\Clock;
 use EDK\Killmail;
+use \ContractListTable;
 /*
  * @package EDK
  */
@@ -197,7 +199,7 @@ class Home extends \pageAssembly
 		if (\Killboard::hasCampaigns(true) &&
 				$this->isCurrentPeriod()) {
 			$html = "<div class='kb-campaigns-header'>Active campaigns</div>";
-			$list = new ContractList();
+			$list = new Contract\Collection();
 			$list->setActive("yes");
 			$list->setCampaigns(true);
 			$table = new ContractListTable($list);

@@ -8,11 +8,13 @@
 
 require_once('common/admin/admin_menu.php');
 
+use EDK\Contract;
 use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\Page\Page;
+use EDK\Killmail;
 
 $page = new Page();
 $page->setAdmin();
@@ -25,7 +27,7 @@ if ($_GET['op'] == 'view')
 		$page->setTitle('Administration - Campaigns');
 		$campaign = 1;
 	}
-	$list = new ContractList();
+	$list = new Contract\Collection();
 	if ($type == 'campaign') $list->setCampaigns(true);
 	$html = "[<a href=\"?a=admin_cc&amp;op=add&amp;type=".$type."\">Add ".$type."</a>]<br />";
 	if ($list->getCount() > 0)
@@ -51,7 +53,7 @@ if ($_GET['op'] == "del")
 {
 	if ($_GET['confirm'])
 	{
-		$contract = new Contract($_GET['ctr_id']);
+		$contract = new Contract\Contract($_GET['ctr_id']);
 		if (!$contract->validate()) exit;
 		$contract->remove();
 
@@ -68,7 +70,7 @@ if ($_GET['op'] == "del")
 // edit
 if ($_GET['op'] == "edit")
 {
-	$contract = new Contract($_GET['ctr_id']);
+	$contract = new Contract\Contract($_GET['ctr_id']);
 	if (!$contract->validate()) exit;
 	if ($_POST['detail_submit'])
 	{
@@ -96,7 +98,7 @@ if ($_GET['op'] == "edit")
 				$sys_id = $id;
 				break;
 		}
-		$contracttarget = new ContractTarget($contract, $crp_id, $all_id, $reg_id, $sys_id);
+		$contracttarget = new Contract\Target($contract, $crp_id, $all_id, $reg_id, $sys_id);
 		$contracttarget->remove();
 
 		header("Location: ".KB_HOST."/?a=admin_cc&ctr_id=".$_GET['ctr_id']."&op=edit&type=".$_GET['type']);
@@ -120,7 +122,7 @@ if ($_GET['op'] == "edit")
 				$sys_id = $id;
 				break;
 		}
-		$contracttarget = new ContractTarget($contract, $crp_id, $all_id, $reg_id, $sys_id);
+		$contracttarget = new Contract\Target($contract, $crp_id, $all_id, $reg_id, $sys_id);
 		$contracttarget->add();
 
 		header("Location: ".KB_HOST."/?a=admin_cc&ctr_id=".$_GET['ctr_id']."&op=edit&type=".$_GET['type']);
@@ -195,7 +197,7 @@ if ($_GET['op'] == "edit")
 	{
 		$page->setTitle("Administration - Edit ".$_GET['type']);
 
-		$contract = new Contract($_GET['ctr_id']);
+		$contract = new Contract\Contract($_GET['ctr_id']);
 
 		$html .= "<div class=block-header2>Details</div>";
 
@@ -275,7 +277,7 @@ if ($_GET['op'] == "add")
 {
 	if ($_POST['detail_submit'])
 	{
-		$contract = new Contract();
+		$contract = new Contract\Contract();
 		$contract->add($_POST['ctr_name'], $_GET['type'], $_POST['ctr_started'], $_POST['ctr_ended'], $_POST['ctr_comment']);
 
 		header("Location: ".KB_HOST."/?a=admin_cc&ctr_id=".$contract->getID()."&op=edit&type=".$_GET['type']);

@@ -7,12 +7,16 @@
  */
 namespace EDK\Page;
 
+use EDK\Contract\Contract;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Database;
 use EDK\Killmail;
+use EDK\PageComponent\AwardBox;
+use EDK\PageComponent\BarGraph;
 use EDK\PageComponent\Box;
+use \involved;
 
 /*
  * @package EDK
@@ -89,7 +93,7 @@ class ContractDetail extends \pageAssembly
 
 		$this->menuOptions = array();
 
-		$this->contract = new \Contract($this->ctr_id);
+		$this->contract = new Contract($this->ctr_id);
 		if(!$this->contract->validate())
 		{
 			$this->page = new Page('Campaign details');
@@ -112,12 +116,12 @@ class ContractDetail extends \pageAssembly
 	function topLists()
 	{
 		$tklist = new \EDK\Toplist\ContractKills();
-		$tklist->setContract(new \Contract($this->ctr_id));
+		$tklist->setContract(new Contract($this->ctr_id));
 		involved::load($tklist,'kill');
 
 		$tklist->generate();
 		$campaign = "campaign";
-		$tkbox = new \AwardBox($tklist, "Top killers", "kills in this ".$campaign, "kills", "eagle");
+		$tkbox = new AwardBox($tklist, "Top killers", "kills in this ".$campaign, "kills", "eagle");
 
 		$html = $tkbox->generate();
 
@@ -128,7 +132,7 @@ class ContractDetail extends \pageAssembly
 			involved::load($tklist,'kill');
 
 			$tklist->generate();
-			$tkbox = new \AwardBox($tklist, "Top scorers", "points in this ".$campaign, "points", "redcross");
+			$tkbox = new AwardBox($tklist, "Top scorers", "points in this ".$campaign, "points", "redcross");
 			$html .= $tkbox->generate();
 		}
 		return $html;
@@ -237,7 +241,7 @@ class ContractDetail extends \pageAssembly
 					$curtargets['total_losses'] = $summary->getTotalLosses();
 					$curtargets['total_kill_isk'] = round($summary->getTotalKillISK()/1000000000, 2);
 					$curtargets['total_loss_isk'] = round($summary->getTotalLossISK()/1000000000, 2);
-					$bar = new \BarGraph($curtargets['efficiency'], 100, 120);
+					$bar = new BarGraph($curtargets['efficiency'], 100, 120);
 					$curtargets['bar'] = $bar->generate();
 					$targets[] = $curtargets;
 				}
@@ -245,7 +249,7 @@ class ContractDetail extends \pageAssembly
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "recent_activity":
-				$this->contract = new \Contract($this->ctr_id);
+				$this->contract = new Contract($this->ctr_id);
 				$klist = $this->contract->getKillList();
 				$klist->setOrdered(true);
 				if ($scl_id)
@@ -272,7 +276,7 @@ class ContractDetail extends \pageAssembly
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "kills":
-				$this->contract = new \Contract($this->ctr_id);
+				$this->contract = new Contract($this->ctr_id);
 				$list = $this->contract->getKillList();
 				$list->setOrdered(true);
 				if ($scl_id)
@@ -289,7 +293,7 @@ class ContractDetail extends \pageAssembly
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "losses":
-				$this->contract = new \Contract($this->ctr_id);
+				$this->contract = new Contract($this->ctr_id);
 				$llist = $this->contract->getLossList();
 				$llist->setOrdered(true);
 				if ($scl_id)

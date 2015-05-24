@@ -11,6 +11,7 @@ namespace EDK\Page;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\PageComponent\Box;
+use EDK\Contract;
 
 $page = new Page('Campaigns');
 /*
@@ -89,7 +90,7 @@ class Campaigns extends \pageAssembly
 		switch ($this->view)
 		{
 			case '':
-				$activelist = new \ContractList();
+				$activelist = new EDK\Contract\Collection();
 				$activelist->setActive('yes');
 				$this->page->setTitle('Active campaigns');
 				$table = new \ContractListTable($activelist);
@@ -97,7 +98,7 @@ class Campaigns extends \pageAssembly
 				return $table->generate();
 				break;
 			case 'past':
-				$pastlist = new \ContractList();
+				$pastlist = new EDK\Contract\Collection();
 				$pastlist->setActive('no');
 				$this->page->setTitle('Past campaigns');
 				$table = new \ContractListTable($pastlist);

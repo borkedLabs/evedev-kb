@@ -5,8 +5,11 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Contract;
 
 use EDK\Database;
+use EDK\Killmail;
+use \involved;
 /**
  * @package EDK
  */
@@ -49,8 +52,8 @@ class Contract
 		$this->ctr_id = (int)$ctr_id;
 
 		// overall kill/losslist
-		$this->klist = new KillList();
-		$this->llist = new KillList();
+		$this->klist = new Killmail\Collection();
+		$this->llist = new Killmail\Collection();
 		involved::load($this->klist,'kill');
 		involved::load($this->llist,'loss');
 	}
@@ -95,7 +98,7 @@ class Contract
 
 		while ($carow = $caqry->getRow())
 		{
-			$contracttarget = new ContractTarget($this, $carow['ctd_crp_id'], $carow['ctd_all_id'], $carow['ctd_reg_id'], $carow['ctd_sys_id']);
+			$contracttarget = new Target($this, $carow['ctd_crp_id'], $carow['ctd_all_id'], $carow['ctd_reg_id'], $carow['ctd_sys_id']);
 			$this->contracttargets[] = $contracttarget;
 			if ($carow['ctd_crp_id'])
 			{

@@ -5,12 +5,15 @@
  * $HeadURL: https://evedev-kb.googlecode.com/svn/trunk/common/includes/class.contract.php $
  * @package EDK
  */
+namespace EDK\Contract;
 
 use EDK\Database;
+use EDK\Killmail;
+use \involved;
 /**
  * @package EDK
  */
-class ContractTarget
+class Target
 {
 	function __construct($contract, $crp_id, $all_id, $reg_id , $sys_id)
 	{
@@ -20,8 +23,8 @@ class ContractTarget
 		$this->reg_id_ = $reg_id;
 		$this->sys_id_ = $sys_id;
 
-		$this->klist_ = new KillList();
-		$this->llist_ = new KillList();
+		$this->klist_ = new Killmail\Collection();
+		$this->llist_ = new Killmail\Collection();
 
 		if ($this->crp_id_)
 		{

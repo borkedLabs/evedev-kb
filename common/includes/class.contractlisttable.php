@@ -6,9 +6,11 @@
  * @package EDK
  */
 
+use EDK\Contract;
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\PageComponent\BarGraph;
 
 /**
  * @package EDK
@@ -23,7 +25,7 @@ class ContractListTable
 	/**
 	 * @param ContractList $contractlist
 	 */
-	function __construct(ContractList $contractlist)
+	function __construct(Contract\Collection $contractlist)
 	{
 		$this->contractlist = $contractlist;
 	}
