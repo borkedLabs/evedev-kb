@@ -14,6 +14,7 @@ use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Alliance;
 use EDK\EVE\Ship;
+use EDK\EVE\SolarSystem;
 
 /**
  * @package EDK
