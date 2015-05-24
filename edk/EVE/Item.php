@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\EVE;
+
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\ImageURL;

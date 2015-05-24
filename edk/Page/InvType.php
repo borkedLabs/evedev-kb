@@ -4,6 +4,9 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\EVE\Dogma;
+use EDK\EVE\Item;
+use EDK\EVE\Ship;
 use EDK\Killmail;
 use EDK\PageComponent\Box;
 
@@ -54,7 +57,7 @@ class InvType extends \pageAssembly
 	function context()
 	{
 		parent::__construct();
-		$item = new \dogma($this->typeID);
+		$item = new Dogma($this->typeID);
 
 		if (!$item->isValid())
 		{
@@ -126,7 +129,7 @@ class InvType extends \pageAssembly
 	function details()
 	{
 		global $smarty;
-		$item = new \dogma($this->typeID);
+		$item = new Dogma($this->typeID);
 
 		if (!$item->isValid())
 		{
@@ -141,7 +144,7 @@ class InvType extends \pageAssembly
 		if ($item->get('itt_cat') == 6)
 		{
 			//we have a ship, so get it from the db
-			$ship = \Ship::getByID($item->get('typeID'));
+			$ship = Ship::getByID($item->get('typeID'));
 			$smarty->assign('shipImage', $ship->getImage(64));
 			$smarty->assign('traits', $ship->getTraitsHtml());
 
@@ -204,7 +207,7 @@ class InvType extends \pageAssembly
 		}
 		else
 		{
-			$i = new \Item($this->typeID);
+			$i = new Item($this->typeID);
 			$smarty->assign('itemImage', $i->getIcon(64, false));
 			$html = $smarty->fetch(get_tpl('invtype_item'));
 		}

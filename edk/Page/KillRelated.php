@@ -14,6 +14,7 @@ use EDK\Core\ImageURL;
 use EDK\Core\Language;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\EVE\Ship;
 use EDK\Killmail;
 use EDK\Killmail\Kill;
 use EDK\PageComponent\Box;
@@ -362,7 +363,7 @@ class KillRelated extends \pageAssembly
 		$smarty->assignByRef('pilots_a', $this->pilots['a']);
 		$smarty->assignByRef('pilots_e', $this->pilots['e']);
 
-		$pod = \Ship::getByID(670);
+		$pod = Ship::getByID(670);
 		$smarty->assign('podpic', $pod->getImage(32));
 		$smarty->assign('friendlycnt', count($this->pilots['a']));
 		$smarty->assign('hostilecnt', count($this->pilots['e']));

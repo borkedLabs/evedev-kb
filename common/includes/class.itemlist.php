@@ -7,6 +7,7 @@
  */
 
 use EDK\Database;
+use EDK\EVE\Item;
 /**
  * Fetches a information for each item in a list.
  *

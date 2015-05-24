@@ -10,6 +10,7 @@ namespace EDK\Killmail;
 
 use EDK\Core\Event;
 use EDK\Database;
+use EDK\EVE\Ship;
 use \Involved;
 
 /**

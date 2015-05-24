@@ -16,6 +16,9 @@ use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\EVE\Dogma;
+use EDK\EVE\Item;
+use EDK\EVE\Ship;
 use EDK\PageComponent\Box;
 use EDK\Killmail;
 
@@ -465,7 +468,7 @@ class KillDetail extends \pageAssembly
 		foreach ($this->kill->getInvolved() as $inv) {
 			$corp = Corporation::getByID($inv->getCorpID());
 			$alliance = Alliance::getByID($inv->getAllianceID());
-			$ship = \Ship::getByID( $inv->getShipID());
+			$ship = Ship::getByID( $inv->getShipID());
 
 			$alliance_name = $alliance->getName();
 			if (!isset($this->invAllies[$alliance_name])) {
@@ -513,7 +516,7 @@ class KillDetail extends \pageAssembly
 				}
 			}
 			$pilot = Pilot::getByID($inv->getPilotID());
-			$weapon = \Item::getByID($inv->getWeaponID());
+			$weapon = Item::getByID($inv->getWeaponID());
 
 			$this->involved[$i]['shipImage'] = $ship->getImage(64);
 			$this->involved[$i]['shipName'] = $ship->getName();
@@ -748,7 +751,7 @@ class KillDetail extends \pageAssembly
 		global $smarty;
 		$smarty->assign('killID', $this->kill->getID());
 		$plt = new Pilot($this->kill->getVictimID());
-		$item = new \dogma($this->kill->getVictimShip()->getID());
+		$item = new Dogma($this->kill->getVictimShip()->getID());
                 $shipClassID = $this->kill->getVictimShip()->getClass()->getID();
 		// itt_cat = 6 for ships, shipClassID = 45 are personal deployable structures. Assume != 6 is a structure.
 		if ($item->get('itt_cat') != 6 && $shipClassID != 45) {
@@ -979,7 +982,7 @@ class KillDetail extends \pageAssembly
 		$smarty->assign('victimShipClassName', $shipclass->getName());
 		if ($this->page->isAdmin()) $smarty->assign('ship', $ship);
 
-		$ssc = new \dogma($ship->getID());
+		$ssc = new Dogma($ship->getID());
 
 		$smarty->assignByRef('ssc', $ssc);
 
@@ -1344,7 +1347,7 @@ class KillDetail extends \pageAssembly
                 }
 
 		//get the actual slot count for each vessel - for the fitting panel
-		$dogma = Cacheable::factory('dogma',
+		$dogma = Cacheable::factory('\EDK\EVE\Dogma',
 				$this->kill->getVictimShipExternalID());
 		$lowcount = (int) $dogma->attrib['lowSlots']['value'];
 		$medcount = (int) $dogma->attrib['medSlots']['value'];

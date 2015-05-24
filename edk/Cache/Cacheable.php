@@ -44,7 +44,6 @@ abstract class Cacheable {
 		} else {
 			return new $classname($id);
 		}
-
 	}
 
 	/**

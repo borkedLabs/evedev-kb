@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\EVE;
+
 use EDK\Cache\Cacheable;
 use EDK\Database;
 /**
@@ -29,7 +31,7 @@ class SolarSystem extends Cacheable
 	 */
 	private $row = array();
 
-    function SolarSystem($id = 0)
+    function __construct($id = 0)
     {
         $this->id = (int)$id;
     }
@@ -121,16 +123,16 @@ class SolarSystem extends Cacheable
 	 */
     static function lookup($name)
     {
-			$qry = Database\Factory::getDBQuery();
-			$qry->execute("SELECT sys_id FROM kb3_systems "
-			." WHERE sys_name = '".$qry->escape($name)."'");
+		$qry = Database\Factory::getDBQuery();
+		$qry->execute("SELECT sys_id FROM kb3_systems "
+		." WHERE sys_name = '".$qry->escape($name)."'");
 
-			if (!$qry->recordCount()) {
-					return false;
-			} else {
-				$row = $qry->getRow();
-				return Cacheable::factory('SolarSystem', (int)$row['sys_id']);
-			}
+		if (!$qry->recordCount()) {
+				return false;
+		} else {
+			$row = $qry->getRow();
+			return Cacheable::factory('SolarSystem', (int)$row['sys_id']);
+		}
     }
 
 	/**

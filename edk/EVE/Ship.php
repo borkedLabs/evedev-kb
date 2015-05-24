@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+namespace EDK\EVE;
+
 use EDK\Cache\Cacheable;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
@@ -227,7 +229,7 @@ class Ship extends Cacheable
 			$qry->execute($sql);
 			$row = $qry->getRow();
 			$this->shipname = $row['shp_id'] ? $row['typeName'] : "Unknown";
-			$this->shipclass = Cacheable::factory('ShipClass', $row['shp_class']);
+			$this->shipclass = Cacheable::factory('\EDK\EVE\ShipClass', $row['shp_class']);
 			$this->id = (int) $row['shp_id'];
 
 			if (!$this->value = (float) $row['price']) {

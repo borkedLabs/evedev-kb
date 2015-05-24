@@ -19,9 +19,9 @@ use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
 use GuzzleHttp;
-use \SolarSystem;
-use \Item;
-use \Ship;
+use EDK\EVE\SolarSystem;
+use EDK\EVE\Item;
+use EDK\EVE\Ship;
 use \logger;
 
 /**
@@ -750,7 +750,7 @@ class IDFeed
                 
 		$npc = false;
 		$ship = Ship::getByID((int)$inv['shipTypeID']);
-		$weapon = Cacheable::factory('Item', (int)$inv['weaponTypeID']);
+		$weapon = Cacheable::factory('\EDK\EVE\Item', (int)$inv['weaponTypeID']);
 
 		$alliance = Alliance::add("None");
 

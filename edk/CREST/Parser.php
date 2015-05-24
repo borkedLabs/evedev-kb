@@ -14,6 +14,8 @@ use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\EVE\SolarSystem;
+use EDK\EVE\Ship;
 use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
@@ -191,7 +193,7 @@ class Parser
                 
                 // handle solarSystem
                 $solarSystemID = (int)$this->killmailRepresentation->solarSystem->id;
-                $solarSystem = \SolarSystem::getByID($solarSystemID);
+                $solarSystem = SolarSystem::getByID($solarSystemID);
                 if (!$solarSystem->getName()) {
                     throw new ParserException("Unknown solar system ID: ".$solarSystemID);
                 }
@@ -466,7 +468,7 @@ class Parser
             $Pilot = $pilot = Pilot::add($victimName, $Corp, $timestamp, $victimDetails["characterID"]);
             
             // handle victim's ship
-            $Ship = \Ship::getByID($victimDetails["shipTypeID"]);
+            $Ship = Ship::getByID($victimDetails["shipTypeID"]);
             
             
             // set values in $Kill
@@ -504,14 +506,14 @@ class Parser
                 $Ship = null;
                 if(!$involvedParty['shipTypeID'])
                 {
-                    $Ship = \Ship::lookup("Unknown");
+                    $Ship = Ship::lookup("Unknown");
                 }
                 else
                 {
-                    $Ship = \Ship::getByID($involvedParty['shipTypeID']);
+                    $Ship = Ship::getByID($involvedParty['shipTypeID']);
                 }
                 
-				$Weapon = Cacheable::factory('Item', $involvedParty['weaponTypeID']);
+				$Weapon = Cacheable::factory('\EDK\EVE\Item', $involvedParty['weaponTypeID']);
             
                 	
                 // get alliance

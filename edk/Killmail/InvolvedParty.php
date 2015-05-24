@@ -125,7 +125,7 @@ class InvolvedParty
 	 */
 	function getShip()
 	{
-		return Cacheable::factory('Ship', $this->shipid);
+		return Cacheable::factory('\EDK\EVE\Ship', $this->shipid);
 	}
 
 	/**
@@ -134,7 +134,7 @@ class InvolvedParty
 	 */
 	function getWeapon()
 	{
-		return Cacheable::factory('Item', $this->weaponid);
+		return Cacheable::factory('\EDK\EVE\Item', $this->weaponid);
 	}
 
 	/**

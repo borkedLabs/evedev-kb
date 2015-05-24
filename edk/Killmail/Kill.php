@@ -327,7 +327,7 @@ class Kill extends Cacheable
 		if(!isset($this->solarsystemid)) {
 			$this->execQuery();
 		}
-		$this->solarsystem = Cacheable::factory('SolarSystem', $this->solarsystemid);
+		$this->solarsystem = Cacheable::factory('\EDK\EVE\SolarSystem', $this->solarsystemid);
 		return $this->solarsystem;
 	}
 
@@ -454,7 +454,7 @@ class Kill extends Cacheable
 			trigger_error("No victim ship id set", E_USER_ERROR);
 			return "";
 		}
-		$this->victimship = Cacheable::factory('Ship', $this->victimshipid);
+		$this->victimship = Cacheable::factory('\EDK\EVE\Ship', $this->victimshipid);
 		return $this->victimship;
 	}
 

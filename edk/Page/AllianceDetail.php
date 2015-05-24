@@ -16,12 +16,12 @@ use EDK\Core\URI;
 use EDK\Database;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\EVE\ShipClass;
 use EDK\Killmail;
 use EDK\PageComponent\Box;
 use \KillListTable;
 use \KillSummaryTable;
 use \PageSplitter;
-use \Shipclass;
 /**
  * Display alliance details.
  * @package EDK
@@ -492,7 +492,7 @@ class AllianceDetail extends \pageAssembly
 				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
-					$shipclass[] = new Shipclass($row['scl_id']);
+					$shipclass[] = new ShipClass($row['scl_id']);
 				}
 				$newrow = true;
 				$ships = array();
@@ -521,7 +521,7 @@ class AllianceDetail extends \pageAssembly
 				$qry = Database\Factory::getDBQuery();
 				$qry->execute($sql);
 				while ($row = $qry->getRow()) {
-					$shipclass[] = new Shipclass($row['scl_id']);
+					$shipclass[] = new ShipClass($row['scl_id']);
 				}
 				foreach ($shipclass as $shp) {
 					$list = new \EDK\Toplist\Kills();

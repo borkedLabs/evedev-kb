@@ -14,6 +14,7 @@ use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\EVE\Ship;
 
 /**
  * @package EDK

@@ -25,7 +25,7 @@ class Ship
 
 		while ($row = $this->toplist->getRow())
 		{
-			$ship = \Ship::getByID($row['shp_id']);
+			$ship = \EDK\EVE\Ship::getByID($row['shp_id']);
 			$shipclass = $ship->getClass();
 			$shipclass->getName();
 

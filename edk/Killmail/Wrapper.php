@@ -13,8 +13,7 @@ use EDK\Core\ImageURL;
 use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Alliance;
-
-use \Ship;
+use EDK\EVE\Ship;
 
 /**
  * @package EDK
