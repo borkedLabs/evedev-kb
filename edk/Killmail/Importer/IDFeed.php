@@ -18,11 +18,11 @@ use EDK\Entity\Alliance;
 use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
+use GuzzleHttp;
 use \SolarSystem;
 use \Item;
 use \Ship;
 use \logger;
-use \http_request;
 
 /**
  * EDK IDFeed Syndication reader class.
@@ -101,12 +101,17 @@ class IDFeed
 			$options .= $key."=".$val;
 		}
 
-		$http = new http_request($this->url.$options);
-		$http->set_useragent("EDK IDFeedfetcher ".ID_FEED_VERSION);
-		$http->set_timeout(300);
-		$this->xml = $http->get_content();
-		if ($http->get_http_code() != 200) {
-			trigger_error("HTTP error ".$http->get_http_code()
+		$client = new GuzzleHttp\Client();
+		$response = $client->get($this->url.$optionsm , [
+												'headers' => [
+													'User-Agent' => 'EDK IDFeedfetcher '.ID_FEED_VERSION,
+													'Accept'     => 'application/xml',
+												],
+												'timeout' => 300] );
+		
+		$this->xml = $response->getBody();
+		if ($response->getStatusCode() != 200) {
+			trigger_error("HTTP error ".$response->getStatusCode()
 					." while fetching feed from ".$this->url.$options.".", E_USER_WARNING);
 			return false;
 		}

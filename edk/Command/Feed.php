@@ -258,10 +258,17 @@ class Feed extends Command
 			$urltest = $url."/?a=idfeed&kll_id=-1";
 		}
 		
-		$http = new \http_request($urltest);
-		$http->set_useragent("EDK IDFeedfetcher Check");
-		$http->set_timeout(10);
-		$res = $http->get_content();
+		
+		$client = new GuzzleHttp\Client();
+		$response = $client->get($urltest , [
+												'headers' => [
+													'User-Agent' => 'EDK IDFeedfetcher Check',
+												],
+												'timeout' => 10
+												] );
+		
+		$res = $response->getBody();
+		
 		if ($res && strpos($res, 'edkapi'))
 		{
 			if(strpos($url, '?a=feed'))

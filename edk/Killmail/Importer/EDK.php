@@ -17,6 +17,7 @@ use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use GuzzleHttp;
 
 $feedversion = "v1.9";
 
@@ -87,16 +88,20 @@ class EDK
 		}
 		if(!file_exists($this->feedfilename))
 		{
-			$http = new http_request($fetchurl);
-			$http->set_useragent("EDK Feedfetcher ".$feedversion);
-			$http->set_timeout(60);
-			$http->set_header("Accept-Encoding: gzip");
-			$data = $http->get_content();
+			$client = new GuzzleHttp\Client();
+			$response = $client->get($fetchurl , [
+													'headers' => [
+														'User-Agent' => 'EDK Feedfetcher '.$feedversion,
+														'Accept-Encoding'     => 'gzip]',
+													],
+													'timeout' => 60,
+													'decode_content' => 'gzip'
+													] );
+			
+			$data = $response->getBody();
+			
 			if($data == '')
 					return "<i>Error getting XML data from ".$fetchurl."</i><br />".$http->getError()."<br />";
-
-			if(strpos($http->get_header(), "Content-Encoding: gzip")
-					&& gzinflate(substr($data, 10))) $data = gzinflate(substr($data, 10));
 
 			if(strpos($data, "<?xml") != 0) $data = substr($data, strpos($data, "<?xml"));
 			$data = trim($data); // helps with broken sites that add extra white space.

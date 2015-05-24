@@ -16,7 +16,7 @@ use EDK\Database;
  * Incomplete - Does not read Certificates or Roles
  * @package EDK
  */
-class API_CharacterSheet
+class CharacterSheet
 {
 	function getCachedUntil()
 	{
