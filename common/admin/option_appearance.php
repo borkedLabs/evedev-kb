@@ -8,71 +8,72 @@
 
 
 use EDK\Core\Config;
+use EDK\PageComponent\Options;
 
-options::cat('Appearance', 'Global Options', 'Global Look');
-options::fadd('Banner', 'style_banner', 'select', array('admin_appearance', 'createSelectBanner'), array('admin_appearance', 'changeBanner'));
-options::fadd('Theme', 'theme_name', 'select', array('admin_appearance', 'createSelectTheme'), array('admin_appearance', 'changeTheme'));
-options::fadd('Style', 'style_name', 'select', array('admin_appearance', 'createSelectStyle'), array('admin_appearance', 'changeStyle'));
-options::fadd('Language', 'cfg_language', 'select', array('admin_appearance', 'createLanguage'));
+Options::cat('Appearance', 'Global Options', 'Global Look');
+Options::fadd('Banner', 'style_banner', 'select', array('admin_appearance', 'createSelectBanner'), array('admin_appearance', 'changeBanner'));
+Options::fadd('Theme', 'theme_name', 'select', array('admin_appearance', 'createSelectTheme'), array('admin_appearance', 'changeTheme'));
+Options::fadd('Style', 'style_name', 'select', array('admin_appearance', 'createSelectStyle'), array('admin_appearance', 'changeStyle'));
+Options::fadd('Language', 'cfg_language', 'select', array('admin_appearance', 'createLanguage'));
 
-options::cat('Appearance', 'Global Options', 'Global Options');
-options::fadd('Display standings', 'show_standings', 'checkbox');
-options::fadd('Enable lost item values', 'item_values', 'checkbox');
-options::fadd('Display a link instead of POD on Battlesummary', 'bs_podlink', 'checkbox');
-options::fadd('Include Capsules, Shuttles and Noobships in kills', 'podnoobs', 'checkbox');
-options::fadd('Classify kills for hours:', 'kill_classified', 'edit:size:4', '', '', '0 to disable, 1-24hrs');
+Options::cat('Appearance', 'Global Options', 'Global Options');
+Options::fadd('Display standings', 'show_standings', 'checkbox');
+Options::fadd('Enable lost item values', 'item_values', 'checkbox');
+Options::fadd('Display a link instead of POD on Battlesummary', 'bs_podlink', 'checkbox');
+Options::fadd('Include Capsules, Shuttles and Noobships in kills', 'podnoobs', 'checkbox');
+Options::fadd('Classify kills for hours:', 'kill_classified', 'edit:size:4', '', '', '0 to disable, 1-24hrs');
 
-options::cat('Appearance', 'Global Options', 'User Registration');
-options::fadd('Show user-menu on every page', 'user_showmenu', 'checkbox');
-options::fadd('Registration disabled', 'user_regdisabled', 'checkbox');
-options::fadd('Registration password', 'user_regpass', 'edit');
-options::fadd('Allow out-of-game registration', 'user_noigb', 'checkbox');
+Options::cat('Appearance', 'Global Options', 'User Registration');
+Options::fadd('Show user-menu on every page', 'user_showmenu', 'checkbox');
+Options::fadd('Registration disabled', 'user_regdisabled', 'checkbox');
+Options::fadd('Registration password', 'user_regpass', 'edit');
+Options::fadd('Allow out-of-game registration', 'user_noigb', 'checkbox');
 
-options::cat('Appearance', 'Front Page', 'Front Page');
-options::fadd('Combine kills and losses', 'show_comb_home', 'checkbox');
-options::fadd('Fill home page', 'cfg_fillhome', 'checkbox', '', '', 'Include kills from previous week/months to fill home page');
-options::fadd('Display region names', 'killlist_regionnames', 'checkbox');
-options::fadd('Display comment count', 'comments_count', 'checkbox');
-options::fadd('Display involved count', 'killlist_involved', 'checkbox');
-options::fadd('Display clock', 'show_clock', 'checkbox');
-options::fadd('Display Monthly stats', 'show_monthly', 'checkbox', '', '', 'Default is weekly');
-options::fadd('Show ISK loss', 'killlist_iskloss', 'checkbox', '', '', 'Instead of ship type');
+Options::cat('Appearance', 'Front Page', 'Front Page');
+Options::fadd('Combine kills and losses', 'show_comb_home', 'checkbox');
+Options::fadd('Fill home page', 'cfg_fillhome', 'checkbox', '', '', 'Include kills from previous week/months to fill home page');
+Options::fadd('Display region names', 'killlist_regionnames', 'checkbox');
+Options::fadd('Display comment count', 'comments_count', 'checkbox');
+Options::fadd('Display involved count', 'killlist_involved', 'checkbox');
+Options::fadd('Display clock', 'show_clock', 'checkbox');
+Options::fadd('Display Monthly stats', 'show_monthly', 'checkbox', '', '', 'Default is weekly');
+Options::fadd('Show ISK loss', 'killlist_iskloss', 'checkbox', '', '', 'Instead of ship type');
 
-options::cat('Appearance', 'Front Page', 'Kill Summary Tables');
-options::fadd('Display Summary Table', 'summarytable', 'checkbox');
-options::fadd('Display a summary line below a Summary Table', 'summarytable_summary', 'checkbox');
-options::fadd('Display efficiency in the summary line', 'summarytable_efficiency', 'checkbox');
+Options::cat('Appearance', 'Front Page', 'Kill Summary Tables');
+Options::fadd('Display Summary Table', 'summarytable', 'checkbox');
+Options::fadd('Display a summary line below a Summary Table', 'summarytable_summary', 'checkbox');
+Options::fadd('Display efficiency in the summary line', 'summarytable_efficiency', 'checkbox');
 
-options::cat('Appearance', 'Front Page', 'Kill Lists');
-options::fadd('Amount of kills listed', 'killcount', 'edit:size:2');
+Options::cat('Appearance', 'Front Page', 'Kill Lists');
+Options::fadd('Amount of kills listed', 'killcount', 'edit:size:2');
 
-options::cat('Appearance', 'Kill Details', 'Kill Details');
-options::fadd('Display killpoints', 'kill_points', 'checkbox');
-options::fadd('Display losspoints', 'loss_points', 'checkbox');
-options::fadd('Display totalpoints', 'total_points', 'checkbox');
-options::fadd('Show Total ISK Loss, Damage at top', 'kd_showiskd', 'checkbox');
-options::fadd('Show Top Damage Dealer/Final Blow Boxes', 'kd_showbox', 'checkbox');
-options::fadd('Show involved parties summary', 'kd_showext', 'checkbox');
-options::fadd('Include dropped value in total loss', 'kd_droptototal', 'checkbox');
+Options::cat('Appearance', 'Kill Details', 'Kill Details');
+Options::fadd('Display killpoints', 'kill_points', 'checkbox');
+Options::fadd('Display losspoints', 'loss_points', 'checkbox');
+Options::fadd('Display totalpoints', 'total_points', 'checkbox');
+Options::fadd('Show Total ISK Loss, Damage at top', 'kd_showiskd', 'checkbox');
+Options::fadd('Show Top Damage Dealer/Final Blow Boxes', 'kd_showbox', 'checkbox');
+Options::fadd('Show involved parties summary', 'kd_showext', 'checkbox');
+Options::fadd('Include dropped value in total loss', 'kd_droptototal', 'checkbox');
 
-//options::fadd('Show T2 items tag', 'kd_ttag', 'checkbox');
-//options::fadd('Show Faction items tag', 'kd_ftag', 'checkbox');
-//options::fadd('Show Deadspace items tag', 'kd_dtag', 'checkbox');
-//options::fadd('Show Officer items tag', 'kd_otag', 'checkbox');
-options::fadd('Show Fitting Panel', 'fp_show', 'checkbox');
-options::fadd('Show Fitting Exports', 'kd_EFT', 'checkbox');
-options::fadd('Limit involved parties', 'kd_involvedlimit', 'edit:size:4', '', '', 'Leave blank for no limit.');
+//Options::fadd('Show T2 items tag', 'kd_ttag', 'checkbox');
+//Options::fadd('Show Faction items tag', 'kd_ftag', 'checkbox');
+//Options::fadd('Show Deadspace items tag', 'kd_dtag', 'checkbox');
+//Options::fadd('Show Officer items tag', 'kd_otag', 'checkbox');
+Options::fadd('Show Fitting Panel', 'fp_show', 'checkbox');
+Options::fadd('Show Fitting Exports', 'kd_EFT', 'checkbox');
+Options::fadd('Limit involved parties', 'kd_involvedlimit', 'edit:size:4', '', '', 'Leave blank for no limit.');
 
-options::cat('Appearance', 'Kill Details', 'Fitting Panel');
-options::fadd('Panel Theme', 'fp_theme', 'select', array('admin_appearance', 'createPanelTheme'));
-options::fadd('Panel Style', 'fp_style', 'select', array('admin_appearance', 'createPanelStyle'));
-options::fadd('Item Highlight Style', 'fp_highstyle', 'select', array('admin_appearance', 'createHighStyle'));
-options::fadd('Ammo Highlight Style', 'fp_ammostyle', 'select', array('admin_appearance', 'createAmmoStyle'));
-options::fadd('Show Ammo, charges, etc', 'fp_showammo', 'checkbox');
-//options::fadd('Highlight Tech II items', 'fp_ttag', 'checkbox');
-//options::fadd('Highlight Faction items', 'fp_ftag', 'checkbox');
-//options::fadd('Highlight Deadspace items', 'fp_dtag', 'checkbox');
-//options::fadd('Highlight Officer items', 'fp_otag', 'checkbox');
+Options::cat('Appearance', 'Kill Details', 'Fitting Panel');
+Options::fadd('Panel Theme', 'fp_theme', 'select', array('admin_appearance', 'createPanelTheme'));
+Options::fadd('Panel Style', 'fp_style', 'select', array('admin_appearance', 'createPanelStyle'));
+Options::fadd('Item Highlight Style', 'fp_highstyle', 'select', array('admin_appearance', 'createHighStyle'));
+Options::fadd('Ammo Highlight Style', 'fp_ammostyle', 'select', array('admin_appearance', 'createAmmoStyle'));
+Options::fadd('Show Ammo, charges, etc', 'fp_showammo', 'checkbox');
+//Options::fadd('Highlight Tech II items', 'fp_ttag', 'checkbox');
+//Options::fadd('Highlight Faction items', 'fp_ftag', 'checkbox');
+//Options::fadd('Highlight Deadspace items', 'fp_dtag', 'checkbox');
+//Options::fadd('Highlight Officer items', 'fp_otag', 'checkbox');
 
 class admin_appearance
 {
@@ -267,7 +268,7 @@ class admin_appearance
 	function changeTheme()
 	{
 		global $themename;
-		if(options::getPrevious('theme_name') == $_POST['option_theme_name']) return;
+		if(Options::getPrevious('theme_name') == $_POST['option_theme_name']) return;
 
 		$themename = preg_replace('/[^a-zA-Z0-9-_]/', '', $_POST['option_theme_name']);
 		if(!is_dir("themes/$themename")) $themename = 'default';
@@ -290,7 +291,7 @@ class admin_appearance
 	function changeStyle()
 	{
 		global $smarty;
-		if(options::getPrevious('theme_name') != $_POST['option_theme_name'])
+		if(Options::getPrevious('theme_name') != $_POST['option_theme_name'])
 		{
 			$themename = preg_replace('/[^a-zA-Z0-9-_]/', '', $_POST['option_theme_name']);
 			if(!is_dir("themes/$themename")) $themename = 'default';
@@ -302,7 +303,7 @@ class admin_appearance
 
 			$smarty->assign('style', $arr['value']);
 		}
-		elseif(options::getPrevious('style_name') != $_POST['option_style_name'])
+		elseif(Options::getPrevious('style_name') != $_POST['option_style_name'])
 		{
 			$smarty->assign('style', preg_replace('/[^a-zA-Z0-9-_]/', '', $_POST['option_style_name']));
 		}
@@ -317,7 +318,7 @@ class admin_appearance
 	function changeBanner()
 	{
 		global $smarty;
-		if(options::getPrevious('style_banner') == $_POST['option_style_banner'])
+		if(Options::getPrevious('style_banner') == $_POST['option_style_banner'])
 				return;
 		if($_POST['option_style_banner'] == 0) return;
 

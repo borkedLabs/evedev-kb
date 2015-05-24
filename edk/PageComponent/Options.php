@@ -5,14 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\PageComponent;
 
 use EDK\Core\Config;
 use EDK\Core\URI;
-use EDK\PageComponent\Box;
 /*
  * Control handling of admin menu options.
  */
-class options
+class Options
 {
 	/** @var array Array of options for each option on the admin pages. */
 	private static $data = array();

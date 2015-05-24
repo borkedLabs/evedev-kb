@@ -10,56 +10,57 @@
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Entity\Corporation;
+use EDK\PageComponent\Options;
 
-options::cat('Advanced', 'Configuration', 'Available updates');
-options::fadd('Code updates', 'none', 'custom', array('update', 'codeCheck'));
+Options::cat('Advanced', 'Configuration', 'Available updates');
+Options::fadd('Code updates', 'none', 'custom', array('update', 'codeCheck'));
 
-options::cat('Advanced', 'Configuration', 'Killboard Configuration');
-options::fadd('Killboard Title', 'cfg_kbtitle', 'edit:size:50');
-options::fadd('Main Webpage Link', 'cfg_mainsite', 'edit:size:50');
-options::fadd('Killboard Host', 'cfg_kbhost', 'edit:size:50', '',
+Options::cat('Advanced', 'Configuration', 'Killboard Configuration');
+Options::fadd('Killboard Title', 'cfg_kbtitle', 'edit:size:50');
+Options::fadd('Main Webpage Link', 'cfg_mainsite', 'edit:size:50');
+Options::fadd('Killboard Host', 'cfg_kbhost', 'edit:size:50', '',
 		array('admin_config', 'checkHost'));
-options::fadd('Image base URL', 'cfg_img', 'edit:size:50', '',
+Options::fadd('Image base URL', 'cfg_img', 'edit:size:50', '',
 		array('admin_config', 'checkImg'));
-options::fadd('Use CCP imageserver', 'cfg_ccpimages', 'checkbox');
-options::fadd('Use simple URLs', 'cfg_pathinfo', 'checkbox', '', '',
+Options::fadd('Use CCP imageserver', 'cfg_ccpimages', 'checkbox');
+Options::fadd('Use simple URLs', 'cfg_pathinfo', 'checkbox', '', '',
 		'e.g. '.KB_HOST.'/index.php/kill_details/1234/');
-options::fadd('Allow Masterfeed', 'feed_allowmaster', 'checkbox');
-options::fadd('Compress pages', 'cfg_compress', 'checkbox', '', '',
+Options::fadd('Allow Masterfeed', 'feed_allowmaster', 'checkbox');
+Options::fadd('Compress pages', 'cfg_compress', 'checkbox', '', '',
 		'Enable unless you encounter errors');
-options::fadd('Display profiling information', 'cfg_profile', 'checkbox');
-options::fadd('Log errors', 'cfg_log', 'checkbox');
-options::fadd('Lock board', 'cfg_locked', 'checkbox');
+Options::fadd('Display profiling information', 'cfg_profile', 'checkbox');
+Options::fadd('Log errors', 'cfg_log', 'checkbox');
+Options::fadd('Lock board', 'cfg_locked', 'checkbox');
 
-options::cat('Advanced', 'Configuration', 'API');
-options::fadd('API connection method', 'apiConnectionMethod', 'select',
+Options::cat('Advanced', 'Configuration', 'API');
+Options::fadd('API connection method', 'apiConnectionMethod', 'select',
 		array('admin_config', 'createApiConnectionMethod'));
 
-options::cat('Advanced', 'Configuration', 'Public-Mode');
-options::fadd('Only Kills in SummaryTables', 'public_summarytable', 'checkbox',
+Options::cat('Advanced', 'Configuration', 'Public-Mode');
+Options::fadd('Only Kills in SummaryTables', 'public_summarytable', 'checkbox',
 		'', '', 'Set no board owners to work in public mode');
-options::fadd('Remove Losses Page', 'public_losses', 'checkbox');
-options::fadd('Stats Page', 'public_stats', 'select',
+Options::fadd('Remove Losses Page', 'public_losses', 'checkbox');
+Options::fadd('Stats Page', 'public_stats', 'select',
 		array('admin_config', 'createSelectStats'));
 
-options::cat('Advanced', 'Configuration', 'Pilot/Corp/Alliance ID (Provide'
+Options::cat('Advanced', 'Configuration', 'Pilot/Corp/Alliance ID (Provide'
 		.' either exact full name, ID or external ID)');
-options::fadd('Add Pilot', '', 'custom', array('admin_config', 'createPilot'));
-options::fadd('Add Corporation', '', 'custom', array('admin_config',
+Options::fadd('Add Pilot', '', 'custom', array('admin_config', 'createPilot'));
+Options::fadd('Add Corporation', '', 'custom', array('admin_config',
 	'createCorp'));
-options::fadd('Add Alliance', '', 'custom', array('admin_config',
+Options::fadd('Add Alliance', '', 'custom', array('admin_config',
 	'createAlliance'));
 
 if (Config::get('cfg_pilotid')) {
-	options::fadd('Remove Pilot', 'rem_pilotid', 'select',
+	Options::fadd('Remove Pilot', 'rem_pilotid', 'select',
 			array('admin_config', 'removePilot'));
 }
 if (Config::get('cfg_corpid')) {
-	options::fadd('Remove Corporation', 'rem_corpid', 'select',
+	Options::fadd('Remove Corporation', 'rem_corpid', 'select',
 			array('admin_config', 'removeCorp'));
 }
 if (Config::get('cfg_allianceid')) {
-	options::fadd('Remove Alliance', 'rem_allianceid', 'select',
+	Options::fadd('Remove Alliance', 'rem_allianceid', 'select',
 			array('admin_config', 'removeAlliance'));
 }
 

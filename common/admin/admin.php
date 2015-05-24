@@ -8,6 +8,8 @@
 // admin menu now loads all admin pages with options
 require_once('common/admin/admin_menu.php');
 
+use EDK\PageComponent\Options;
+
 use EDK\Page\Page;
 use EDK\Core\URI;
 
@@ -15,12 +17,12 @@ $page = new Page();
 $page->setAdmin();
 
 if ($_POST) {
-    options::handlePost();
+    Options::handlePost();
 }
 
-$page->setContent(options::genOptionsPage());
+$page->setContent(Options::genOptionsPage());
 
-$page->addContext(options::genAdminMenu());
+$page->addContext(Options::genAdminMenu());
 
 // reload in order to correctly update the owner removal lists
 if ($_POST) {

@@ -5,10 +5,11 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\PageComponent\Options;
 
-options::cat('Maintenance', 'Database', 'Table Checks');
-options::fadd('Current SQL cache size', 'none', 'custom', array('admin_db', 'checkCache'), array('admin_db', 'killCache'));
-options::fadd('Reinstall CCP DB', 'none', 'custom', array('admin_db', 'CCPDBlink'));
+Options::cat('Maintenance', 'Database', 'Table Checks');
+Options::fadd('Current SQL cache size', 'none', 'custom', array('admin_db', 'checkCache'), array('admin_db', 'killCache'));
+Options::fadd('Reinstall CCP DB', 'none', 'custom', array('admin_db', 'CCPDBlink'));
 
 class admin_db
 {

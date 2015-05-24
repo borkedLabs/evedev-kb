@@ -7,20 +7,21 @@
  */
 
 use EDK\Core\Config;
+use EDK\PageComponent\Options;
 
-options::cat('Advanced', 'Posting Options', 'Posting Options');
+Options::cat('Advanced', 'Posting Options', 'Posting Options');
 
-options::fadd('Enable Comments', 'comments', 'checkbox');
-options::fadd('Require password for Comments', 'comments_pw', 'checkbox');
-options::fadd('Forbid killmail posting', 'post_forbid', 'checkbox');
-options::fadd('Forbid CREST link posting', 'post_crest_forbid', 'checkbox');
-options::fadd('Require password for CREST link posting', 'crest_pw_needed', 'checkbox');
+Options::fadd('Enable Comments', 'comments', 'checkbox');
+Options::fadd('Require password for Comments', 'comments_pw', 'checkbox');
+Options::fadd('Forbid killmail posting', 'post_forbid', 'checkbox');
+Options::fadd('Forbid CREST link posting', 'post_crest_forbid', 'checkbox');
+Options::fadd('Require password for CREST link posting', 'crest_pw_needed', 'checkbox');
 
-options::fadd('Killmail post password', 'post_password', 'password', '', array('admin_posting', 'setPostPassword'));
-options::fadd('CREST link post password', 'post_crest_password', 'password', '', array('admin_posting', 'setCrestPostPassword'));
-options::fadd('Comment post password', 'comment_password', 'password', '', array('admin_posting', 'setCommentPassword'));
+Options::fadd('Killmail post password', 'post_password', 'password', '', array('admin_posting', 'setPostPassword'));
+Options::fadd('CREST link post password', 'post_crest_password', 'password', '', array('admin_posting', 'setCrestPostPassword'));
+Options::fadd('Comment post password', 'comment_password', 'password', '', array('admin_posting', 'setCommentPassword'));
 ;
-options::fadd('Disallow any killmails before', 'filter_date', 'custom', array('admin_posting', 'dateSelector'), array('admin_posting', 'postDateSelector'));
+Options::fadd('Disallow any killmails before', 'filter_date', 'custom', array('admin_posting', 'dateSelector'), array('admin_posting', 'postDateSelector'));
 
 class admin_posting
 {
