@@ -14,11 +14,15 @@ use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
-use EDK\PageComponent\AwardBox;
-use EDK\PageComponent\Box;
-use EDK\PageComponent\Clock;
+use EDK\Page\Component\AwardBox;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\ContractListTable;
+use EDK\Page\Component\Clock;
+use EDK\Page\Component\KillListTable;
+use EDK\Page\Component\KillSummaryTable;
+use EDK\Page\Component\KillSummaryTablePublic;
+use EDK\Page\Component\PageSplitter;
 use EDK\Killmail;
-use \ContractListTable;
 /*
  * @package EDK
  */
@@ -184,11 +188,11 @@ class Home extends Base
 		// Display the summary table.
 		if (Config::get('summarytable')) {
 			if (Config::get('public_summarytable')) {
-				$summarytable = new \KillSummaryTablePublic();
+				$summarytable = new KillSummaryTablePublic();
 				$this->loadTime($summarytable);
 				\involved::load($summarytable, 'kill');
 			} else {
-				$summarytable = new \KillSummaryTable();
+				$summarytable = new KillSummaryTable();
 				$this->loadTime($summarytable);
 				\involved::load($summarytable, 'kill');
 			}
@@ -260,7 +264,7 @@ class Home extends Base
 		// show all kills for the week using the page splitter.
 		if (Config::get("cfg_fillhome") && !$this->dateSet) {
 			$klist->setLimit(Config::get('killcount'));
-			$table = new \KillListTable($klist);
+			$table = new KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
 			$table->setLimit(Config::get('killcount'));
 			$html = $table->generate();
@@ -269,9 +273,9 @@ class Home extends Base
 			//$klist->setWeek($this->week);
 			//$klist->setYear($this->year);
 			$klist->setPageSplit(Config::get('killcount'));
-			$pagesplitter = new \PageSplitter($klist->getCount(),
+			$pagesplitter = new PageSplitter($klist->getCount(),
 					Config::get('killcount'));
-			$table = new \KillListTable($klist);
+			$table = new KillListTable($klist);
 			if ($this->showcombined) $table->setCombined(true);
 			$pagesplit = $pagesplitter->generate();
 			$html = $pagesplit.$table->generate().$pagesplit;

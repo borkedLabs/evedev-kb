@@ -1,6 +1,6 @@
 <?php
 
-namespace EDK\PageComponent;
+namespace EDK\Page\Component;
 
 /**
  * Overload the box object to force every admin page to use the new options menu

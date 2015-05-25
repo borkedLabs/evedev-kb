@@ -11,7 +11,7 @@ namespace EDK\Page;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\Session;
-use EDK\PageComponent\Navigation;
+use EDK\Page\Component\Navigation;
 use EDK\Core\URI;
 use EDK\Database;
 

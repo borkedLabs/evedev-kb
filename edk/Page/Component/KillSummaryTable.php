@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page\Component;
 
 
 use EDK\Core\Config;
@@ -13,6 +14,8 @@ use EDK\Database;
 use EDK\StatSummary\AllianceSummary;
 use EDK\StatSummary\CorpSummary;
 use EDK\StatSummary\PilotSummary;
+use \involved;
+
 /**
  * @package EDK
  */

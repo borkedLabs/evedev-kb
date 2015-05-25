@@ -6,12 +6,12 @@
  * @package EDK
  */
 
-namespace EDK\PageComponent\TopTable;
+namespace EDK\Page\Component\TopTable;
 
-use EDK\Core\URI;
+use EDK\Cache\Cacheable;
 use EDK\Core\ImageURL;
 
-class Pilot
+class Corp
 {
 	function __construct($toplist, $entity)
 	{
@@ -25,31 +25,29 @@ class Pilot
 		$this->toplist->generate();
 
 		$i = 1;
-		$rows = array();
 		while ($row = $this->toplist->getRow())
 		{
-			$pilot = \EDK\Entity\Pilot::getByID($row['plt_id']);
-			if($row['plt_externalid']) {
-				$uri = \EDK\Core\EDK::urlFor('Pilot:external', ['id' => $row['plt_externalid']]);
-				$img = ImageURL::getURL('Pilot', $row['plt_externalid'], 32);
+			/* @var $corp Corporation */
+			$corp = Cacheable::factory('\EDK\Entity\Corporation', $row['crp_id']);
+			if($corp->getExternalID()) {
+				$uri = KB_HOST."/?a=corp_detail&amp;crp_ext_id=".$corp->getExternalID();
 			} else {
-				$uri = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $row['plt_externalid']]);
-
-				$img = $pilot->getPortraitURL(32);
+				$uri = KB_HOST."/?a=corp_detail&amp;crp_id=".$row['crp_id'];
 			}
 			$rows[] = array(
 				'rank' => $i,
-				'name' => $pilot->getName(),
+				'name' => $corp->getName(),
 				'uri' => $uri,
-				'portrait' => $img,
+				'portrait' => ImageURL::getURL('Corporation', $corp->getExternalID(false), 32),
 				'count' => $row['cnt']);
 			$i++;
 		}
 
-		$smarty->assign('tl_name', 'Pilot');
+		$smarty->assign('tl_name', 'Corporation');
 		$smarty->assign('tl_type', $this->entity_);
 		$smarty->assignByRef('tl_rows', $rows);
 
 		return $smarty->fetch(get_tpl('toplisttable'));
 	}
 }
+

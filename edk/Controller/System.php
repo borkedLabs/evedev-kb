@@ -14,7 +14,10 @@ use EDK\Core\URI;
 use EDK\EVE\SolarSystem;
 use EDK\Killmail;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\KillListTable;
+use EDK\Page\Component\KillSummaryTable;
+use EDK\Page\Component\PageSplitter;
 
 /*
  * @package EDK
@@ -111,7 +114,7 @@ class System extends Base
 	 */
 	function statSetup()
 	{
-		$this->kill_summary = new \KillSummaryTable();
+		$this->kill_summary = new KillSummaryTable();
 		$this->kill_summary->setSystem($this->sys_id);
 		if (Config::get('kill_classified')) {
 			$this->kill_summary->setEndDate(
@@ -176,9 +179,9 @@ class System extends Base
 
 		$klist->setPageSplit(Config::get('killcount'));
 
-		$pagesplitter = new \PageSplitter($klist->getCount(), Config::get('killcount'));
+		$pagesplitter = new PageSplitter($klist->getCount(), Config::get('killcount'));
 
-		$table = new \KillListTable($klist);
+		$table = new KillListTable($klist);
 		$smarty->assign('klsplit', $pagesplitter->generate());
 		$smarty->assign('kltable', $table->generate());
 		$html = $smarty->fetch(get_tpl('system_detail'));

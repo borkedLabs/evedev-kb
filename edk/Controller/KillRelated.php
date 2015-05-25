@@ -19,7 +19,7 @@ use EDK\EVE\Ship;
 use EDK\Killmail;
 use EDK\Killmail\Kill;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\Box;
 
 /*
  * Build the related kills page.

@@ -12,7 +12,8 @@ use EDK\Cache\Cache;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\ContractListTable;
 use EDK\Contract;
 
 $page = new Page('Campaigns');
@@ -95,7 +96,7 @@ class Campaigns extends Base
 				$activelist = new Contract\Collection();
 				$activelist->setActive('yes');
 				$this->page->setTitle('Active campaigns');
-				$table = new \ContractListTable($activelist);
+				$table = new ContractListTable($activelist);
 				$table->paginate(10, $pageNum);
 				return $table->generate();
 				break;
@@ -103,7 +104,7 @@ class Campaigns extends Base
 				$pastlist = new Contract\Collection();
 				$pastlist->setActive('no');
 				$this->page->setTitle('Past campaigns');
-				$table = new \ContractListTable($pastlist);
+				$table = new ContractListTable($pastlist);
 				$table->paginate(10, $pageNum);
 				return $table->generate();
 				break;

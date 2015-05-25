@@ -20,10 +20,10 @@ use EDK\Entity\Corporation;
 use EDK\EVE\ShipClass;
 use EDK\Killmail;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
-use \KillListTable;
-use \KillSummaryTable;
-use \PageSplitter;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\KillListTable;
+use EDK\Page\Component\KillSummaryTable;
+use EDK\Page\Component\PageSplitter;
 /**
  * Display alliance details.
  * @package EDK
@@ -201,7 +201,7 @@ class Alliance extends Base
 	 */
 	function statSetup()
 	{
-		$this->kill_summary = new \KillSummaryTable();
+		$this->kill_summary = new KillSummaryTable();
 		$this->kill_summary->addInvolvedAlliance($this->all_id);
 		$this->kill_summary->generate();
 		return "";
@@ -385,7 +385,7 @@ class Alliance extends Base
 				else {
 					$list->setPodsNoobShips(Config::get('podnoobs'));
 				}
-				$ktab = new \KillListTable($list);
+				$ktab = new KillListTable($list);
 				$ktab->setLimit(10);
 				$ktab->setDayBreak(false);
 				$smarty->assign('kills', $ktab->generate());
@@ -406,7 +406,7 @@ class Alliance extends Base
 				else {
 					$list->setPodsNoobShips(Config::get('podnoobs'));
 				}
-				$ltab = new \KillListTable($list);
+				$ltab = new KillListTable($list);
 				$ltab->setLimit(10);
 				$ltab->setDayBreak(false);
 				$smarty->assign('losses', $ltab->generate());
@@ -423,7 +423,7 @@ class Alliance extends Base
 				}
 				$list->setPageSplit(Config::get('killcount'));
 				$pagesplitter = new PageSplitter($list->getCount(), Config::get('killcount'));
-				$table = new \KillListTable($list);
+				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('kills', $table->generate());
 				$smarty->assign('splitter', $pagesplitter->generate());
@@ -443,7 +443,7 @@ class Alliance extends Base
 				$pagesplitter = new PageSplitter($list->getCount(),
 						Config::get('killcount'));
 
-				$table = new \KillListTable($list);
+				$table = new KillListTable($list);
 				$table->setDayBreak(false);
 				$smarty->assign('losses', $table->generate());
 				$smarty->assign('splitter', $pagesplitter->generate());

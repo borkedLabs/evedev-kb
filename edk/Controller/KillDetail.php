@@ -21,7 +21,7 @@ use EDK\EVE\Dogma;
 use EDK\EVE\Item;
 use EDK\EVE\Ship;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\Box;
 use EDK\Killmail;
 
 if (Config::get('comments')) {

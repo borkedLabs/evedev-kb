@@ -5,7 +5,7 @@
  * $HeadURL: https://evedev-kb.googlecode.com/svn/trunk/common/includes/class.page.php $
  * @package EDK
  */
-namespace EDK\PageComponent;
+namespace EDK\Page\Component;
 
 /**
  * Construct a menu.

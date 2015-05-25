@@ -16,9 +16,10 @@ use EDK\Core\URI;
 use EDK\Database;
 use EDK\Killmail;
 use EDK\Page\Page;
-use EDK\PageComponent\AwardBox;
-use EDK\PageComponent\BarGraph;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\AwardBox;
+use EDK\Page\Component\BarGraph;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\KillSummaryTable;
 use \involved;
 
 /*
@@ -147,7 +148,7 @@ class ContractDetail extends Base
 	{
 		$klist = $this->contract->getKillList();
 		$llist = $this->contract->getLossList();
-		$killsummary = new \KillSummaryTable($klist, $llist);
+		$killsummary = new KillSummaryTable($klist, $llist);
 		if ($view == "") $killsummary->setFilter(false);
 
 		return $killsummary->generate();
@@ -227,7 +228,7 @@ class ContractDetail extends Base
 				{
 					$kl = &$target->getKillList();
 					$ll = &$target->getLossList();
-					$summary = new \KillSummaryTable($kl, $ll);
+					$summary = new KillSummaryTable($kl, $ll);
 					$summary->setVerbose(true);
 					$summary->setView('combined');
 

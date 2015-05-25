@@ -13,8 +13,8 @@ use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\URI;
 use EDK\Page\Page;
-use EDK\PageComponent\AwardBox;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\AwardBox;
+use EDK\Page\Component\Box;
 
 /*
  * @package EDK

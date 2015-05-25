@@ -5,12 +5,12 @@
  * $HeadURL: https://evedev-kb.googlecode.com/svn/trunk/common/includes/class.contract.php $
  * @package EDK
  */
+namespace EDK\Page\Component;
 
 use EDK\Contract;
 use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
-use EDK\PageComponent\BarGraph;
 
 /**
  * @package EDK

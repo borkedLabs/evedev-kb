@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+namespace EDK\Page\Component;
 
 use EDK\Core\Config;
 use EDK\Core\Event;
