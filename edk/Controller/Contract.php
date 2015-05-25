@@ -9,7 +9,6 @@
 namespace EDK\Controller;
 
 use EDK\Cache\Cache;
-use EDK\Contract\Contract;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -25,7 +24,7 @@ use \involved;
 /*
  * @package EDK
  */
-class ContractDetail extends Base
+class Contract extends Base
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -47,13 +46,14 @@ class ContractDetail extends Base
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function indexAction()
+	function detailAction()
 	{
 		$this->queue("start");
 		$this->queue("stats");
 		$this->queue("comment");
 		$this->queue("summaryTable");
 		$this->queue("killList");
+		
 		$this->generate();
 		
 		Cache::generate();
@@ -97,7 +97,7 @@ class ContractDetail extends Base
 
 		$this->menuOptions = array();
 
-		$this->contract = new Contract($this->ctr_id);
+		$this->contract = new \EDK\Contract\Contract($this->ctr_id);
 		if(!$this->contract->validate())
 		{
 			$this->page = new Page('Campaign details');
@@ -120,7 +120,7 @@ class ContractDetail extends Base
 	function topLists()
 	{
 		$tklist = new \EDK\Toplist\ContractKills();
-		$tklist->setContract(new Contract($this->ctr_id));
+		$tklist->setContract(new \EDK\Contract\Contract($this->ctr_id));
 		involved::load($tklist,'kill');
 
 		$tklist->generate();
@@ -132,7 +132,7 @@ class ContractDetail extends Base
 		if (config::get('kill_points'))
 		{
 			$tklist = new \EDK\Toplist\ContractScore();
-			$tklist->setContract(new Contract($this->ctr_id));
+			$tklist->setContract(new \EDK\Contract\Contract($this->ctr_id));
 			involved::load($tklist,'kill');
 
 			$tklist->generate();
@@ -253,7 +253,7 @@ class ContractDetail extends Base
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "recent_activity":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \EDK\Contract\Contract($this->ctr_id);
 				$klist = $this->contract->getKillList();
 				$klist->setOrdered(true);
 				if ($scl_id)
@@ -280,7 +280,7 @@ class ContractDetail extends Base
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "kills":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \EDK\Contract\Contract($this->ctr_id);
 				$list = $this->contract->getKillList();
 				$list->setOrdered(true);
 				if ($scl_id)
@@ -297,7 +297,7 @@ class ContractDetail extends Base
 				$html .= $smarty->fetch(get_tpl('cc_detail_lists'));
 				break;
 			case "losses":
-				$this->contract = new Contract($this->ctr_id);
+				$this->contract = new \EDK\Contract\Contract($this->ctr_id);
 				$llist = $this->contract->getLossList();
 				$llist->setOrdered(true);
 				if ($scl_id)

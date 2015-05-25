@@ -576,10 +576,7 @@ class KillDetail extends Base
 				$this->involved[$i]['weaponName'] = "Unknown";
 			} else {
 				if ($pilot->getExternalID(true)) {
-					$this->involved[$i]['pilotURL'] = URI::build(
-							array('a', 'pilot_detail', true),
-							array('plt_ext_id', $pilot->getExternalID(), true));
-							\EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $pilot->getExternalID()]);
+					$this->involved[$i]['pilotURL'] = \EDK\Core\EDK::urlFor('Pilot:external', ['id' => $pilot->getExternalID()]);
 				} else {
 					$this->involved[$i]['pilotURL'] = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $pilot->getID()]);
 				}

@@ -59,8 +59,7 @@ class AwardBox
 		$smarty->assign('pilot_portrait', $pilot->getPortraitURL(64));
 		$smarty->assign('award_img',
 				config::get('cfg_img')."/awards/".$this->award_.".png");
-		$smarty->assign('url', URI::build(array('a', 'pilot_detail', true),
-						array('plt_id', $rows[0]['plt_id'], true)));
+		$smarty->assign('url', \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $rows[0]['plt_id']]));
 		$smarty->assign('name', $pilot->getName());
 
 		$bar = new BarGraph($rows[0]['cnt'], $max);
@@ -78,8 +77,7 @@ class AwardBox
 			}
 			$bar = new BarGraph($rows[$i - 1]['cnt'], $max);
 			$top[$i] = array(
-				'url' => URI::build(array('a', 'pilot_detail', true),
-						array('plt_id', $rows[$i-1]['plt_id'], true)),
+				'url' => \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $rows[$i-1]['plt_id']]),
 				'name' => $pilotname,
 				'bar' => $bar->generate(),
 				'cnt' => $rows[$i - 1]['cnt']);

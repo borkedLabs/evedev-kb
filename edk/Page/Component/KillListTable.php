@@ -68,8 +68,6 @@ class KillListTable
 		}
 
 		$c = 0;
-		$kdpage = array('a', 'kill_detail', true);
-		$krpage = array('a', 'kill_related', true);
 		$kills = array();
 		while ($kill  = $this->kill_list_->getKill())
 		{
@@ -187,27 +185,39 @@ class KillListTable
 				}
 				$kll['kill'] = !$kll['loss'];
 			}
-			$kll['urldetail'] = URI::build($kdpage,
-					array('kll_id', $kll['id'], true));
-			if (!$kill->isClassified()) {
-				$kll['urlrelated'] = URI::build($krpage,
-					array('kll_id', $kll['id'], true));
+			$kll['urldetail'] = \EDK\Core\EDK::urlFor('KillDetail:index', ['id' => $kll['id']]);
+
+			if (!$kill->isClassified())
+			{
+				$kll['urlrelated'] = \EDK\Core\EDK::urlFor('KillRelated:index', ['id' => $kll['id']]);
 			}
+			
 			$kll['victimextid'] = $kill->getVictimExternalID();
-			$kll['urlvictim'] = URI::page('pilot_detail',
-					$kll['victimextid'] ? $kll['victimextid'] : $kll['victimid'],
-					$kll['victimextid'] ? 'plt_ext_id' : 'plt_id');
-			$kll['urlfb'] = URI::page('pilot_detail',
-					$kll['fbplext'] ? $kll['fbplext'] : $kll['fbid'],
-					$kll['fbplext'] ? 'plt_ext_id' : 'plt_id');
-			if ($kll['allianceexists'] ){
-				$kll['urlvictimall'] = URI::page('alliance_detail',
-					$kll['victimallianceid'], 'all_id');
+					
+			if( $kll['victimextid'] )
+			{
+				$kll['urlvictim'] = \EDK\Core\EDK::urlFor('Pilot:external', ['id' => $kll['victimextid']]);
+			}
+			else
+			{
+				$kll['urlvictim'] = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $kll['victimid']]);
+			}
+			
+			if( $kll['fbplext'] )
+			{
+				$kll['urlfb'] = \EDK\Core\EDK::urlFor('Pilot:external', ['id' => $kll['fbplext']]);
+			}
+			else
+			{
+				$kll['urlfb'] = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $kll['fbid']]);
+			}
+					
+			if ($kll['allianceexists'] )
+			{
+				$kll['urlvictimall'] = \EDK\Core\EDK::urlFor('Alliance:detail', ['id' => $kll['victimallianceid']]);
 			} 
-			$kll['urlvictimcorp'] = URI::page('corp_detail',
-					$kll['victimcorpid'], 'crp_id');
-			$kll['urlfbcorp'] = URI::page('corp_detail',
-					$kll['fbcorpid'], 'crp_id');
+			$kll['urlvictimcorp'] = \EDK\Core\EDK::urlFor('Corp:detail', ['id' => $kll['victimcorpid']]);
+			$kll['urlfbcorp'] = \EDK\Core\EDK::urlFor('Corp:detail', ['id' => $kll['fbcorpid']]);
 			event::call('killlist_table_kill', $kll);
 			$kills[] = $kll;
 		}

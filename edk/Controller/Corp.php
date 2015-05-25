@@ -15,11 +15,11 @@ use EDK\Core\URI;
 use EDK\Database;
 use EDK\Entity\Corporation;
 use EDK\Page\Page;
-use EDK\PageComponent\Box;
+use EDK\Page\Component\Box;
 use EDK\Killmail;
-use \KillListTable;
-use \KillSummaryTable;
-use \PageSplitter;
+use EDK\Page\Component\KillListTable;
+use EDK\Page\Component\KillSummaryTable;
+use EDK\Page\Component\PageSplitter;
 
 /*
  * @package EDK
