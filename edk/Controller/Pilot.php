@@ -13,7 +13,7 @@ use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
-use EDK\Entity\Pilot;
+use EDK\Entity;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\Killmail;
@@ -29,7 +29,7 @@ use \EDK\PageComponent\TopTable\Weapon;
 /*
  * @package EDK
  */
-class PilotDetail extends Base
+class Pilot extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -54,7 +54,7 @@ class PilotDetail extends Base
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function indexAction()
+	function detailAction()
 	{
 		$this->queue("start");
 		$this->queue("statSetup");
@@ -123,7 +123,7 @@ class PilotDetail extends Base
 
 		if(!$this->plt_id) {
 			if($this->plt_external_id) {
-				$this->pilot = new Pilot(0, $this->plt_external_id);
+				$this->pilot = new Entity\Pilot(0, $this->plt_external_id);
 				$this->plt_id = $this->pilot->getID();
 			} else {
 				$html = 'That pilot doesn\'t exist.';
@@ -201,7 +201,7 @@ class PilotDetail extends Base
 				$this->corp = Corporation::add($data['corporation'],
 					$this->alliance, $apiInfo->getCurrentTime(),
 					$data['corporationID']);
-				$this->pilot = Pilot::add($data['characterName'], $this->corp,
+				$this->pilot = Entity\Pilot::add($data['characterName'], $this->corp,
 								$apiInfo->getCurrentTime(), $data['characterID']);
 			}
 		}

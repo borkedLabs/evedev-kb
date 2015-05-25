@@ -11,6 +11,7 @@ use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\EVE\SolarSystem;
 use EDK\Killmail;
 use EDK\Page\Page;
 use EDK\PageComponent\Box;
@@ -18,7 +19,7 @@ use EDK\PageComponent\Box;
 /*
  * @package EDK
  */
-class SystemDetail extends Base
+class System extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -37,7 +38,7 @@ class SystemDetail extends Base
 	/** @var KillSummaryTable */
 	private $kill_summary = null;
 
-	function indexAction()
+	function detailAction()
 	{
 		$this->queue("start");
 		$this->queue("map");
@@ -94,7 +95,7 @@ class SystemDetail extends Base
 		$this->page->addHeader("<link rel='canonical' href='".
 				URI::build($this->args)."' />");
 
-		$this->system = new \SolarSystem($this->sys_id);
+		$this->system = new SolarSystem($this->sys_id);
 		$this->menuOptions = array();
 		$this->page->setTitle('System details - '.$this->system->getName());
 		$this->smarty->assign('sys_id', $this->sys_id);

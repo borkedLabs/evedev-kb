@@ -15,8 +15,8 @@ use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\Entity;
 use EDK\Entity\Corporation;
-use EDK\Entity\Alliance;
 use EDK\EVE\ShipClass;
 use EDK\Killmail;
 use EDK\Page\Page;
@@ -28,7 +28,7 @@ use \PageSplitter;
  * Display alliance details.
  * @package EDK
  */
-class AllianceDetail extends Base
+class Alliance extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -67,7 +67,7 @@ class AllianceDetail extends Base
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function indexAction()
+	function detailAction()
 	{
 		$this->queue("start");
 		$this->queue("statSetup");
@@ -130,7 +130,7 @@ class AllianceDetail extends Base
 		}
 
 		if (!$this->all_id && $this->all_external_id) {
-			$this->alliance = new Alliance($this->all_external_id, true);
+			$this->alliance = new Entity\Alliance($this->all_external_id, true);
 			$this->all_id = $this->alliance->getID();
 			if (!$this->all_id) {
 				echo 'No valid alliance id specified.';

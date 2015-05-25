@@ -533,15 +533,11 @@ class KillDetail extends Base
 				$this->involved[$i]['shipClass'] = false;
 			}
 
-			$this->involved[$i]['corpURL'] =
-					URI::build(array('a', 'corp_detail', true),
-							array('crp_id', $corp->getID(), true));
+			$this->involved[$i]['corpURL'] = \EDK\Core\EDK::urlFor('Corp:detail', ['id' => $corp->getID()]);
 			$this->involved[$i]['corpName'] = $corp->getName();
 
 			if($alliance && strcasecmp($alliance->getName(), "None") != 0) {
-				$this->involved[$i]['alliURL'] =
-						URI::build(array('a', 'alliance_detail', true),
-								array('all_id', $alliance->getID(), true));
+				$this->involved[$i]['alliURL'] = \EDK\Core\EDK::urlFor('Alliance:detail', ['id' => $alliance->getID()]);
 			} else {
 				$this->involved[$i]['alliURL'] = false;
 			}
@@ -585,10 +581,9 @@ class KillDetail extends Base
 					$this->involved[$i]['pilotURL'] = URI::build(
 							array('a', 'pilot_detail', true),
 							array('plt_ext_id', $pilot->getExternalID(), true));
+							\EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $pilot->getExternalID()]);
 				} else {
-					$this->involved[$i]['pilotURL'] =
-							URI::build(array('a', 'pilot_detail', true),
-									array('plt_id', $pilot->getID(), true));
+					$this->involved[$i]['pilotURL'] = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $pilot->getID()]);
 				}
 				$this->involved[$i]['typeID'] = 1377; //type number for characters.
 
@@ -1009,10 +1004,7 @@ class KillDetail extends Base
 		} else {
 			$smarty->assign('systemID', $this->kill->getSystem()->getID());
 			$smarty->assign('system', $this->kill->getSystem()->getName());
-			$smarty->assign('systemURL',
-					URI::build(
-					array('a', 'system_detail', true),
-					array('sys_id', $this->kill->getSystem()->getID(), true)));
+			$smarty->assign('systemURL',\EDK\Core\EDK::urlFor('System:detail', ['sys_id' => $this->kill->getSystem()->getID()]));
 			$smarty->assign('systemSecurity',
 					$this->kill->getSystem()->getSecurity(true));
 		}

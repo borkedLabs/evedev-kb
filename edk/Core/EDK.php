@@ -257,7 +257,7 @@ class EDK
 	
 	public static function urlFor($route, $args)
 	{
-		return self::$slim->urlFor($route, $args);
+		return self::$Slim->urlFor($route, $args);
 	}
 	
 	public static function slashfix($fix)

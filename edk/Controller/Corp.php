@@ -24,7 +24,7 @@ use \PageSplitter;
 /*
  * @package EDK
  */
-class CorpDetail extends Base
+class Corp extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -64,7 +64,7 @@ class CorpDetail extends Base
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function indexAction($id, $view = "")
+	function detailAction($id, $view = "")
 	{
 		$this->view = $view;
 		$this->queue("start");
