@@ -289,7 +289,7 @@ class KillDetail extends Base
 					(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => URI::page('invtype', $i_id),
+					'url' => \EDK\Core\EDK::urlFor('InvType:index', ['id' => $i_id]),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -395,7 +395,7 @@ class KillDetail extends Base
 				$this->drop_array[$i_location][] = array(
 					'Icon' => $item->getIcon(32),
 					'Name' => $i_name,
-					'url' => URI::page('invtype', $i_id),
+					'url' => \EDK\Core\EDK::urlFor('InvType:index', ['id' => $i_id]),
 					'Quantity' => $i_qty,
 					'Value' => $formatted,
 					'single_unit' => $value,
@@ -526,7 +526,7 @@ class KillDetail extends Base
 			$this->involved[$i]['shipName'] = $ship->getName();
 			$this->involved[$i]['shipID'] = $ship->getID();
 			if($ship->getID()) {
-				$this->involved[$i]['shipURL'] = URI::page('invtype', $ship->getID());
+				$this->involved[$i]['shipURL'] = \EDK\Core\EDK::urlFor('InvType:index', ['id' => $ship->getID()]);
 				$this->involved[$i]['shipClass'] = $ship->getClass()->getName();
 			} else {
 				$this->involved[$i]['shipURL'] = false;
@@ -554,8 +554,7 @@ class KillDetail extends Base
 
 
 			if (!$pilot->getID() || $tpilot == $weapon->getName()) {
-				$this->involved[$i]['pilotURL'] =
-						URI::page('invtype', $weapon->getID());
+				$this->involved[$i]['pilotURL'] = \EDK\Core\EDK::urlFor('InvType:index', ['id' => $weapon->getID()]);
 				$this->involved[$i]['pilotName'] = $weapon->getName();
 				$this->involved[$i]['secStatus'] = 0;
 				$this->involved[$i]['portrait'] = $corp->getPortraitURL(64);
@@ -567,8 +566,7 @@ class KillDetail extends Base
 
 				$this->involved[$i]['typeID'] = 2; //type number for corporations.
 
-				$this->involved[$i]['pilotURL'] =
-						URI::page('invtype', $weapon->getID());
+				$this->involved[$i]['pilotURL'] = \EDK\Core\EDK::urlFor('InvType:index', ['id' => $weapon->getID()]);
 				$this->involved[$i]['shipImage'] = ImageURL::getURL('Ship',
 						$weapon->getID(), 64);
 				$this->involved[$i]['shipURL'] = false;
@@ -603,7 +601,7 @@ class KillDetail extends Base
 						&& $weapon->getName() != $ship->getName()) {
 					$this->involved[$i]['weaponName'] = $weapon->getName();
 					$this->involved[$i]['weaponID'] = $weapon->getID();
-					$this->involved[$i]['weaponURL'] = URI::page('invtype', $weapon->getID());
+					$this->involved[$i]['weaponURL'] = \EDK\Core\EDK::urlFor('InvType:index', ['id' => $weapon->getID()]);
 				} else {
 					$this->involved[$i]['weaponName'] = "Unknown";
 				}
@@ -757,13 +755,11 @@ class KillDetail extends Base
 			$corp = new Corporation($this->kill->getVictimCorpID());
 			$smarty->assign('victimPortrait', $corp->getPortraitURL(64));
 			$smarty->assign('victimExtID', 0);
-			$smarty->assign('victimURL', URI::page('invtype',
-					$item->getID()));
+			$smarty->assign('victimURL', \EDK\Core\EDK::urlFor('InvType:index', ['id' => $item->getID()]) );
 		} else {
 			$smarty->assign('victimPortrait', $plt->getPortraitURL(64));
 			$smarty->assign('victimExtID', $plt->getExternalID());
-			$smarty->assign('victimURL', URI::page('pilot_detail',
-					$this->kill->getVictimID(), 'plt_id'));
+			$smarty->assign('victimURL', \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $this->kill->getVictimID()]));
 		}
 		$smarty->assign('victimName', $this->kill->getVictimName());
 		$smarty->assign('victimCorpURL', URI::page('corp_detail',
@@ -977,7 +973,7 @@ class KillDetail extends Base
 		$smarty->assign('victimShipIsFaction', $ship->isFaction());
 		$smarty->assign('victimShipName', $ship->getName());
 		$smarty->assign('victimShipID', $ship->getID());
-		$smarty->assign('victimShipURL', URI::page('invtype', $ship->getID()));
+		$smarty->assign('victimShipURL', \EDK\Core\EDK::urlFor('InvType:index', ['id' => $ship->getID()]));
 		$smarty->assign('victimShipClassName', $shipclass->getName());
 		if ($this->page->isAdmin()) $smarty->assign('ship', $ship);
 

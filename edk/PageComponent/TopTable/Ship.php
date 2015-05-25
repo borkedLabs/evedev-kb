@@ -33,7 +33,7 @@ class Ship
 				'rank' => false,
 				'name' => $ship->getName(),
 				'subname' => $shipclass->getName(),
-				'uri' => URI::page('invtype', $ship->getID()),
+				'uri' => \EDK\Core\EDK::urlFor('InvType:index', ['id' => $ship->getID()]),
 				'portrait' => $ship->getImage(32),
 				'count' => $row['cnt']);
 		}

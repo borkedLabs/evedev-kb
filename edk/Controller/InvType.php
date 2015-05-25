@@ -28,6 +28,11 @@ class InvType extends Base
 	{
 		$this->queue("start");
 		$this->queue("details");
+		
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()

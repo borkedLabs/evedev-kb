@@ -48,14 +48,25 @@ class Pilot extends Base
 	protected $points = 0;
 
 	/**
-
 	 * Construct the Pilot Details object.
-
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function detailAction()
+	function detailAction($id, $view = "")
 	{
+		$this->plt_id = $id;
+		$this->assemblySetup($view);
+	}
+
+	function externalAction($id, $view = "")
+	{
+		$this->plt_external_id = $id;
+		$this->assemblySetup($view);
+	}
+	
+	function assemblySetup($view = "")
+	{
+		$this->view = $view;
 		$this->queue("start");
 		$this->queue("statSetup");
 		$this->queue("stats");
@@ -66,7 +77,7 @@ class Pilot extends Base
 		
 		Cache::generate();
 	}
-
+	
 	public function generate()
 	{
 		Event::call("pilotDetail_assembling", $this);
@@ -102,17 +113,9 @@ class Pilot extends Base
 	{
 		$this->page = new Page();
 
-		$this->plt_id = (int)URI::getArg('plt_id');
 		if (!$this->plt_id) {
-			$this->plt_external_id = (int)URI::getArg('plt_ext_id');
 			if (!$this->plt_external_id) {
-				$id = (int)URI::getArg('id', 1);
-				// Arbitrary number bigger than we expect to reach locally
-				if ($id > 1000000) {
-					$this->plt_external_id = $id;
-				} else {
-					$this->plt_id = $id;
-				}
+				throw new Exception("Invalid ID");
 			}
 		}
 
@@ -209,8 +212,10 @@ class Pilot extends Base
 		$smarty->assign('portrait_URL',$this->pilot->getPortraitURL(128));
 		$smarty->assign('corp_id',$this->corp->getID());
 		$smarty->assign('corp_name',$this->corp->getName());
+		$smarty->assign('corp_url', \EDK\Core\EDK::urlFor('Corp:detail', ['id' => $this->corp->getID()]));
 		$smarty->assign('all_name',$this->alliance->getName());
 		$smarty->assign('all_id',$this->alliance->getID());
+		$smarty->assign('all_url', \EDK\Core\EDK::urlFor('Alliance:detail', ['id' => $this->alliance->getID()]));
 		$smarty->assign('klist_count',$this->summary->getTotalKills());
 		$smarty->assign('klist_real_count',$this->summary->getTotalRealKills());//$this->klist->getRealCount());
 		$smarty->assign('llist_count',$this->summary->getTotalLosses());

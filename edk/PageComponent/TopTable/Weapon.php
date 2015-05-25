@@ -10,7 +10,7 @@ namespace EDK\PageComponent\TopTable;
 
 use EDK\Core\URI;
 use EDK\Core\Language;
-use \Item;
+use EDK\EVE\Item;
 
 class Weapon
 {
@@ -30,8 +30,7 @@ class Weapon
 			$rows[] = array(
 				'rank' => false,
 				'name' => $item->getName(),
-				'uri' => URI::build(array('a', 'invtype', true),
-						array('id', $item->getID(), true)),
+				'uri' => \EDK\Core\EDK::urlFor('InvType:index', ['id' => $item->getID()]),
 				'icon' => $item->getIcon(32),
 				'count' => $row['cnt']);
 		}

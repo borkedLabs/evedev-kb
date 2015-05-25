@@ -7,11 +7,11 @@
 		<tr class='kb-table-row-even'>
 			<td rowspan='7'><img src="{$portrait_URL}" alt="portrait" /></td>
 			<td>Corporation:</td>
-			<td><a href="{$kb_host}/?a=corp_detail&amp;crp_id={$corp_id}">{$corp_name}</a></td>
+			<td><a href="{$corp_url}">{$corp_name}</a></td>
 		</tr>
 		<tr class='kb-table-row-even'>
 			<td>Alliance:</td>
-			<td><a href="{$kb_host}/?a=alliance_detail&amp;all_id={$all_id}">{$all_name}</a></td>
+			<td><a href="{$all_url}">{$all_name}</a></td>
 		</tr>
 		<tr class='kb-table-row-even'>
 			<td>Kills:</td>

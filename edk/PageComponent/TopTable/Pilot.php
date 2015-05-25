@@ -30,12 +30,10 @@ class Pilot
 		{
 			$pilot = \EDK\Entity\Pilot::getByID($row['plt_id']);
 			if($row['plt_externalid']) {
-				$uri = URI::build(array('a', 'pilot_detail', true),
-						array('plt_ext_id', $row['plt_externalid'], true));
+				$uri = \EDK\Core\EDK::urlFor('Pilot:external', ['id' => $row['plt_externalid']]);
 				$img = ImageURL::getURL('Pilot', $row['plt_externalid'], 32);
 			} else {
-				$uri = URI::build(array('a', 'pilot_detail', true),
-						array('plt_id', $row['plt_id'], true));
+				$uri = \EDK\Core\EDK::urlFor('Pilot:detail', ['id' => $row['plt_externalid']]);
 
 				$img = $pilot->getPortraitURL(32);
 			}
