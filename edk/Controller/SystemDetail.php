@@ -5,18 +5,20 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Killmail;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 
 /*
  * @package EDK
  */
-class SystemDetail extends \pageAssembly
+class SystemDetail extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -35,14 +37,17 @@ class SystemDetail extends \pageAssembly
 	/** @var KillSummaryTable */
 	private $kill_summary = null;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
 		$this->queue("start");
 		$this->queue("map");
 		$this->queue("statSetup");
 		$this->queue("summaryTable");
 		$this->queue("killList");
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 
@@ -185,7 +190,6 @@ class SystemDetail extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 	}

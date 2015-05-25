@@ -6,22 +6,27 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
+
+use EDK\Cache\Cache;
 use EDK\Core\Event;
+use EDK\Page\Page;
+
 /*
  * @package EDK
  */
-class Locked extends \pageAssembly
+class Locked extends Base
 {
 	/** @var Page */
 	public $page = null;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("content");
+		$this->generate();
+		
+		Cache::generate();
 	}
 	
 	public function generate()

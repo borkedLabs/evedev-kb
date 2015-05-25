@@ -2,7 +2,7 @@
 namespace EDK\Command;
 
 use EDK\Core\Config;
-use EDK\Database\DBQuery;
+use EDK\Database\Query;
 
 class Api extends Command
 {
@@ -26,7 +26,7 @@ class Api extends Command
 		$myEveAPI = new \EDK\EVEAPI\KillLog();
 		$myEveAPI->iscronjob_ = true;
 
-		$qry = new DBQuery();
+		$qry = new Query();
 		$qry->execute("SELECT * FROM kb3_api_keys WHERE key_kbsite = '" . KB_SITE . "' ORDER BY key_name");
 		
 		while ($row = $qry->getRow())

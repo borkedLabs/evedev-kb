@@ -5,9 +5,12 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
+
+use EDK\Page\Page;
  
 use EDK\Contract;
+use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -19,7 +22,7 @@ use \ContractListTable;
 /*
  * @package EDK
  */
-class Home extends \pageAssembly
+class Home extends Base
 {
 	/** @var array */
 	private $pargs = array();
@@ -53,15 +56,18 @@ class Home extends \pageAssembly
 	/** @var boolean */
 	private $dateSet = false;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
 		$this->queue('start');
 		$this->queue('summaryTable');
 		$this->queue('campaigns');
 		// Legacy support for mods placing themselves after it.
 		$this->queue('contracts');
 		$this->queue('killList');
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()
@@ -71,6 +77,7 @@ class Home extends \pageAssembly
 		$this->page->setContent($html);
 
 		$this->context(); //This resets the queue and queues context items.
+		
 		Event::call("home_context_assembling", $this);
 		$contextHTML = $this->assemble();
 		$this->page->addContext($contextHTML);
@@ -401,7 +408,6 @@ class Home extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue('menuSetup');
 		$this->queue('menu');
 		$this->queue('clock');

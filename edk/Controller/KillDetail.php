@@ -5,13 +5,14 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\ImageURL;
 use EDK\Core\URI;
+use EDK\Cache\Cache;
 use EDK\Database;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
@@ -19,6 +20,7 @@ use EDK\Entity\Alliance;
 use EDK\EVE\Dogma;
 use EDK\EVE\Item;
 use EDK\EVE\Ship;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 use EDK\Killmail;
 
@@ -29,7 +31,7 @@ if (Config::get('comments')) {
 /**
  * @package EDK
  */
-class KillDetail extends \pageAssembly
+class KillDetail extends Base
 {
     
 	/** @var integer The id of the kill this page is for. */
@@ -67,9 +69,8 @@ class KillDetail extends \pageAssembly
 	 * Construct the Pilot Details object.
 	 * Add the functions to the build queue.
 	 */
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
 		$this->queue("start");
 		$this->queue("top");
 		$this->queue("victim");
@@ -82,6 +83,10 @@ class KillDetail extends \pageAssembly
 		$this->queue("fitting");
 		$this->queue("itemsLost");
 		$this->queue("bottom");
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	/**
@@ -89,7 +94,6 @@ class KillDetail extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 		$this->queue("points");

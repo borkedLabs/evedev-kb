@@ -6,11 +6,13 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\Page\Page;
 
 // An ajax search function for this page is in common/includes/xajax.functions.php
 require_once(__DIR__.'/../../common/includes/xajax.functions.php');
@@ -18,7 +20,7 @@ require_once(__DIR__.'/../../common/includes/xajax.functions.php');
 /*
  * @package EDK
  */
-class Search extends \pageAssembly
+class Search extends Base
 {
 	/** @var Page */
 	public $page;
@@ -34,13 +36,15 @@ class Search extends \pageAssembly
      *  Set up the basic variables of the class and add the functions to the
      *  build queue.
      */
-    function __construct()
+    function indexAction()
     {
-        parent::__construct();
-
         $this->queue("start");
 		$this->queue("newSearch");
         $this->queue("checkSearch");
+		
+		$this->generate();
+		
+		Cache::generate();
     }
     function start()
     {

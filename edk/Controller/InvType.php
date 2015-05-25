@@ -1,6 +1,7 @@
 <?php
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
@@ -8,12 +9,13 @@ use EDK\EVE\Dogma;
 use EDK\EVE\Item;
 use EDK\EVE\Ship;
 use EDK\Killmail;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 
 /*
  * @package EDK
  */
-class InvType extends \pageAssembly
+class InvType extends Base
 {
 	/** @var integer */
 	public $typeID;
@@ -22,10 +24,8 @@ class InvType extends \pageAssembly
 	/** @var array The list of menu options to display. */
 	protected $menuOptions = array();
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("details");
 	}
@@ -56,7 +56,6 @@ class InvType extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$item = new Dogma($this->typeID);
 
 		if (!$item->isValid())

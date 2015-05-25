@@ -9,6 +9,8 @@
 namespace EDK\CREST;
 
 use EDK\Core\Config;
+use \Exception;
+
 /**
  * simple class for getting CREST references via URL
  */

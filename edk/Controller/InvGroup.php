@@ -5,28 +5,31 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Database;
+use EDK\Page\Page;
 
 /*
  * @package EDK
  */
-class InvGroup extends \pageAssembly
+class InvGroup extends Base
 {
 	/** @var Page */
 	public $page = null;
 	/** @var integer */
 	public $groupID = 0;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("details");
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()

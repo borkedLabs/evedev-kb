@@ -200,6 +200,7 @@ class Page
 			$smarty->assign('profile', 1);
 		}
 		$smarty->assign('content_html', $this->contenthtml);
+		
 		if (Config::get('user_showmenu')) {
 			$this->contexthtml = array_merge(array(user::menu()), $this->contexthtml);
 		}

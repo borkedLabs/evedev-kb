@@ -5,27 +5,30 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
 use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\Session;
 use EDK\Core\URI;
+use EDK\Page\Page;
+
 /*
  * @package EDK
  */
-class Login extends \pageAssembly
+class Login extends Base
 {
 
 	/** @var Page The Page object used to display this page. */
 	public $page;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("content");
+		$this->generate();
+		
+		Cache::generate();
 	}
 	
 	public function generate()

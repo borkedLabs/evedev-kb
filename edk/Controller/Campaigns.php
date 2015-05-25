@@ -6,10 +6,12 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Event;
 use EDK\Core\URI;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 use EDK\Contract;
 
@@ -17,7 +19,7 @@ $page = new Page('Campaigns');
 /*
  * @package EDK
  */
-class Campaigns extends \pageAssembly
+class Campaigns extends Base
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -34,15 +36,16 @@ class Campaigns extends \pageAssembly
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', URI::getArg('view', 1));
 
 		$this->queue("start");
 		$this->queue("listCampaigns");
-
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 	
 	public function generate()
@@ -64,7 +67,6 @@ class Campaigns extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 	}

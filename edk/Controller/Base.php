@@ -7,19 +7,33 @@
  * @package EDK
  */
 
+namespace EDK\Controller;
+
+use EDK\Cache\Cache;
+use EDK\Core\Config;
 use EDK\Core\Event;
+use EDK\Core\Session;
+use \Smarty;
+
+$smarty = null;
 
 /**
  * @package EDK
  */
-class pageAssembly
+class Base extends \SlimController\SlimController
 {
+	private $assemblyQueue = array();
+	
+	protected $smarty = null;
 
-	function __construct()
+	public function __construct(\Slim\Slim &$app)
 	{
-		$this->assemblyQueue = array();
+		parent::__construct($app);
+		
+		global $timeStarted;
+		$timeStarted = microtime(true);
 	}
-
+	
 	/**
 	 * Assemble the page and return the HTML.
 	 *
@@ -46,6 +60,8 @@ class pageAssembly
 				$output .= $this->call($callback['callback']);
 			}
 		}
+		
+		$this->assemblyQueue = array();
 
 		return $output;
 	}
@@ -149,6 +165,7 @@ class pageAssembly
 	{
 		$this->assemblyQueue[$id]['callback'] = $callback;
 	}
+	
 
 	function filter($id, $callback, $priority = 5)
 	{

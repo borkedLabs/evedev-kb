@@ -6,8 +6,9 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
@@ -16,6 +17,7 @@ use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
 use EDK\Killmail;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 use \KillListTable;
 use \KillSummaryTable;
@@ -27,7 +29,7 @@ use \EDK\PageComponent\TopTable\Weapon;
 /*
  * @package EDK
  */
-class PilotDetail extends \pageAssembly
+class PilotDetail extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -52,15 +54,17 @@ class PilotDetail extends \pageAssembly
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("statSetup");
 		$this->queue("stats");
 		$this->queue("summaryTable");
 		$this->queue("killList");
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()
@@ -82,7 +86,6 @@ class PilotDetail extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 		$this->queue("points");

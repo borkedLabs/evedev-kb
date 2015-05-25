@@ -5,14 +5,16 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Database;
 use EDK\Entity\Corporation;
+use EDK\Page\Page;
 use EDK\PageComponent\Box;
 use EDK\Killmail;
 use \KillListTable;
@@ -22,7 +24,7 @@ use \PageSplitter;
 /*
  * @package EDK
  */
-class CorpDetail extends \pageAssembly
+class CorpDetail extends Base
 {
 	/** @var Page */
 	public $page = null;
@@ -62,16 +64,18 @@ class CorpDetail extends \pageAssembly
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function __construct()
+	function indexAction($id, $view = "")
 	{
-		parent::__construct();
-
+		$this->view = $view;
 		$this->queue("start");
 		$this->queue("statSetup");
 		$this->queue("stats");
 		$this->queue("summaryTable");
 		$this->queue("killList");
 
+		$this->generate();
+		
+		Cache::generate();
 	}
 	
 	public function generate()
@@ -93,7 +97,6 @@ class CorpDetail extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 	}
@@ -204,6 +207,8 @@ class CorpDetail extends \pageAssembly
 	{
 		if($this->view != '' && $this->view != 'kills'
 			&& $this->view != 'losses') return '';
+			
+		
 		// The summary table is also used by the stats. Whichever is called
 		// first generates the table.
 		return $this->kill_summary->generate();

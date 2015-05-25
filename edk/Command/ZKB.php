@@ -3,6 +3,7 @@
 namespace EDK\Command;
 
 use EDK\Core\Config;
+use EDK\Killmail\Importer;
 
 class ZKB extends Command
 {
@@ -10,7 +11,7 @@ class ZKB extends Command
 	{
 		$config = new Config(KB_SITE);
 
-		$fetchConfigs = \ZKBFetch::getAll();
+		$fetchConfigs = Importer\ZKB::getAll();
 
 		foreach($fetchConfigs AS &$fetchConfig)
 		{

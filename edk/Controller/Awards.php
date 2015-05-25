@@ -5,19 +5,21 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\URI;
+use EDK\Page\Page;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\Box;
 
 /*
  * @package EDK
  */
-class Awards extends \pageAssembly
+class Awards extends Base
 {
 	/** @var array The array of menu options */
 	protected $menuOptions;
@@ -41,12 +43,14 @@ class Awards extends \pageAssembly
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-
 		$this->queue("start");
 		$this->queue("awards");
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()
@@ -233,7 +237,6 @@ class Awards extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 	}

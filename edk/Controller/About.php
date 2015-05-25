@@ -6,24 +6,24 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
 
 use EDK\Core\Event;
 use EDK\Core\Language;
+use EDK\Cache\Cache;
 use EDK\Database;
+use EDK\Page\Page;
 
 /*
  * @package EDK
  */
-class About extends \pageAssembly
+class About extends Base
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
 
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
-		
 		$this->queue("start");
 		$this->queue("top");
 		$this->queue("developers");
@@ -31,6 +31,10 @@ class About extends \pageAssembly
 		$this->queue("theme");
 		$this->queue("mods");
 		$this->queue("bottom");
+		
+		$this->generate();
+		
+		Cache::generate();
 	}
 
 	public function generate()

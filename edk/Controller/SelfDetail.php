@@ -6,8 +6,9 @@
  * @package EDK
  */
 
-namespace EDK\Page;
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Cache\Cacheable;
 use EDK\Core\Config;
 use EDK\Core\Event;
@@ -15,11 +16,12 @@ use EDK\Core\URI;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
+use EDK\Page\Page;
 
 /*
  * @package EDK
  */
-class SelfDetail extends \pageAssembly
+class SelfDetail extends Base
 {
     /**
      * Construct the Alliance Details object.
@@ -28,10 +30,11 @@ class SelfDetail extends \pageAssembly
      */
     function __construct()
     {
-        parent::__construct();
-
         $this->queue("start");
         $this->queue("display");
+		$this->generate();
+		
+		Cache::generate();
     }
 	
 

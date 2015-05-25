@@ -5,14 +5,17 @@
  * $HeadURL$
  * @package EDK
  */
-namespace EDK\Page;
+ 
+namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Contract\Contract;
 use EDK\Core\Config;
 use EDK\Core\Event;
 use EDK\Core\URI;
 use EDK\Database;
 use EDK\Killmail;
+use EDK\Page\Page;
 use EDK\PageComponent\AwardBox;
 use EDK\PageComponent\BarGraph;
 use EDK\PageComponent\Box;
@@ -21,7 +24,7 @@ use \involved;
 /*
  * @package EDK
  */
-class ContractDetail extends \pageAssembly
+class ContractDetail extends Base
 {
 	/** @var Page The Page object used to display this page. */
 	public $page;
@@ -43,15 +46,16 @@ class ContractDetail extends \pageAssembly
 	 * Set up the basic variables of the class and add the functions to the
 	 *  build queue.
 	 */
-	function __construct()
+	function indexAction()
 	{
-		parent::__construct();
 		$this->queue("start");
 		$this->queue("stats");
 		$this->queue("comment");
 		$this->queue("summaryTable");
 		$this->queue("killList");
-
+		$this->generate();
+		
+		Cache::generate();
 	}
 	
 	public function generate()
@@ -73,7 +77,6 @@ class ContractDetail extends \pageAssembly
 	 */
 	function context()
 	{
-		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
 		$this->queue("topLists");
