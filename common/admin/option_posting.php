@@ -7,7 +7,7 @@
  */
 
 use EDK\Core\Config;
-use EDK\PageComponent\Options;
+use EDK\Page\Component\Options;
 
 Options::cat('Advanced', 'Posting Options', 'Posting Options');
 

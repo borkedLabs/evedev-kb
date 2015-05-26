@@ -8,7 +8,7 @@
 
 
 use EDK\Core\Config;
-use EDK\PageComponent\Options;
+use EDK\Page\Component\Options;
 
 Options::cat('Appearance', 'Global Options', 'Global Look');
 Options::fadd('Banner', 'style_banner', 'select', array('admin_appearance', 'createSelectBanner'), array('admin_appearance', 'changeBanner'));

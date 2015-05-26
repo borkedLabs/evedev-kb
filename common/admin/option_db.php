@@ -5,7 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
-use EDK\PageComponent\Options;
+use EDK\Page\Component\Options;
 
 Options::cat('Maintenance', 'Database', 'Table Checks');
 Options::fadd('Current SQL cache size', 'none', 'custom', array('admin_db', 'checkCache'), array('admin_db', 'killCache'));

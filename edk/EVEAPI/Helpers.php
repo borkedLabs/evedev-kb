@@ -9,6 +9,7 @@
 namespace EDK\EVEAPI;
  
 use EDK\Core\Config;
+use EDK\CREST\CREST;
 use EDK\Database;
 
 class EDKApiConnectionException extends \Exception {}
@@ -244,7 +245,7 @@ class Helpers
         {
             $API_TESTING_CHARACTER_ID = 800263173;
             // connectivity check for XML API
-            $apiIdToName = new API_IDtoName();
+            $apiIdToName = new IDtoName();
             // don't use caching for this
             \Pheal\Core\Config::getInstance()->cache = new \Pheal\Cache\NullStorage();
             $apiIdToName->setIDs($API_TESTING_CHARACTER_ID);
@@ -269,7 +270,7 @@ class Helpers
             $CREST_TESTING_URL = 'http://public-crest.eveonline.com/killmails/33493676/553ac7e2aeabe48092bde10958de0a44dc6f35ef/';
             try
             {
-                $kill = SimpleCrest::getReferenceByUrl($CREST_TESTING_URL);
+                $kill = CREST::getReferenceByUrl($CREST_TESTING_URL);
                 if(!is_null($kill) && (int)$kill->killID > 0)
                 {
                     return true;

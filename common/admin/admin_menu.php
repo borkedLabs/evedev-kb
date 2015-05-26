@@ -7,9 +7,9 @@
  */
 
 use EDK\Core\Config;
-use EDK\PageComponent\AdminBox;
-use EDK\PageComponent\Box;
-use EDK\PageComponent\Options;
+use EDK\Page\Component\AdminBox;
+use EDK\Page\Component\Box;
+use EDK\Page\Component\Options;
 
 // include all admin modules
 // this doesnt need to check for itself because its already loaded
@@ -41,6 +41,7 @@ foreach ($mods_active as $mod)
     }
 }
 
+global $menubox;
 $menubox = new AdminBox();
 
 Options::oldMenu('Features', "Campaigns", array(array('a', 'admin_cc',  true),

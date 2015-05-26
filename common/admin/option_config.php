@@ -11,7 +11,7 @@ use EDK\Core\Config;
 use EDK\Core\URI;
 use EDK\Database;
 use EDK\Entity\Corporation;
-use EDK\PageComponent\Options;
+use EDK\Page\Component\Options;
 
 Options::cat('Advanced', 'Configuration', 'Available updates');
 Options::fadd('Code updates', 'none', 'custom', array('update', 'codeCheck'));

@@ -14,8 +14,9 @@ use EDK\Database\PreparedQuery;
 use EDK\Entity\Pilot;
 use EDK\Entity\Corporation;
 use EDK\Entity\Alliance;
-use EDK\EVE\SolarSystem;
+use EDK\EVE\Item;
 use EDK\EVE\Ship;
+use EDK\EVE\SolarSystem;
 use EDK\Killmail\Kill;
 use EDK\Killmail\InvolvedParty;
 use EDK\Killmail\DestroyedItem;
@@ -663,7 +664,7 @@ class Parser
             $typeID = (int)$item['typeID'];
             // we will add this item with the given flag, even if it's not in our database
             // that way, when the database is updated, the item will display correctly
-            $Item = new \Item($typeID);
+            $Item = new Item($typeID);
             
             // if item has a parent, use the parent's flag
             if(!is_null($parentItemLocation))

@@ -32,7 +32,27 @@ $app->addRoutes(array(
     '/awards'   => 'Awards:index',
     '/about'   => 'About:index',
     '/campaigns'   => 'Campaigns:index',
+    '/campaigns/:view/'   => 'Campaigns:index',
+    '/standings'   => 'Standings:index',
     '/search'   => 'Search:index',
+    '/post'   => 'Post:index',
+    '/self_detail'   => 'SelfDetail:index',
+	
+	
+    '/admin'   => 'Admin\Home:index',
+    '/admin_audit/'   => 'Admin\Audit:index',
+    '/admin_troubleshooting/'   => 'Admin\Troubleshooting:index',
+    '/admin_cc/'   => 'Admin\Campaigns:index',
+    '/admin_roles/'   => 'Admin\Roles:index',
+    '/admin_standings/'   => 'Admin\Standings:index',
+    '/admin_api/'   => 'Admin\API:index',
+    '/admin_mapoptions/'   => 'Admin\Map:options',
+    '/admin_navmanager/'   => 'Admin\Navigation:index',
+    '/admin_verify/'   => 'Admin\Verify:index',
+    '/admin_mods/'   => 'Admin\Mods:index',
+    '/admin_status/'   => 'Admin\Status:index',
+	'/admin_value_fetch/' => 'Admin\Fetch:values',
+	'/admin_zkbfetch/' => 'Admin\Fetch:zkb'
 ));
 
 $app->config('debug', true);

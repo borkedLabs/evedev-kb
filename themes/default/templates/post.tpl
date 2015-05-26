@@ -11,7 +11,7 @@
       Remember to post your losses as well.<br /></p>
       <br />
       <b>CREST-Link:</b>
-      <form id="postform" name="postform" class="f_killmail" method="post" action="{$kb_host}/?a=post">
+      <form id="postform" name="postform" class="f_killmail" method="post" action="{$kb_host}/post">
       <input type="text" name="crest_url" id="crest_url" class="f_killmail" size="100">
       {if !$isadmin && $crest_pw_needed}
         <br /><br /><b>Password:</b><br /><input id="password_crest" name="password_crest" type="password" />

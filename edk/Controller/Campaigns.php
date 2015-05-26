@@ -118,8 +118,8 @@ class Campaigns extends Base
 	 */
 	function menuSetup()
 	{
-		$this->addMenuItem('link', 'Active campaigns', KB_HOST.'/?a=campaigns');
-		$this->addMenuItem('link', 'Past campaigns', KB_HOST.'/?a=campaigns&amp;view=past');
+		$this->addMenuItem('link', 'Active campaigns', \EDK\Core\EDK::urlFor('Campaigns:index'));
+		$this->addMenuItem('link', 'Past campaigns', \EDK\Core\EDK::urlFor('Campaigns:index', ['view' => 'past']));
 		return "";
 	}
 	/**

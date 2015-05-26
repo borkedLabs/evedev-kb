@@ -255,7 +255,7 @@ class EDK
 		if(isset($boardMessage)) $smarty->assign('message', $boardMessage);
 	}
 	
-	public static function urlFor($route, $args)
+	public static function urlFor($route, $args = [])
 	{
 		return self::$Slim->urlFor($route, $args);
 	}

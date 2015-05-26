@@ -7,7 +7,7 @@
  */
  
 use EDK\Database;
-use EDK\PageComponent\Options;
+use EDK\Page\Component\Options;
 
 /*
 * This file contains the generic admin options in the new format
