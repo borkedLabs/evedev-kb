@@ -38,8 +38,9 @@ $app->addRoutes(array(
     '/post'   => 'Post:index',
     '/self_detail'   => 'SelfDetail:index',
 	
-	
+	'/login'	=> 'Login:index',
     '/admin'   => 'Admin\Home:index',
+    '/admin/'   => 'Admin\Home:index',
     '/admin_audit/'   => 'Admin\Audit:index',
     '/admin_troubleshooting/'   => 'Admin\Troubleshooting:index',
     '/admin_cc/'   => 'Admin\Campaigns:index',
@@ -52,7 +53,11 @@ $app->addRoutes(array(
     '/admin_mods/'   => 'Admin\Mods:index',
     '/admin_status/'   => 'Admin\Status:index',
 	'/admin_value_fetch/' => 'Admin\Fetch:values',
-	'/admin_zkbfetch/' => 'Admin\Fetch:zkb'
+	'/admin_kill_import/' => 'Admin\Import:import',
+	'/admin_kill_import_csv/' => 'Admin\Import:csv',
+	'/admin_kill_export/' => 'Admin\Export:export',
+	'/admin_zkbfetch/'  => 'Admin\Fetch:zkb',
+	'/admin_idfeedsyndication/'  => 'Admin\Fetch:idfeed',
 ));
 
 $app->config('debug', true);

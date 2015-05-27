@@ -7,8 +7,10 @@
  */
 namespace EDK\Killmail;
 
+use EDK\Core\Event;
 use EDK\Database;
 use EDK\Database\PreparedQuery;
+use \logger;
 
 /**
  * Store and retrieve comments for each killmail.
@@ -99,7 +101,7 @@ class Comments
 				'name' => $name, 'comment' => $comment, 'id' => $id);
 
 		// create comment_added event
-		event::call('comment_added', $this);
+		Event::call('comment_added', $this);
 	}
 
 	/**

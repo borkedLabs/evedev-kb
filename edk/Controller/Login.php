@@ -7,6 +7,7 @@
  */
 namespace EDK\Controller;
 
+use EDK\Cache\Cache;
 use EDK\Core\Event;
 use EDK\Core\Language;
 use EDK\Core\Session;
