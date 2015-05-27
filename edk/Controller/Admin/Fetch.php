@@ -369,10 +369,10 @@ class Fetch extends Base
 				if(!($_POST['fetch_feed'] && in_array (md5($val['url']), $_POST['fetch_feed']))
 					|| empty($val['url'])) continue;
 
-				if (isIDFeed($val['url'])) {
-					$html .= getIDFeed($key, $val);
+				if ($this->isIDFeed($val['url'])) {
+					$html .= $this->getIDFeed($key, $val);
 				} else {
-					$html .= getOldFeed($key, $val);
+					$html .= $this->getOldFeed($key, $val);
 				}
 				Config::set("fetch_idfeeds", $feeds);
 			}
