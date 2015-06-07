@@ -7,7 +7,8 @@
         "guzzlehttp/guzzle": "~5.3",
 		"slim/slim": "~2.6",
         "slimcontroller/slimcontroller": "0.4.3",
-		"zeuxisoo/slim-whoops": "0.3.0"
+		"zeuxisoo/slim-whoops": "0.3.0",
+        "slim/views": "0.1.*"
     },
 	"autoload": {
 		"psr-4": {

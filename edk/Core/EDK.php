@@ -213,6 +213,9 @@ class EDK
 		if ($stylename != 'default' || $themename != 'default') {
 			$smarty->assign('style', $stylename);
 		}
+		
+		$smarty->addPluginsDir(KB_ROOT.'/vendor/slim/views/SmartyPlugins/');
+		
 		$smarty->assign('img_url', IMG_URL);
 		$smarty->assign('img_host', IMG_HOST);
 		$smarty->assign('kb_host', KB_HOST);

@@ -35,6 +35,7 @@ $app->addRoutes(array(
     '/campaigns/:view/'   => 'Campaigns:index',
     '/standings'   => 'Standings:index',
     '/search'   => 'Search:index',
+    '/search/'   => 'Search:index',
     '/post'   => 'Post:index',
     '/self_detail'   => 'SelfDetail:index',
 	
