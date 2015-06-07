@@ -8,6 +8,8 @@
  * sequentially. e.g. update/012/
 */
 
+require __DIR__.'/../vendor/autoload.php';
+
 if(function_exists("set_time_limit"))
 	@set_time_limit(0);
 @error_reporting(E_ALL ^ E_NOTICE);
