@@ -44,11 +44,10 @@ class CrestParser
 		}
 	}
         
-        
 	function validateCrestUrl()
 	{
 		// should look like this:
-		// http://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
+		// https://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
 		$urlPieces = explode("/", $this->crestUrl);
 		if(count($urlPieces) < 6 || 
 				$urlPieces[2] != "public-crest.eveonline.com" || 
@@ -60,7 +59,6 @@ class CrestParser
 			throw new CrestParserException("Invalid CREST URL.");
 		}        
 	}
-        
         
 	function parse($checkauth = true)
 	{
@@ -649,7 +647,7 @@ class CrestParser
             $typeID = (int)$item['typeID'];
             // we will add this item with the given flag, even if it's not in our database
             // that way, when the database is updated, the item will display correctly
-            $Item = new Item($typeID);
+            $Item = Item::getByID($typeID);
             
             // if item has a parent, use the parent's flag
             if(!is_null($parentItemLocation))

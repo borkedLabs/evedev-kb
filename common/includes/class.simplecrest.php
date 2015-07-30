@@ -36,6 +36,7 @@ class SimpleCrest
      * takes a CREST URL and gets the referenced object
      * @param string $url
      * @return Object a decoded json object
+     * @throws Exception
      */
     public static function getReferenceByUrl($url)
     {
@@ -82,7 +83,9 @@ class SimpleCrest
         // ignore ssl peer verification
         if(substr($url,0,5) == "https")
         {
-           curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            //curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            // make sure we can verify the peer's certificatge
+            curl_setopt(self::$curl, CURLOPT_CAINFO, getcwd() . DIRECTORY_SEPARATOR . KB_CACHEDIR . '/cert/cacert.pem');
         }
         
         // set timeout

@@ -16,7 +16,6 @@ else $uri .= "&xajax=1";
 $xajax->configure('requestURI', $uri);
 $xajax->configure('deferScriptGeneration', false);
 $xajax->configure('javascript URI', config::get('cfg_kbhost')."/vendor/xajax/xajax/");
-
 /**
  * @package EDK
  */

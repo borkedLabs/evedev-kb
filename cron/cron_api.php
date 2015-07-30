@@ -42,6 +42,5 @@ class ApiCommand extends CronCommand
 			
 			print $html;
 		}
-
 	}
 }

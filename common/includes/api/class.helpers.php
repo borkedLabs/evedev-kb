@@ -33,18 +33,26 @@ class API_Helpers
 		}
 		else
 		{
-			$info = new API_IDtoName();
-			$info->setIDs($id);
-			$result = $info->fetchXML();
-			if($result == "")
-			{
-				$data = $info->getIDData();
-				if($update && $data[0]['characterID'] > 0 && $data[0]['name'])
+                        $crestTypeUrl = CREST_PUBLIC_URL . '/types/' . $id . '/';
+                        $typeInfo = NULL;
+                        
+                        try 
+                        {
+                            $typeInfo = SimpleCrest::getReferenceByUrl($crestTypeUrl);
+                        } 
+                        catch (Exception $e) 
+                        {
+                            // nothing we can do
+                        }
+                        
+                        if($typeInfo != NULL)
+                        {
+				if($update && $typeInfo->name != NULL && $typeInfo->description != NULL)
 				{
-					$sql = "INSERT INTO kb3_invtypes (typeID, typeName, description) values($id, '".$qry->escape($data[0]['name'])."', '')";
+					$sql = "INSERT INTO kb3_invtypes (typeID, typeName, description) values($id, '".$qry->escape($typeInfo->name)."', '".$qry->escape($typeInfo->description)."')";
 					$qry->execute($sql);
 				}
-				return $data[0]['name'];
+				return $typeInfo->name;
 			}
 			return null;
 		}
@@ -261,7 +269,7 @@ class API_Helpers
          */
         public static function testCrestApiConnection()
         {
-            $CREST_TESTING_URL = 'http://public-crest.eveonline.com/killmails/33493676/553ac7e2aeabe48092bde10958de0a44dc6f35ef/';
+            $CREST_TESTING_URL = CREST_PUBLIC_URL . Kill::$CREST_KILLMAIL_ENDPOINT . '33493676/553ac7e2aeabe48092bde10958de0a44dc6f35ef/';
             try
             {
                 $kill = SimpleCrest::getReferenceByUrl($CREST_TESTING_URL);
@@ -278,7 +286,7 @@ class API_Helpers
             
             catch(Exception $e)
             {
-                throw new EDKApiConnectionException($e->getMessage(), $e->getError());
+                throw new EDKApiConnectionException($e->getMessage(), $e->getCode());
             }
         }
         

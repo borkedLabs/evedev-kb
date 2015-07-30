@@ -341,7 +341,7 @@ function isNewerVersion($newVersion, $baseVersion)
 }
 
 
-function loadMods()
+function loadMods($page)
 {
     $mods_active = explode(',', config::get('mods_active'));
     $modOverrides = false;
