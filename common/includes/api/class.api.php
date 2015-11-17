@@ -33,6 +33,7 @@ class API {
 		\Pheal\Core\Config::getInstance()->cache = new \Pheal\Cache\FileStorage(KB_CACHEDIR.'/api/', array('delimiter' => '-'));
 		\Pheal\Core\Config::getInstance()->api_customkeys = true;
 		\Pheal\Core\Config::getInstance()->log = new \Pheal\Log\FileStorage(KB_CACHEDIR.'/api/');
+		\Pheal\Core\Config::getInstance()->api_base = API_SERVER.'/';
 	}
 
 	function IsCached() {

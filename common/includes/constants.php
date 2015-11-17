@@ -7,7 +7,7 @@
  * @package EDK
  */
 if (!defined('LATEST_DB_UPDATE')) {
-    define('LATEST_DB_UPDATE', "037");
+    define('LATEST_DB_UPDATE', "038");
 }
 
 define('KB_CACHEDIR', __DIR__.'/../../cache');
@@ -22,11 +22,11 @@ define('CREST_PUBLIC_URL', 'https://public-crest.eveonline.com');
 
 // current version: major.minor.sub.ccpDBupdateNo
 // even numbers for minor = development version
-define('KB_VERSION', '4.2.15.0');
-define('KB_RELEASE', '(Vanguard 1.0)');
-define('KB_CCP_DB_VERSION', '114986');
-define('KB_CCP_DB_DATE', 'Sep 29, 2015');
-define('ID_FEED_VERSION', 1.30);
+define('KB_VERSION', '4.2.16.0');
+define('KB_RELEASE', '(Parallax 1.0)');
+define('KB_CCP_DB_VERSION', '115480');
+define('KB_CCP_DB_DATE', 'Nov 4, 2015');
+define('ID_FEED_VERSION', 1.40);
 define('ZKB_FETCH_VERSION', 1.0);
 define('KB_APIKEY_LEGACY', 1);
 define('KB_APIKEY_CORP', 2);
