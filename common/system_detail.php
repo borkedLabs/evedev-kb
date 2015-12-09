@@ -165,6 +165,7 @@ class pSystemDetail extends pageAssembly
 		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
+                $this->queue("topList");
 	}
 
 	/**
@@ -215,6 +216,46 @@ class pSystemDetail extends pageAssembly
 	function addMenuItem($type, $name, $url = '')
 	{
 		$this->menuOptions[] = array($type, $name, $url);
+	}
+        
+        /**
+	 *
+	 * @return string HTML string for toplists
+	 */
+	function topList()
+	{
+		// Display the top location lists.
+
+                $LocationList = new TopList_Locations();
+                if ($this->view == 'losses') {
+			involved::load($LocationList, 'loss');
+		} else {
+			involved::load($LocationList, 'kill');
+		}
+		$LocationList->addSystem($this->system);
+		if (config::get('kill_classified')) {
+			$LocationList->setEndDate(gmdate('Y-m-d H:i', strtotime('now - '
+					.(config::get('kill_classified')).' hours')));
+		}
+                
+                $scl_id = (int)edkURI::getArg('scl_id', 2);
+		if ($scl_id) {
+			$LocationList->addVictimShipClass(intval($scl_id));
+                }
+                $LocationList->generate();
+                if($this->view == 'losses')
+                {
+                    $LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "losses", "losses", "cross");
+                }
+                
+                else
+                {
+                    $LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "losses", "losses", "cross");
+                }
+                
+                $html = $LocationListBox->generate();
+
+		return $html;
 	}
 
 	/**
