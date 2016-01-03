@@ -136,19 +136,6 @@ class pKillDetail extends pageAssembly
 
 		$this->finalblow = false;
 		
-		$pageTitle = $this->kill->getVictimShip()->getName()." | ".$this->kill->getVictimName()." | Killmail";
-		$description = sprintf('%s lost their %s worth %s ISK in %s', $this->kill->getVictimName(),
-																$this->kill->getVictimShip()->getName(),
-																number_format($this->kill->getVictimShip()->getPrice(),2),
-																$this->kill->getSystem()->getName());
-		$this->page->addMetaTag('description', $description);
-		$this->page->addMetaTag('og:description', $description);
-		$this->page->addMetaTag('og:title',$pageTitle);
-		$this->page->addMetaTag('twitter:title',$pageTitle);
-		$this->page->addMetaTag('og:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
-		$this->page->addMetaTag('twitter:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
-		$this->page->addMetaTag('og:url',edkURI::build(array('kll_id', $this->kll_id, true)));
-		$this->page->addMetaTag('twitter:card', 'summary');
 
 		$this->commenthtml = '';
 		// Check for posted comments.
@@ -926,6 +913,21 @@ class pKillDetail extends pageAssembly
 		$smarty->assign('shipValue', $this->ShipValue);
 		$smarty->assign('totalLoss', $TotalLoss);
 		$smarty->assign('BPOValue', $this->bp_value);
+
+		/* create meta details with isk values */
+		$pageTitle = $this->kill->getVictimShip()->getName()." | ".$this->kill->getVictimName()." | Killmail";
+		$description = sprintf('%s lost their %s worth %s ISK in %s', $this->kill->getVictimName(),
+																$this->kill->getVictimShip()->getName(),
+																$TotalLoss,
+																$this->kill->getSystem()->getName());
+		$this->page->addMetaTag('description', $description);
+		$this->page->addMetaTag('og:description', $description);
+		$this->page->addMetaTag('og:title',$pageTitle);
+		$this->page->addMetaTag('twitter:title',$pageTitle);
+		$this->page->addMetaTag('og:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
+		$this->page->addMetaTag('twitter:image',"http://image.eveonline.com/Render/".$this->kill->getVictimShip()->getID()."_128.png");
+		$this->page->addMetaTag('og:url',edkURI::build(array('kll_id', $this->kll_id, true)));
+		$this->page->addMetaTag('twitter:card', 'summary');
 
 		return $smarty->fetch(get_tpl('kill_detail_items_lost'));
 	}
