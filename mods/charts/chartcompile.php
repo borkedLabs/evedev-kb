@@ -461,10 +461,10 @@ function chartGenerateHTML($arrData)
     foreach ($arrData as $arSubData)
 	{
 		$barData['labels'][] = $arSubData[1];
-		$killObject->data[] = $arSubData[2];
-		$lossObject->data[] = $arSubData[3];
-		$iskKillObject->data[] = $arSubData[4];
-		$iskLossObject->data[] = $arSubData[5];
+		$killObject->data[] = (int)$arSubData[2];
+		$lossObject->data[] = (int)$arSubData[3];
+		$iskKillObject->data[] = (float)$arSubData[4];
+		$iskLossObject->data[] = (float)$arSubData[5];
 	}
 	
 	$html .= "var barChartData = ". json_encode($barData) . ";";
