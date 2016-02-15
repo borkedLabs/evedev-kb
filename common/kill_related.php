@@ -12,7 +12,6 @@
  */
 class pKillRelated extends pageAssembly
 {
-
 	/** @var array \SolarSystem */
 	protected $systems = array();
 	/** @var boolean */
@@ -53,7 +52,7 @@ class pKillRelated extends pageAssembly
 		$this->queue("overview");
 		$this->queue("battleStats");
 		$this->queue("killList");
-                $this->queue("metaTags");
+		$this->queue("metaTags");
 	}
 
 	/**
@@ -76,7 +75,7 @@ class pKillRelated extends pageAssembly
 	function start()
 	{
 		$this->page = new Page('Related kills & losses');
-		$this->page->addHeader('<meta name="robots" content="index, nofollow" />');
+		$this->page->addMetaTag('robots', 'noindex, nofollow');
 
 		$this->kll_id = (int) edkURI::getArg('kll_id', 1);
 		if (!$this->kll_id) {
@@ -634,43 +633,49 @@ class pKillRelated extends pageAssembly
 			'scl' => $shipc->getPoints(),
 			'ts' => $ts);
 	}
-        
-        
-        /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
 
-            $referenceSystem = SolarSystem::getByID(reset($this->systems));
-            // meta tag: title
-            $metaTagTitle = $referenceSystem->getName() . " | " . $referenceSystem->getRegionName() . " | Battle Report";
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
+	/** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
+		
+		$referenceSystem = SolarSystem::getByID(reset($this->systems));
+		// meta tag: title
+		$metaTagTitle = $referenceSystem->getName() . " | " . $referenceSystem->getRegionName() . " | Battle Report";
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
 
-            // build description
-            $date = gmdate("Y-m-d", strtotime($this->firstts));
-            $startTime = gmdate("H:i", strtotime($this->firstts));
-            $endTime = gmdate("H:i", strtotime($this->lastts));
-            $totalIskDestroyedM = round(($this->kill_summary->getTotalKillISK() + $this->kill_summary->getTotalLossISK()) / 1000000, 2);
-            $metaTagDescription = "Battle Report for ".$referenceSystem->getName() . " (".$referenceSystem->getRegionName().") from ".$date." (".$startTime." - ".$endTime."): ";
-            $metaTagDescription .= "Involved Pilots: ".(count($this->pilots['a'])+count($this->pilots['e'])).", Total ISK destroyed: ".$totalIskDestroyedM."M ISK";
+		// build description
+		$date = gmdate("Y-m-d", strtotime($this->firstts));
+		$startTime = gmdate("H:i", strtotime($this->firstts));
+		$endTime = gmdate("H:i", strtotime($this->lastts));
+		$totalIskDestroyedM = round(($this->kill_summary->getTotalKillISK() + $this->kill_summary->getTotalLossISK()) / 1000000, 2);
+		
+		
+		$metaTagDescription = sprintf("Battle Report for %s (%s) from %s (%s - %s); Involved Pilots: %s, Total ISK Destroyed: %.2fM ISK", 
+										$referenceSystem->getName(),
+										$referenceSystem->getRegionName(),
+										$date,
+										$startTime,
+										$endTime,
+										(count($this->pilots['a'])+count($this->pilots['e'])),
+										$totalIskDestroyedM );
 
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-                
-            // meta tag: image
-            $this->page->addHeader('<meta name="og:image" content="'.imageURL::getURL('Type', 3802, 64).'">');
-            $this->page->addHeader('<meta name="twitter:image" content="'.imageURL::getURL('Type', 3802, 64).'">');
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+			
+		// meta tag: image
+		$this->page->addMetaTag('og:image', imageURL::getURL('Type', 3802, 64) );
+		$this->page->addMetaTag('twitter:image', imageURL::getURL('Type', 3802, 64) );
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('kll_id', $this->kll_id, true)).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('kll_id', $this->kll_id, true)));
+		// meta tag: Twitter summary
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
 
 	public function menuSetup()
 	{

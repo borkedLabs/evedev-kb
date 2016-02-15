@@ -15,9 +15,8 @@ class pPilotDetail extends pageAssembly
 	public $page = null;
 	/** @var integer */
 	public $plt_id = false;
-        
-        /** @var Pilot the pilot */
-        public $pilot = null;
+	/** @var Pilot the pilot */
+	public $pilot = null;
 	/** @var string The selected view. */
 	protected $view = null;
 	/** @var array The list of views and their callbacks. */
@@ -28,8 +27,8 @@ class pPilotDetail extends pageAssembly
 	protected $lpoints = 0;
 	/** @var integer */
 	protected $points = 0;
-        /** @var double efficiency The pilot's efficiency */
-        protected $efficiency = 0;
+	/** @var double efficiency The pilot's efficiency */
+	protected $efficiency = 0;
 
 	/**
 
@@ -47,7 +46,7 @@ class pPilotDetail extends pageAssembly
 		$this->queue("stats");
 		$this->queue("summaryTable");
 		$this->queue("killList");
-                $this->queue("metaTags");
+		$this->queue("metaTags");
 	}
 
 	/**
@@ -88,7 +87,7 @@ class pPilotDetail extends pageAssembly
 
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 2));
 		if($this->view) {
-			$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
+			$this->page->addMetaTag('robots', 'noindex, nofollow');
 		}
 
 		if(!$this->plt_id) {
@@ -116,8 +115,14 @@ class pPilotDetail extends pageAssembly
 			exit;
 		}
 
-		if($this->plt_external_id) $this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
-		else $this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
+		if($this->plt_external_id)
+		{
+			$this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
+		}
+		else
+		{
+			$this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_id, 'plt_id')."' />");
+		}
 
 		$this->corp = $this->pilot->getCorp();
 		$this->alliance = $this->corp->getAlliance();
@@ -346,36 +351,41 @@ class pPilotDetail extends pageAssembly
 		}
 		return $menubox->generate();
 	}
-        
-         /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
-            // meta tag: title
-            $metaTagTitle = $this->pilot->getName() . " | Pilot Details";
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
-            
-            // build description
-            $metaTagDescription = $this->pilot->getName() . " (Member of " . $this->pilot->getCorp()->getName();
-            $metaTagDescription .= ") has " . $this->summary->getTotalKills() . " kills and " . $this->summary->getTotalLosses() . " losses (Efficiency: ".$this->efficiency."%) at " . config::get('cfg_kbtitle');
-            
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-                
-            // meta tag: image
-            $this->page->addHeader('<meta name="og:image" content="'.$this->pilot->getPortraitURL(128).'">');
-            $this->page->addHeader('<meta name="twitter:image" content="'.$this->pilot->getPortraitURL(128).'">');
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('plt_id', $this->plt_id, true)).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
+	 /** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
+		
+		// meta tag: title
+		$metaTagTitle = $this->pilot->getName() . " | Pilot Details";
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
+		
+		// build description
+		$metaTagDescription = sprintf("%s (Member of %s) has %d kills and %d losses (Efficiency: %d%%) at %s", 
+										$this->pilot->getName(),
+										$this->pilot->getCorp()->getName(),	
+										$this->summary->getTotalKills(),
+										$this->summary->getTotalLosses(),
+										$this->efficiency,
+										config::get('cfg_kbtitle') );
+		
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+
+		// meta tag: image
+		$this->page->addMetaTag('og:image', $this->pilot->getPortraitURL(128) );
+		$this->page->addMetaTag('twitter:image', $this->pilot->getPortraitURL(128) );
+
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('plt_id', $this->plt_id, true)));
+		// meta tag: Twitter summary
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
 
 	function points()
 	{

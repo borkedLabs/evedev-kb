@@ -11,23 +11,24 @@
  */
 class pSelf extends pageAssembly
 {
-    /**
-     * Construct the Alliance Details object.
-     * Set up the basic variables of the class and add the functions to the
-     *  build queue.
-     */
-    function __construct()
-    {
-        parent::__construct();
+	/**
+	 * Construct the Alliance Details object.
+	 * Set up the basic variables of the class and add the functions to the
+	 *  build queue.
+	 */
+	function __construct()
+	{
+		parent::__construct();
 
-        $this->queue("start");
-        //$this->queue("summaryTable");
-        $this->queue("display");
-    }
-    function start()
-    {
-        $this->page = new Page('Board Owners');
-    }
+		$this->queue("start");
+		//$this->queue("summaryTable");
+		$this->queue("display");
+	}
+
+	function start()
+	{
+		$this->page = new Page('Board Owners');
+	}
 
 	function summaryTable()
 	{

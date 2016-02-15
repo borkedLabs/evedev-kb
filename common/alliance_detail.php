@@ -21,9 +21,9 @@ class pAllianceDetail extends pageAssembly
 	public $all_external_id = 0;
 	/** @var Alliance */
 	public $alliance = null;
-        /** @var array allianceDetails alliance information
-         *  fetched from the API, populated in stats() */
-        public $allianceDetails = null;
+	/** @var array allianceDetails alliance information
+	 *  fetched from the API, populated in stats() */
+	public $allianceDetails = null;
 	/** @var string The selected view. */
 	protected $view = null;
 	/** @var array The list of views and their callbacks. */
@@ -64,7 +64,7 @@ class pAllianceDetail extends pageAssembly
 		$this->queue("stats");
 		$this->queue("summaryTable");
 		$this->queue("killList");
-                $this->queue("metaTags");
+		$this->queue("metaTags");
 	}
 
 	/**
@@ -92,7 +92,7 @@ class pAllianceDetail extends pageAssembly
 
 		// Search engines should only index the main view.
 		if ($this->view) {
-			$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
+			$this->page->addMetaTag('robots', 'noindex, nofollow');
 		}
 
 		if (!$this->all_id && !$this->all_external_id) {
@@ -264,10 +264,10 @@ class pAllianceDetail extends pageAssembly
 			} else {
 				$this->efficiency = 0;
 			}
-                        
-                        // store for use when adding meta tags
-                        $this->allianceDetails = $myAlliance;
-                        $this->allianceDetails['efficiency'] = $this->efficiency;
+
+			// store for use when adding meta tags
+			$this->allianceDetails = $myAlliance;
+			$this->allianceDetails['efficiency'] = $this->efficiency;
 		}
 		// The summary table is also used by the stats. Whichever is called
 		// first generates the table.
@@ -807,49 +807,58 @@ class pAllianceDetail extends pageAssembly
 		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
-	}
-        
-        /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
-            // meta tag: title
-            if($this->alliance->isFaction())
-            {
-                $metaTagTitle = $this->alliance->getName() . " | Faction Details";
-            }
-            
-            else
-            {
-                $metaTagTitle = $this->alliance->getName() . " | Alliance Details";
-            }
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
-            
-            // build description
-            $metaTagDescription = $this->alliance->getName();
-            if($this->allianceDetails)
-            {
-                $metaTagDescription .= " [" . $this->allianceDetails['shortName'] . "] (" . $this->allianceDetails['memberCount'] . " Members in " . count($this->allianceDetails['memberCorps']) . " Corps)";
-            }
-            $metaTagDescription .= " has " . $this->kill_summary->getTotalKills() . " kills and " . $this->kill_summary->getTotalLosses() . " losses (Efficiency: ".$this->efficiency."%) at " . config::get('cfg_kbtitle');
-            
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-                
-            // meta tag: image
-            $this->page->addHeader('<meta name="og:image" content="'.$this->alliance->getPortraitURL(128).'">');
-            $this->page->addHeader('<meta name="twitter:image" content="'.$this->alliance->getPortraitURL(128).'">');
+}
+	
+	/** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
+		
+		// meta tag: title
+		if($this->alliance->isFaction())
+		{
+			$metaTagTitle = $this->alliance->getName() . " | Faction Details";
+		}
+		
+		else
+		{
+			$metaTagTitle = $this->alliance->getName() . " | Alliance Details";
+		}
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('all_id', $this->all_id, true)).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
+		
+		// build description
+		$metaTagDescription = $this->alliance->getName();
+		if($this->allianceDetails)
+		{
+			$metaTagDescription .= sprintf(" [%s] (%d Members in %d Corps)", 
+											$this->allianceDetails['shortName'],
+											$this->allianceDetails['memberCount'],
+											count($this->allianceDetails['memberCorps']) );
+		}
+
+		$metaTagDescription .= sprintf(" has %d kills and %d losses (Efficiency: %d%%) at %s", 
+										$this->kill_summary->getTotalKills(),
+										$this->kill_summary->getTotalLosses(),
+										$this->efficiency,
+										config::get('cfg_kbtitle'));
+
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+
+		// meta tag: image
+		$this->page->addMetaTag('og:image', $this->alliance->getPortraitURL(128) );
+		$this->page->addMetaTag('twitter:image', $this->alliance->getPortraitURL(128) );
+		
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('all_id', $this->all_id, true)));
+		// meta tag: Twitter summary
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
 
 	/**
 	 * Build the menu.

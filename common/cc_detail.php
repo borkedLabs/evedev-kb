@@ -77,10 +77,8 @@ class pContractDetail extends pageAssembly
 		$title = 'Campaign details';
 
 		// SetTitle will escape the characters so unescape first.
-		$this->page->setTitle($title.' - '.html_entity_decode(
-				$this->contract->getName(), ENT_QUOTES, 'UTF-8'));
-		$this->page->addHeader('<meta name="robots" content="index, nofollow" />');
-
+		$this->page->setTitle($title.' - '.html_entity_decode($this->contract->getName(), ENT_QUOTES, 'UTF-8'));
+		$this->page->addMetaTag('robots', 'noindex, nofollow');
 	}
 
 	/**

@@ -48,7 +48,7 @@ class pAwards extends pageAssembly
 	function start()
 	{
 		$this->page = new Page(Language::get('page_awards'));
-		$this->page->addHeader('<meta name="robots" content="index, follow" />');
+		$this->page->addMetaTag('robots', 'noindex, nofollow');
 
 		$this->page->addHeader("<link rel='canonical' href='".edkURI::build(array('a', 'awards', true))."' />");
 

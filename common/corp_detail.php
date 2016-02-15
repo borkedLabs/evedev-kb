@@ -46,8 +46,8 @@ class pCorpDetail extends pageAssembly
 	private $pyear;
 	/** @var KillSummaryTable */
 	private $kill_summary = null;
-        /** @var double efficiency The corp's efficiency */
-        protected $efficiency = 0;
+	/** @var double efficiency The corp's efficiency */
+	protected $efficiency = 0;
 
 	
 	/**
@@ -64,8 +64,7 @@ class pCorpDetail extends pageAssembly
 		$this->queue("stats");
 		$this->queue("summaryTable");
 		$this->queue("killList");
-                $this->queue("metaTags");
-
+		$this->queue("metaTags");
 	}
 
 	/**
@@ -107,7 +106,7 @@ class pCorpDetail extends pageAssembly
 
 		$this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 2));
 		if($this->view) {
-			$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
+			$this->page->addMetaTag('robots', 'noindex, nofollow');
 		}
 
 		if(!$this->crp_id) {
@@ -693,45 +692,45 @@ class pCorpDetail extends pageAssembly
 		$this->addMenuItem("link","Most violent systems", edkURI::build($args, array('view', 'violent_systems', true)));
 		return "";
 	}
-        
-        /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
-            // meta tag: title
-            $metaTagTitle = $this->corp->getName() . " | Corp Details";
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
-            
-            // build description
-            $metaTagDescription = $this->corp->getName();
-            if($this->corpDetails['ticker'])
-            {
-                $metaTagDescription .= " [" . $this->corpDetails['ticker'] . "] (" . $this->corpDetails['memberCount'] . " pilots";
-            }
-            if(isset($this->corpDetails['allianceName']))
-            {
-                 $metaTagDescription .= ", member of " . $this->corpDetails['allianceName'];
-            }
-            $metaTagDescription .= ") has " . $this->kill_summary->getTotalKills() . " kills and " . $this->kill_summary->getTotalLosses() . " losses (Efficiency: ".$this->efficiency."%) at " . config::get('cfg_kbtitle');
-            
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-                
-            // meta tag: image
-            $this->page->addHeader('<meta name="og:image" content="'.$this->corp->getPortraitURL(128).'">');
-            $this->page->addHeader('<meta name="twitter:image" content="'.$this->corp->getPortraitURL(128).'">');
+	
+	/** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		// meta tag: title
+		$metaTagTitle = $this->corp->getName() . " | Corp Details";
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
+		
+		// build description
+		$metaTagDescription = $this->corp->getName();
+		if($this->corpDetails['ticker'])
+		{
+			$metaTagDescription .= " [" . $this->corpDetails['ticker'] . "] (" . $this->corpDetails['memberCount'] . " pilots";
+		}
+		if(isset($this->corpDetails['allianceName']))
+		{
+			 $metaTagDescription .= ", member of " . $this->corpDetails['allianceName'];
+		}
+		$metaTagDescription .= ") has " . $this->kill_summary->getTotalKills() . " kills and " . $this->kill_summary->getTotalLosses() . " losses (Efficiency: ".$this->efficiency."%) at " . config::get('cfg_kbtitle');
+		
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+			
+		// meta tag: image
+		$this->page->addMetaTag('og:image', $this->corp->getPortraitURL(128) );
+		$this->page->addMetaTag('twitter:image', $this->corp->getPortraitURL(128) );
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('crp_id', $this->crp_id, true)).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
-        
+		$this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
+		
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('crp_id', $this->crp_id, true)));
+
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
+	
 	/**
 	 * Build the menu.
 	 *

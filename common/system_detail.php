@@ -59,7 +59,7 @@ class pSystemDetail extends pageAssembly
 		$this->menuOptions = array();
 
 		$this->page = new Page();
-		$this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
+		$this->page->addMetaTag('robots', 'noindex, nofollow');
 
 		if (!$this->sys_id) {
 			echo 'no valid id supplied<br/>';
@@ -168,8 +168,8 @@ class pSystemDetail extends pageAssembly
 		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
-                $this->queue("topList");
-                $this->queue("metaTags");
+		$this->queue("topList");
+		$this->queue("metaTags");
 	}
 
 	/**
@@ -261,48 +261,54 @@ class pSystemDetail extends pageAssembly
 
 		return $html;
 	}
-        
-        /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
-            // meta tag: title
-            $metaTagTitle = $this->system->getName() . " | System Details";
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
-            
-            // build description
-            $metaTagDescription = "In ". $this->system->getName() . " " . $this->kill_summary->getTotalKills() . " ships have been killed and " . $this->kill_summary->getTotalLosses() . " ships have been lost at " . Config::get("cfg_kbtitle").".";
-            if($this->LocationList)
-            {
-                $this->LocationList->rewind();
-                $topLocation = $this->LocationList->getRow();
-                if($topLocation)
-                {
-                    $metaTagDescription .= " The most dangerous location is " . $topLocation['itemName'] . " (" . $topLocation['cnt'] . " kills).";
-                }
-            }            
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-                
-            // meta tag: image
-            $this->page->addHeader('<meta name="og:image" content="'.imageURL::getURL('Type', 3802, 64).'">');
-            $this->page->addHeader('<meta name="twitter:image" content="'.imageURL::getURL('Type', 3802, 64).'">');
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('sys_id', $this->sys_id, true)).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
+	/** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		// meta tag: title
+		$metaTagTitle = $this->system->getName() . " | System Details";
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
+
+		// build description
+		$metaTagDescription = sprintf("In %s %d ships have been killed and %d ships have been lost at %s", 
+										$this->system->getName(),
+										$this->kill_summary->getTotalKills(),
+										$this->kill_summary->getTotalLosses(),
+										Config::get("cfg_kbtitle") );
+
+		if($this->LocationList)
+		{
+			$this->LocationList->rewind();
+			$topLocation = $this->LocationList->getRow();
+			if($topLocation)
+			{
+				$metaTagDescription .= sprintf("The most dangerous location is %s (%d kills)", 
+												$topLocation['itemName'],
+												$topLocation['cnt'] );
+			}
+		}
+
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+
+		// meta tag: image
+		$this->page->addMetaTag('og:image', imageURL::getURL('Type', 3802, 64) );
+		$this->page->addMetaTag('twitter:image', imageURL::getURL('Type', 3802, 64) );
+
+		$this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
+
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('sys_id', $this->sys_id, true)));
+		// meta tag: Twitter summary
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
 
 	/**
-
 	 * Add a type of view to the options.
-
 	 *
 	 * @param string $view The name of the view to recognise.
 	 * @param mixed $callback The method to call when this view is used.
