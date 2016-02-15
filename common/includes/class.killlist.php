@@ -1084,7 +1084,7 @@ class KillList
 
 class CombinedKillList extends KillList
 {
-	function CombinedKillList()
+	function __construct()
 	{
 	// please only load killlists here
 		$this->lists = func_get_args();

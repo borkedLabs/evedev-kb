@@ -1,5 +1,5 @@
 -------------------------------------------
-Eve Development Network Killboard v4.2.17.0
+Eve Development Network Killboard v4.2.20.0
 -------------------------------------------
 
 // REQUIREMENTS
@@ -26,6 +26,67 @@ o/ EVE Development Network
 VERSION HISTORY
 ===============
 
+v4.2.20.0
+
+This is a hotfix release for v4.2.19.0, fixing idfeed
+
+Bugfixes:
+Fix: Removed call to removed function
+  
+-------------------------------------------
+v4.2.19.0
+
+Features:
+Updated EDK to 4.2.19.0 and CCP DB to YC-118-2 1.0.116998
+IDFeed from other EDK boards fetches mail from CREST
+
+Enhancements:
+Made cache object factory more robust against corrupted cache
+Added PHP time limit as hint to config option for maximum number of kills to fetch per run
+Generic module slot detection
+Added Meta Tags to main killboard pages
+Added rewind() method to top list base class
+Split cron jobs and improved logging
+Added documentation to constants
+Set old value fetcher to deprecated
+API Import: Made more robust against API errors
+Updated ACP Troubleshooting indicator icons
+Removed legacy EDK feed
+Updated IDFeed to v1.5 and zKBFetch to v1.1
+Removed reinforced mode feature
+Removed PHP4 style constructors from all classes
+Many code cleanups
+
+Bugfixes:
+CacheHandlerRedis: Fix for warning in PHP7
+Fixed default URL in ValueFetcherCrest
+Fix: Respect seconds when showing kills in time intervals
+Fix: Declared callback methods as static
+Fix: Try to load config after installation check
+Installer: Use mysqli and fixed removed/deprecated methods
+Fix: Declared gzopen in case only gzopen64 is available
+
+-------------------------------------------
+v4.2.18.0
+
+Features:
+Updated EDK to 4.2.18.0 and CCP DB to YC-118-1 1.0.116645
+Add Redis cache system based on memcache handler
+
+Enhancements:
+Increased memory limit for long-running cron jobs
+Added location top list to front page
+PHP errors should only be displayed on the frontend when `display_errors` is on.
+Made update 038 more robust
+
+Bugfixes:
+Fix: CREST link calculations for Drifter kills
+Renamed subselct in location toplist query
+Fix: Location toplist now respects PodNoobship setting
+Fixed location toplist description when showing kills
+Fix: Pilot name was missing from top Solokillers, Damagedealers and Finalblowe toplists
+
+-------------------------------------------
 v4.2.17.0
 
 Features:

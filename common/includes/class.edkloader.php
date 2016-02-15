@@ -50,27 +50,28 @@ class edkloader
 		}
 		$name = str_replace("_", "", $name);
 		
-		$subFilePath = __DIR__.'/'.$subdirname."/class.".$subfilename.".php";
-		
-		if (isset(self::$classes[$name]))
+		if (isset(self::$classes[$name])) 
 		{
-			require_once(__DIR__.'/'.self::$classes[$name]);
-			return true;
-		}
-		else if ($splitpos && is_file($subFilePath))
-		{
-			require_once $subFilePath;
-			return true;
+			require_once(self::$classes[$name]);
+				return true;
 		} 
-		else 
+                
+		if (isset($subdirname) && isset($subfilename)) 
 		{
-			if( file_exists(__DIR__.'/class.'.$name.".php") )
+			$includesFilePath = self::$dir."common/includes/".$subdirname."/class.".$subfilename.".php";
+			if(is_file($includesFilePath))
 			{
-				require_once(__DIR__.'/class.'.$name.".php");
+				require_once($includesFilePath);
 				return true;
 			}
+		} 
+                
+		if(file_exists(self::$dir."common/includes/class.".$name.".php")) 
+		{
+			include_once(self::$dir."common/includes/class.".$name.".php");
+			return true;
 		}
-		
+
 		return false;
 	}
 

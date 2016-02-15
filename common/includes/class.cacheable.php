@@ -35,10 +35,20 @@ abstract class Cacheable {
 		} else if (class_exists('Config', false) && !config::get('cfg_objcache')) {
 			return new $classname($id);
 		} else if (self::$cachehandler->exists($classname.$id)) {
-			return self::$cachehandler->get($classname.$id);
-		} else {
-			return new $classname($id);
-		}
+			$object = self::$cachehandler->get($classname.$id);
+                        // check for cache corruption
+                        if($object)
+                        {
+                            return $object;
+                        }
+                        
+                        else
+                        {
+                            self::$cachehandler->remove($classname.$id);
+                        }
+		} 
+                return new $classname($id);
+		
 
 	}
 
@@ -138,13 +148,15 @@ abstract class Cacheable {
 	/**
 	 * Initialise the cachehandler.
 	 *
-	 * Sets a new cachehandler, choosing between memcache or filecache
+	 * Sets a new cachehandler, choosing between memcache, redis or filecache
 	 * depending on killboard settings.
 	 */
 	private static function init()
 	{
 		if(defined('DB_USE_MEMCACHE') && DB_USE_MEMCACHE == true) {
 			self::$cachehandler = new CacheHandlerHashedMem();
+		} elseif(defined('DB_USE_REDIS') && DB_USE_REDIS == true) {
+			self::$cachehandler = new CacheHandlerHashedRedis();
 		} else {
 			self::$cachehandler = new CacheHandlerHashed();
 		}

@@ -59,25 +59,26 @@ class CrestParser
 			throw new CrestParserException("Invalid CREST URL.");
 		}        
 	}
-        
+
 	function parse($checkauth = true)
 	{
-
-                $urlPieces = explode("/", $this->crestUrl);
-                $this->externalID = (int)$urlPieces[4];
-                $this->crestHash = $urlPieces[5];
-                
-                // create killmail representation
-                // get instance
-                try
-                {
-                    $this->killmailRepresentation = SimpleCrest::getReferenceByUrl($this->crestUrl);
-                }
-                
-                catch(Exception $e)
-                {
-                    throw new CrestParserException($e->getMessage(), $e->getCode());
-                }
+		$this->validateCrestUrl();
+		
+		$urlPieces = explode("/", $this->crestUrl);
+		$this->externalID = (int)$urlPieces[4];
+		$this->crestHash = $urlPieces[5];
+		
+		// create killmail representation
+		// get instance
+		try
+		{
+			$this->killmailRepresentation = SimpleCrest::getReferenceByUrl($this->crestUrl);
+		}
+		
+		catch(Exception $e)
+		{
+			throw new CrestParserException($e->getMessage(), $e->getCode());
+		}
 
 		$qry = DBFactory::getDBQuery();
 
@@ -139,7 +140,7 @@ class CrestParser
 						.$this->getDupeID(), -4);
                         }
 			throw new CrestParserException("That killmail has already been posted <a href=\""
-						."?a=kill_detail&kll_id=".$this->getDupeID()
+						.edkURI::page('kill_detail', $this->getDupeID(), 'kll_id')
 						."\">here</a>.", -1);
 		}			
 		// Check external IDs
@@ -349,19 +350,19 @@ class CrestParser
                 $victim["shipTypeID"] = (int) @$mailRepresentation->victim->shipType->id;
                 $victim["shipTypeName"] = (string) @$mailRepresentation->victim->shipType->name;
                 $victim["characterID"] = (int) @$mailRepresentation->victim->character->id;
-                $victim["characterName"] = (string) $mailRepresentation->victim->character->name;
-                $victim["corporationID"] = (int) $mailRepresentation->victim->corporation->id;
-                $victim["corporationName"] = (string) $mailRepresentation->victim->corporation->name;
+                $victim["characterName"] = (string) @$mailRepresentation->victim->character->name;
+                $victim["corporationID"] = (int) @$mailRepresentation->victim->corporation->id;
+                $victim["corporationName"] = (string) @$mailRepresentation->victim->corporation->name;
                 $victim["allianceID"] = (int) @$mailRepresentation->victim->alliance->id;
                 $victim["allianceName"] = (string) @$mailRepresentation->victim->alliance->name;
-                $victim["factionID"] = (int) $mailRepresentation->victim->faction->id;
-                $victim["factionName"] = (string) $mailRepresentation->victim->faction->name;
-                $victim["damageTaken"] = (int) $mailRepresentation->victim->damageTaken;
-                $victim["moonName"] = (string) $mailRepresentation->moon->name;
-                $victim["moonID"] = (int) $mailRepresentation->moon->id;
-                $victim["x"] = (float) $mailRepresentation->victim->position->x;
-                $victim["y"] = (float) $mailRepresentation->victim->position->y;
-                $victim["z"] = (float) $mailRepresentation->victim->position->z;
+                $victim["factionID"] = (int) @$mailRepresentation->victim->faction->id;
+                $victim["factionName"] = (string) @$mailRepresentation->victim->faction->name;
+                $victim["damageTaken"] = (int) @$mailRepresentation->victim->damageTaken;
+                $victim["moonName"] = (string) @$mailRepresentation->moon->name;
+                $victim["moonID"] = (int) @$mailRepresentation->moon->id;
+                $victim["x"] = (float) @$mailRepresentation->victim->position->x;
+                $victim["y"] = (float) @$mailRepresentation->victim->position->y;
+                $victim["z"] = (float) @$mailRepresentation->victim->position->z;
                 return $victim;
         }
         

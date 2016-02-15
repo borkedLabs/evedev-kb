@@ -23,6 +23,14 @@ class Parser
 	private $trust = 0;
 	private static $loadExternals = true;
 
+	function uchr ($codes)
+	{ //converts characterset code-pages to ascii-compatible types
+		if (is_scalar($codes)) $codes= func_get_args();
+		$str= '';
+		foreach ($codes as $code) $str.= html_entity_decode('&#'.$code.';',ENT_NOQUOTES,'UTF-8');
+		return $str;
+	}
+
 	function __construct($killmail, $externalID = null, $loadExternals = true)
 	{
 		self::$loadExternals = $loadExternals;

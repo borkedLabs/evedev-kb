@@ -4,6 +4,9 @@ class ZkbCommand extends CronCommand
 {
 	public function execute()
 	{
+		$cronStartTime = microtime(true);
+		println("Starting zKB Import");
+
 		$config = new Config(KB_SITE);
 
 		$fetchConfigs = ZKBFetch::getAll();
@@ -12,6 +15,8 @@ class ZkbCommand extends CronCommand
 		{
 			$this->getZKBApi($fetchConfig);
 		}
+		
+		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 
 	private function getZKBApi(&$fetchConfig)
@@ -37,6 +42,9 @@ class ZkbCommand extends CronCommand
 			println(count($fetchConfig->getPosted())." kills were posted and ".
 						count($fetchConfig->getSkipped())." were skipped. ");
 						
+            println(count($fetchConfig->getPosted())." kills were posted and ".count($fetchConfig->getSkipped())." were skipped "
+                                                . "(".$fetchConfig->getNumberOfKillsFetched()." kills fetched)");
+			
 			println("Timestamp of last kill: ".strftime('%Y-%m-%d %H:%M:%S', $fetchConfig->getLastKillTimestamp()));
 			
 			if ($fetchConfig->getParseMessages()) 

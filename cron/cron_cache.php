@@ -6,13 +6,25 @@ class CacheCommand extends CronCommand
 	{
 		$config = new Config(KB_SITE);
 
-		println("Running Cron_Cache on " . gmdate("M d Y H:i"));
-		println("");
+		println("Starting Alliance list update");
+		$cronStartTime = microtime(true);
 
 		// Alliance
-		$myAlliAPI = new API_Alliance();
+		$allianceApi = new API_Alliance();
 		
 		println("Caching Alliance XML");
-		$Allitemp .= $myAlliAPI->fetchalliances();
+		$allianceApi->fetchalliances();
+		if(!is_null($allianceApi->getError()))
+		{
+			println("Error occurred while fetching Alliance list:");
+			println($allianceApi->getMessage());
+		}
+		else
+		{
+			println("Finished successfully");
+		}
+		
+		
+		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 }

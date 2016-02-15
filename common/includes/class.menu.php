@@ -15,7 +15,7 @@
 class Menu
 {
 	private $menu = array();
-	
+
 	/**
 	 * Return the array of menu options.
 	 *

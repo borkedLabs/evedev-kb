@@ -34,6 +34,8 @@ class IDFeed
 	private $lastInternalReturned = 0;
 	private $posted = array();
 	private $skipped = array();
+        /** @param int accumulated number of kills present in the XML */
+        protected $numberOfKillsFetched = 0;
 	private $duplicate = array();
 	private $time = '';
 	private $cachedTime = '';
@@ -45,6 +47,9 @@ class IDFeed
         private $isApiFetch = FALSE;
         /** flag indicating whether to skip NPC only losses */
         private $skipNpcOnly;
+        
+        /** field for counting the number of kills fetched from CREST; we need to keep track for not running into PHP's time limit */
+        protected static $NUMBER_OF_KILLS_FETCHED_FROM_CREST = 0;
         
         /** 
          * flag indicating the slot for an item in an incoming feed/API
@@ -400,6 +405,7 @@ class IDFeed
 	 */
 	function processFeed()
 	{
+                API_Helpers::autoSetMaxNumberOfKillsToProcess();
 		// Remove error messages at the top.
 		if (strpos($this->xml, "<?xml") !== 0) {
 			$this->xml = substr($this->xml, strpos($this->xml, "<?xml"));
@@ -445,8 +451,16 @@ class IDFeed
 		// We need raw mails for the mailhash so temporarily disable
 		// classification
 		config::put('kill_classified', 0);
+                $maxNumberOfKillsPerRun = config::get('maxNumberOfKillsPerRun');
 		if (!is_null($sxe->result->rowset->row)) {
-			foreach ($sxe->result->rowset->row as $row) {
+                        $this->numberOfKillsFetched += count($sxe->result->rowset->row);
+                        foreach ($sxe->result->rowset->row as $row) 
+                        {
+                                // check if we reached the maximum number of kills we may fetch
+                                if(self::$NUMBER_OF_KILLS_FETCHED_FROM_CREST >= $maxNumberOfKillsPerRun)
+                                {
+                                    break;
+                                }
 				$this->processKill($row);
 			}
 		}
@@ -478,7 +492,6 @@ class IDFeed
 
 			$kill->setTimeStamp(strval($row['killTime']));
 
-			$qrow = $qry->getRow();
 			$sys = SolarSystem::getByID((int)$row['solarSystemID']);
 			if (!$sys->getName()) {
 				return false;
@@ -538,15 +551,66 @@ class IDFeed
                                 // will be thrown creating the raw mail, and thus creating the kill's hash, fatally fails
                                 $errorstring = "";
                                 $killException = null;
-                                try
-                                {
-                                    $id = $kill->add();
-                                } 
                                 
-                                catch (KillException $ex) 
+                                // check if we can fetch from CREST
+                                if(!is_null($kill->getCrestUrl()))
                                 {
-                                    $killException = $ex;
-                                    $id = 0;
+                                    $CrestParser = new CrestParser($kill->getCrestUrl());
+                                    try
+                                    {
+                                        $id = $CrestParser->parse(true);
+                                    } 
+                                    catch (CrestParserException $e) 
+                                    {
+                                        $killException = $e;
+                                        $id = 0;
+                                        
+                                        // special treatment for dupes (-1) / permanently deleted kills (-4)
+                                        if($e->getCode() < 0)
+                                        {
+                                            $id = $e->getCode();
+                                        }
+                                        
+                                        // CREST error due to incorrect CREST hash
+                                        else if($e->getCode() == 403)
+                                        {
+                                            // check if kills with invalid CREST hash should be posted as non-verified kills
+                                            if(!config::get('skipNonVerifyableKills'))
+                                            {
+                                                // reset external ID so the kill is not API verified
+                                                $kill->setExternalID(null);
+                                                try
+                                                {
+                                                    $id = $kill->add();
+                                                } 
+
+                                                catch (KillException $ex) 
+                                                {
+                                                    $killException = $ex;
+                                                    $id = 0;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $killException = new KillException("Corrupt kill information provided, skipping");
+                                            }
+                                        }
+                                    }
+                                    self::$NUMBER_OF_KILLS_FETCHED_FROM_CREST++;
+                                }
+                                
+                                else
+                                {
+                                    try
+                                    {
+                                        $id = $kill->add();
+                                    } 
+
+                                    catch (KillException $ex) 
+                                    {
+                                        $killException = $ex;
+                                        $id = 0;
+                                    }
                                 }
 
 				if ($id == 0) {
@@ -582,8 +646,8 @@ class IDFeed
                                                          . "kb3_kills.kll_z = ".$kill->getZCoordinate()." WHERE kb3_kills.kll_id = $id AND"
 							." (kb3_kills.kll_external_id IS NULL OR kb3_kills.kll_x = 0)");
 				   }
-					$this->duplicate[] = array($externalID, $internalID, $id);
-					$skip = true;
+                                    $this->duplicate[] = array($externalID, $internalID, $id);
+                                    $skip = true;
 				} else {
 					$this->posted[] = array($externalID, $internalID,
 						$id);
@@ -641,7 +705,35 @@ class IDFeed
 		if ($this->lastInternalReturned < $internalID) {
 			$this->lastInternalReturned = $internalID;
 		}
+                $this->updateLastReturnedId();
+                
 	}
+        
+        /**
+         * updates the last returned kill ID for this feed in the killboard's
+         * configuration; this is called after processing each kill, in case
+         * fetching hits the time limit and is aborted
+         */
+        private function updateLastReturnedId()
+        {
+            // does not apply for fetching from API
+            if($this->isApiFetch)
+            {
+                return;
+            }
+            
+            $feeds = config::get('fetch_idfeeds');
+            foreach($feeds AS $i => $feed)
+            {
+                if($this->url == $feed['url'])
+                {
+                    $feed['lastkill'] = $this->lastInternalReturned;
+                    $feeds[$i] = $feed;
+                    break;
+                }
+            }
+            config::set('fetch_idfeeds', $feeds);
+        }
 
 	/**
 	 * @param SimpleXMLElement $row
@@ -897,6 +989,14 @@ class IDFeed
 	{
 		return $this->posted;
 	}
+        
+        /**
+         * return the accumulated number of kills by zKB
+         */
+        function getNumberOfKillsFetched()
+        {
+            return $this->numberOfKillsFetched;
+        }
 
 	/**
 	 * Return an array of skipped kill IDs
@@ -940,6 +1040,16 @@ class IDFeed
 	private function killExists(&$row)
 	{
 		$qry = DBFactory::getDBQuery(true);
+                if ((int)$row['killID'] > 0) {
+			$qry->execute("SELECT kll_id FROM kb3_kills "
+					."WHERE kll_external_id = ".(int)$row['killID']);
+			if ($qry->recordCount()) {
+				$qrow = $qry->getRow();
+				$id = $qrow['kll_id'];
+				return $id;
+			}
+		}
+                
 		if (strlen($row['hash']) > 1) {
 			$qry->execute("SELECT kll_id, kll_external_id, kll_trust FROM kb3_mails"
 					." WHERE kll_hash = 0x".$qry->escape(strval($row['hash'])));
@@ -954,15 +1064,6 @@ class IDFeed
 							(int)$row['killID']." WHERE kb3_mails.kll_id = $id AND ".
 							"kb3_mails.kll_external_id IS NULL");					
 				}
-				return $id;
-			}
-		}
-		if ((int)$row['killID'] > 0) {
-			$qry->execute("SELECT kll_id FROM kb3_kills "
-					."WHERE kll_external_id = ".(int)$row['killID']);
-			if ($qry->recordCount()) {
-				$qrow = $qry->getRow();
-				$id = $qrow['kll_id'];
 				return $id;
 			}
 		}

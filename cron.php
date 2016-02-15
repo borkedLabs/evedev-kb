@@ -11,9 +11,6 @@ require_once __DIR__.'/kbconfig.php';
 require_once __DIR__.'/common/includes/globals.php';
 require_once __DIR__.'/common/includes/db.php';
 
-// load mods
-loadMods();
-
 $consoleArgs = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 if( $consoleArgs == null || count($consoleArgs) < 2 )
 {

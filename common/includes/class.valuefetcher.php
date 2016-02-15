@@ -8,6 +8,7 @@
 
 /**
  * @package EDK
+ * @deprecated This class is kept solely for compatibility with mods based on this value Fetcher!
  */
 class valueFetcher
 {
@@ -18,7 +19,7 @@ class valueFetcher
 	 * @param string $url URL for item price xml
 	 * @param string $factionurl URL for faction price xml
 	 */
-	public function valueFetcher($url,
+	public function __construct($url,
 			$factionurl = 'http://prices.c0rporation.com/faction.xml')
 	{
 		// Check the input

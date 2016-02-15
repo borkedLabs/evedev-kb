@@ -25,6 +25,10 @@ class ContractList
 	/** @var integer */
 	private $limit;
 
+	function __construct()
+	{
+	}
+
 	private function execQuery()
 	{
 		if ($this->executed) {

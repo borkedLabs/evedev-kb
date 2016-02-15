@@ -25,7 +25,7 @@ class ValueFetcherCrest
      * @param string $url URL for item price xml
      * @param string $factionurl URL for faction price xml
      */
-    function __construct($url)
+    public function __construct($url)
     {
         // Check the input
         if ($url != null && $url != "" && (substr($url, 0, 7) == 'http://' || substr($url, 0, 8) == 'https://')) 
@@ -35,7 +35,7 @@ class ValueFetcherCrest
         
         else
         {
-            $this->url = $CREST_URL;
+            $this->url = CREST_PUBLIC_URL . self::$CREST_PRICES_ENDPOINT;
         }
     }
 

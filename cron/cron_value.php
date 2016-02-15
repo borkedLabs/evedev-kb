@@ -4,10 +4,13 @@ class ValueCommand extends CronCommand
 {
 	public function execute()
 	{
+		$cronStartTime = microtime(true);
+		println("Starting CREST item value update");
+
 		$url = config::get('itemPriceCrestUrl');
 		if ($url == null || $url == "")
 		{
-			$url = ValueFetcherCrest::$CREST_URL;
+			$url = CREST_PUBLIC_URL . ValueFetcherCrest::$CREST_PRICES_ENDPOINT;
 		}
 
 		$fetch = new ValueFetcherCrest($url);
@@ -17,5 +20,6 @@ class ValueCommand extends CronCommand
 
 		// Echo result
 		println($count." Items updated");
+		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 }
