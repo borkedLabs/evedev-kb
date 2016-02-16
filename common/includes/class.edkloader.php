@@ -37,6 +37,7 @@ class edkloader
 	{
 		$name = strtolower($name);
 		$splitpos = strpos($name, "_");
+		$subdirname = '';
 
 		if ($splitpos > 0)
 		{
@@ -53,23 +54,23 @@ class edkloader
 		if (isset(self::$classes[$name])) 
 		{
 			require_once(self::$classes[$name]);
-				return true;
+			return true;
 		} 
-                
-		if (isset($subdirname) && isset($subfilename)) 
+		
+		$subFilePath = __DIR__.'/'.$subdirname."/class.".$subfilename.".php";
+		
+		if ($splitpos && is_file($subFilePath))
 		{
-			$includesFilePath = self::$dir."common/includes/".$subdirname."/class.".$subfilename.".php";
-			if(is_file($includesFilePath))
+			require_once $subFilePath;
+			return true;
+		} 
+		else 
+		{
+			if( file_exists(__DIR__.'/class.'.$name.".php") )
 			{
-				require_once($includesFilePath);
+				require_once(__DIR__.'/class.'.$name.".php");
 				return true;
 			}
-		} 
-                
-		if(file_exists(self::$dir."common/includes/class.".$name.".php")) 
-		{
-			include_once(self::$dir."common/includes/class.".$name.".php");
-			return true;
 		}
 
 		return false;
