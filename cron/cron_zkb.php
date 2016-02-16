@@ -4,7 +4,6 @@ class ZkbCommand extends CronCommand
 {
 	public function execute()
 	{
-		$cronStartTime = microtime(true);
 		println("Starting zKB Import");
 
 		$config = new Config(KB_SITE);
@@ -15,8 +14,6 @@ class ZkbCommand extends CronCommand
 		{
 			$this->getZKBApi($fetchConfig);
 		}
-		
-		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 
 	private function getZKBApi(&$fetchConfig)

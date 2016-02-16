@@ -5,7 +5,6 @@ class ClearupCommand extends CronCommand
 	public function execute()
 	{
 		println("Starting cache clearup");
-		$cronStartTime = microtime(true);
 
 		/** @var integer Maximum size for the store in megabytes. */
 		$maxStoreSize = 512;
@@ -53,7 +52,5 @@ class ClearupCommand extends CronCommand
 			println("Page cache re-enabled");
 			config::set('cache_enabled', 1);
 		}
-		
-		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 }

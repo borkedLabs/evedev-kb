@@ -17,7 +17,6 @@ class ApiCommand extends CronCommand
 			define('KB_CACHEDIR', $dir);
 		}
 		
-		$cronStartTime = microtime(true);
 		println("Starting API Import");
 
 		$myEveAPI = new API_KillLog();
@@ -36,7 +35,5 @@ class ApiCommand extends CronCommand
 			println("Importing Mails for " . $row['key_name']);
 			println($myEveAPI->Import($row['key_name'], $row['key_id'], $row['key_key'], $row['key_flags']));
 		}
-
-		println("Time taken = ".(microtime(true) - $cronStartTime)." seconds.");
 	}
 }

@@ -5,7 +5,6 @@ class FeedCommand extends CronCommand
 	public function execute()
 	{
 		println("Starting IDFeed Import");
-		$cronStartTime = microtime(true);
 
 		$config = new Config(KB_SITE);
 
@@ -21,8 +20,6 @@ class FeedCommand extends CronCommand
 			println("Fetching IDFeed: ".$feedId);
 			$this->getIDFeed($feedId, $feedConfig);
 		}
-		
-		println("Time taken = ".(microtime(true) - $cronStartTime)." seconds");
 	}
 	
 	protected function getIDFeed(&$key, &$val)

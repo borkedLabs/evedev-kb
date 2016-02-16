@@ -7,7 +7,6 @@ class CacheCommand extends CronCommand
 		$config = new Config(KB_SITE);
 
 		println("Starting Alliance list update");
-		$cronStartTime = microtime(true);
 
 		// Alliance
 		$allianceApi = new API_Alliance();
@@ -23,8 +22,5 @@ class CacheCommand extends CronCommand
 		{
 			println("Finished successfully");
 		}
-		
-		
-		println('Time taken = '.(microtime(true) - $cronStartTime).' seconds.');
 	}
 }
