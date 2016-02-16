@@ -116,18 +116,18 @@ abstract class statSummary
 	 *
 	 * @param Kill $kill
 	 */
-	abstract public static function addKill($kill);
+	public static function addKill($kill);
 	/**
 	 * Delete a Kill and remove its value from the summary.
 	 *
 	 * @param Kill $kill
 	 */
-	abstract public static function delKill($kill);
+	public static function delKill($kill);
 	/**
 	 * Update the summary table when a kill value changes.
 	 *
 	 * @param Kill $kill
 	 * @param float $difference
 	 */
-	abstract public static function update($kill, $difference);
+	public static function update($kill, $difference);
 }
