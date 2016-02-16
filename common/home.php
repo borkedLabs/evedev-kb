@@ -426,12 +426,12 @@ class pHome extends pageAssembly
 					.$this->getCurrentPeriod(), "points", "redcross");
 			$html .= $tkbox->generate();
             
-                        // load involved for top locations
-                        involved::load($LocationList, 'kill');
-                        $LocationList->generate();
-                        $LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "kills in ".$this->getCurrentPeriod(), "kills", "cross");
-                        $html .= $LocationListBox->generate();
-            
+			// load involved for top locations
+			involved::load($LocationList, 'kill');
+			$LocationList->generate();
+			$LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "kills in ".$this->getCurrentPeriod(), "kills", "cross");
+			$html .= $LocationListBox->generate();
+
 		} else {
 			$tllist = new TopList_Losses();
 			$this->loadTime($tllist);
@@ -446,11 +446,11 @@ class pHome extends pageAssembly
 					.$this->getCurrentPeriod(), "losses", "moon");
 			$html = $tlbox->generate();
             
-                        // load involved for top locations
-                        involved::load($LocationList, 'loss');
-                        $LocationList->generate();
-                        $LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "losses in ".$this->getCurrentPeriod(), "losses", "cross");
-                        $html .= $LocationListBox->generate();
+			// load involved for top locations
+			involved::load($LocationList, 'loss');
+			$LocationList->generate();
+			$LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "losses in ".$this->getCurrentPeriod(), "losses", "cross");
+			$html .= $LocationListBox->generate();
 		}
 		return $html;
 
