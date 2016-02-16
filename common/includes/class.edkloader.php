@@ -53,7 +53,7 @@ class edkloader
 		
 		if (isset(self::$classes[$name])) 
 		{
-			require_once(self::$classes[$name]);
+			require_once(__DIR__.'/'.self::$classes[$name]);
 			return true;
 		} 
 		
