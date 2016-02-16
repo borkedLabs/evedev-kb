@@ -336,62 +336,61 @@ class pHome extends pageAssembly
 			return $clock->generate();
 		}
 	}
-        
-        /** 
-         * adds meta tags for Twitter Summary Card and OpenGraph tags
-         * to the HTML header
-         */
-        function metaTags()
-        {
-            // build page description depending on view and time interval
-            if($this->view == 'losses')
-            {
-                $metaTagDescription = "Losses";
-            }
-            
-            else if($this->showcombined)
-            {
-                $metaTagDescription = "Kills and Losses";
-            }
-            
-            else
-            {
-                $metaTagDescription = "Kills";
-            }
-            
-            $metaTagDescription .= " in ".$this->getCurrentPeriod(). ".";
-            
-            if($this->topPilot)
-            {
-                // meta tag: image
-                $this->page->addHeader('<meta name="og:image" content="'.$this->topPilot->getPortraitURL(128).'">');
-                $this->page->addHeader('<meta name="twitter:image" content="'.$this->topPilot->getPortraitURL(128).'">');
-                
-                $metaTagDescription .= " Top ";
-                if($this->view == 'losses')
-                {
-                    $metaTagDescription .= "loser: ";
-                }
-                else 
-                {
-                    $metaTagDescription .= "killer: ";
-                }
-                $metaTagDescription .= $this->topPilot->getName() . " (" . $this->topPilot->getCorp()->getName() .").";
-            }
 
-            $this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
-            $this->page->addHeader('<meta name="description" content="'.$metaTagDescription.'">');
-            $this->page->addHeader('<meta name="og:description" content="'.$metaTagDescription.'">');
-            // meta tag: title
-            $metaTagTitle = config::get('cfg_kbtitle') . " | Front Page";
-            $this->page->addHeader('<meta name="og:title" content="'.$metaTagTitle.'">');
-            $this->page->addHeader('<meta name="twitter:title" content="'.$metaTagTitle.'">');
-            
-            // meta tag: URL
-            $this->page->addHeader('<meta name="og:url" content="'.edkURI::build(array('home')).'">');
-            // meta tag: Twitter summary
-            $this->page->addHeader('<meta name="twitter:card" content="summary">');
-        }
+	/** 
+	 * adds meta tags for Twitter Summary Card and OpenGraph tags
+	 * to the HTML header
+	 */
+	function metaTags()
+	{
+		// build page description depending on view and time interval
+		if($this->view == 'losses')
+		{
+			$metaTagDescription = "Losses";
+		}
+		else if($this->showcombined)
+		{
+			$metaTagDescription = "Kills and Losses";
+		}
+		else
+		{
+			$metaTagDescription = "Kills";
+		}
+		
+		$metaTagDescription .= " in ".$this->getCurrentPeriod(). ".";
+		
+		if($this->topPilot)
+		{
+			// meta tag: image
+			$this->page->addMetaTag('og:image', $this->topPilot->getPortraitURL(128) );
+			$this->page->addMetaTag('twitter:image', $this->topPilot->getPortraitURL(128) );
+			
+			$metaTagDescription .= " Top ";
+			if($this->view == 'losses')
+			{
+				$metaTagDescription .= "loser: ";
+			}
+			else 
+			{
+				$metaTagDescription .= "killer: ";
+			}
+			$metaTagDescription .= $this->topPilot->getName() . " (" . $this->topPilot->getCorp()->getName() .").";
+		}
+
+		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
+		$this->page->addMetaTag('description', $metaTagDescription);
+		$this->page->addMetaTag('og:description', $metaTagDescription);
+
+		// meta tag: title
+		$metaTagTitle = config::get('cfg_kbtitle') . " | Front Page";
+		$this->page->addMetaTag('og:title',$metaTagTitle);
+		$this->page->addMetaTag('twitter:title',$metaTagTitle);
+		
+		// meta tag: URL
+		$this->page->addMetaTag('og:url',edkURI::build(array('home')));
+		// meta tag: Twitter summary
+		$this->page->addMetaTag('twitter:card', 'summary');
+	}
 
 	/**
 	 *
@@ -467,7 +466,7 @@ class pHome extends pageAssembly
 		$this->queue('menu');
 		$this->queue('clock');
 		$this->queue('topLists');
-                $this->queue('metaTags');
+		$this->queue('metaTags');
 	}
 
 	/**
