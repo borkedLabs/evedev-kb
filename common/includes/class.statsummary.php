@@ -116,18 +116,29 @@ abstract class statSummary
 	 *
 	 * @param Kill $kill
 	 */
-	public static function addKill($kill);
+	public static function addKill($kill)
+	{
+		throw new BadMethodCallException("Method not implemented");
+	}
+
 	/**
 	 * Delete a Kill and remove its value from the summary.
 	 *
 	 * @param Kill $kill
 	 */
-	public static function delKill($kill);
+	public static function delKill($kill)
+	{
+		throw new BadMethodCallException("Method not implemented");
+	}
+
 	/**
 	 * Update the summary table when a kill value changes.
 	 *
 	 * @param Kill $kill
 	 * @param float $difference
 	 */
-	public static function update($kill, $difference);
+	public static function update($kill, $difference)
+	{
+		throw new BadMethodCallException("Method not implemented");
+	}
 }
