@@ -43,7 +43,7 @@ class session
 	{
 		session_name("EDK_".substr(hash('md5', KB_SITE),0,6));
 		session_start();
-		if(function_exists('session_regenerate_id')) session_regenerate_id();
+		session_regenerate_id();
 		$_SESSION['admin'] = $admin;
 		$_SESSION['rsite'] = $_SERVER["HTTP_HOST"];
 		$_SESSION['site'] = md5(KB_SITE);
