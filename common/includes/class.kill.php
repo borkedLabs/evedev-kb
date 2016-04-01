@@ -16,12 +16,9 @@ class KillException extends Exception {}
  */
 class Kill extends Cacheable
 {
+	/** @const the base URL for the public CREST killmail endpoint */
+	public static $CREST_KILLMAIL_ENDPOINT = '/killmails/';
 	
-		/** @const the base URL for the public CREST killmail endpoint */
-		public static $CREST_KILLMAIL_ENDPOINT = '/killmails/';
-		
-		
-		
 	/**
 	 * The ID for this kill
 	 * @var integer
@@ -700,26 +697,30 @@ class Kill extends Cacheable
 
 			foreach($this->destroyeditems_ as $destroyed) {
 				$item = $destroyed->getItem();
-				$mail .= $item->getName();
-				if ($destroyed->getQuantity() > 1) {
-					$mail .= ", Qty: ".$destroyed->getQuantity();
+				
+				if($item != null)
+				{
+					$mail .= $item->getName();
+					if ($destroyed->getQuantity() > 1) {
+						$mail .= ", Qty: ".$destroyed->getQuantity();
+					}
+									
+					if ($destroyed->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+						$mail .= " (Copy)";
+					}
+									
+					$flagID = InventoryFlag::collapse($destroyed->getLocationID());
+					if ($destroyed->getLocationID() == InventoryFlag::$CARGO) {
+						$mail .= " (Cargo)";
+					} else if ($destroyed->getLocationID() == InventoryFlag::$DRONE_BAY) {
+						$mail .= " (Drone Bay)";
+					} else if ($destroyed->getLocationID() == InventoryFlag::$IMPLANT) {
+						$mail .= " (Implant)";
+					} else if ($destroyed->getLocationID() == InventoryFlag::$OTHER) {
+						$mail .= " (Other)";
+					}
+					$mail .= "\r\n";
 				}
-								
-								if ($destroyed->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
-					$mail .= " (Copy)";
-								}
-								
-								$flagID = InventoryFlag::collapse($destroyed->getLocationID());
-				if ($destroyed->getLocationID() == InventoryFlag::$CARGO) {
-					$mail .= " (Cargo)";
-				} else if ($destroyed->getLocationID() == InventoryFlag::$DRONE_BAY) {
-					$mail .= " (Drone Bay)";
-				} else if ($destroyed->getLocationID() == InventoryFlag::$IMPLANT) {
-					$mail .= " (Implant)";
-				} else if ($destroyed->getLocationID() == InventoryFlag::$OTHER) {
-					$mail .= " (Other)";
-				}
-				$mail .= "\r\n";
 			}
 		}
 
@@ -729,25 +730,28 @@ class Kill extends Cacheable
 
 			foreach($this->droppeditems_ as $dropped) {
 				$item = $dropped->getItem();
-				$mail .= $item->getName();
-				if ($dropped->getQuantity() > 1) {
-					$mail .= ", Qty: ".$dropped->getQuantity();
+				if( $item != null )
+				{
+					$mail .= $item->getName();
+					if ($dropped->getQuantity() > 1) {
+						$mail .= ", Qty: ".$dropped->getQuantity();
+					}
+									
+					if ($dropped->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+						$mail .= " (Copy)";
+					}
+									
+					if ($dropped->getLocationID() == InventoryFlag::$CARGO) {
+						$mail .= " (Cargo)";
+					} else if ($dropped->getLocationID() == InventoryFlag::$DRONE_BAY) {
+						$mail .= " (Drone Bay)";
+					} else if ($dropped->getLocationID() == InventoryFlag::$IMPLANT) {
+						$mail .= " (Implant)";
+					} else if ($dropped->getLocationID() == InventoryFlag::$OTHER) {
+						$mail .= " (Other)";
+					}
+					$mail .= "\r\n";
 				}
-								
-								if ($dropped->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
-					$mail .= " (Copy)";
-								}
-								
-				if ($dropped->getLocationID() == InventoryFlag::$CARGO) {
-					$mail .= " (Cargo)";
-				} else if ($dropped->getLocationID() == InventoryFlag::$DRONE_BAY) {
-					$mail .= " (Drone Bay)";
-				} else if ($dropped->getLocationID() == InventoryFlag::$IMPLANT) {
-					$mail .= " (Implant)";
-				} else if ($dropped->getLocationID() == InventoryFlag::$OTHER) {
-					$mail .= " (Other)";
-				}
-				$mail .= "\r\n";
 			}
 		}
 
@@ -948,9 +952,12 @@ class Kill extends Cacheable
 			$destroyedlist = new ItemList(null, true);
 			$destroyedlist->addKillDestroyed($this->id);
 			while($item = $destroyedlist->getItem()) {
+				if($item == null)
+					continue;
+
 				$destroyed = new DestroyedItem($item,
 					$item->getAttribute('itd_quantity'),
-										$item->getAttribute('itd_singleton'),
+					$item->getAttribute('itd_singleton'),
 					$item->getAttribute('itl_flagText'),
 					$item->getAttribute('itd_itl_id'));
 				$this->destroyeditems_[] = $destroyed;
@@ -958,16 +965,19 @@ class Kill extends Cacheable
 			$droppedlist = new ItemList(null, true);
 			$droppedlist->addKillDropped($this->id);
 			while($item = $droppedlist->getItem()) {
+				if($item == null)
+					continue;
+
 				$dropped = new DestroyedItem($item,
 					$item->getAttribute('itd_quantity'),
-										$item->getAttribute('itd_singleton'),
+					$item->getAttribute('itd_singleton'),
 					$item->getAttribute('itl_flagText'),
 					$item->getAttribute('itd_itl_id'));
 				$this->droppeditems_[] = $dropped;
 			}
 						
-						// try to calculate the nearest celestial and the distance from it
-						$this->calculateNearestCelestial();
+			// try to calculate the nearest celestial and the distance from it
+			$this->calculateNearestCelestial();
 			$this->executed = true;
 			$this->putCache();
 		}
@@ -1402,14 +1412,29 @@ class Kill extends Cacheable
 		$value = 0;
 		foreach($this->destroyeditems_ as $itd) {
 			$item = $itd->getItem();
-			if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();
+
+			if($item == null)
+				continue;
+
+			if(strpos($item->getName(), "Blueprint") === FALSE)
+			{
+				$value += $itd->getValue() * $itd->getQuantity();
+			}
 		}
+		
 		if(config::get('kd_droptototal')) {
 			foreach($this->droppeditems_ as $itd) {
 				$item = $itd->getItem();
-				if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();
+				if($item == null)
+					continue;
+				
+				if(strpos($item->getName(), "Blueprint") === FALSE)
+				{
+					$value += $itd->getValue() * $itd->getQuantity();
+				}
 			}
 		}
+		
 		$value += $this->getVictimShip()->getPrice();
 		if($update) {
 			$qry = DBFactory::getDBQuery();
@@ -1650,21 +1675,25 @@ class Kill extends Cacheable
 		foreach ($this->destroyeditems_ as $dest)
 		{
 			$item = $dest->getItem();
+
+			if($item == null)
+				continue;
+
 			$loc_id = $dest->getLocationID();
 			if (!is_numeric($this->getID()) || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
 			{
-				trigger_error('error with destroyed item.', E_USER_WARNING);
-				var_dump($dest);
-				exit;
-				continue;
+				throw new KillException("Error with destroyed item " . var_export($dest,true));
 			}
 
 			if($notfirstitd) $itdsql .= ", ";
 			$itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
 			$notfirstitd = true;
 		}
+		
 		if($notfirstitd &&!$qry->execute($itdsql))
+		{
 			return $this->rollback($qry);
+		}
 
 		// dropped
 		$notfirstitd=false;
@@ -1672,19 +1701,18 @@ class Kill extends Cacheable
 		foreach ($this->droppeditems_ as $dest)
 		{
 			$item = $dest->getItem();
+
 			$loc_id = $dest->getLocationID();
-			if (!is_numeric($this->getID()) || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
+			if (!is_numeric($this->getID()) || $item == null || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
 			{
-				trigger_error('error with dropped item.', E_USER_WARNING);
-				var_dump($dest);
-				exit;
-				continue;
+				throw new KillException("Error with dropped item " . var_export($dest,true));
 			}
 
 			if($notfirstitd) $itdsql .= ", ";
 			$itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
 			$notfirstitd = true;
 		}
+
 		if($notfirstitd &&!$qry->execute($itdsql))
 			return $this->rollback($qry);
 				
