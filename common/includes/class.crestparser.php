@@ -31,8 +31,10 @@ class CrestParser
 	 * @param string $crestUrl the URL to the crest representation of the kill
 	 */
 	function __construct($crestUrl)
-	{                
+	{
 		$this->crestUrl = $crestUrl;
+		// allow posting of CREST links using the old public-crest base URL
+		$this->crestUrl = str_replace('https://public-crest.eveonline.com', CREST_PUBLIC_URL, $this->crestUrl);
 		// validate the syntax
 		try
 		{
@@ -42,21 +44,21 @@ class CrestParser
 		{
 			$this->error($e->getMessage());
 		}
-	}
-        
+	} 
+	
 	function validateCrestUrl()
 	{
 		// should look like this:
 		// https://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
 		$urlPieces = explode("/", $this->crestUrl);
 		if(count($urlPieces) < 6 || 
-				$urlPieces[2] != "public-crest.eveonline.com" || 
+				substr($this->crestUrl, 0, strlen(CREST_PUBLIC_URL)) != CREST_PUBLIC_URL || 
 				$urlPieces[3] != "killmails" ||
 				!is_numeric($urlPieces[4]) ||
 				strlen($urlPieces[5]) != 40)
 		{
 			
-			throw new CrestParserException("Invalid CREST URL.");
+			throw new CrestParserException("Invalid CREST URL: ".$this->crestUrl);
 		}        
 	}
 
