@@ -46,8 +46,8 @@ class pAllianceDetail extends pageAssembly
 	private $pyear = '';
 	/** @var KillSummaryTable */
 	private $kill_summary = null;
-        /** @var double efficiency The alliance's efficiency */
-        protected $efficiency = 0;
+    /** @var double efficiency The alliance's efficiency */
+    protected $efficiency = 0;
 
 	/**
 	 * Construct the Alliance Details object.
@@ -944,6 +944,22 @@ class pAllianceDetail extends pageAssembly
 	{
 		$this->menuOptions[] = array($type, $name, $url);
 	}
+    
+    /**
+     * Removes the menu item with the given name
+     * 
+     * @param string $name the name of the menu item to remove
+     */
+    function removeMenuItem($name)
+    {
+        foreach((array)$this->menuOptions AS $menuItem)
+        {
+            if(count($menuItem) > 1 && $menuItem[1] == $name)
+            {
+                unset($this->menuOptions[key($this->menuOptions)]);
+            }
+        }
+    }
 
 	/**
 
@@ -985,14 +1001,51 @@ class pAllianceDetail extends pageAssembly
 		return $this->view;
 	}
         
-        /**
-         * Return the alliance
-         * @return Alliance
-         */
-        function getAlliance()
-        {
-            return $this->alliance;
-        }
+    /**
+     * Return the alliance
+     * @return Alliance
+     */
+    function getAlliance()
+    {
+        return $this->alliance;
+    }
+    
+    function getAllianceCorps() 
+    {
+        return $this->allianceCorps;
+    }
+
+    function getNextMonth() 
+    {
+        return $this->nmonth;
+    }
+
+    function getNextYear() 
+    {
+        return $this->nyear;
+    }
+
+    function getPreviousMonth() 
+    {
+        return $this->pmonth;
+    }
+
+    function getPreviousYear() 
+    {
+        return $this->pyear;
+    }
+
+    function getKillSummary() 
+    {
+        return $this->kill_summary;
+    }
+
+    function getEfficiency() 
+    {
+        return $this->efficiency;
+    }
+
+
 }
 
 $allianceDetail = new pAllianceDetail();

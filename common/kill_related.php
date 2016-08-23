@@ -718,7 +718,72 @@ class pKillRelated extends pageAssembly
 	{
 		$this->menuOptions[] = array($type, $name, $url);
 	}
+    
+    /**
+    * Removes the menu item with the given name
+    * 
+    * @param string $name the name of the menu item to remove
+    */
+   function removeMenuItem($name)
+   {
+       foreach((array)$this->menuOptions AS $menuItem)
+       {
+           if(count($menuItem) > 1 && $menuItem[1] == $name)
+           {
+               unset($this->menuOptions[key($this->menuOptions)]);
+           }
+       }
+   }
+   
+   function getSystems() 
+   {
+       return $this->systems;
+   }
 
+   function getAdjacent()
+   {
+       return $this->adjacent;
+   }
+
+   function getVictimAlliances() 
+   {
+       return $this->victimAll;
+   }
+
+   function getInvolvedAlliances() 
+   {
+       return $this->invAll;
+   }
+
+   function getVictimCorps() 
+   {
+       return $this->victimCorp;
+   }
+
+   function getInvolvedCorps() 
+   {
+       return $this->invCorp;
+   }
+
+   function getFirstKillTimestamp() 
+   {
+       return $this->firstts;
+   }
+
+   function getLastKillTimestamp() 
+   {
+       return $this->lastts;
+   }
+
+   function getPilots() 
+   {
+       return $this->pilots;
+   }
+
+   function getKillSummary() 
+   {
+       return $this->kill_summary;
+   }
 }
 $killRelated = new pKillRelated();
 event::call("killRelated_assembling", $killRelated);

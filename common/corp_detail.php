@@ -21,9 +21,9 @@ class pCorpDetail extends pageAssembly
 	public $corp = null;
 	/** @var Alliance */
 	public $alliance = null;
-        /** @var array corpDetails array containing information from the public corp sheet.
-         * Populated by stats() */
-        protected $corpDetails = null;
+    /** @var array corpDetails array containing information from the public corp sheet.
+     * Populated by stats() */
+    protected $corpDetails = null;
 
 	/** @var string The selected view. */
 	protected $view = null;
@@ -692,7 +692,7 @@ class pCorpDetail extends pageAssembly
 		$this->addMenuItem("link","Most violent systems", edkURI::build($args, array('view', 'violent_systems', true)));
 		return "";
 	}
-	
+
 	/** 
 	 * adds meta tags for Twitter Summary Card and OpenGraph tags
 	 * to the HTML header
@@ -723,14 +723,14 @@ class pCorpDetail extends pageAssembly
 		$this->page->addMetaTag('og:image', $this->corp->getPortraitURL(128) );
 		$this->page->addMetaTag('twitter:image', $this->corp->getPortraitURL(128) );
 
-		$this->page->addHeader('<meta name="og:site_name" content="EDK - '.config::get('cfg_kbtitle').'">');
+		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
 		
 		// meta tag: URL
 		$this->page->addMetaTag('og:url',edkURI::build(array('crp_id', $this->crp_id, true)));
 
 		$this->page->addMetaTag('twitter:card', 'summary');
 	}
-	
+
 	/**
 	 * Build the menu.
 	 *
@@ -761,6 +761,22 @@ class pCorpDetail extends pageAssembly
 	{
 		$this->menuOptions[] = array($type, $name, $url);
 	}
+    
+    /**
+    * Removes the menu item with the given name
+    * 
+    * @param string $name the name of the menu item to remove
+    */
+   function removeMenuItem($name)
+   {
+       foreach((array)$this->menuOptions AS $menuItem)
+       {
+           if(count($menuItem) > 1 && $menuItem[1] == $name)
+           {
+               unset($this->menuOptions[key($this->menuOptions)]);
+           }
+       }
+   }
 
 	/**
 
@@ -803,14 +819,51 @@ class pCorpDetail extends pageAssembly
 	}
         
         
-        /**
-         * Return the corporation
-         * @return Corporation
-         */
-        function getCorp()
-        {
-            return $this->corp;
-        }
+    /**
+     * Return the corporation
+     * @return Corporation
+     */
+    function getCorp()
+    {
+        return $this->corp;
+    }
+    
+    function getCorpDetails() 
+    {
+        return $this->corpDetails;
+    }
+
+    function getNextMonth() 
+    {
+        return $this->nmonth;
+    }
+
+    function getNextYear() 
+    {
+        return $this->nyear;
+    }
+
+    function getPreviousMonth() 
+    {
+        return $this->pmonth;
+    }
+
+    function getPreviousYear() 
+    {
+        return $this->pyear;
+    }
+
+    function getKillSummary() 
+    {
+        return $this->kill_summary;
+    }
+
+    function getEfficiency() 
+    {
+        return $this->efficiency;
+    }
+
+
 }
 
 $corpDetail = new pCorpDetail();
