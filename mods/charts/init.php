@@ -22,27 +22,27 @@ if (!$nochart)
 
 class charts
 {
-	function addCorpDetail($home)
+	public static function addCorpDetail($home)
     {
         $home->addBehind("summaryTable", "charts::graphPages");
     }
     
-    function addPilotDetail($home)
+    public static function addPilotDetail($home)
     {
         $home->addBehind("summaryTable", "charts::graphPages");
     }
 	
-    function addAllianceDetail($home)
+    public static function addAllianceDetail($home)
     {
         $home->addBehind("summaryTable", "charts::graphPages");
     }
 	
-    function addHome($home)
+    public static function addHome($home)
     {
         $home->addBehind("summaryTable", "charts::graphHome");
     }
     
-    function graphHome($home)
+    public static function graphHome($home)
     {
 		require_once('mods/charts/chartcompile.php');
 
@@ -50,7 +50,7 @@ class charts
         return $html;
     }
 	
-	function graphPages($home)
+	public static function graphPages($home)
     {
 		require_once('mods/charts/chartcompile.php');
 
