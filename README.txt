@@ -1,5 +1,5 @@
 -------------------------------------------
-Eve Development Network Killboard v4.2.25.0
+Eve Development Network Killboard v4.2.29.0
 -------------------------------------------
 
 // REQUIREMENTS
@@ -26,6 +26,50 @@ o/ EVE Development Network
 VERSION HISTORY
 ===============
 
+v4.2.29.0
+
+Features:
+Updated CCP DB to YC-119-1 1.0.20170112
+
+Enhancements:
+Remove Killmail CC via Email functionality - Remove old and vulnerable PHPMailer classes
+Respect squadron size for Fighter losses
+Cron jobs: Load mods before first log output
+Updated zKBFetch for comaptibility with API changes
+
+Bugfixes:
+Fix for zKB Fetch for entities with > 200 kills/h
+
+-------------------------------------------
+v4.2.28.0
+
+Features:
+Updated EDK to 4.2.28.0 and CCP DB to Ascension 1.0.20161114
+
+-------------------------------------------
+v4.2.27.0
+
+Features:
+Updated EDK to 4.2.27.0 and CCP DB to YC-118-8 1.0.20161011
+
+Enhancements:
+Enhancement: Added possibility to disable page caching via session
+
+Bugfixes:
+Updated Copyright to 2016 in database update template
+Removed last traces of procedural method calls using mysql
+
+-------------------------------------------
+v4.2.26.0
+
+Features:
+Updated EDK to 4.2.26.0 and CCP DB to YC-118-8 1.0.20160912
+
+Bugfixes:
+Fix: Citadels are no longer considered to be NPCs
+Fix: Kill lists listed the same kill multiple times
+
+-------------------------------------------
 v4.2.25.0
 
 Features:

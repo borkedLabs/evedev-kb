@@ -498,7 +498,7 @@ class Kill extends Cacheable
 	 */
 	function getVictimShipValue()
 	{
-		return $this->getVictimShip()->getPrice();
+		return $this->getVictimShip()->getPrice() * $this->getVictimShip()->getSquadronSize();
 	}
 
 	/**
@@ -1435,7 +1435,9 @@ class Kill extends Cacheable
 			}
 		}
 		
-		$value += $this->getVictimShip()->getPrice();
+        // respect squadron size for fighters, since a lost fighter killmail means a whole dead squadron
+		$value += $this->getVictimShip()->getPrice() * $this->getVictimShip()->getSquadronSize();
+
 		if($update) {
 			$qry = DBFactory::getDBQuery();
 			$qry->execute("UPDATE kb3_kills SET kll_isk_loss = '$value' WHERE

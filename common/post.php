@@ -98,7 +98,6 @@ function post()
 </form>';
 			}
 		} else {
-
 			logger::logKill($killid);
 			header("Location: ".html_entity_decode(edkURI::page('kill_detail',
 							$killid, 'kll_id')));

@@ -5,7 +5,6 @@ class ApiCommand extends CronCommand
 	public function execute()
 	{
 		$config = new Config(KB_SITE);
-
 		define('KB_TITLE', config::get('cfg_kbtitle'));
 
 		if (!$dir = config::get('cache_dir'))

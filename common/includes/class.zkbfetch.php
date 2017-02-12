@@ -45,7 +45,11 @@ class ZKBFetch
     protected $lastKillTimestamp;
     /** @param int negative offset in hours to apply to the last kill timestamp before fetching */
     protected $killTimestampOffset;
-
+    /** @param int the zKB API page number to fetch; will be increased during fetch cycles */
+    protected $pageNumber = 1;
+    /** @param int the unix formatted timestamp to use as startTime for fetching */
+    protected $startTimestamp;
+    
     /** @param int default for the negative offset in hours to apply to the last kill timestamp before fetching */
     public static $KILL_TIMESTAMP_OFFSET_DEFAULT = 2;
     
@@ -59,6 +63,8 @@ class ZKBFetch
     {
         $this->id = $id;
         $this->killTimestampOffset = self::$KILL_TIMESTAMP_OFFSET_DEFAULT;
+        
+        date_default_timezone_set("UTC"); 
     }
     
     /**
@@ -128,7 +134,7 @@ class ZKBFetch
         $fetchParams = new DBPreparedQuery();
         $fetchParams->prepare('INSERT INTO kb3_zkbfetch (`url`, `lastKillTimestamp`) VALUES (?, ?)');
         $types = 'ss';
-        $timeString = strftime('%Y-%m-%d %H:%M:%S', $this->lastKillTimestamp);
+        $timeString = strftime('%Y-%m-%d %H:00', $this->lastKillTimestamp);
         $arr2 = array(&$types, &$this->url, &$timeString);
         $fetchParams->bind_params($arr2);
 
@@ -233,7 +239,7 @@ class ZKBFetch
         {
             return;
         }
-        $timeString = strftime('%Y-%m-%d %H:%M:%S', $this->lastKillTimestamp);
+        $timeString = strftime('%Y-%m-%d %H:00', $this->lastKillTimestamp);
         $updateParams = new DBPreparedQuery();
         $updateParams->prepare('UPDATE kb3_zkbfetch SET lastKillTimestamp = ? WHERE fetchID = ?');
         $types = 'si';
@@ -326,12 +332,14 @@ class ZKBFetch
         }
 
         // add startTime, if not already in URL and if given and the URL is not for a specific kill
-        if(strpos($this->fetchUrl, 'startTime') === FALSE && !is_null($this->lastKillTimestamp) && strlen(trim($this->lastKillTimestamp) > 0)
+        if(strpos($this->fetchUrl, 'startTime') === FALSE && !is_null($this->startTimestamp) && strlen(trim($this->startTimestamp) > 0)
                 && strpos($this->fetchUrl, 'killID') === FALSE)
         {
-            $timestampFormattedForZkb = strftime("%Y%m%d%H%M", $this->lastKillTimestamp);
+            $timestampFormattedForZkb = strftime("%Y%m%d%H00", $this->startTimestamp);
             $this->fetchUrl .= "startTime/$timestampFormattedForZkb/orderDirection/asc/";
         }
+        
+        $this->fetchUrl .= "page/$this->pageNumber/";
 
         $urlPieces = explode("/", $this->fetchUrl);
 
@@ -352,12 +360,19 @@ class ZKBFetch
         $this->rawData = array();
         
         // remember the timestamp we started with
-        $startTimestamp = $this->lastKillTimestamp;
+        $this->startTimestamp = $this->lastKillTimestamp;
+        
+        // calculate the timestamp of the next full hour, starting at the time of the last kill;
+        // this is the timestamp we want to reach at least
+        if($this->startTimestamp)
+        {
+            $nextFullHourTimestamp = $this->startTimestamp+1 + (3600 - (($this->startTimestamp+1) % 3600));
+        }
         
         // apply negative offset
-        if(isset($this->killTimestampOffset) && is_numeric($this->killTimestampOffset) && isset($this->lastKillTimestamp) && is_numeric($this->lastKillTimestamp))
+        if(isset($this->killTimestampOffset) && is_numeric($this->killTimestampOffset) && isset($this->startTimestamp) && is_numeric($this->startTimestamp))
         {
-            $this->lastKillTimestamp -= $this->killTimestampOffset*3600;
+            $this->startTimestamp -= $this->killTimestampOffset*3600;
         }
         
         // initialize fetch counter
@@ -377,7 +392,7 @@ class ZKBFetch
                 // may happen if more than one kill matches the last kill timestamp
                 break;
             }
-
+            
             // fetch the raw data from zKB API
             try
             {
@@ -408,7 +423,7 @@ class ZKBFetch
                 // check if we reached the maximum number of kills we may fetch
                 if(self::$NUMBER_OF_KILLS_FETCHED_FROM_CREST >= $maxNumberOfKillsPerRun)
                 {
-                    break;
+                    break 2;
                 }
                 
                 try
@@ -431,7 +446,7 @@ class ZKBFetch
             }
             
             // no timestamp given at all
-            if($startTimestamp == NULL)
+            if($this->startTimestamp == NULL || $nextFullHourTimestamp == NULL)
             {
                 break;
             }
@@ -439,15 +454,16 @@ class ZKBFetch
             // safety stop
             if($cyclesFetched >= self::$MAXIMUM_NUMBER_OF_CYCLES)
             {
-                $this->parsemsg[] = "Stopped fetching before finding new kills due to safety limit (fetched ".(self::$MAXIMUM_NUMBER_OF_CYCLES*200)." kills in a row!). "
+                $this->parsemsg[] = "Stopped fetching before finding new kills due to safety limit (fetched ".($this->numberOfKillsFetched)." kills in a row!). "
                         . "Try lowering your negative kill timestamp offset!";
                 break;
             }
             
             $cyclesFetched++;
+            $this->pageNumber++;
             // remember the URL we used during this cycle
             $fetchUrlPreviousCycle = $this->fetchUrl;
-        }  while(count($this->rawData) > 1 && $this->lastKillTimestamp <= $startTimestamp);
+        }  while(count($this->rawData) > 1 && $this->lastKillTimestamp <= $nextFullHourTimestamp);
     }
     
     
@@ -884,7 +900,8 @@ class ZKBFetch
            if($shipClassID == 35           // small Tower
                    || $shipClassID == 36   // medium Tower
                    || $shipClassID == 37   // large Tower
-                   || $shipClassID == 38)  // POS Module  
+                   || $shipClassID == 38  // POS Module  
+                   || $shipClassID == ShipClass::$SHIP_CLASS_ID_CITADELS)  // Citadels
            {
                if($Alliance->getName() == "None")
                {
@@ -913,14 +930,18 @@ class ZKBFetch
            if(!$involvedCharacterID && !$involvedParty['weaponTypeID'] && !$involvedParty['allianceID'])                        
            {
                    $Alliance = $Corp->getAlliance();
-                   $Ship = Ship::lookup("Unknown");
+                   $Ship = Ship::getByID($involvedParty['shipTypeID']);
                    $Weapon = Item::getByID($involvedParty['shipTypeID']);
                    if(!$Weapon->getName())
                    {
                        throw new ZKBFetchException("Involved party is an NPC with a ship type not found in the database! Kill-ID: ".$killData->killID);
                    }
                    $involvedPartyName = $Corp->getName().' - '.$Weapon->getName();
-                   $isNPC = TRUE;
+                   // citadels are no NPCs!
+                   if($Ship->getClass()->getID() != ShipClass::$SHIP_CLASS_ID_CITADELS)
+                   {
+                       $isNPC = TRUE;
+                   }
                    $involvedCharacterID = 0;
                    $loadPilotExternals = false;
            }
