@@ -1,5 +1,5 @@
 -------------------------------------------
-Eve Development Network Killboard v4.2.29.0
+Eve Development Network Killboard v4.2.32.0
 -------------------------------------------
 
 // REQUIREMENTS
@@ -26,6 +26,45 @@ o/ EVE Development Network
 VERSION HISTORY
 ===============
 
+Features:
+Updated EDK to 4.2.32.0 and CCP DB to YC-119-6 1.0.20170613
+
+Enhancements:
+Added explicit JS path configuration to xAjax Proxy
+
+Bugfixes:
+Fix: Fixed URL in meta info tags for Kill Details page
+
+-------------------------------------------
+v4.2.31.0
+
+Features:
+Updated EDK to 4.2.31.0 and CCP DB to YC-119-5 1.0.20170509
+
+Enhancements:
+Show 'Drone' ship group in summary tables
+
+Bugfixes:
+Fix: EDK Proxy for xAjax used $this in static context
+Fixed typo when fetching ship classes for pilot summary
+Fix: Entity summary table stats after deleting kills
+Fix: Front page summary table stats wrong in certain situations
+
+-------------------------------------------
+v4.2.30.0
+
+Features:
+Updated EDK to 4.2.30.0 and CCP DB to YC-119-3 1.0.20170316
+
+Enhancements:
+Added Syndicate Mobile Warp Disruptors to correct ship class
+Exclude Mobile Warp Disruptors from kill lists
+
+Bugfixes:
+ZKBFetch: Removed zKB API modifier "api-only"
+Show system sec status colored in kill list tables
+
+-------------------------------------------
 v4.2.29.0
 
 Features:
