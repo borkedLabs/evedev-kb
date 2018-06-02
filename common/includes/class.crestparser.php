@@ -14,71 +14,69 @@ class CrestParser
 {
 	private $error_ = array();
 	/** @var string the URL to the crest representation */
-	private $crestUrl;
-	/** @var string the crest hash value */
-	private $crestHash;
+    private $crestUrl;
+    /** @var string the crest hash value */
+    private $crestHash;
 	private $externalID = 0;
 	private $dupeid_ = 0;
 	private $hash = null;
 	private $trust = 0;
-	/** @var Object (json decoded) */
-	private $killmailRepresentation;
-	/** @var boolean isNPCOnly flag indicating the killmail has only NPCs as involved parties */
-	private $isNPCOnly = true;
-	/** @var boolean allowNpcOnlyKills flag indicating whether killmails with only NPCs as involved parties may be posted */
-	private $allowNpcOnlyKills = true;
+    /** @var Object (json decoded) */
+    private $killmailRepresentation;
+    /** @var boolean isNPCOnly flag indicating the killmail has only NPCs as involved parties */
+    private $isNPCOnly = true;
+    /** @var boolean allowNpcOnlyKills flag indicating whether killmails with only NPCs as involved parties may be posted */
+    private $allowNpcOnlyKills = true;
 
+    /**
+    * 
+    * @param string $crestUrl the URL to the crest representation of the kill
+    */
 	function __construct($crestUrl)
-	{
-		$this->crestUrl = $crestUrl;
-		// allow posting of CREST links using the old public-crest base URL
-		$this->crestUrl = str_replace('https://public-crest.eveonline.com', CREST_PUBLIC_URL, $this->crestUrl);
-		// validate the syntax
-		try
-		{
-			$this->validateCrestUrl();
-		}
-		catch(CrestParserException $e)
-		{
-			$this->error($e->getMessage());
-		}
-	} 
-	
-	function validateCrestUrl()
-	{
-		// should look like this:
-		// https://public-crest.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
-		$urlPieces = explode("/", $this->crestUrl);
-		if(count($urlPieces) < 6 || 
-				substr($this->crestUrl, 0, strlen(CREST_PUBLIC_URL)) != CREST_PUBLIC_URL || 
-				$urlPieces[3] != "killmails" ||
-				!is_numeric($urlPieces[4]) ||
-				strlen($urlPieces[5]) != 40)
-		{
-			
-			throw new CrestParserException("Invalid CREST URL: ".$this->crestUrl);
-		}        
+	{                
+            $this->crestUrl = $crestUrl;
+            // allow posting of CREST links using the old public-crest base URL
+            $this->crestUrl = str_replace('https://public-crest.eveonline.com', CREST_PUBLIC_URL, $this->crestUrl);
+            $this->crestUrl = preg_replace('#'.preg_quote('https://esi.tech.ccp.is') .'/(v\d|latest)/#', CREST_PUBLIC_URL.'/', $this->crestUrl);
 	}
+        
+        
+    function validateCrestUrl()
+    {
+        // should look like this:
+        // https://crest-tq.eveonline.com/killmails/30290604/787fb3714062f1700560d4a83ce32c67640b1797/
+        $urlPieces = explode("/", $this->crestUrl);
+        if(count($urlPieces) < 6 || 
+                substr($this->crestUrl, 0, strlen(CREST_PUBLIC_URL)) != CREST_PUBLIC_URL || 
+                $urlPieces[3] != "killmails" ||
+                !is_numeric($urlPieces[4]) ||
+                strlen($urlPieces[5]) != 40)
+        {
+
+            throw new CrestParserException("Invalid CREST URL: ".$this->crestUrl);
+        }        
+    }
+        
         
 	function parse($checkauth = true)
 	{
-		$this->validateCrestUrl();
+        $this->validateCrestUrl();
 
-		$urlPieces = explode("/", $this->crestUrl);
-		$this->externalID = (int)$urlPieces[4];
-		$this->crestHash = $urlPieces[5];
+        $urlPieces = explode("/", $this->crestUrl);
+        $this->externalID = (int)$urlPieces[4];
+        $this->crestHash = $urlPieces[5];
 
-		// create killmail representation
-		// get instance
-		try
-		{
-			$this->killmailRepresentation = SimpleCrest::getReferenceByUrl($this->crestUrl);
-		}
+        // create killmail representation
+        // get instance
+        try
+        {
+            $this->killmailRepresentation = SimpleCrest::getReferenceByUrl($this->crestUrl);
+        }
 
-		catch(Exception $e)
-		{
-			throw new CrestParserException($e->getMessage(), $e->getCode());
-		}
+        catch(Exception $e)
+        {
+            throw new CrestParserException($e->getMessage(), $e->getCode());
+        }
 
 		$qry = DBFactory::getDBQuery();
 
