@@ -34,3 +34,6 @@ cache/update
 # IIS7 
 web.config
 
+/cache/esi/cli/Files
+/cache/esi/localhost/Files
+/cache

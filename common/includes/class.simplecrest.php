@@ -76,13 +76,6 @@ class SimpleCrest
         
         $headers = array();
         
-        // ignore ssl peer verification
-        if(substr($url,0,5) == "https" && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-        {
-            //curl_setopt(self::$curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-            // make sure we can verify the peer's certificatge
-            curl_setopt(self::$curl, CURLOPT_CAINFO, getcwd() . DIRECTORY_SEPARATOR . KB_CACHEDIR . '/cert/cacert.pem');
-        }
         
         // set timeout
         curl_setopt(self::$curl, CURLOPT_TIMEOUT, self::$TIMEOUT);

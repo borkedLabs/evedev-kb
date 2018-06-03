@@ -118,12 +118,6 @@ class ESI extends ApiClient
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         }
-        
-        else
-        {
-            // make sure we can verify the peer's certificatge
-            curl_setopt($curl, CURLOPT_CAINFO, getcwd() . DIRECTORY_SEPARATOR . KB_CACHEDIR . '/cert/cacert.pem');
-        }
 
         if (!empty($queryParams)) {
             $url = ($url . '?' . http_build_query($queryParams));
