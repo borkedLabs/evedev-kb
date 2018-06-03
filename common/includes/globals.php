@@ -16,7 +16,11 @@ spl_autoload_register('edkloader::load');
 // Set up the external class files with the autoloader.
 
 // Ugly hacks to make things work until other changes are made with the file structure
-edkloader::register('API', '/api/class.api.php');
+edkloader::register('API', 'includes/api/class.api.php');
+edkloader::register('EDK\ESI\ESI', 'esi/class.esi.php');
+edkloader::register('EDK\ESI\ESISSO', 'esi/class.esisso.php');
+edkloader::register('EDK\ESI\ESIFetch', 'esi/class.esifetch.php');
+edkloader::register('EDK\ESI\EsiConfiguration', 'esi/class.esiconfiguration.php');
 edkloader::register('TopList', 'class.toplist.php');
 edkloader::register('TopKillsList', 'class.toplist.php');
 edkloader::register('TopCorpKillsList', 'class.toplist.php');
@@ -43,18 +47,18 @@ require_once(__DIR__.'/db.php');
 
 function slashfix($fix)
 {
-	return addslashes(stripslashes($fix));
+    return addslashes(stripslashes($fix));
 }
 
 function roundsec($sec)
 {
-	if ($sec <= 0) {
-		$s = 0.0;
-	} else {
-		$s = $sec;
-	}
+    if ($sec <= 0) {
+        $s = 0.0;
+    } else {
+        $s = $sec;
+    }
 
-	return number_format(round($s, 1), 1);
+    return number_format(round($s, 1), 1);
 }
 
 /**
@@ -67,35 +71,35 @@ function roundsec($sec)
  */
 function get_tpl($name)
 {
-	global $themename;
-	event::call('get_tpl', $name);
+    global $themename;
+    event::call('get_tpl', $name);
 
-	// If a specific tempate file is already asked for then simply return it.
-	if (substr($name, -3) == 'tpl') {
-		return $name;
-	}
+    // If a specific tempate file is already asked for then simply return it.
+    if (substr($name, -3) == 'tpl') {
+        return $name;
+    }
 
-	if ($themename == 'default') {
-		if (IS_IGB && file_exists('./themes/default/templates/igb_'.$name
-						.'.tpl')) {
-			return 'igb_'.$name.'.tpl';
-		}
-		return $name.'.tpl';
-	} else {
-		if (IS_IGB) {
-			if (is_file('./themes/'.$themename.'/templates/igb_'.$name.'.tpl')) {
-				return 'igb_'.$name.'.tpl';
-			} else if (is_file('./themes/default/templates/igb_'.$name.'.tpl')) {
-				return '../../default/templates/igb_'.$name.'.tpl';
-			}
-		}
-		if (is_file('./themes/'.$themename.'/templates/'.$name.'.tpl')) {
-			 return $name.'.tpl';
-		} else if (is_file('./themes/default/templates/'.$name.'.tpl')) {
-			return '../../default/templates/'.$name.'.tpl';
-		}
-	}
-	return $name.'.tpl';
+    if ($themename == 'default') {
+        if (IS_IGB && file_exists('./themes/default/templates/igb_'.$name
+                        .'.tpl')) {
+            return 'igb_'.$name.'.tpl';
+        }
+        return $name.'.tpl';
+    } else {
+        if (IS_IGB) {
+            if (is_file('./themes/'.$themename.'/templates/igb_'.$name.'.tpl')) {
+                return 'igb_'.$name.'.tpl';
+            } else if (is_file('./themes/default/templates/igb_'.$name.'.tpl')) {
+                return '../../default/templates/igb_'.$name.'.tpl';
+            }
+        }
+        if (is_file('./themes/'.$themename.'/templates/'.$name.'.tpl')) {
+             return $name.'.tpl';
+        } else if (is_file('./themes/default/templates/'.$name.'.tpl')) {
+            return '../../default/templates/'.$name.'.tpl';
+        }
+    }
+    return $name.'.tpl';
 }
 
 /**
@@ -108,11 +112,11 @@ function get_tpl($name)
  */
 function kbdate($format, $timestamp = null)
 {
-	if ($timestamp === null) {
-		return gmdate($format);
-	} else {
-		return gmdate($format, $timestamp);
-	}
+    if ($timestamp === null) {
+        return gmdate($format);
+    } else {
+        return gmdate($format, $timestamp);
+    }
 }
 
 /**
@@ -121,22 +125,22 @@ function kbdate($format, $timestamp = null)
  */
 function getYear()
 {
-	if (config::get('show_monthly')) {
-		return gmdate('Y');
-	}
+    if (config::get('show_monthly')) {
+        return gmdate('Y');
+    }
 
-	$test = kbdate('o');
-	if ($test == 'o') {
-		$day = gmdate('j');
-		$week = gmdate('W');
-		if ($week == 1 && $day > 14) {
-			return gmdate('Y') - 1;
-		} else if ($week > 50 && $day < 8) {
-			return gmdate('Y') + 1;
-		}
-		return gmdate('Y');
-	}
-	return $test;
+    $test = kbdate('o');
+    if ($test == 'o') {
+        $day = gmdate('j');
+        $week = gmdate('W');
+        if ($week == 1 && $day > 14) {
+            return gmdate('Y') - 1;
+        } else if ($week > 50 && $day < 8) {
+            return gmdate('Y') + 1;
+        }
+        return gmdate('Y');
+    }
+    return $test;
 }
 
 /**
@@ -146,11 +150,11 @@ function getYear()
  */
 function getWeeks($year = null)
 {
-	if (is_null($year)) {
-		$year = getYear();
-	}
-	$weeks = date('W', mktime(1, 0, 0, 12, 31, $year));
-	return $weeks == 1 ? 52 : $weeks;
+    if (is_null($year)) {
+        $year = getYear();
+    }
+    $weeks = date('W', mktime(1, 0, 0, 12, 31, $year));
+    return $weeks == 1 ? 52 : $weeks;
 }
 
 /**
@@ -170,28 +174,28 @@ function getWeeks($year = null)
  * @return integer
  */
 function makeStartDate($week = 0, $year = 0, $month = 0, $startweek = 0,
-		$startdate = 0)
+        $startdate = 0)
 {
-	$qstartdate = 0;
-	if (intval($year) > 2000) {
-		if ($week) {
-			if ($week < 10) {
-				$week = '0'.$week;
-			}
-			$qstartdate = strtotime($year.'W'.$week.' UTC');
-		} else if ($month) {
-			$qstartdate = strtotime($year.'-'.$month.'-1 00:00 UTC');
-		} else if ($startweek) {
-			$qstartdate = strtotime($year.'W'.$startweek.' UTC');
-		} else {
-			$qstartdate = strtotime($year.'-1-1 00:00 UTC');
-		}
-	}
-	//If set use the latest startdate and earliest enddate set.
-	if ($startdate && $qstartdate < strtotime($startdate." UTC")) {
-		$qstartdate = strtotime($startdate." UTC");
-	}
-	return $qstartdate;
+    $qstartdate = 0;
+    if (intval($year) > 2000) {
+        if ($week) {
+            if ($week < 10) {
+                $week = '0'.$week;
+            }
+            $qstartdate = strtotime($year.'W'.$week.' UTC');
+        } else if ($month) {
+            $qstartdate = strtotime($year.'-'.$month.'-1 00:00 UTC');
+        } else if ($startweek) {
+            $qstartdate = strtotime($year.'W'.$startweek.' UTC');
+        } else {
+            $qstartdate = strtotime($year.'-1-1 00:00 UTC');
+        }
+    }
+    //If set use the latest startdate and earliest enddate set.
+    if ($startdate && $qstartdate < strtotime($startdate." UTC")) {
+        $qstartdate = strtotime($startdate." UTC");
+    }
+    return $qstartdate;
 }
 
 /**
@@ -212,29 +216,29 @@ function makeStartDate($week = 0, $year = 0, $month = 0, $startweek = 0,
  */
 function makeEndDate($week = 0, $year = 0, $month = 0, $enddate = '')
 {
-	$qenddate = 0;
-	if ($year) {
-		if ($week) {
-			if ($week < 10) {
-				$week = '0'.$week;
-			}
-			$qenddate = strtotime($year.'W'.$week.' +7days -1second UTC');
-		} else if ($month) {
-			if ($month == 12) {
-				$qenddate = strtotime($year.'-12-31 23:59:59 UTC');
-			} else {
-				$qenddate = strtotime($year.'-'.($month + 1).'-1 00:00 - 1 minute UTC');
-			}
-		} else {
-			$qenddate = strtotime($year.'-12-31 23:59:59 UTC');
-		}
-	}
-	//If set use the earliest enddate.
-	if ($enddate && (!$qenddate || ($qenddate && $qenddate > strtotime($enddate." UTC")))) {
-		$qenddate = strtotime($enddate." UTC");
-	}
+    $qenddate = 0;
+    if ($year) {
+        if ($week) {
+            if ($week < 10) {
+                $week = '0'.$week;
+            }
+            $qenddate = strtotime($year.'W'.$week.' +7days -1second UTC');
+        } else if ($month) {
+            if ($month == 12) {
+                $qenddate = strtotime($year.'-12-31 23:59:59 UTC');
+            } else {
+                $qenddate = strtotime($year.'-'.($month + 1).'-1 00:00 - 1 minute UTC');
+            }
+        } else {
+            $qenddate = strtotime($year.'-12-31 23:59:59 UTC');
+        }
+    }
+    //If set use the earliest enddate.
+    if ($enddate && (!$qenddate || ($qenddate && $qenddate > strtotime($enddate." UTC")))) {
+        $qenddate = strtotime($enddate." UTC");
+    }
 
-	return $qenddate;
+    return $qenddate;
 }
 
 /**
@@ -280,7 +284,7 @@ function isNewerVersion($newVersion, $baseVersion)
         {
             return TRUE;
         }
-		
+        
         // version is older
         if($newVersionPart < $baseVersionPart)
         {
@@ -331,7 +335,7 @@ function loadMods($page)
 
     $none = '';
     event::call('mods_initialised', $none);
-	
+    
     return $modInfo;
 }
 

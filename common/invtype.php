@@ -42,6 +42,7 @@ class pInvtype extends pageAssembly
 		// display context menu only for ships
 		if ($item->get('itt_cat') == 6)
 		{
+
 			$this->queue("menuSetup");
 			$this->queue("menu");
 		}

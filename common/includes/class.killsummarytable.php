@@ -353,44 +353,39 @@ class KillSummaryTable
 		}
 		else
 		{
-			$sql .= "INNER JOIN (";
-			$involved = array();
-			if ($this->inv_all)
-                        {
-                                $invsql = "SELECT ina_kll_id as kll_id FROM kb3_inv_all ina
-                                    inner join kb3_kills kll on ina.ina_kll_id = kll.kll_id
-                                    WHERE ina_all_id in (".implode(',', $this->inv_all).") 
-                                        and kll.kll_all_id not in (".implode(',', $this->inv_all).") ";
-                                if($startdate) $invsql .=" AND ina_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
-                                if($enddate) $invsql .=" AND ina_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
-                                $involved[] = $invsql;
-                        }
-                        if ($this->inv_crp)
-                        {
-                                $invsql = "SELECT inc_kll_id as kll_id FROM kb3_inv_crp inc
-                                    inner join kb3_kills kll on inc.inc_kll_id = kll.kll_id
-                                    WHERE inc_crp_id in (".implode(',', $this->inv_crp).") 
-                                        and kll.kll_crp_id not in (".implode(',', $this->inv_crp).") ";
-                                if($startdate) $invsql .=" AND inc_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
-                                if($enddate) $invsql .=" AND inc_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
-                                $involved[] = $invsql;
-                        }     
-			if ($this->inv_plt)
-			{
-				$invsql = "SELECT ind_kll_id as kll_id FROM kb3_inv_detail
-					WHERE ind_plt_id in (".implode(',', $this->inv_plt).") ";
-				if($startdate) $invsql .=" AND ind_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
-				if($enddate) $invsql .=" AND ind_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
-				$involved[] = $invsql;
-			}
-			$invtypecount = 0;
-			if($this->inv_all) $invtypecount++;
-			if($this->inv_crp) $invtypecount++;
-			if($this->inv_plt) $invtypecount++;
-
-			$sql .= "(".implode(") UNION (", $involved);
-			if($invtypecount == 1) $sql .= " GROUP BY kll_id";
-			$sql .= ") ) inv ON inv.kll_id = kll.kll_id ";
+            $sql .= "INNER JOIN (";
+            $involved = array();
+            if ($this->inv_all)
+            {
+                $invsql = "SELECT ina_kll_id as kll_id FROM kb3_inv_all
+                    WHERE ina_all_id in (".implode(',', $this->inv_all).") ";
+                if($startdate) $invsql .=" AND ina_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
+                if($enddate) $invsql .=" AND ina_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
+                $involved[] = $invsql;
+            }
+            if ($this->inv_crp)
+            {
+                $invsql = "SELECT inc_kll_id as kll_id FROM kb3_inv_crp
+                    WHERE inc_crp_id in (".implode(',', $this->inv_crp).") ";
+                if($startdate) $invsql .=" AND inc_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
+                if($enddate) $invsql .=" AND inc_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
+                $involved[] = $invsql;
+            }
+            if ($this->inv_plt)
+            {
+                $invsql = "SELECT ind_kll_id as kll_id FROM kb3_inv_detail
+                    WHERE ind_plt_id in (".implode(',', $this->inv_plt).") ";
+                if($startdate) $invsql .=" AND ind_timestamp >= '".gmdate('Y-m-d H:i:s',$startdate)."' ";
+                if($enddate) $invsql .=" AND ind_timestamp <= '".gmdate('Y-m-d H:i:s',$enddate)."' ";
+                $involved[] = $invsql;
+            }
+            $invtypecount = 0;
+            if($this->inv_all) $invtypecount++;
+            if($this->inv_crp) $invtypecount++;
+            if($this->inv_plt) $invtypecount++;
+            $sql .= "(".implode(") UNION (", $involved);
+            if($invtypecount == 1) $sql .= " GROUP BY kll_id";
+            $sql .= ") ) inv ON inv.kll_id = kll.kll_id ";
 		}
 		if($this->system)
 		{
@@ -460,48 +455,39 @@ class KillSummaryTable
 
 		if($invcount)
 		{
-                        // this block made sure that only kills are counted as losses
-                        // that only had involved parties not belonging to any of the 
-                        // involved parties (scope of the summary table);
-                        // by remonving this block, all kills are counted as losses, for which
-                        // the victim is a member of ony involved party (scope of this summary table);
-
-                        /*
-                        if ($this->inv_all && !($this->inv_crp || $this->inv_plt))
-                        {
-                            $sql .= $sqlop.' ina.ina_kll_id IS NULL ';
-                            $sqlop = " AND ";
-                        }
-                        else if ($this->inv_crp && !($this->inv_plt || $this->inv_all))
-                        {
-                            $sql .= $sqlop.' inc.inc_kll_id IS NULL ';
-                            $sqlop = " AND ";
-                        }
-                        else if(!($this->inv_plt && !($this->inv_crp || $this->inv_all)))
-                        {
-                            $sql .= $sqlop.' ind.ind_kll_id IS NULL ';
-                            $sqlop = " AND ";
-                        }
-                        */
-
-			$invP = array();
-			if ($this->inv_all)
-			{
-				$invP[] = 'kll.kll_all_id IN ( '.implode(',', $this->inv_all).' ) ';
-			}
-			if ($this->inv_crp)
-			{
-				$invP[] = 'kll.kll_crp_id IN ( '.implode(',', $this->inv_crp).' ) ';
-			}
-			if ($this->inv_plt)
-			{
-				$invP[] = 'kll.kll_victim_id IN ( '.implode(',', $this->inv_plt).' ) ';
-			}
-			if($invP)
-			{
-				$sql .= $sqlop." (".implode(' OR ', $invP).") ";
-				$sqlop = " AND ";
-			}
+            if ($this->inv_all && !($this->inv_crp || $this->inv_plt))
+            {
+                $sql .= $sqlop.' ina.ina_kll_id IS NULL ';
+                $sqlop = " AND ";
+            }
+            else if ($this->inv_crp && !($this->inv_plt || $this->inv_all))
+            {
+                $sql .= $sqlop.' inc.inc_kll_id IS NULL ';
+                $sqlop = " AND ";
+            }
+            else if(!($this->inv_plt && !($this->inv_crp || $this->inv_all)))
+            {
+                $sql .= $sqlop.' ind.ind_kll_id IS NULL ';
+                $sqlop = " AND ";
+            }
+            $invP = array();
+            if ($this->inv_all)
+            {
+                $invP[] = 'kll.kll_all_id IN ( '.implode(',', $this->inv_all).' ) ';
+            }
+            if ($this->inv_crp)
+            {
+                $invP[] = 'kll.kll_crp_id IN ( '.implode(',', $this->inv_crp).' ) ';
+            }
+            if ($this->inv_plt)
+            {
+                $invP[] = 'kll.kll_victim_id IN ( '.implode(',', $this->inv_plt).' ) ';
+            }
+            if($invP)
+            {
+                $sql .= $sqlop." (".implode(' OR ', $invP).") ";
+                $sqlop = " AND ";
+            }
 		}
 		if($this->system)
 		{

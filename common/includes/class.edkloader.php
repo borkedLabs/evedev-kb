@@ -13,10 +13,10 @@
  */
 class edkloader
 {
-	/** @var array */
-	private static $classes = array();
-	/** @var string */
-	private static $dir = "";
+    /** @var array */
+    private static $classes = array();
+    /** @var string */
+    private static $dir = "";
 
 	/**
 	 * Load a class file.
@@ -35,6 +35,23 @@ class edkloader
 	 */
 	public static function load($name)
 	{
+        // check for EsiClient-specific files
+        // project-specific namespace prefix
+        $prefix = 'EsiClient\\';
+        
+        // does the class use the namespace prefix?
+        $len = strlen($prefix);
+        if (strncmp($prefix, $name, $len) === 0) 
+        {
+            // get the relative class name
+            $relative_class = substr($name, $len);
+            $esiLibPath = __DIR__."common/esi/lib/EsiClient/".$relative_class.".php";
+            if(file_exists($esiLibPath)) 
+            {
+                require_once $esiLibPath;
+            }
+        }
+		
 		$name = strtolower($name);
 		$splitpos = strpos($name, "_");
 		$subdirname = '';
@@ -76,39 +93,39 @@ class edkloader
 		return false;
 	}
 
-	/**
-	 * Register a given file as containing the given class.
-	 * Re-registering a class name replaces the previous entry with the new.
-	 *
-	 * @param string $name
-	 * @param string $file
-	 */
-	public static function register($name, $file)
-	{
-		self::$classes[strtolower($name)] = $file;
-	}
+    /**
+     * Register a given file as containing the given class.
+     * Re-registering a class name replaces the previous entry with the new.
+     *
+     * @param string $name
+     * @param string $file
+     */
+    public static function register($name, $file)
+    {
+        self::$classes[strtolower($name)] = $file;
+    }
 
-	/**
-	 * Remove a registered classname. The default handler will be used instead.
-	 *
-	 * @param string $name
-	 */
-	public static function unregister($name)
-	{
-		unset(self::$classes[strtolower($name)]);
-	}
+    /**
+     * Remove a registered classname. The default handler will be used instead.
+     *
+     * @param string $name
+     */
+    public static function unregister($name)
+    {
+        unset(self::$classes[strtolower($name)]);
+    }
 
-	/**
-	 * Set the root directory to be used for class files.
-	 *
-	 * @param string $dir The root directory to use for includes.
-	 */
-	public static function setRoot($dir)
-	{
-		if (substr($dir, -1) != "/") {
-			$dir .= "/";
-		}
+    /**
+     * Set the root directory to be used for class files.
+     *
+     * @param string $dir The root directory to use for includes.
+     */
+    public static function setRoot($dir)
+    {
+        if (substr($dir, -1) != "/") {
+            $dir .= "/";
+        }
 
-		self::$dir = $dir;
-	}
+        self::$dir = $dir;
+    }
 }

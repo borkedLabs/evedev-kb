@@ -364,6 +364,7 @@ class pHome extends pageAssembly
 		if($this->topPilot)
 		{
 			// meta tag: image
+
 			$this->page->addMetaTag('og:image', $this->topPilot->getPortraitURL(128) );
 			$this->page->addMetaTag('twitter:image', $this->topPilot->getPortraitURL(128) );
 			
@@ -379,12 +380,14 @@ class pHome extends pageAssembly
 			$metaTagDescription .= $this->topPilot->getName() . " (" . $this->topPilot->getCorp()->getName() .").";
 		}
 
+
 		$this->page->addMetaTag('og:site_name', config::get('cfg_kbtitle'));
 		$this->page->addMetaTag('description', $metaTagDescription);
 		$this->page->addMetaTag('og:description', $metaTagDescription);
 
 		// meta tag: title
 		$metaTagTitle = config::get('cfg_kbtitle') . " | Front Page";
+
 		$this->page->addMetaTag('og:title',$metaTagTitle);
 		$this->page->addMetaTag('twitter:title',$metaTagTitle);
 		
@@ -435,6 +438,7 @@ class pHome extends pageAssembly
 			$LocationList->generate();
 			$LocationListBox = new AwardBoxLocation($LocationList, "Top locations", "kills in ".$this->getCurrentPeriod(), "kills", "cross");
 			$html .= $LocationListBox->generate();
+
 		} else {
 			$tllist = new TopList_Losses();
 			$this->loadTime($tllist);

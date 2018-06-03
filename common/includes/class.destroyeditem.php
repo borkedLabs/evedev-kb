@@ -28,7 +28,7 @@ class DestroyedItem
 	 * @param Item $item
 	 * @param integer $quantity
 	 * @param integer $singleton
-         * * @param string|integer $location
+	 * @param string|integer $location
 	 * @param integer $locationID
 	 */
 	function __construct($item, $quantity, $singleton, $location, $locationID = 0)
@@ -140,17 +140,16 @@ class DestroyedItem
 		if ($this->location_ || strlen($this->location_) == 0) {
 			$this->locationID_ = (int) $this->item_->getSlot();
 		} else { 
-                        $InventoryFlag = InventoryFlag::getConvertedByName($this->location_);
+			$InventoryFlag = InventoryFlag::getConvertedByName($this->location_);
 			$this->locationID_ = $InventoryFlag->getID();
 		}
 		return $this->locationID_;
 	}
-        
-        /**
-         * @return integer
-         */
-        function getSingleton()
-        {
-            return $this->singleton_;
-        }
-}
+
+	/**
+	 * @return integer
+	 */
+	function getSingleton()
+	{
+	    return $this->singleton_;
+	}}

@@ -136,7 +136,7 @@ class pKillDetail extends pageAssembly
 		}
 
 		$this->finalblow = false;
-		
+
 
 		$this->commenthtml = '';
 		// Check for posted comments.
@@ -517,11 +517,8 @@ class pKillDetail extends pageAssembly
 				$this->involved[$i]['pilotName'] = $weapon->getName();
 				$this->involved[$i]['secStatus'] = 0;
 				$this->involved[$i]['portrait'] = $corp->getPortraitURL(64);
-				$this->involved[$i]['externalID'] = $corp->getExternalID(true);
-
-				if ($this->involved[$i]['externalID'] == 0) {
-					$fetchExternalIDs[] = $corp->getName();
-				}
+				// this triggers fetching the external ID from ESI
+				$this->involved[$i]['externalID'] = $corp->getExternalID(false);
 
 				$this->involved[$i]['typeID'] = 2; //type number for corporations.
 
@@ -550,7 +547,8 @@ class pKillDetail extends pageAssembly
 				$this->involved[$i]['secStatus'] = $inv->getSecStatus();
 
 				$this->involved[$i]['portrait'] = $pilot->getPortraitURL(64);
-				$this->involved[$i]['externalID'] = $pilot->getExternalID(true);
+				// this triggers fetching the external ID from ESI
+				$this->involved[$i]['externalID'] = $pilot->getExternalID(false);
 
 				//get the external ID from the pilot class - if not found then add it to a list of pilots
 				//and check the api in bulk
@@ -582,47 +580,7 @@ class pKillDetail extends pageAssembly
 			}
 			++$i;
 		}
-
-		//prod CCP for the entire list of names
-		if (count($fetchExternalIDs) > 0) {
-			$names = new API_NametoID();
-			$names->setNames(implode(',', $fetchExternalIDs));
-			$names->fetchXML();
-			$nameIDPair = $names->getNameData();
-
-			//fill in the pilot external IDs.. could potentially be slow
-			//but it beats the alternative. Do nothing if no names need loading.
-			if (count($nameIDPair) > 0) {
-				foreach ($nameIDPair as $idpair) {
-					//store the IDs
-					foreach ($this->kill->getInvolved() as $inv) {
-						$pilot = Cacheable::factory('Pilot', $inv->getPilotID());
-						$corp = Cacheable::factory('Corporation', $inv->getCorpID());
-
-						if ($idpair['name'] == $corp->getName()) {
-							$corp->setExternalID($idpair['characterID']);
-						} else if ($idpair['name'] == $pilot->getName()) {
-							$pilot->setCharacterID($idpair['characterID']);
-						}
-					}
-
-					//as we've already populated the structures for the template
-					//we need to quickly retrofit it.
-					foreach ($this->involved as $inv) {
-						$pname = $inv['pilotName'];
-						$cname = $inv['corpName'];
-
-						if ($cname == $idpair['name']) {
-							$inv['externalID'] = $idpair['characterID'];
-						} else if ($pname == $idpair['name']) {
-							$inv['externalID'] = $idpair['characterID'];
-						}
-					}
-				}
-			}
-		}
 	}
-
 	/**
 	 * Return HTML for the summary of involved parties.
 	 * @global Smarty $smarty
@@ -900,7 +858,8 @@ class pKillDetail extends pageAssembly
 		// Get Ship Value
 		$this->ShipValue = $this->kill->getVictimShip()->getPrice() * $this->kill->getVictimShip()->getSquadronSize();
 
-		if (config::get('kd_droptototal')) {
+		if (config::get('kd_droptototal')) 
+		{
 			$this->totalValue += $this->dropvalue;
 		}
 
@@ -1343,8 +1302,6 @@ class pKillDetail extends pageAssembly
                 $crestUrl = $this->kill->getCrestUrl();
                 if(!is_null($crestUrl) && strlen($crestUrl) > 0)
                 {
-                    // FIXME
-                    $crestUrl = str_replace(CREST_PUBLIC_URL, 'https://esi.tech.ccp.is/latest', $crestUrl);
                     $smarty->assign('crest_url', $crestUrl);
                 }
 
@@ -1463,12 +1420,11 @@ class pKillDetail extends pageAssembly
 				"sndReq('".edkURI::page(
 						'kill_mail', $this->kill->getID(), 'kll_id')
 				."');ReverseContentDisplay('popup')");
+
                 // expose CREST url (if kill was posted via CREST)
                 $crestUrl = $this->kill->getCrestUrl();
                 if(!is_null($crestUrl))
                 {
-                    // FIXME
-                    $crestUrl = str_replace(CREST_PUBLIC_URL, 'https://esi.tech.ccp.is/latest', $crestUrl);
                     $this->addMenuItem("link", "ESI Link", $crestUrl);
                 }
                 
@@ -1825,5 +1781,4 @@ $killDetail->context();
 event::call("killDetail_context_assembling", $killDetail);
 $context = $killDetail->assemble();
 $killDetail->page->addContext($context);
-
 $killDetail->page->generate();

@@ -7,6 +7,7 @@ class CacheCommand extends CronCommand
 		$config = new Config(KB_SITE);
 
 		println("Starting Alliance list update");
+		println("This cronjob is deprecated!");
 
 		// Alliance
 		$allianceApi = new API_Alliance();

@@ -7,7 +7,7 @@
  * @package EDK
  */
 if (!defined('LATEST_DB_UPDATE')) {
-    define('LATEST_DB_UPDATE', "040");
+    define('LATEST_DB_UPDATE', "041");
 }
 
 /** path to cache folder, relative to EDK root */
@@ -20,35 +20,27 @@ define('KB_MAILCACHEDIR', KB_CACHEDIR . '/mails');
 define('KB_QUERYCACHEDIR', KB_CACHEDIR . '/SQL');
 /** URL where to find EDK update information */
 define('KB_UPDATE_URL', 'http://evekb.org/downloads');
-/** base URL for connecting to CCP's XML API */
-define('API_SERVER', "https://api.eveonline.com");
 /** base URL for the image server */
 define('IMG_SERVER', "https://imageserver.eveonline.com");
-/** base URL for connecting to public CREST endpoints */
-define('CREST_PUBLIC_URL', 'https://crest-tq.eveonline.com');
+/** data source for ESI calls */
+define('ESI_DATA_SOURCE', 'tranquility');
+/** SOO OAuth base URL */
+define('OAUTH_BASE_URL', 'https://login.eveonline.com/oauth');
 
 /** 
  * current version: major.minor.sub.ccpDBupdateNo
  * even numbers for minor = development version
  */
-define('KB_VERSION', '4.2.37.0');
+define('KB_VERSION', '4.4.1.0');
 /** release name */
-define('KB_RELEASE', '(YC-120-3 1.0)');
+define('KB_RELEASE', '(Into The Abyss 1.0)');
 /** version of the SDE used to produce the current static database */
-define('KB_CCP_DB_VERSION', '20180323');
+define('KB_CCP_DB_VERSION', '20180529');
 /** release date of the SDE used to produce the current static database */
-define('KB_CCP_DB_DATE', 'Mar 23, 2018');
+define('KB_CCP_DB_DATE', 'May 29, 2018');
 /** the version of IDFeed used by this killboard, gets reported to clients */
 define('ID_FEED_VERSION', 1.50);
 /** the version of zKBFetch used by this killboard */
-define('ZKB_FETCH_VERSION', 1.1);
-/** flag indicating an API key is a legacy key */
-define('KB_APIKEY_LEGACY', 1);
-/** flag indicating an API key is a corp key */
-define('KB_APIKEY_CORP', 2);
-/** flag indicating an API key is a character key */
-define('KB_APIKEY_CHAR', 4);
-/** flag indicating an API key/vcode is incorrect and rejected by the API */
-define('KB_APIKEY_BADAUTH', 8);
-/** flag indicating an API key is expired */
-define('KB_APIKEY_EXPIRED', 16);
+define('ZKB_FETCH_VERSION', 1.2);
+/** user agent */
+define('EDK_USER_AGENT', 'Eve Development Killboard '.KB_VERSION.', Forums: http://evekb.org/forum Contact: Salvoxia <salvoxia@blindfish.info>');

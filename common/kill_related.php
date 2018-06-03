@@ -40,7 +40,6 @@ class pKillRelated extends pageAssembly
 	protected $pilots;
 	/** @var \KillSummaryTable */
 	protected $kill_summary;
-        
 
 	function __construct()
 	{
@@ -104,6 +103,7 @@ class pKillRelated extends pageAssembly
 			Header("Location: ".KB_HOST."/?a=kill_detail&kll_id=".$this->kll_id);
 			die();
 		}
+
 	}
 
 	public function getInvolved()
@@ -634,6 +634,7 @@ class pKillRelated extends pageAssembly
 			'ts' => $ts);
 	}
 
+
 	/** 
 	 * adds meta tags for Twitter Summary Card and OpenGraph tags
 	 * to the HTML header
@@ -654,7 +655,6 @@ class pKillRelated extends pageAssembly
 		$endTime = gmdate("H:i", strtotime($this->lastts));
 		$totalIskDestroyedM = round(($this->kill_summary->getTotalKillISK() + $this->kill_summary->getTotalLossISK()) / 1000000, 2);
 		
-		
 		$metaTagDescription = sprintf("Battle Report for %s (%s) from %s (%s - %s); Involved Pilots: %s, Total ISK Destroyed: %.2fM ISK", 
 										$referenceSystem->getName(),
 										$referenceSystem->getRegionName(),
@@ -671,7 +671,6 @@ class pKillRelated extends pageAssembly
 		$this->page->addMetaTag('og:image', imageURL::getURL('Type', 3802, 64) );
 		$this->page->addMetaTag('twitter:image', imageURL::getURL('Type', 3802, 64) );
 
-		// meta tag: URL
 		$this->page->addMetaTag('og:url',edkURI::build(array('kll_id', $this->kll_id, true)));
 		// meta tag: Twitter summary
 		$this->page->addMetaTag('twitter:card', 'summary');

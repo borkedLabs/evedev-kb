@@ -5,7 +5,8 @@
  * $HeadURL$
  * @package EDK
  */
-
+use Swagger\Client\ApiException;
+use EDK\ESI\ESI;
 /*
  * @package EDK
  */
@@ -109,11 +110,14 @@ class pCorpDetail extends pageAssembly
 			$this->page->addMetaTag('robots', 'noindex, nofollow');
 		}
 
-		if(!$this->crp_id) {
-			if($this->crp_external_id) {
+		 if(!$this->crp_id) {
+			if($this->crp_external_id) 
+			{
 				$this->corp = new Corporation($this->crp_external_id, true);
 				$this->crp_id = $this->corp->getID();
-			} else {
+			} 
+			if(!$this->crp_id)
+			{
 				$html = 'That corporation does not exist.';
 				$this->page->setContent($html);
 				$this->page->generate();
@@ -204,39 +208,45 @@ class pCorpDetail extends pageAssembly
 		global $smarty;
 		// The summary table is also used by the stats. Whichever is called
 		// first generates the table.
-
-		$myAPI = new API_CorporationSheet();
-		$myAPI->setCorpID($this->corp->getExternalID());
-		$result .= $myAPI->fetchXML();
-		// Update the name if it has changed.
-		if($result == "" && $myAPI->getCorporationName())
+		$this->page->setTitle('Corporation details - '.$this->corp->getName());
+		// update the corp's details
+		try
 		{
-			$this->alliance = Alliance::add($myAPI->getAllianceName(),
-				$myAPI->getAllianceID());
-			$this->corp = Corporation::add($myAPI->getCorporationName(),
-				$this->alliance, $myAPI->getCurrentTime(),
-				$externalid = $this->corp->getExternalID());
+			$EsiCorp = $this->corp->fetchCorp();
+			if($EsiCorp)
+			{
+				$this->alliance = $this->corp->getAlliance(); 
+				$this->corpDetails = array('ticker' => $EsiCorp->getTicker());
+				$this->page->setTitle('Corporation details - '.$this->corp->getName() . " [" . $EsiCorp->getTicker() . "]");
+			}
 		}
-                $this->corpDetails = array('ticker' => $myAPI->getTicker());
-		$this->page->setTitle('Corporation details - '.$this->corp->getName() . " [" . $myAPI->getTicker() . "]");
-
+		catch(ApiException $e)
+		{
+			EDKError::log(ESI::getApiExceptionReason($e) . PHP_EOL . $e->getTraceAsString());
+			$this->page->setTitle('Corporation details - '.$this->corp->getName() . " []");
+		}
 		$smarty->assign('portrait_url', $this->corp->getPortraitURL(128));
-
-		if($this->alliance->getName() == "None") {
+		if($this->alliance->getName() == "None") 
+		{
 			$smarty->assign('alliance_url', false);
-		} else if($this->alliance->getExternalID()) {
-                        $this->corpDetails['allianceName'] = $this->alliance->getName();
+		} 
+		
+		else if($this->alliance->getExternalID()) 
+		{
+			$this->corpDetails['allianceName'] = $this->alliance->getName();
 			$smarty->assign('alliance_url', edkURI::build(
 					array('a', 'alliance_detail', true),
 					array('all_ext_id', $this->alliance->getExternalID(), true)));
-		} else {
-                        $this->corpDetails['allianceName'] = $this->alliance->getName();
+		} 
+		
+		else
+		{
+			$this->corpDetails['allianceName'] = $this->alliance->getName();
 			$smarty->assign('alliance_url', edkURI::build(
 					array('a', 'alliance_detail', true),
 					array('all_id', $this->alliance->getID(), true)));
 		}
 		$smarty->assign('alliance_name', $this->alliance->getName());
-
 		$smarty->assign('kill_count', $this->kill_summary->getTotalKills());
 		$smarty->assign('loss_count', $this->kill_summary->getTotalLosses());
 		$smarty->assign('damage_done', number_format($this->kill_summary->getTotalKillISK()/1000000000, 2));
@@ -248,17 +258,29 @@ class pCorpDetail extends pageAssembly
 		} else {
 			$this->efficiency = 0;
 		}
-                
-                $smarty->assign('efficiency', $this->efficiency);
 
-		if ($result != "Corporation is not part of alliance.") {
-                        $this->corpDetails['pilotIdCeo'] = $myAPI->getCeoID();
-                        $this->corpDetails['pilotNameCeo'] = $myAPI->getCeoName();
-                        $this->corpDetails['headQuartersName'] = $myAPI->getStationName();
-                        $this->corpDetails['memberCount'] = $myAPI->getMemberCount();
-                        $this->corpDetails['shareCount'] = $myAPI->getShares();
-                        $this->corpDetails['taxRate'] = $myAPI->getTaxRate();
-                        $this->corpDetails['externalUrl'] = $myAPI->getUrl();
+		$smarty->assign('efficiency', $this->efficiency);
+		if ($EsiCorp) 
+		{
+			$ceoPilotId = $EsiCorp->getCeoId();
+			try
+			{
+				$CeoPilot = new Pilot(0, $ceoPilotId);
+				$CeoPilot->fetchPilot();
+				$this->corpDetails['pilotIdCeo'] = $ceoPilotId;
+				$this->corpDetails['pilotNameCeo'] = $CeoPilot->getName();
+			}
+			catch (ApiException $e) 
+			{
+				EDKError::log(ESI::getApiExceptionReason($e) . PHP_EOL . $e->getTraceAsString());
+			}
+			// FIXME not provided by ESI!
+			$this->corpDetails['headQuartersName'] = "";
+			$this->corpDetails['memberCount'] = $EsiCorp->getMemberCount();
+			// FIXME not provided by ESI!
+			$this->corpDetails['shareCount'] = "";
+			$this->corpDetails['taxRate'] = $EsiCorp->getTaxRate() * 100;
+			$this->corpDetails['externalUrl'] = $EsiCorp->getUrl();
 			$smarty->assign('ceo_url', edkURI::build(
 					array('a', 'pilot_detail', true),
 					array('plt_ext_id', $this->corpDetails['pilotIdCeo'], true)));
@@ -268,54 +290,54 @@ class pCorpDetail extends pageAssembly
 			$smarty->assign('share_count', $this->corpDetails['shareCount']);
 			$smarty->assign('tax_rate', $this->corpDetails['taxRate']);
 			$smarty->assign('external_url', $this->corpDetails['externalUrl']);
-                        $description = $myAPI->getDescription();
-                        $description = preg_replace('/<br>/', '<br />', $description);
-                        // replace non-html size
-                        $description = preg_replace('/<font size=\"[1-9]+\"/', '<font', $description);
-                        //strip out broken cyan color tag
-                        $description = preg_replace('/color=\"#bfffffff\"/', '', $description);
-                        // replace character links
-                        $description = preg_replace_callback('/showinfo:[1-9]+\/\//', array($this, 'parseShowInfoLink'), $description);
-                        $this->corpDetails['description'] = $description;
+			$description = $EsiCorp->getDescription();
+			$description = preg_replace('/<br>/', '<br />', $description);
+			// replace non-html size
+			$description = preg_replace('/<font size=\"[1-9]+\"/', '<font', $description);
+			//strip out broken cyan color tag
+			$description = preg_replace('/color=\"#bfffffff\"/', '', $description);
+			// replace character links
+			$description = preg_replace_callback('/showinfo:[1-9]+\/\//', array($this, 'parseShowInfoLink'), $description);
+			$this->corpDetails['description'] = $description;
 			$smarty->assign('corp_description', $this->corpDetails['description']);
 		}
 		return $smarty->fetch(get_tpl('corp_detail_stats'));
 	}
-        
-        /**
-         * callback for showinfo links in corp description;
-         * replaces the showinfo-link with a link to the correct entity (corp/ally/pilot)
-         * @param array $showInfoLinks
-         */
-        static function parseShowInfoLink($showInfoLinks)
-        {
-            // showInfoLinks[0] looks like this: showinfo:1378//
-            // make it look like: showinfo:1378
-            $showInfoLink = substr($showInfoLinks[0], 0, strlen($showInfoLinks[0])-2);
-            // 1378
-            $typeID = substr($showInfoLink, strpos($showInfoLink, ':')+1, strlen($showInfoLink)-strpos($showInfoLink, ':'));
 
-            // Alliance
-            if($typeID == 16159)
-            {
-                return KB_HOST.'/?a=alliance_detail&all_ext_id=';
-            }
-            
-            // Corporation
-            elseif($typeID == 2)
-            {
-                return KB_HOST.'/?a=corp_detail&crp_ext_id=';
-            }
-            
-            // Characters of various races
-            elseif($typeID >= 1373 && $typeID <= 1386)
-            {
-                return KB_HOST.'/?a=pilot_detail&plt_ext_id=';
-            }
-            
-            // nothing of the above, don't change anything
-            return $showInfoLinks[0];
-        }
+	/**
+	 * callback for showinfo links in corp description;
+	 * replaces the showinfo-link with a link to the correct entity (corp/ally/pilot)
+	 * @param array $showInfoLinks
+	 */
+	static function parseShowInfoLink($showInfoLinks)
+	{
+		// showInfoLinks[0] looks like this: showinfo:1378//
+		// make it look like: showinfo:1378
+		$showInfoLink = substr($showInfoLinks[0], 0, strlen($showInfoLinks[0])-2);
+		// 1378
+		$typeID = substr($showInfoLink, strpos($showInfoLink, ':')+1, strlen($showInfoLink)-strpos($showInfoLink, ':'));
+
+		// Alliance
+		if($typeID == 16159)
+		{
+			return KB_HOST.'/?a=alliance_detail&all_ext_id=';
+		}
+		
+		// Corporation
+		elseif($typeID == 2)
+		{
+			return KB_HOST.'/?a=corp_detail&crp_ext_id=';
+		}
+		
+		// Characters of various races
+		elseif($typeID >= 1373 && $typeID <= 1386)
+		{
+			return KB_HOST.'/?a=pilot_detail&plt_ext_id=';
+		}
+		
+		// nothing of the above, don't change anything
+		return $showInfoLinks[0];
+	}
 
 	/**
 	 *  Build the killlists that are needed for the options selected.

@@ -6,6 +6,8 @@
  * @package EDK
  */
 
+use EDK\ESI\ESI;
+
 /**
  * thrown whenever anything goes wrong while handling a kill
  */
@@ -16,10 +18,7 @@ class KillException extends Exception {}
  */
 class Kill extends Cacheable
 {
-	/** @const the base URL for the public CREST killmail endpoint */
-	public static $CREST_KILLMAIL_ENDPOINT = '/killmails/';
-	
-	/**
+	public static $ESI_KILLMAIL_ENDPOINT = 'killmails';	/**
 	 * The ID for this kill
 	 * @var integer
 	 */
@@ -595,7 +594,7 @@ class Kill extends Cacheable
 			else
 						{
 							// is the victim's name a moon?
-							$moonID = API_Helpers::getMoonID($this->getVictimName());
+							$moonID = ESI_Helpers::getMoonID($this->getVictimName());
 							if($moonID)
 							{
 								$mail .= "Moon: ".$this->getVictimName()."\r\n";
@@ -695,64 +694,56 @@ class Kill extends Cacheable
 		if (count($this->destroyeditems_) > 0) {
 			$mail .= "\r\nDestroyed items:\r\n\r\n";
 
-			foreach($this->destroyeditems_ as $destroyed) {
-				$item = $destroyed->getItem();
-				
-				if($item != null)
-				{
-					$mail .= $item->getName();
-					if ($destroyed->getQuantity() > 1) {
-						$mail .= ", Qty: ".$destroyed->getQuantity();
-					}
-									
-					if ($destroyed->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
-						$mail .= " (Copy)";
-					}
-									
-					$flagID = InventoryFlag::collapse($destroyed->getLocationID());
-					if ($destroyed->getLocationID() == InventoryFlag::$CARGO) {
-						$mail .= " (Cargo)";
-					} else if ($destroyed->getLocationID() == InventoryFlag::$DRONE_BAY) {
-						$mail .= " (Drone Bay)";
-					} else if ($destroyed->getLocationID() == InventoryFlag::$IMPLANT) {
-						$mail .= " (Implant)";
-					} else if ($destroyed->getLocationID() == InventoryFlag::$OTHER) {
-						$mail .= " (Other)";
-					}
-					$mail .= "\r\n";
-				}
-			}
+            foreach($this->destroyeditems_ as $destroyed) {
+                $item = $destroyed->getItem();
+                $mail .= $item->getName();
+                if ($destroyed->getQuantity() > 1) {
+                    $mail .= ", Qty: ".$destroyed->getQuantity();
+                }
+                                
+                                if ($destroyed->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+                    $mail .= " (Copy)";
+                                }
+                                
+                                $flagID = InventoryFlag::collapse($destroyed->getLocationID());
+                if ($destroyed->getLocationID() == InventoryFlag::$CARGO) {
+                    $mail .= " (Cargo)";
+                } else if ($destroyed->getLocationID() == InventoryFlag::$DRONE_BAY) {
+                    $mail .= " (Drone Bay)";
+                } else if ($destroyed->getLocationID() == InventoryFlag::$IMPLANT) {
+                    $mail .= " (Implant)";
+                } else if ($destroyed->getLocationID() == InventoryFlag::$OTHER) {
+                    $mail .= " (Other)";
+                }
+                $mail .= "\r\n";
+            }
 		}
 
 		if (count($this->droppeditems_) > 0)
 		{
-			$mail .= "\r\nDropped items:\r\n\r\n";
-
-			foreach($this->droppeditems_ as $dropped) {
-				$item = $dropped->getItem();
-				if( $item != null )
-				{
-					$mail .= $item->getName();
-					if ($dropped->getQuantity() > 1) {
-						$mail .= ", Qty: ".$dropped->getQuantity();
-					}
-									
-					if ($dropped->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
-						$mail .= " (Copy)";
-					}
-									
-					if ($dropped->getLocationID() == InventoryFlag::$CARGO) {
-						$mail .= " (Cargo)";
-					} else if ($dropped->getLocationID() == InventoryFlag::$DRONE_BAY) {
-						$mail .= " (Drone Bay)";
-					} else if ($dropped->getLocationID() == InventoryFlag::$IMPLANT) {
-						$mail .= " (Implant)";
-					} else if ($dropped->getLocationID() == InventoryFlag::$OTHER) {
-						$mail .= " (Other)";
-					}
-					$mail .= "\r\n";
-				}
-			}
+            $mail .= "\r\nDropped items:\r\n\r\n";
+            foreach($this->droppeditems_ as $dropped) {
+                $item = $dropped->getItem();
+                $mail .= $item->getName();
+                if ($dropped->getQuantity() > 1) {
+                    $mail .= ", Qty: ".$dropped->getQuantity();
+                }
+                                
+                                if ($dropped->getSingleton() == InventoryFlag::$SINGLETON_COPY) {
+                    $mail .= " (Copy)";
+                                }
+                                
+                if ($dropped->getLocationID() == InventoryFlag::$CARGO) {
+                    $mail .= " (Cargo)";
+                } else if ($dropped->getLocationID() == InventoryFlag::$DRONE_BAY) {
+                    $mail .= " (Drone Bay)";
+                } else if ($dropped->getLocationID() == InventoryFlag::$IMPLANT) {
+                    $mail .= " (Implant)";
+                } else if ($dropped->getLocationID() == InventoryFlag::$OTHER) {
+                    $mail .= " (Other)";
+                }
+                $mail .= "\r\n";
+            }
 		}
 
 		if ($this->id && config::get('km_cache_enabled')) {
@@ -952,9 +943,6 @@ class Kill extends Cacheable
 			$destroyedlist = new ItemList(null, true);
 			$destroyedlist->addKillDestroyed($this->id);
 			while($item = $destroyedlist->getItem()) {
-				if($item == null)
-					continue;
-
 				$destroyed = new DestroyedItem($item,
 					$item->getAttribute('itd_quantity'),
 					$item->getAttribute('itd_singleton'),
@@ -965,9 +953,6 @@ class Kill extends Cacheable
 			$droppedlist = new ItemList(null, true);
 			$droppedlist->addKillDropped($this->id);
 			while($item = $droppedlist->getItem()) {
-				if($item == null)
-					continue;
-
 				$dropped = new DestroyedItem($item,
 					$item->getAttribute('itd_quantity'),
 					$item->getAttribute('itd_singleton'),
@@ -1407,47 +1392,31 @@ class Kill extends Cacheable
 	 */
 	function calculateISKLoss($update = true)
 	{
-		// Make sure the kill is initialised before we change anything.
-		$this->execQuery();
-		$value = 0;
-		foreach($this->destroyeditems_ as $itd) {
-			$item = $itd->getItem();
-
-			if($item == null)
-				continue;
-
-			if(strpos($item->getName(), "Blueprint") === FALSE)
-			{
-				$value += $itd->getValue() * $itd->getQuantity();
-			}
-		}
-		
-		if(config::get('kd_droptototal')) {
-			foreach($this->droppeditems_ as $itd) {
-				$item = $itd->getItem();
-				if($item == null)
-					continue;
-				
-				if(strpos($item->getName(), "Blueprint") === FALSE)
-				{
-					$value += $itd->getValue() * $itd->getQuantity();
-				}
-			}
-		}
-		
+        // Make sure the kill is initialised before we change anything.
+        $this->execQuery();
+        $value = 0;
+        foreach($this->destroyeditems_ as $itd) {
+            $item = $itd->getItem();
+            if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();
+        }
+        if(config::get('kd_droptototal')) {
+            foreach($this->droppeditems_ as $itd) {
+                $item = $itd->getItem();
+                if(strpos($item->getName(), "Blueprint") === FALSE) $value += $itd->getValue() * $itd->getQuantity();
+            }
+        }
         // respect squadron size for fighters, since a lost fighter killmail means a whole dead squadron
-		$value += $this->getVictimShip()->getPrice() * $this->getVictimShip()->getSquadronSize();
-
-		if($update) {
-			$qry = DBFactory::getDBQuery();
-			$qry->execute("UPDATE kb3_kills SET kll_isk_loss = '$value' WHERE
-				kll_id = '".$this->id."'");
-			if($this->iskloss) {
-				summaryCache::update($this, $value - $this->iskloss);
-			}
-		}
-		$this->iskloss = $value;
-		return $value;
+ 		$value += $this->getVictimShip()->getPrice() * $this->getVictimShip()->getSquadronSize();
+        if($update) {
+            $qry = DBFactory::getDBQuery();
+            $qry->execute("UPDATE kb3_kills SET kll_isk_loss = '$value' WHERE
+                kll_id = '".$this->id."'");
+            if($this->iskloss) {
+                summaryCache::update($this, $value - $this->iskloss);
+            }
+        }
+        $this->iskloss = $value;
+        return $value;
 	}
 
 	/**
@@ -1545,10 +1514,10 @@ class Kill extends Cacheable
 //				$dogma->attrib['rigSlots']['value'] : 3);
 //		$subcount = 5;
 //		if ($lowcount
-//				&& ($locations[1] > $hicount
-//				|| $locations[2] > $medcount
-//				||	$locations[3] > $lowcount
-//				|| $locations[5] > $rigcount)
+//                && ($locations[1] > $hicount
+//                || $locations[2] > $medcount
+//                ||  $locations[3] > $lowcount
+//                || $locations[5] > $rigcount)
 //				) {
 //			return 0;
 //		} else if ((!$lowcount && $locations[7])
@@ -1673,24 +1642,21 @@ class Kill extends Cacheable
 			return $this->rollback($qry);
 		// destroyed
 		$notfirstitd=false;
-		$itdsql = "insert into kb3_items_destroyed (itd_kll_id, itd_itm_id, itd_quantity, itd_itl_id, itd_singleton) values ";
-		foreach ($this->destroyeditems_ as $dest)
-		{
-			$item = $dest->getItem();
-
-			if($item == null)
-				continue;
-
-			$loc_id = $dest->getLocationID();
-			if (!is_numeric($this->getID()) || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
-			{
-				throw new KillException("Error with destroyed item " . var_export($dest,true));
-			}
-
-			if($notfirstitd) $itdsql .= ", ";
-			$itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
-			$notfirstitd = true;
-		}
+		$itdsql = "insert into kb3_items_destroyed (itd_kll_id, itd_itm_id, itd_quantity, itd_itl_id, itd_singleton) values ";        foreach ($this->destroyeditems_ as $dest)
+        {
+            $item = $dest->getItem();
+            $loc_id = $dest->getLocationID();
+            if (!is_numeric($this->getID()) || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
+            {
+                trigger_error('error with destroyed item.', E_USER_WARNING);
+                var_dump($dest);
+                exit;
+                continue;
+            }
+            if($notfirstitd) $itdsql .= ", ";
+            $itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
+            $notfirstitd = true;
+        }
 		
 		if($notfirstitd &&!$qry->execute($itdsql))
 		{
@@ -1700,20 +1666,21 @@ class Kill extends Cacheable
 		// dropped
 		$notfirstitd=false;
 		$itdsql = "insert into kb3_items_dropped (itd_kll_id, itd_itm_id, itd_quantity, itd_itl_id, itd_singleton) values ";
-		foreach ($this->droppeditems_ as $dest)
-		{
-			$item = $dest->getItem();
-
-			$loc_id = $dest->getLocationID();
-			if (!is_numeric($this->getID()) || $item == null || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
-			{
-				throw new KillException("Error with dropped item " . var_export($dest,true));
-			}
-
-			if($notfirstitd) $itdsql .= ", ";
-			$itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
-			$notfirstitd = true;
-		}
+        foreach ($this->droppeditems_ as $dest)
+        {
+            $item = $dest->getItem();
+            $loc_id = $dest->getLocationID();
+            if (!is_numeric($this->getID()) || !is_numeric($item->getID()) || !is_numeric($dest->getQuantity()) || !is_numeric($loc_id) || !is_numeric($dest->getSingleton()))
+            {
+                trigger_error('error with dropped item.', E_USER_WARNING);
+                var_dump($dest);
+                exit;
+                continue;
+            }
+            if($notfirstitd) $itdsql .= ", ";
+            $itdsql .= "( ".$this->getID().", ".$item->getID().", ".$dest->getQuantity().", ".$loc_id.", ".$dest->getSingleton()." )";
+            $notfirstitd = true;
+        }
 
 		if($notfirstitd &&!$qry->execute($itdsql))
 			return $this->rollback($qry);
@@ -1724,23 +1691,23 @@ class Kill extends Cacheable
 					$this->crestHash = $this->calculateCrestHash();
 				}
 
-		$sql = "INSERT INTO kb3_mails (	 `kll_id`, `kll_timestamp`, `kll_external_id`, `kll_hash`, `kll_trust`, `kll_modified_time`, `kll_crest_hash`)".
-			"VALUES(".$this->getID().", '".$this->getTimeStamp()."', ";
-		if($this->externalid) $sql .= $this->externalid.", ";
-				else $sql .= "NULL, ";
-				$sql .= "'".$qry->escape($this->getHash(false, false))."', 0, UTC_TIMESTAMP(), ";
-				
-				// add CREST hash
-				if($this->crestHash)
-				{
-					$sql .= "'$this->crestHash'";
-				}
-				
-				else
-				{
-					$sql .= "NULL";
-				}
-				$sql .= ")";
+        $sql = "INSERT INTO kb3_mails (  `kll_id`, `kll_timestamp`, `kll_external_id`, `kll_hash`, `kll_trust`, `kll_modified_time`, `kll_crest_hash`)".
+            "VALUES(".$this->getID().", '".$this->getTimeStamp()."', ";
+        if($this->externalid) $sql .= $this->externalid.", ";
+                else $sql .= "NULL, ";
+                $sql .= "'".$qry->escape($this->getHash(false, false))."', 0, UTC_TIMESTAMP(), ";
+                
+                // add CREST hash
+                if($this->crestHash)
+                {
+                    $sql .= "'$this->crestHash'";
+                }
+                
+                else
+                {
+                    $sql .= "NULL";
+                }
+                $sql .= ")";
 				
 		if(!@$qry->execute($sql))
 			return $this->rollback($qry);
@@ -1839,23 +1806,23 @@ class Kill extends Cacheable
 			if($this->hash === false) return false;
 			if($update)
 			{
-				if($this->id && $this->externalid)
-				{
-					$sql = "INSERT IGNORE INTO kb3_mails (	`kll_id`, `kll_timestamp`, ".
-						"`kll_external_id`, `kll_hash`, `kll_trust`, `kll_modified_time`)".
-						"VALUES(".$this->getID().", '".$this->getTimeStamp()."', ".
-						$this->externalid.", '".$qry->escape($this->hash)."', ".
-						$this->trust.", UTC_TIMESTAMP())";
-				}
-				else if($this->id)
-				{
-					$sql = "INSERT IGNORE INTO kb3_mails (	`kll_id`, `kll_timestamp`, ".
-						"`kll_hash`, `kll_trust`, `kll_modified_time`)".
-						"VALUES(".$this->getID().", '".$this->getTimeStamp()."', ".
-						"'".$qry->escape($this->hash)."', ".
-						$this->trust.", UTC_TIMESTAMP())";
-				}
-				if($this->id) $qry->execute($sql);
+                if($this->id && $this->externalid)
+                {
+                    $sql = "INSERT IGNORE INTO kb3_mails (  `kll_id`, `kll_timestamp`, ".
+                        "`kll_external_id`, `kll_hash`, `kll_trust`, `kll_modified_time`)".
+                        "VALUES(".$this->getID().", '".$this->getTimeStamp()."', ".
+                        $this->externalid.", '".$qry->escape($this->hash)."', ".
+                        $this->trust.", UTC_TIMESTAMP())";
+                }
+                else if($this->id)
+                {
+                    $sql = "INSERT IGNORE INTO kb3_mails (  `kll_id`, `kll_timestamp`, ".
+                        "`kll_hash`, `kll_trust`, `kll_modified_time`)".
+                        "VALUES(".$this->getID().", '".$this->getTimeStamp()."', ".
+                        "'".$qry->escape($this->hash)."', ".
+                        $this->trust.", UTC_TIMESTAMP())";
+                }
+                if($this->id) $qry->execute($sql);
 			}
 		}
 		if($hex) return bin2hex($this->hash);
@@ -1967,24 +1934,32 @@ class Kill extends Cacheable
 	}
 		
 		
-		/**
-	 * Get the crest URL of this kill.
-	 *
-	 * @return string the crest URL for this kill
-	 */
-	function getCrestUrl()
-	{
-		if(is_null($this->externalid))
-		{
-			$this->execQuery();
-		}
 
-		if($this->getCrestHash() && !is_null($this->externalid))
-		{
-			return CREST_PUBLIC_URL . self::$CREST_KILLMAIL_ENDPOINT . $this->externalid.'/'.$this->getCrestHash().'/';
-		}
-		return NULL;
-	}
+    /**
+     * Get the ESI URL of this kill.
+     * <br>
+     * The method name is kept for compatibility reasons.
+     *
+     * @return string the ESI URL for this kill
+     */
+    function getCrestUrl()
+    {
+        if(is_null($this->externalid)) 
+        {
+            $this->execQuery();
+        }
+        if($this->getCrestHash() && !is_null($this->externalid))
+        {   
+            $Esi = new ESI();
+            $esiHost = $Esi->getConfig()->getHost();
+            if(substr($esiHost, -1) !== '/')
+            {
+                $esiHost .= '/';
+            }
+            return $esiHost . 'latest/' . self::$ESI_KILLMAIL_ENDPOINT . '/' . $this->externalid.'/'.$this->getCrestHash().'/';
+        }
+        return NULL;
+    }
 		
 	/**
 	 * sets the kill's CREST hash

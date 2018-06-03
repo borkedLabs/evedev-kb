@@ -6,6 +6,10 @@
  * $HeadURL$
  * @package EDK
  */
+use EDK\ESI\ESI;
+use EsiClient\AllianceApi;
+use EsiClient\CorporationApi;
+use \Swagger\Client\ApiException;
 
 /**
  * Display alliance details.
@@ -30,7 +34,7 @@ class pAllianceDetail extends pageAssembly
 	protected $viewList = array();
 	/** @var array The list of menu options to display. */
 	protected $menuOptions = array();
-	/** @var array */
+    /** @var array of Corporation*/
 	private $allianceCorps = array();
 	/** @var integer */
 	protected $month = '';
@@ -190,104 +194,119 @@ class pAllianceDetail extends pageAssembly
 	 */
 	function stats()
 	{
-		global $smarty;
-		$tempMyCorp = new Corporation();
-
-		$myAlliAPI = new API_Alliance();
-		$myAlliAPI->fetchalliances();
-
-		// Use alliance ID if we have it
-		if ($this->alliance->getExternalID()) {
-			$myAlliance = $myAlliAPI->LocateAllianceID($this->alliance->getExternalID());
-		} else {
-			$myAlliance = $myAlliAPI->LocateAlliance($this->alliance->getName());
-		}
-
-		if ($this->alliance->isFaction()) {
-			$this->page->setTitle(Language::get('page_faction_det').' - '
-					.$this->alliance->getName()." [".$myAlliance["shortName"]
-					."]");
-		} else {
-			$this->page->setTitle(Language::get('page_all_det').' - '
-					.$this->alliance->getName()." [".$myAlliance["shortName"]
-					."]");
-		}
-
-		if ($myAlliance) {
+        global $smarty;
+        $tempMyCorp = new Corporation();
+        // Use alliance ID if we have it
+        if (!$this->alliance->getExternalID()) 
+        {
+            $allianceID = ESI_Helpers::getExternalIdForEntity($this->alliance->getName(), 'alliance');
+            if(isset($allianceID))
+            {
+                $this->alliance->setExternalID($allianceID);
+            }
+        }
+        if ($this->alliance->getExternalID()) 
+        {
+            $EdkEsi = new ESI();
+            $AllianceApi = new AllianceApi($EdkEsi);
+            $AllianceDetails = $AllianceApi->getAlliancesAllianceId($this->alliance->getExternalID(), $EdkEsi->getDataSource());
+            // initialize array holding the alliance details
+            $myAlliance = array(
+                "shortName" => $AllianceDetails->getTicker(),
+                "memberCount" => 0,
+                "executorCorpID" => null,
+                "executorCorpName" => null,
+                "startDate" => ESI_Helpers::formatDateTime($AllianceDetails->getDateFounded())
+            );
+            if ($this->alliance->isFaction()) 
+            {
+                $this->page->setTitle(Language::get('page_faction_det').' - '
+                        .$this->alliance->getName()." [".$myAlliance["shortName"]
+                        ."]");
+            } 
+            else 
+            {
+                $this->page->setTitle(Language::get('page_all_det').' - '
+                        .$this->alliance->getName()." [".$myAlliance["shortName"]
+                        ."]");
+            }
+            // fetch the alliance's corps
+            $allianceCorps = $AllianceApi->getAlliancesAllianceIdCorporations($this->alliance->getExternalID(), $EdkEsi->getDataSource());
+            
+            $CorporationApi = new CorporationApi($EdkEsi);
+            // fetch details for each member corp
+            foreach ($allianceCorps as $allianceCorpId) 
+            {
+                try
+                {
+                    $CorporationDetails = $CorporationApi->getCorporationsCorporationId($allianceCorpId, $EdkEsi->getDataSource());
+                }
+                
+                catch(ApiException $e) 
+                {
+                    EDKError::log(ESI::getApiExceptionReason($e) . PHP_EOL . $e->getTraceAsString());
+                    continue;
+                }
+                if ($AllianceDetails->getExecutorCorporationId() == $allianceCorpId) 
+                {
+                    $myAlliance["executorCorpName"] = $CorporationDetails->getName();
+                    $myAlliance["executorCorpID"] = $AllianceDetails->getExecutorCorporationId();
+                }
+                // Build Data array
+                $membercorp["corpExternalID"] = $allianceCorpId;
+                $membercorp["corpName"] = $CorporationDetails->getName();
+                $membercorp["ticker"] = $CorporationDetails->getTicker();
+                $membercorp["members"] = $CorporationDetails->getMemberCount();
+                $myAlliance["memberCount"] += $membercorp["members"];
+                
+                $this->allianceCorps[] = $membercorp;
+                // Check if corp is known to EDK DB, if not, add it.
+                $tempMyCorp = Corporation::getByExternalID($allianceCorpId);
+                if (!$tempMyCorp) {
+                    $tempMyCorp = Corporation::add($membercorp["corpName"], $this->alliance,
+                            $membercorp["joinDate"], $allianceCorpId);
+                }
+                $membercorp = array();
+                unset($membercorp);
+            }
+            if (!isset($this->kill_summary)) 
+                {
+                $this->kill_summary = new KillSummaryTable();
+                $this->kill_summary->addInvolvedAlliance($this->alliance);
+                $this->kill_summary->generate();
+            }
+            $smarty->assign('myAlliance', $myAlliance);
+            $smarty->assign('memberCorpCount', count($this->allianceCorps));
+            if ($this->kill_summary->getTotalKillISK()) {
+                $this->efficiency = round($this->kill_summary->getTotalKillISK() / ($this->kill_summary->getTotalKillISK() + $this->kill_summary->getTotalLossISK()) * 100,
+                        2);
+            } else {
+                $this->efficiency = 0;
+            }
                         
-			$myCorpAPI = new API_CorporationSheet();
-
-			foreach ((array) $myAlliance["memberCorps"] as $tempcorp) {
-				$myCorpAPI->setCorpID($tempcorp["corporationID"]);
-				if ($myCorpAPI->fetchXML() === false) {
-					continue;
-				}
-
-				if ($tempcorp["corporationID"] == $myAlliance["executorCorpID"]) {
-					$myAlliance["executorCorpName"] = $myCorpAPI->getCorporationName();
-					$ExecutorCorp = $myCorpAPI->getCorporationName();
-					$ExecutorCorpID = $myCorpAPI->getCorporationID();
-				}
-				// Build Data array
-				$membercorp["corpExternalID"] = $myCorpAPI->getCorporationID();
-				$membercorp["corpName"] = $myCorpAPI->getCorporationName();
-				$membercorp["ticker"] = $myCorpAPI->getTicker();
-				$membercorp["members"] = $myCorpAPI->getMemberCount();
-				$membercorp["joinDate"] = $tempcorp["startDate"];
-				$membercorp["taxRate"] = $myCorpAPI->getTaxRate()."%";
-				$membercorp["url"] = $myCorpAPI->getUrl();
-
-				$this->allianceCorps[] = $membercorp;
-
-				// Check if corp is known to EDK DB, if not, add it.
-				$tempMyCorp = Corporation::lookup($myCorpAPI->getCorporationName());
-				if ($tempMyCorp) {
-					$tempMyCorp = Corporation::add($myCorpAPI->getCorporationName(), $this->alliance,
-							substr($tempcorp["startDate"], 0, 16), $myCorpAPI->getCorporationID());
-				}
-
-				$membercorp = array();
-				unset($membercorp);
-			}
-
-			if (!isset($this->kill_summary)) {
-				$this->kill_summary = new KillSummaryTable();
-				$this->kill_summary->addInvolvedAlliance($this->alliance);
-				$this->kill_summary->generate();
-			}
-			$smarty->assign('myAlliance', $myAlliance);
-			$smarty->assign('memberCorpCount', count($myAlliance["memberCorps"]));
-
-			if ($this->kill_summary->getTotalKillISK()) {
-				$this->efficiency = round($this->kill_summary->getTotalKillISK() / ($this->kill_summary->getTotalKillISK() + $this->kill_summary->getTotalLossISK()) * 100,
-						2);
-			} else {
-				$this->efficiency = 0;
-			}
-
-			// store for use when adding meta tags
-			$this->allianceDetails = $myAlliance;
-			$this->allianceDetails['efficiency'] = $this->efficiency;
-		}
-		// The summary table is also used by the stats. Whichever is called
-		// first generates the table.
-		$smarty->assign('all_img', $this->alliance->getPortraitURL(128));
-		$smarty->assign('totalkills', $this->kill_summary->getTotalKills());
-		$smarty->assign('totallosses', $this->kill_summary->getTotalLosses());
-		$smarty->assign('totalkisk',
-				round($this->kill_summary->getTotalKillISK() / 1000000000, 2));
-		$smarty->assign('totallisk',
-				round($this->kill_summary->getTotalLossISK() / 1000000000, 2));
-		if ($this->kill_summary->getTotalKillISK()) {
-			$smarty->assign('efficiency',
-					round($this->kill_summary->getTotalKillISK()
-							/ ($this->kill_summary->getTotalKillISK()
-								+ $this->kill_summary->getTotalLossISK()) * 100,
-							2));
-		} else {
-			$smarty->assign('efficiency', '0');
-		}
-		return $smarty->fetch(get_tpl('alliance_detail_stats'));
+            // store for use when adding meta tags
+            $this->allianceDetails = $myAlliance;
+            $this->allianceDetails['efficiency'] = $this->efficiency;
+        }
+        // The summary table is also used by the stats. Whichever is called
+        // first generates the table.
+        $smarty->assign('all_img', $this->alliance->getPortraitURL(128));
+        $smarty->assign('totalkills', $this->kill_summary->getTotalKills());
+        $smarty->assign('totallosses', $this->kill_summary->getTotalLosses());
+        $smarty->assign('totalkisk',
+                round($this->kill_summary->getTotalKillISK() / 1000000000, 2));
+        $smarty->assign('totallisk',
+                round($this->kill_summary->getTotalLossISK() / 1000000000, 2));
+        if ($this->kill_summary->getTotalKillISK()) {
+            $smarty->assign('efficiency',
+                    round($this->kill_summary->getTotalKillISK()
+                            / ($this->kill_summary->getTotalKillISK()
+                                + $this->kill_summary->getTotalLossISK()) * 100,
+                            2));
+        } else {
+            $smarty->assign('efficiency', '0');
+        }
+        return $smarty->fetch(get_tpl('alliance_detail_stats'));
 	}
 
 	/**
@@ -298,16 +317,43 @@ class pAllianceDetail extends pageAssembly
 	 */
 	function corpList()
 	{
-		global $smarty;
-		foreach ($this->allianceCorps as &$tempcorp) {
-			$tempcorp['url'] = htmlspecialchars(html_entity_decode(
-					urldecode($tempcorp['url'])));
-			if ($tempcorp['url'] == 'http://') $tempcorp['url'] = '';
-			$tempcorp['corpName'] = preg_replace('/(\w{30})\w+/', '$1...',
-					$tempcorp['corpName']);
-		}
-		$smarty->assignByRef('corps', $this->allianceCorps);
-		return $smarty->fetch(get_tpl('alliance_detail_corps'));
+
+        global $smarty;
+        $EdkEsi = new ESI();
+        $CorporationApi = $CorporationApi = new CorporationApi($EdkEsi);
+       
+        foreach ($this->allianceCorps as &$tempcorp) 
+        {
+             // get alliance join date for this alliance
+            try
+            {
+                $corporationAllianceHistory = $CorporationApi->getCorporationsCorporationIdAlliancehistory($tempcorp["corpExternalID"], $EdkEsi->getDataSource());
+                // look through the alliance history to get the record for this alliance
+                $CorporationAllianceJoinDetails = null;
+                foreach($corporationAllianceHistory as $corpAllianceHistoryRecord)
+                {
+                    if($corpAllianceHistoryRecord->getAllianceId() == $this->alliance->getExternalID())
+                    {
+                        $tempcorp["joinDate"] = ESI_Helpers::formatDateTime($corpAllianceHistoryRecord->getStartDate());
+                        $Corporation = new Corporation($tempcorp["corpExternalID"], true);
+                        // FIXME
+                        $membercorp["taxRate"] = "";
+                        $membercorp["url"] = $Corporation->getDetailsURL();
+                        break;
+                    }
+                }
+            }
+            catch(ApiException $e)
+            {
+                // do nothing, alliance join date is not available
+                EDKError::log(ESI::getApiExceptionReason($e) . PHP_EOL . $e->getTraceAsString());
+            }
+            $tempcorp['url'] = htmlspecialchars(html_entity_decode(urldecode($tempcorp['url'])));
+            if ($tempcorp['url'] == 'http://') $tempcorp['url'] = '';
+            $tempcorp['corpName'] = preg_replace('/(\w{30})\w+/', '$1...', $tempcorp['corpName']);
+        }
+        $smarty->assignByRef('corps', $this->allianceCorps);
+        return $smarty->fetch(get_tpl('alliance_detail_corps'));
 	}
 
 	/**
@@ -465,7 +511,7 @@ class pAllianceDetail extends pageAssembly
 
 				// Get all ShipClasses
 				$sql = "select scl_id, scl_class from kb3_ship_classes
-					where scl_class not in ('Unknown') order by scl_class";
+						where scl_class not in ('Unknown') order by scl_class";
 
 				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
@@ -494,7 +540,7 @@ class pAllianceDetail extends pageAssembly
 
 				// Get all ShipClasses
 				$sql = "select scl_id, scl_class from kb3_ship_classes
-					where scl_class not in ('Unknown') order by scl_class";
+						where scl_class not in ('Unknown') order by scl_class";
 
 				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
@@ -519,7 +565,7 @@ class pAllianceDetail extends pageAssembly
 
 				// Get all ShipClasses
 				$sql = "select scl_id, scl_class from kb3_ship_classes
-					where scl_class not in ('Unknown') order by scl_class";
+						where scl_class not in ('Unknown') order by scl_class";
 
 				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
@@ -545,7 +591,7 @@ class pAllianceDetail extends pageAssembly
 
 				// Get all ShipClasses
 				$sql = "select scl_id, scl_class from kb3_ship_classes
-					where scl_class not in ('Unknown') order by scl_class";
+						where scl_class not in ('Unknown') order by scl_class";
 
 				$qry = DBFactory::getDBQuery();
 				$qry->execute($sql);
@@ -807,7 +853,7 @@ class pAllianceDetail extends pageAssembly
 		parent::__construct();
 		$this->queue("menuSetup");
 		$this->queue("menu");
-}
+	}
 	
 	/** 
 	 * adds meta tags for Twitter Summary Card and OpenGraph tags
@@ -827,7 +873,6 @@ class pAllianceDetail extends pageAssembly
 		{
 			$metaTagTitle = $this->alliance->getName() . " | Alliance Details";
 		}
-
 		$this->page->addMetaTag('og:title',$metaTagTitle);
 		$this->page->addMetaTag('twitter:title',$metaTagTitle);
 		
@@ -838,7 +883,7 @@ class pAllianceDetail extends pageAssembly
 			$metaTagDescription .= sprintf(" [%s] (%d Members in %d Corps)", 
 											$this->allianceDetails['shortName'],
 											$this->allianceDetails['memberCount'],
-											count($this->allianceDetails['memberCorps']) );
+											count($this->allianceCorps) );
 		}
 
 		$metaTagDescription .= sprintf(" has %d kills and %d losses (Efficiency: %d%%) at %s", 

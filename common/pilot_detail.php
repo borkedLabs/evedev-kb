@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+use Swagger\Client\ApiException;
 
 /*
  * @package EDK
@@ -15,7 +16,8 @@ class pPilotDetail extends pageAssembly
 	public $page = null;
 	/** @var integer */
 	public $plt_id = false;
-    /** @var Pilot the pilot */
+
+	/** @var Pilot the pilot */
 	public $pilot = null;
 	/** @var string The selected view. */
 	protected $view = null;
@@ -115,6 +117,7 @@ class pPilotDetail extends pageAssembly
 			exit;
 		}
 
+
 		if($this->plt_external_id)
 		{
 			$this->page->addHeader("<link rel='canonical' href='".edkURI::page('pilot_detail', $this->plt_external_id, 'plt_ext_id')."' />");
@@ -153,31 +156,19 @@ class pPilotDetail extends pageAssembly
 	function stats()
 	{
 		$this->summary->generate();
+		// update the pilot's details
 		if($this->pilot->getExternalID())
 		{
-			$apiInfo = new API_CharacterInfo();
-			$apiInfo->setID($this->pilot->getExternalID());
-			$result .= $apiInfo->fetchXML();
-			// Update the name if it has changed.
-			if($result == "")
+			$Pilot = new Pilot(0, $this->pilot->getExternalID());
+			try
 			{
-				$data = $apiInfo->getData();
-                                if(isset($data['allianceID']) && isset($data['alliance']))
-                                {
-                                    $this->alliance = Alliance::add($data['alliance'],
-					$data['allianceID']);
-                                }
-                                
-                                else
-                                {
-                                    $this->alliance = Alliance::add("None");
-                                }
-				
-				$this->corp = Corporation::add($data['corporation'],
-					$this->alliance, $apiInfo->getCurrentTime(),
-					$data['corporationID']);
-				$this->pilot = Pilot::add($data['characterName'], $this->corp,
-								$apiInfo->getCurrentTime(), $data['characterID']);
+				// try fetching / updating pilot information
+				$Pilot->fetchPilot();
+			}
+
+			catch (ApiException $e) 
+			{
+				EDKError::log(ESI::getApiExceptionReason($e) . PHP_EOL . $e->getTraceAsString());
 			}
 		}
 		global $smarty;
@@ -191,12 +182,11 @@ class pPilotDetail extends pageAssembly
 		$smarty->assign('llist_count',$this->summary->getTotalLosses());
 		$smarty->assign('klist_isk_B',round($this->summary->getTotalKillISK()/1000000000,2));
 		$smarty->assign('llist_isk_B',round($this->summary->getTotalLossISK()/1000000000,2));
-
 		//Pilot Efficiency Mod Begin (K Austin)
 		if ($this->summary->getTotalKills() == 0)
 		{
-			$pilot_survival = 100;
-			$this->efficiency = 0;
+		    $pilot_survival = 100;
+		    $this->efficiency = 0;
 		}
 		else
 		{
@@ -205,13 +195,10 @@ class pPilotDetail extends pageAssembly
 			if($this->summary->getTotalKillISK() + $this->summary->getTotalLossISK()) $this->efficiency = round(($this->summary->getTotalKillISK() / ($this->summary->getTotalKillISK() + $this->summary->getTotalLossISK())) * 100,2);
 			else $this->efficiency = 0;
 		}
-
 		$smarty->assign('pilot_survival',$pilot_survival);
 		$smarty->assign('pilot_efficiency',$this->efficiency);
-
 		$this->lpoints = $this->summary->getTotalLossPoints();
 		$this->points = $this->summary->getTotalKillPoints();
-
 		return $smarty->fetch(get_tpl('pilot_detail_stats'));
 	}
 

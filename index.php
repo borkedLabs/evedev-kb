@@ -12,6 +12,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
 @error_reporting(E_ALL & ~(E_STRICT | E_NOTICE | E_USER_NOTICE));
+date_default_timezone_set("UTC");
 
 // Party time!
 include(__DIR__.'/common/index.php');

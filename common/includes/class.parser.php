@@ -117,16 +117,6 @@ class Parser
 			$this->needs_final_blow_ = 1;
 	}
 
-
-	function uchr ($codes)
-	{ 
-		//converts characterset code-pages to ascii-compatible types
-		if (is_scalar($codes)) $codes= func_get_args();
-		$str= '';
-		foreach ($codes as $code) $str.= html_entity_decode('&#'.$code.';',ENT_NOQUOTES,'UTF-8');
-		return $str;
-	}
-	
 	function parse($checkauth = true)
 	{
 		$qry = DBFactory::getDBQuery();

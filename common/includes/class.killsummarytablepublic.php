@@ -85,9 +85,9 @@ class KillSummaryTablePublic extends KillSummaryTable
 			$entry = array();
 			// build array
 			$sql = "select scl_id, scl_class
-                    from kb3_ship_classes
-                   where scl_class not in ('Unknown' )
-                  order by scl_class";
+					from kb3_ship_classes
+					where scl_class not in ('Unknown' )
+					order by scl_class";
 
 			$qry = DBFactory::getDBQuery();
 			$qry->execute($sql) or die($qry->getErrorMsg());
