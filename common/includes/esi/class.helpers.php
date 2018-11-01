@@ -162,157 +162,26 @@ class ESI_Helpers
         // resolve as many IDs as possible using local cache
         self::resolveEntityIdsFromCache($entityIds, $idNameMapping);
         
-        // wrap IDs into container
-        // this used to work and is the intended way - seems broken!
-        //$EsiUniverseIds = new PostUniverseNamesIds();
-        //$EsiUniverseIds->setIds($entityIds);
+         // the universe/names endpoint resolves up to 1000 entity IDs per call,
+        // but really large kills might top that. So we need to make sure to respect that limit
+        $entityIdsChunked = array_chunk($entityIds, 999);
         
-        // resolve IDs to names
-        $EsiUniverseNames = $UniverseApi->postUniverseNames($entityIds, $EdkEsi->getDataSource());
-  
-        foreach($EsiUniverseNames as $EsiUniverseName)
+        foreach($entityIdsChunked AS $entityIdsForSingleCall)
         {
-            $idNameMapping[$EsiUniverseName->getId()] = $EsiUniverseName->getName();
-            // store in cache
-            self::putIdNameMappingIntoCache($EsiUniverseName->getId(), $EsiUniverseName->getName(), $EsiUniverseName->getCategory());
-        }
-        
-        return $idNameMapping;
-    }
-    
-    
-    /**
-     * The same as {@link ESI_Helpers::resolveEntityIds($entityIds)}, but
-     * only works for character IDs and uses a different ESI endpoint.
-     * 
-     * @param int[] $characterIds an array of entity IDs
-     * @return array an indexed array, using the input IDs as index
-     * 
-     * @throws \Swagger\Client\ApiException on ESI communication error
-     */
-    public static function resolveCharacterIds($characterIds)
-    {        
-        self::initCacheHandler();
-        // create mapping
-        $idNameMapping = array();
-        // resolve as many IDs as possible using local cache
-        self::resolveEntityIdsFromCache($characterIds, $idNameMapping);
-        
-        // create ESI client
-        $EdkEsi = new ESI();
-        
-        // bulk resolve character IDs
-        $CharacterApi = new CharacterApi($EdkEsi);
-        while(count($characterIds) > 0)
-        {
-            // since this is a GET call, we need to observe the maximum URL length;
-            // however, the endpoint only accepts < 100 IDs (manually tested with corporation endpoint, not documented) IDs at once, which will
-            // keep us below the URL length limit
-            $characterIdsForSingleCall = array();
-            while(count($characterIdsForSingleCall) <= 90 && count($characterIds) > 0)
-            {
-                $characterId = array_pop($characterIds);
-                $characterIdsForSingleCall[] = $characterId;
-            }
-            $characterNames = $CharacterApi->getCharactersNames($characterIdsForSingleCall);
-            foreach($characterNames as $characterName)
-            {
-                $idNameMapping[$characterName->getCharacterId()] = $characterName->getCharacterName();
-                self::putIdNameMappingIntoCache($characterName->getCharacterId(), $characterName->getCharacterName(), 'character');
-            }
-        }
-        
-        return $idNameMapping;
-    }
-    
-    /**
-     * The same as {@link ESI_Helpers::resolveEntityIds($entityIds)}, but
-     * only works for corporation IDs and uses a different ESI endpoint.
-     * 
-     * @param int[] $corporationIds an array of entity IDs
-     * @return array an indexed array, using the input IDs as index
-     * 
-     * @throws \Swagger\Client\ApiException on ESI communication error
-     */
-    public static function resolveCorporationIds($corporationIds)
-    {        
-        self::initCacheHandler();
-        // create mapping
-        $idNameMapping = array();
-        // resolve as many IDs as possible using local cache
-        self::resolveEntityIdsFromCache($corporationIds, $idNameMapping);
-        
-        // create ESI client
-        $EdkEsi = new ESI();
+            // resolve IDs to names
+            $EsiUniverseNames = $UniverseApi->postUniverseNames($entityIdsForSingleCall, $EdkEsi->getDataSource());
 
-        $CorporationApi = new CorporationApi($EdkEsi);
-        while(count($corporationIds) > 0)
-        {
-            // since this is a GET call, we need to observe the maximum URL length;
-            // however, the endpoint only accepts < 100 IDs (manually tested with corporation endpoint, not documented) IDs at once, which will
-            // keep us below the URL length limit
-            $corporationIdsForSingleCall = array();
-            while(count($corporationIdsForSingleCall) <= 90 && count($corporationIds) > 0)
+            foreach($EsiUniverseNames as $EsiUniverseName)
             {
-                $corporationId = array_pop($corporationIds);
-                $corporationIdsForSingleCall[] = $corporationId;
-            }
-            
-            $corporationNames = $CorporationApi->getCorporationsNames($corporationIdsForSingleCall);
-            foreach($corporationNames as $corporationName)
-            {
-                $idNameMapping[$corporationName->getCorporationId()] = $corporationName->getCorporationName();
-                self::putIdNameMappingIntoCache($corporationName->getCorporationId(), $corporationName->getCorporationName(), 'corporation');
+                $idNameMapping[$EsiUniverseName->getId()] = $EsiUniverseName->getName();
+                // store in cache
+                self::putIdNameMappingIntoCache($EsiUniverseName->getId(), $EsiUniverseName->getName(), $EsiUniverseName->getCategory());
             }
         }
         
         return $idNameMapping;
     }
     
-    
-    /**
-     * The same as {@link ESI_Helpers::resolveEntityIds($entityIds)}, but
-     * only works for alliance IDs and uses a different ESI endpoint.
-     * 
-     * @param int[] $allianceIds an array of entity IDs
-     * @return array an indexed array, using the input IDs as index
-     * 
-     * @throws \Swagger\Client\ApiException on ESI communication error
-     */
-    public static function resolveAllianceIds($allianceIds)
-    {        
-        self::initCacheHandler();
-        // create mapping
-        $idNameMapping = array();
-        // resolve as many IDs as possible using local cache
-        self::resolveEntityIdsFromCache($allianceIds, $idNameMapping);
-        
-        // create ESI client
-        $EdkEsi = new ESI();
-        
-        $AllianceApi = new AllianceApi($EdkEsi);
-        while(count($allianceIds) > 0)
-        {
-            // since this is a GET call, we need to observe the maximum URL length;
-            // however, the endpoint only accepts < 100 IDs (manually tested with corporation endpoint, not documented) IDs at once, which will
-            // keep us below the URL length limit
-            $allianceIdsForSingleCall = array();
-            while(count($allianceIdsForSingleCall) <= 90 && count($allianceIds) > 0)
-            {
-                $allianceId = array_pop($allianceIds);
-                $allianceIdsForSingleCall[] = $allianceId;
-            }
-            
-           $allianceNames = $AllianceApi->getAlliancesNames($allianceIdsForSingleCall);
-            foreach($allianceNames as $allianceName)
-            {
-                $idNameMapping[$allianceName->getAllianceId()] = $allianceName->getAllianceName();
-                self::putIdNameMappingIntoCache($allianceName->getAllianceId(), $allianceName->getAllianceName(), 'alliance');
-            }
-        }
-        
-        return $idNameMapping;
-    }
     
     /**
      * Tries to look up the given entity IDs in the local cache to resolve to a name.
