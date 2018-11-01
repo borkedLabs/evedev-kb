@@ -39,8 +39,8 @@ define('KB_CCP_DB_VERSION', '20180529');
 /** release date of the SDE used to produce the current static database */
 define('KB_CCP_DB_DATE', 'May 29, 2018');
 /** the version of IDFeed used by this killboard, gets reported to clients */
-define('ID_FEED_VERSION', 1.50);
+define('ID_FEED_VERSION', 1.6);
 /** the version of zKBFetch used by this killboard */
-define('ZKB_FETCH_VERSION', 1.3);
+define('ZKB_FETCH_VERSION', 1.4);
 /** user agent */
 define('EDK_USER_AGENT', 'Eve Development Killboard '.KB_VERSION.', Forums: http://evekb.org/forum Contact: Salvoxia <salvoxia@blindfish.info>');
